@@ -1,5 +1,5 @@
 name: 'Setup Node.js'
-description: 'Setup Node.js + pnpm (via corepack) and install dependencies (requires checkout first)'
+description: 'Setup pnpm, Node.js, and install dependencies (requires checkout first)'
 
 inputs:
   node-version:
@@ -10,30 +10,18 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    # pnpm is provided by corepack (a Node built-in) which reads the version
-    # from the "packageManager" field in package.json. This avoids
-    # pnpm/action-setup, which still targets Node 20 and emits a deprecation
-    # warning. Every action below is Node-24-native.
+    # No version pin — pnpm version comes from the "packageManager" field in
+    # package.json. pnpm/action-setup still targets Node 20, which emits a
+    # cosmetic deprecation warning; the workflow's FORCE_JAVASCRIPT_ACTIONS_TO_NODE24
+    # env makes it run on Node 24. (corepack-on-runner was tried and is flaky.)
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+
     - name: Setup Node.js
       uses: actions/setup-node@v5
       with:
         node-version: ${{ inputs.node-version }}
-
-    - name: Enable pnpm via corepack
-      shell: bash
-      run: corepack enable
-
-    - name: Resolve pnpm store path
-      id: pnpm-store
-      shell: bash
-      run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
-
-    - name: Cache pnpm store
-      uses: actions/cache@v4
-      with:
-        path: ${{ steps.pnpm-store.outputs.path }}
-        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: ${{ runner.os }}-pnpm-
+        cache: 'pnpm'
 
     - name: Install dependencies
       shell: bash
