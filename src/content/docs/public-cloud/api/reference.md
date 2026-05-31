@@ -7,10 +7,8 @@ sidebar_position: 3
 
 The full interactive API reference is hosted as a Swagger UI:
 
-- **Cloud Platform API**:
-  [api.zcp.zsoftly.ca/api/docs/nimbo](https://api.zcp.zsoftly.ca/api/docs/nimbo)
-- **Object Storage API**:
-  [api.zcp.zsoftly.ca/api/docs/ceph](https://api.zcp.zsoftly.ca/api/docs/ceph)
+- **Cloud Platform API**: [Open the Swagger UI](https://api.zcp.zsoftly.ca/api/docs/nimbo)
+- **Object Storage API**: [Open the Swagger UI](https://api.zcp.zsoftly.ca/api/docs/ceph)
 
 The Swagger UI provides:
 
