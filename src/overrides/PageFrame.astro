@@ -66,81 +66,100 @@ import type { Props } from '@astrojs/starlight/props';
 >
 </div>
 
+<div
+  id="toc-resizer"
+  class="toc-resizer"
+  role="separator"
+  aria-orientation="vertical"
+  aria-label="Resize table of contents"
+  tabindex="0"
+>
+</div>
+
 <script>
   document.getElementById('promo-dismiss')?.addEventListener('click', () => {
     sessionStorage.setItem('zs-promo-dismissed', '1');
     document.documentElement.setAttribute('data-promo-dismissed', '');
   });
 
-  // ── Sidebar resize ──────────────────────────────────────────
-  const STORAGE_KEY = 'zs-sidebar-width';
-  const MIN_PX = 180;
-  const MAX_PX = 480;
+  // ── Resizable layout (left sidebar + right TOC) ─────────────
+  // Each handle drives a CSS custom property; the content column (main-pane)
+  // is flex: 1 in custom.css, so it absorbs whatever space the sidebar or TOC
+  // gives up. The handles reposition themselves via CSS (left/right bound to
+  // the same variables), so we only need to update the variable.
+  const root = document.documentElement;
+  const remPerPx = () => 1 / parseFloat(getComputedStyle(root).fontSize);
   const STEP_PX = 10; // keyboard arrow step
 
-  const root = document.documentElement;
-  const resizer = document.getElementById('sidebar-resizer');
-
-  // Tracks the last applied clamped width so we persist the right value.
-  let currentWidthPx = 0;
-
-  function pxToRem(px: number) {
-    return px / parseFloat(getComputedStyle(root).fontSize);
+  interface Handle {
+    el: HTMLElement | null;
+    cssVar: string;
+    storageKey: string;
+    min: number;
+    max: number;
+    invertKeys: boolean;
+    fromEvent: (e: MouseEvent) => number;
   }
 
-  function setSidebarWidth(px: number) {
-    const clamped = Math.min(Math.max(px, MIN_PX), MAX_PX);
-    root.style.setProperty('--sl-sidebar-width', `${pxToRem(clamped).toFixed(3)}rem`);
-    if (resizer) resizer.style.left = `${clamped}px`;
-    currentWidthPx = clamped;
-    return clamped;
-  }
+  function initHandle(h: Handle) {
+    if (!h.el) return;
+    let px = 0;
 
-  function persistWidth() {
-    localStorage.setItem(STORAGE_KEY, String(currentWidthPx));
-  }
+    const apply = (value: number) => {
+      px = Math.min(Math.max(value, h.min), h.max);
+      root.style.setProperty(h.cssVar, `${(px * remPerPx()).toFixed(3)}rem`);
+    };
+    const persist = () => localStorage.setItem(h.storageKey, String(px));
 
-  // Restore saved width — validate before applying
-  const raw = localStorage.getItem(STORAGE_KEY);
-  const saved = raw !== null ? Number(raw) : NaN;
-  if (Number.isFinite(saved)) {
-    setSidebarWidth(saved);
-  }
+    const saved = Number(localStorage.getItem(h.storageKey));
+    if (Number.isFinite(saved) && saved > 0) apply(saved);
 
-  // ── Mouse drag ─────────────────────────────────────────────
-  let dragging = false;
-
-  resizer?.addEventListener('mousedown', (e: MouseEvent) => {
-    dragging = true;
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-    e.preventDefault();
-  });
-
-  document.addEventListener('mousemove', (e: MouseEvent) => {
-    if (!dragging) return;
-    setSidebarWidth(e.clientX);
-  });
-
-  document.addEventListener('mouseup', () => {
-    if (!dragging) return;
-    dragging = false;
-    document.body.style.cursor = '';
-    document.body.style.userSelect = '';
-    persistWidth();
-  });
-
-  // ── Keyboard (Arrow Left / Arrow Right) ────────────────────
-  resizer?.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      setSidebarWidth(currentWidthPx - STEP_PX);
-      persistWidth();
+    let dragging = false;
+    h.el.addEventListener('mousedown', (e: MouseEvent) => {
+      dragging = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
       e.preventDefault();
-    } else if (e.key === 'ArrowRight') {
-      setSidebarWidth(currentWidthPx + STEP_PX);
-      persistWidth();
+    });
+    document.addEventListener('mousemove', (e: MouseEvent) => {
+      if (dragging) apply(h.fromEvent(e));
+    });
+    document.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      persist();
+    });
+    h.el.addEventListener('keydown', (e: KeyboardEvent) => {
+      const dir = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : 0;
+      if (!dir) return;
+      apply(px + dir * STEP_PX * (h.invertKeys ? -1 : 1));
+      persist();
       e.preventDefault();
-    }
+    });
+  }
+
+  // Left sidebar: handle on the sidebar's right edge; dragging right widens it.
+  initHandle({
+    el: document.getElementById('sidebar-resizer'),
+    cssVar: '--sl-sidebar-width',
+    storageKey: 'zs-sidebar-width',
+    min: 180,
+    max: 480,
+    invertKeys: false,
+    fromEvent: (e) => e.clientX,
+  });
+
+  // Right TOC: handle on the TOC's left edge; dragging left widens it.
+  initHandle({
+    el: document.getElementById('toc-resizer'),
+    cssVar: '--toc-width',
+    storageKey: 'zs-toc-width',
+    min: 192,
+    max: 448,
+    invertKeys: true,
+    fromEvent: (e) => window.innerWidth - e.clientX,
   });
 </script>
 

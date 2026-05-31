@@ -228,29 +228,61 @@
 }
 
 /* ============================================================
-   Content area scaling
-   ============================================================ */
+   Elastic content layout
+   ============================================================
+   Starlight pins the content column to --sl-content-width and turns any
+   freed-up sidebar space into dead margin, so dragging the sidebar never
+   actually widens the article. We replace that model with a real flex row:
 
-/* Prevent the main content column from collapsing below a readable width
-   when the sidebar is wide or the browser is zoomed in. This selector does
-   not overlap with any Expressive Code or Starlight component selectors, so
-   no @layer isolation is required. */
+     [ left sidebar ]  [ content — flex: 1 ]  [ TOC — --toc-width ]
+
+   Both edges are drag-resizable (--sl-sidebar-width and --toc-width); the
+   content column absorbs whatever space they give up, so the frame is fully
+   elastic and moving either handle reflows the other side. Scoped to
+   [data-has-sidebar]/[data-has-toc] so the splash homepage is untouched. */
+
 @media (min-width: 72rem) {
-  .content-panel {
-    min-inline-size: 24rem;
+  :root {
+    --toc-width: 17rem;
+  }
+
+  /* Content fills the row instead of the fixed --sl-content-width formula. */
+  [data-has-sidebar] .main-pane {
+    width: auto !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    --sl-content-margin-inline: 0 !important;
+  }
+
+  /* Drop the 45rem cap so the article fills the main pane. */
+  [data-has-sidebar] .sl-container {
+    max-width: none !important;
+    margin-inline: 0 !important;
+  }
+  [data-has-sidebar] .content-panel {
     flex: 1 1 0;
+    min-inline-size: 0;
+  }
+
+  /* The TOC becomes an independent, fixed-width (resizable) column. */
+  [data-has-toc] .right-sidebar-container {
+    width: var(--toc-width) !important;
+    flex: 0 0 var(--toc-width) !important;
+  }
+  [data-has-toc] .right-sidebar {
+    width: var(--toc-width) !important;
   }
 }
 
 /* ============================================================
-   Sidebar resize handle
+   Resize handles (left sidebar + right TOC)
    ============================================================ */
 
-.sidebar-resizer {
+.sidebar-resizer,
+.toc-resizer {
   position: fixed;
   top: var(--sl-nav-height, 4rem);
   bottom: 0;
-  left: var(--sl-sidebar-width, 18rem);
   width: 4px;
   cursor: col-resize;
   z-index: 200;
@@ -258,7 +290,15 @@
   transition: background-color 150ms ease;
 }
 
-.sidebar-resizer::after {
+.sidebar-resizer {
+  left: var(--sl-sidebar-width, 18rem);
+}
+.toc-resizer {
+  right: var(--toc-width, 17rem);
+}
+
+.sidebar-resizer::after,
+.toc-resizer::after {
   content: '';
   position: absolute;
   inset-block: 0;
@@ -271,19 +311,30 @@
 
 .sidebar-resizer:hover::after,
 .sidebar-resizer:active::after,
-.sidebar-resizer:focus-visible::after {
+.sidebar-resizer:focus-visible::after,
+.toc-resizer:hover::after,
+.toc-resizer:active::after,
+.toc-resizer:focus-visible::after {
   background: var(--sl-color-accent);
 }
 
-.sidebar-resizer:focus-visible {
+.sidebar-resizer:focus-visible,
+.toc-resizer:focus-visible {
   outline: none;
 }
 
-/* Hide on mobile where sidebar is an overlay */
+/* Both handles only apply to the wide three-column layout. */
 @media (max-width: 72rem) {
-  .sidebar-resizer {
+  .sidebar-resizer,
+  .toc-resizer {
     display: none;
   }
+}
+
+/* Hide a handle when its column isn't present on the page. */
+:root:not([data-has-sidebar]) .sidebar-resizer,
+:root:not([data-has-toc]) .toc-resizer {
+  display: none;
 }
 
 /* ============================================================

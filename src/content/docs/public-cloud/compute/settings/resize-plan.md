@@ -11,8 +11,11 @@ storage. The plan change process requires a reboot of the VM.
 - To change your plan, go to the **VM Settings** and navigate to the **Change Plan** section.
 - Select from the available options or create a custom plan based on your needs.
 
-:::warning Downgrading is currently not supported. Shrinking the hard disk is not possible without
+:::caution
 
-risking data loss. :::
+Downgrading is currently not supported. Shrinking the hard disk is not possible without risking data
+loss.
+
+:::
 
 - Review the details and click **Review and Change Plan** to apply the new plan.

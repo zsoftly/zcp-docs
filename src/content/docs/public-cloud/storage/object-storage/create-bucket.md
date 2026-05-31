@@ -38,9 +38,12 @@ Once your object storage instance is active:
 - Optionally enable **Bucket Versioning** (required for Object Locking).
 - Optionally enable **Object Locking**: stores objects in write-once-read-many (WORM) model.
 
-:::note Object Locking only works in versioned buckets. Object versions count toward your total
+:::note
 
-storage costs. :::
+Object Locking only works in versioned buckets. Object versions count toward your total storage
+costs.
+
+:::
 
 - Click **Create**.
 

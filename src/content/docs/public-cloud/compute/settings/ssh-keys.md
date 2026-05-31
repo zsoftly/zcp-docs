@@ -10,7 +10,7 @@ authorized to log in to the VM.
 
 - Go to **VM Settings** → **SSH Keys** to view authorized keys.
 
-:::warning
+:::caution
 
 You need to stop the Instance before performing a reset SSH Key operation.
 

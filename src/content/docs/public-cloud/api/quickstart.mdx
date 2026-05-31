@@ -1,0 +1,784 @@
+---
+title: API Quickstart
+sidebar_position: 2
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## API Quickstart
+
+Authenticate and make your first API calls.
+
+### 1. Get your token
+
+Generate a Bearer token from the portal under **Profile → API Tokens**. Every request uses the base
+URL `https://api.zcp.zsoftly.ca/api` and sends the token in the `Authorization` header.
+
+### 2. List your virtual machines
+
+The example below authenticates and lists your virtual machines. Pick your language and replace
+`your-token` with your API token.
+
+<Tabs syncKey="lang">
+<TabItem label="cURL">
+
+```bash
+curl -s "https://api.zcp.zsoftly.ca/api/virtual-machines" \
+  -H "Authorization: Bearer your-token" \
+  -H "Accept: application/json" | jq '.data'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import requests
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"  # Profile -> API Tokens
+
+resp = requests.get(
+    f"{BASE}/virtual-machines",
+    headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/json"},
+)
+for vm in resp.json()["data"]:
+    print(vm["name"], vm["state"])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token'; // Profile -> API Tokens
+
+const res = await fetch(`${BASE}/virtual-machines`, {
+  headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/json' },
+});
+const { data } = await res.json();
+for (const vm of data) {
+  console.log(vm.name, vm.state);
+}
+```
+
+</TabItem>
+<TabItem label="TypeScript">
+
+```ts
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token'; // Profile -> API Tokens
+
+interface VM {
+  name: string;
+  state: string;
+}
+
+const res = await fetch(`${BASE}/virtual-machines`, {
+  headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/json' },
+});
+const { data } = (await res.json()) as { data: VM[] };
+for (const vm of data) {
+  console.log(vm.name, vm.state);
+}
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	const base = "https://api.zcp.zsoftly.ca/api"
+	const token = "your-token" // Profile -> API Tokens
+
+	req, _ := http.NewRequest("GET", base+"/virtual-machines", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var env struct {
+		Data []struct {
+			Name  string `json:"name"`
+			State string `json:"state"`
+		} `json:"data"`
+	}
+	json.NewDecoder(resp.Body).Decode(&env)
+	for _, vm := range env.Data {
+		fmt.Println(vm.Name, vm.State)
+	}
+}
+```
+
+</TabItem>
+<TabItem label="C#">
+
+```csharp
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        const string baseUrl = "https://api.zcp.zsoftly.ca/api";
+        const string token = "your-token"; // Profile -> API Tokens
+
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+        var json = await client.GetStringAsync($"{baseUrl}/virtual-machines");
+        Console.WriteLine(json);
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class ListVms {
+    public static void main(String[] args) throws Exception {
+        String base = "https://api.zcp.zsoftly.ca/api";
+        String token = "your-token"; // Profile -> API Tokens
+
+        HttpRequest req = HttpRequest.newBuilder()
+            .uri(URI.create(base + "/virtual-machines"))
+            .header("Authorization", "Bearer " + token)
+            .header("Accept", "application/json")
+            .GET()
+            .build();
+
+        HttpResponse<String> res = HttpClient.newHttpClient()
+            .send(req, HttpResponse.BodyHandlers.ofString());
+        System.out.println(res.body());
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Ruby">
+
+```ruby
+require "net/http"
+require "json"
+require "uri"
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token" # Profile -> API Tokens
+
+uri = URI("#{BASE}/virtual-machines")
+req = Net::HTTP::Get.new(uri)
+req["Authorization"] = "Bearer #{TOKEN}"
+req["Accept"] = "application/json"
+
+res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+JSON.parse(res.body)["data"].each do |vm|
+  puts "#{vm['name']} #{vm['state']}"
+end
+```
+
+</TabItem>
+<TabItem label="PHP">
+
+```php
+<?php
+$base = "https://api.zcp.zsoftly.ca/api";
+$token = "your-token"; // Profile -> API Tokens
+
+$ch = curl_init("$base/virtual-machines");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Authorization: Bearer $token",
+    "Accept: application/json",
+]);
+$body = json_decode(curl_exec($ch), true);
+curl_close($ch);
+
+foreach ($body["data"] as $vm) {
+    echo "{$vm['name']} {$vm['state']}\n";
+}
+```
+
+</TabItem>
+</Tabs>
+
+### 3. Create a virtual machine
+
+Slugs for `project`, `region`, `template`, `plan`, and `networks` come from the corresponding list
+endpoints (`/projects`, `/regions`, `/templates`, `/plans/service/compute`, `/networks`). See the
+[Cloud Platform API reference](https://api.zcp.zsoftly.ca/api/docs/nimbo) for the full request
+schema.
+
+<Tabs syncKey="lang">
+<TabItem label="cURL">
+
+```bash
+curl -s -X POST "https://api.zcp.zsoftly.ca/api/virtual-machines" \
+  -H "Authorization: Bearer your-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "name": "my-server",
+    "project": "my-project",
+    "region": "yow",
+    "boot_source": "template",
+    "template": "ubuntu-24-04",
+    "plan": "general-1vcpu-1gb",
+    "network_type": "public",
+    "networks": ["my-public-network"],
+    "is_public": true,
+    "billing_cycle": "hourly",
+    "hostname": "my-server"
+  }' | jq '.data'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import requests
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"
+
+vm = {
+    "name": "my-server",
+    "project": "my-project",
+    "region": "yow",
+    "boot_source": "template",
+    "template": "ubuntu-24-04",
+    "plan": "general-1vcpu-1gb",
+    "network_type": "public",
+    "networks": ["my-public-network"],
+    "is_public": True,
+    "billing_cycle": "hourly",
+    "hostname": "my-server",
+}
+
+resp = requests.post(
+    f"{BASE}/virtual-machines",
+    headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/json"},
+    json=vm,
+)
+print(resp.json()["data"])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token';
+
+const res = await fetch(`${BASE}/virtual-machines`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${TOKEN}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+  body: JSON.stringify({
+    name: 'my-server',
+    project: 'my-project',
+    region: 'yow',
+    boot_source: 'template',
+    template: 'ubuntu-24-04',
+    plan: 'general-1vcpu-1gb',
+    network_type: 'public',
+    networks: ['my-public-network'],
+    is_public: true,
+    billing_cycle: 'hourly',
+    hostname: 'my-server',
+  }),
+});
+console.log((await res.json()).data);
+```
+
+</TabItem>
+<TabItem label="TypeScript">
+
+```ts
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token';
+
+const res = await fetch(`${BASE}/virtual-machines`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${TOKEN}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+  body: JSON.stringify({
+    name: 'my-server',
+    project: 'my-project',
+    region: 'yow',
+    boot_source: 'template',
+    template: 'ubuntu-24-04',
+    plan: 'general-1vcpu-1gb',
+    network_type: 'public',
+    networks: ['my-public-network'],
+    is_public: true,
+    billing_cycle: 'hourly',
+    hostname: 'my-server',
+  }),
+});
+console.log((await res.json()).data);
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	const base = "https://api.zcp.zsoftly.ca/api"
+	const token = "your-token"
+
+	body := []byte(`{
+		"name": "my-server",
+		"project": "my-project",
+		"region": "yow",
+		"boot_source": "template",
+		"template": "ubuntu-24-04",
+		"plan": "general-1vcpu-1gb",
+		"network_type": "public",
+		"networks": ["my-public-network"],
+		"is_public": true,
+		"billing_cycle": "hourly",
+		"hostname": "my-server"
+	}`)
+
+	req, _ := http.NewRequest("POST", base+"/virtual-machines", bytes.NewReader(body))
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var env struct {
+		Data json.RawMessage `json:"data"`
+	}
+	json.NewDecoder(resp.Body).Decode(&env)
+	fmt.Println(string(env.Data))
+}
+```
+
+</TabItem>
+<TabItem label="C#">
+
+```csharp
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        const string baseUrl = "https://api.zcp.zsoftly.ca/api";
+        const string token = "your-token";
+
+        var body = """
+        {
+          "name": "my-server",
+          "project": "my-project",
+          "region": "yow",
+          "boot_source": "template",
+          "template": "ubuntu-24-04",
+          "plan": "general-1vcpu-1gb",
+          "network_type": "public",
+          "networks": ["my-public-network"],
+          "is_public": true,
+          "billing_cycle": "hourly",
+          "hostname": "my-server"
+        }
+        """;
+
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+        var content = new StringContent(body, Encoding.UTF8, "application/json");
+        var resp = await client.PostAsync($"{baseUrl}/virtual-machines", content);
+        Console.WriteLine(await resp.Content.ReadAsStringAsync());
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class CreateVm {
+    public static void main(String[] args) throws Exception {
+        String base = "https://api.zcp.zsoftly.ca/api";
+        String token = "your-token";
+
+        String body = """
+            {
+              "name": "my-server",
+              "project": "my-project",
+              "region": "yow",
+              "boot_source": "template",
+              "template": "ubuntu-24-04",
+              "plan": "general-1vcpu-1gb",
+              "network_type": "public",
+              "networks": ["my-public-network"],
+              "is_public": true,
+              "billing_cycle": "hourly",
+              "hostname": "my-server"
+            }
+            """;
+
+        HttpRequest req = HttpRequest.newBuilder()
+            .uri(URI.create(base + "/virtual-machines"))
+            .header("Authorization", "Bearer " + token)
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(body))
+            .build();
+
+        HttpResponse<String> res = HttpClient.newHttpClient()
+            .send(req, HttpResponse.BodyHandlers.ofString());
+        System.out.println(res.body());
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Ruby">
+
+```ruby
+require "net/http"
+require "json"
+require "uri"
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"
+
+uri = URI("#{BASE}/virtual-machines")
+req = Net::HTTP::Post.new(uri)
+req["Authorization"] = "Bearer #{TOKEN}"
+req["Content-Type"] = "application/json"
+req["Accept"] = "application/json"
+req.body = {
+  name: "my-server",
+  project: "my-project",
+  region: "yow",
+  boot_source: "template",
+  template: "ubuntu-24-04",
+  plan: "general-1vcpu-1gb",
+  network_type: "public",
+  networks: ["my-public-network"],
+  is_public: true,
+  billing_cycle: "hourly",
+  hostname: "my-server",
+}.to_json
+
+res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+puts JSON.parse(res.body)["data"]
+```
+
+</TabItem>
+<TabItem label="PHP">
+
+```php
+<?php
+$base = "https://api.zcp.zsoftly.ca/api";
+$token = "your-token";
+
+$vm = [
+    "name" => "my-server",
+    "project" => "my-project",
+    "region" => "yow",
+    "boot_source" => "template",
+    "template" => "ubuntu-24-04",
+    "plan" => "general-1vcpu-1gb",
+    "network_type" => "public",
+    "networks" => ["my-public-network"],
+    "is_public" => true,
+    "billing_cycle" => "hourly",
+    "hostname" => "my-server",
+];
+
+$ch = curl_init("$base/virtual-machines");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($vm));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Authorization: Bearer $token",
+    "Content-Type: application/json",
+    "Accept: application/json",
+]);
+$body = json_decode(curl_exec($ch), true);
+curl_close($ch);
+
+print_r($body["data"]);
+```
+
+</TabItem>
+</Tabs>
+
+### 4. Manage a virtual machine
+
+VM lifecycle actions use the VM slug and the action name — one of `start`, `stop`, `reboot`, or
+`reset`.
+
+<Tabs syncKey="lang">
+<TabItem label="cURL">
+
+```bash
+curl -s -X PUT "https://api.zcp.zsoftly.ca/api/virtual-machines/my-server/stop" \
+  -H "Authorization: Bearer your-token" \
+  -H "Accept: application/json" | jq '.message'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import requests
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"
+
+resp = requests.put(
+    f"{BASE}/virtual-machines/my-server/stop",
+    headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/json"},
+)
+print(resp.json()["message"])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token';
+
+const res = await fetch(`${BASE}/virtual-machines/my-server/stop`, {
+  method: 'PUT',
+  headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/json' },
+});
+console.log((await res.json()).message);
+```
+
+</TabItem>
+<TabItem label="TypeScript">
+
+```ts
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token';
+
+const res = await fetch(`${BASE}/virtual-machines/my-server/stop`, {
+  method: 'PUT',
+  headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/json' },
+});
+console.log((await res.json()).message);
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	const base = "https://api.zcp.zsoftly.ca/api"
+	const token = "your-token"
+
+	req, _ := http.NewRequest("PUT", base+"/virtual-machines/my-server/stop", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var env struct {
+		Message string `json:"message"`
+	}
+	json.NewDecoder(resp.Body).Decode(&env)
+	fmt.Println(env.Message)
+}
+```
+
+</TabItem>
+<TabItem label="C#">
+
+```csharp
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        const string baseUrl = "https://api.zcp.zsoftly.ca/api";
+        const string token = "your-token";
+
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", token);
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+        var resp = await client.PutAsync($"{baseUrl}/virtual-machines/my-server/stop", null);
+        Console.WriteLine(await resp.Content.ReadAsStringAsync());
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class ManageVm {
+    public static void main(String[] args) throws Exception {
+        String base = "https://api.zcp.zsoftly.ca/api";
+        String token = "your-token";
+
+        HttpRequest req = HttpRequest.newBuilder()
+            .uri(URI.create(base + "/virtual-machines/my-server/stop"))
+            .header("Authorization", "Bearer " + token)
+            .header("Accept", "application/json")
+            .PUT(HttpRequest.BodyPublishers.noBody())
+            .build();
+
+        HttpResponse<String> res = HttpClient.newHttpClient()
+            .send(req, HttpResponse.BodyHandlers.ofString());
+        System.out.println(res.body());
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Ruby">
+
+```ruby
+require "net/http"
+require "json"
+require "uri"
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"
+
+uri = URI("#{BASE}/virtual-machines/my-server/stop")
+req = Net::HTTP::Put.new(uri)
+req["Authorization"] = "Bearer #{TOKEN}"
+req["Accept"] = "application/json"
+
+res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+puts JSON.parse(res.body)["message"]
+```
+
+</TabItem>
+<TabItem label="PHP">
+
+```php
+<?php
+$base = "https://api.zcp.zsoftly.ca/api";
+$token = "your-token";
+
+$ch = curl_init("$base/virtual-machines/my-server/stop");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Authorization: Bearer $token",
+    "Accept: application/json",
+]);
+$body = json_decode(curl_exec($ch), true);
+curl_close($ch);
+
+echo $body["message"] . "\n";
+```
+
+</TabItem>
+</Tabs>
+
+### Infrastructure as Code (IaC)
+
+:::note
+
+A ZSoftly **Terraform** provider is coming soon — manage virtual machines, networks, and storage
+declaratively. Example configurations will be published here.
+
+:::
+
+### Configuration Management
+
+:::note
+
+An **Ansible** collection is coming soon — provision and configure ZSoftly resources from your
+playbooks. Modules and example playbooks will be published here.
+
+:::
+
+### Full API Reference
+
+The complete interactive API reference is available as Swagger UI:
+
+- **Cloud Platform API**:
+  [api.zcp.zsoftly.ca/api/docs/nimbo](https://api.zcp.zsoftly.ca/api/docs/nimbo)
+- **Object Storage API**:
+  [api.zcp.zsoftly.ca/api/docs/ceph](https://api.zcp.zsoftly.ca/api/docs/ceph)
+
+See also: [Authentication](./authentication), [API Reference](./reference)

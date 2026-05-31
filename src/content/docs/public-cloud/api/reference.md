@@ -20,16 +20,16 @@ The Swagger UI provides:
 
 ### API Domains
 
-| Domain         | Description                        |
-| -------------- | ---------------------------------- |
-| Authentication | Login, 2FA, password reset         |
-| Instances      | VM lifecycle management            |
-| Networks       | Public networks and VPCs           |
-| Storage        | Volumes, snapshots, object storage |
-| Kubernetes     | Cluster management                 |
-| Load Balancer  | Traffic distribution               |
-| DNS            | Domain and record management       |
-| Billing        | Invoices, payments, usage          |
-| Support        | Tickets and FAQs                   |
+| Domain           | Description                        |
+| ---------------- | ---------------------------------- |
+| Authentication   | Login, 2FA, password reset         |
+| Virtual Machines | VM lifecycle management            |
+| Networks         | Public networks and VPCs           |
+| Storage          | Volumes, snapshots, object storage |
+| Kubernetes       | Cluster management                 |
+| Load Balancer    | Traffic distribution               |
+| DNS              | Domain and record management       |
+| Billing          | Invoices, payments, usage          |
+| Support          | Tickets and FAQs                   |
 
 See also: [Authentication](./authentication), [API Quickstart](./quickstart)
