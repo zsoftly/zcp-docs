@@ -1,0 +1,39 @@
+name: '10: Deploy — Dev'
+
+# Auto-deploys to dev on every push to main after CI passes.
+# Deploy runs on zsoftly-iaas (self-hosted) — touches Dokploy API secrets.
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.gitignore'
+      - 'LICENSE'
+      - 'CONTRIBUTING.md'
+      - 'README.md'
+      - '.vscode/**'
+
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/00-ci.yml
+    secrets: inherit
+
+  deploy:
+    name: Deploy to Dev
+    needs: [ci]
+    runs-on: zsoftly-iaas
+    steps:
+      - name: '00: Checkout'
+        uses: actions/checkout@v5
+
+      - name: '01: Deploy to Dokploy (wait for completion)'
+        run: .github/scripts/dokploy-deploy.sh "${{ secrets.DOKPLOY_API_URL }}" "${{ secrets.DOKPLOY_API_KEY }}" "${{ secrets.DOKPLOY_APP_ID_DEV }}"
+
+      - name: '02: Smoke test live site'
+        run: .github/scripts/smoke-test.sh dev.docs.apps.zcp.zsoftly.ca

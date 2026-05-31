@@ -1,0 +1,99 @@
+name: '00: CI'
+
+# Runs on every PR and is callable from deploy workflows via workflow_call.
+# Public repo — uses GitHub-hosted runners (no limits).
+
+on:
+  pull_request:
+    paths-ignore:
+      - '.gitignore'
+      - 'LICENSE'
+      - 'CONTRIBUTING.md'
+      - 'README.md'
+      - '.vscode/**'
+  workflow_call:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: '00: Checkout'
+        uses: actions/checkout@v5
+
+      - name: '01: Setup Node.js'
+        uses: ./.github/actions/setup-node
+
+      - name: '02: Check formatting'
+        run: pnpm fmt:check
+
+      - name: '03: Run ESLint'
+        run: pnpm lint
+
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: '00: Checkout'
+        uses: actions/checkout@v5
+
+      - name: '01: Setup Node.js'
+        uses: ./.github/actions/setup-node
+
+      - name: '02: Run type check'
+        run: pnpm typecheck
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: '00: Checkout'
+        uses: actions/checkout@v5
+
+      - name: '01: Setup Node.js'
+        uses: ./.github/actions/setup-node
+
+      - name: '02: Run dependency audit'
+        run: pnpm audit --audit-level=high
+
+  build:
+    name: Build
+    needs: [lint, typecheck, security-audit]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: '00: Checkout'
+        uses: actions/checkout@v5
+
+      - name: '01: Setup Node.js'
+        uses: ./.github/actions/setup-node
+
+      - name: '02: Build'
+        run: pnpm build
+
+      - name: '03: Verify build output'
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "[FAIL] Build output not found at dist/"
+            exit 1
+          fi
+          FILE_COUNT=$(find dist -type f | wc -l)
+          echo "[OK] Build output verified: $FILE_COUNT files"
+          if [ "$FILE_COUNT" -lt 50 ]; then
+            echo "[FAIL] Expected at least 50 files in dist/, got $FILE_COUNT"
+            exit 1
+          fi
+
+      - name: '04: Upload build artifact on failure'
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: build-failure-logs
+          path: dist/
+          retention-days: 3
+          if-no-files-found: ignore
+          compression-level: 9

@@ -1,0 +1,67 @@
+name: '20: Deploy — Staging'
+
+# Manual deploy to staging from a release branch.
+# Deploy runs on zsoftly-iaas (self-hosted) — touches Dokploy API secrets.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Release branch to deploy (e.g. release/2026-06-01-1400)'
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-stg
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: zsoftly-iaas
+    steps:
+      - name: '00: Validate branch name'
+        run: |
+          BRANCH="${{ github.event.inputs.branch }}"
+          if [[ "$BRANCH" != release/* ]]; then
+            echo "[ERROR] Branch must start with 'release/' (got: $BRANCH)"
+            exit 1
+          fi
+          echo "[OK] Branch validated: $BRANCH"
+
+  ci:
+    name: CI
+    needs: [validate]
+    uses: ./.github/workflows/00-ci.yml
+    secrets: inherit
+
+  deploy:
+    name: Deploy to Staging
+    needs: [ci]
+    runs-on: zsoftly-iaas
+    steps:
+      - name: '00: Checkout'
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: '01: Switch app branch in Dokploy'
+        run: |
+          HTTP_STATUS=$(curl -Ss -o /tmp/dokploy-response.json -w "%{http_code}" -X POST \
+            "${{ secrets.DOKPLOY_API_URL }}/api/trpc/application.saveGithubProvider" \
+            -H "x-api-key: ${{ secrets.DOKPLOY_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"json\":{\"applicationId\":\"${{ secrets.DOKPLOY_APP_ID_STG }}\",\"branch\":\"${{ github.event.inputs.branch }}\",\"owner\":\"zsoftly\",\"repository\":\"zcp-docs\",\"buildPath\":\"/\",\"githubId\":\"${{ secrets.DOKPLOY_GITHUB_ID }}\"}}")
+          echo "[INFO] HTTP status: $HTTP_STATUS"
+          cat /tmp/dokploy-response.json
+          if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
+            echo "[ERROR] saveGithubProvider failed with HTTP $HTTP_STATUS"
+            exit 1
+          fi
+          echo "[OK] Branch set to ${{ github.event.inputs.branch }}"
+
+      - name: '02: Deploy to Dokploy (wait for completion)'
+        run: .github/scripts/dokploy-deploy.sh "${{ secrets.DOKPLOY_API_URL }}" "${{ secrets.DOKPLOY_API_KEY }}" "${{ secrets.DOKPLOY_APP_ID_STG }}"
+
+      - name: '03: Smoke test live site'
+        run: .github/scripts/smoke-test.sh stg.docs.apps.zcp.zsoftly.ca

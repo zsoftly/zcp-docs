@@ -1,0 +1,99 @@
+name: '30: Deploy — Production'
+
+# Manual deploy to production (docs.zcp.zsoftly.ca).
+# Prod runs on bare metal — rsync over SSH, same VM as zcp.zsoftly.ca.
+# Requires the same release branch to be deployed to stg first.
+# Deploy runs on zsoftly-iaas (self-hosted) — touches SSH keys and internal infra.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Release branch to deploy (must match what is on stg)'
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-prd
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: zsoftly-iaas
+    steps:
+      - name: '00: Validate branch name'
+        run: |
+          BRANCH="${{ github.event.inputs.branch }}"
+          if [[ "$BRANCH" != release/* ]]; then
+            echo "[ERROR] Branch must start with 'release/' (got: $BRANCH)"
+            exit 1
+          fi
+          echo "[OK] Branch validated: $BRANCH"
+
+      - name: '01: Verify branch was deployed to stg'
+        run: |
+          BRANCH="${{ github.event.inputs.branch }}"
+          ENCODED_INPUT=$(python3 -c "import json,urllib.parse; print(urllib.parse.quote(json.dumps({'json':{'applicationId':'${{ secrets.DOKPLOY_APP_ID_STG }}'}})))")
+
+          STG_BRANCH=$(curl -sf \
+            "${{ secrets.DOKPLOY_API_URL }}/api/trpc/application.one?input=${ENCODED_INPUT}" \
+            -H "x-api-key: ${{ secrets.DOKPLOY_API_KEY }}" \
+            | python3 -c "import json,sys; print(json.load(sys.stdin).get('result',{}).get('data',{}).get('json',{}).get('branch',''))")
+
+          if [ "$STG_BRANCH" != "$BRANCH" ]; then
+            echo "[ERROR] Branch '$BRANCH' is not deployed to stg (stg has: '$STG_BRANCH')"
+            echo "[ERROR] Deploy to stg first using the '20: Deploy Staging' workflow"
+            exit 1
+          fi
+          echo "[OK] Branch matches stg deployment: $STG_BRANCH"
+
+  ci:
+    name: CI
+    needs: [validate]
+    uses: ./.github/workflows/00-ci.yml
+    secrets: inherit
+
+  deploy:
+    name: Deploy to Production
+    needs: [ci]
+    runs-on: zsoftly-iaas
+    steps:
+      - name: '00: Checkout'
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: '01: Setup Node.js'
+        uses: ./.github/actions/setup-node
+
+      - name: '02: Build'
+        run: pnpm build
+
+      - name: '03: Verify build output'
+        run: |
+          FILE_COUNT=$(find dist -type f | wc -l)
+          echo "[OK] Build verified: $FILE_COUNT files"
+          if [ "$FILE_COUNT" -lt 50 ]; then
+            echo "[FAIL] Expected at least 50 files, got $FILE_COUNT"
+            exit 1
+          fi
+
+      - name: '04: Deploy to production via rsync'
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY_PRD }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST_PRD }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER_PRD }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH_PRD }}
+        run: |
+          echo "$DEPLOY_KEY" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+          rsync -az --delete \
+            -e "ssh -i /tmp/deploy_key -o StrictHostKeyChecking=no" \
+            dist/ \
+            "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}"
+          rm -f /tmp/deploy_key
+          echo "[OK] Deployed to ${DEPLOY_HOST}:${DEPLOY_PATH}"
+
+      - name: '05: Smoke test live site'
+        run: .github/scripts/smoke-test.sh docs.zcp.zsoftly.ca
