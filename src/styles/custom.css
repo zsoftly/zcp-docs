@@ -23,9 +23,13 @@
   }
 }
 
-/* Shift the fixed header element itself down by bar height */
+/* Shift the fixed header down by the bar height, and keep its ORIGINAL height.
+   Starlight sets .header height to --sl-nav-height; since we bumped that var to
+   make room for the bar, we subtract the bar back out here so the header doesn't
+   grow downward and cover the first sidebar item. */
 .header {
   top: var(--sl-announcement-height) !important;
+  height: calc(var(--sl-nav-height) - var(--sl-announcement-height)) !important;
 }
 :root[data-promo-dismissed] .header {
   top: 0 !important;

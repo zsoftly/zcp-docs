@@ -79,4 +79,4 @@ jobs:
         run: .github/scripts/dokploy-deploy.sh "${{ secrets.DOKPLOY_API_URL }}" "${{ secrets.DOKPLOY_API_KEY }}" "${{ secrets.DOKPLOY_APP_ID_STG }}"
 
       - name: '03: Smoke test live site'
-        run: .github/scripts/smoke-test.sh docs-stg.apps.zcp.zsoftly.ca
+        run: .github/scripts/smoke-test.sh stg-docs.apps.zcp.zsoftly.ca
