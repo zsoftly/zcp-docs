@@ -52,4 +52,6 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
-Documentation content © 2026 ZSoftly Technologies Inc. All rights reserved.
+Source code and tooling: [MIT](./LICENSE)
+
+Documentation content: © 2026 ZSoftly Technologies Inc. All rights reserved.
