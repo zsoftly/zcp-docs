@@ -1,12 +1,17 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightLinksValidator from 'starlight-links-validator';
 
 export default defineConfig({
   site: 'https://docs.zsoftly.ca',
   integrations: [
     starlight({
       title: 'ZSoftly Docs',
+      // Fails the build on broken internal links (404s, bad anchors).
+      // errorOnRelativeLinks: false — our content uses relative links (./page,
+      // ../section) which resolve correctly; we only want to catch real breakage.
+      plugins: [starlightLinksValidator({ errorOnRelativeLinks: false })],
       logo: {
         light: './public/logo.png',
         dark: './public/logo-dark.png',
