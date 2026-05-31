@@ -2,12 +2,20 @@ MIT License
 
 Copyright (c) 2026 ZSoftly Technologies Inc.
 
+For purposes of this license, "Software" means the source code, configuration
+files, tooling, and build scripts in this repository. "Software" expressly
+excludes all documentation content located in src/content/docs/ and any other
+prose, guides, or reference material (collectively, "Documentation").
+
+Documentation is not licensed under this MIT License and is All Rights Reserved
+by ZSoftly Technologies Inc. No license to use, copy, modify, or distribute
+Documentation is granted by this file.
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of the Software to deal in the Software without restriction, including without
+limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies of the Software, and to permit persons to whom
+the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -19,9 +27,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Note: This license covers the source code, configuration, and tooling in this
-repository. The documentation content (prose, guides, and reference material)
-is © 2026 ZSoftly Technologies Inc. All rights reserved.
