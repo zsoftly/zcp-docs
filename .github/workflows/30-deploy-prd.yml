@@ -17,6 +17,9 @@ concurrency:
   group: deploy-prd
   cancel-in-progress: false
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   validate:
     name: Validate
