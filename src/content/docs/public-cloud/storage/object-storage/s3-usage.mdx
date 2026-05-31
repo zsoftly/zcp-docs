@@ -7,8 +7,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## S3 API Usage
 
-ZSoftly object storage is S3-compatible (backed by Ceph RGW). Any tool or SDK that supports S3 works
-with it.
+ZSoftly object storage is S3-compatible. Any tool or SDK that supports S3 works with it.
 
 **Endpoints:**
 
@@ -235,7 +234,7 @@ foreach ($s3->listBuckets()["Buckets"] as $bucket) {
 
 Always enable path-style addressing: `forcePathStyle` (JS/TS), `UsePathStyle` (Go), `ForcePathStyle`
 (C#), `pathStyleAccessEnabled` (Java), `force_path_style` (Ruby), or `use_path_style_endpoint`
-(PHP). Ceph-backed S3 requires it. Virtual-hosted style is not supported.
+(PHP). ZSoftly object storage requires it. Virtual-hosted style is not supported.
 
 :::
 

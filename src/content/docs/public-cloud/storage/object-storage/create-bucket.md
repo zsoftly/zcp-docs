@@ -5,8 +5,8 @@ sidebar_position: 1
 
 ## Object Storage
 
-ZSoftly Public Cloud object storage is backed by Ceph and is S3-compatible. Use it for files,
-backups, static assets, or any unstructured data.
+ZSoftly Public Cloud object storage is S3-compatible. Use it for files, backups, static assets, or
+any unstructured data.
 
 ### Create an Object Storage Instance
 

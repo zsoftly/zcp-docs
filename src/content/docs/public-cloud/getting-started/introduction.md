@@ -25,7 +25,7 @@ Throughout these docs:
 - **Compute**: Launch VMs with shared CPU, dedicated CPU, high-frequency, or GPU configurations
 - **Networking**: Create public networks or fully isolated VPCs with subnets, ACLs, and VPN gateways
 - **Block Storage**: Attach NVMe SSD volumes to your VMs for additional persistent storage
-- **Object Storage**: S3-compatible object storage backed by Ceph
+- **Object Storage**: S3-compatible object storage
 - **Kubernetes**: Managed Kubernetes clusters with HA and autoscaling support
 - **Load Balancer**: Distribute traffic across VM instances with session persistence options
 - **DNS**: Manage domains and DNS records from the portal
