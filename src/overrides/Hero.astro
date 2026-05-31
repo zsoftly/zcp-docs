@@ -1,0 +1,325 @@
+---
+// Custom hero: compact two-column layout with philosophy quote panel.
+import type { Props } from '@astrojs/starlight/props';
+
+const { data } = Astro.locals.starlightRoute.entry;
+const { actions = [] } = data.hero || {};
+---
+
+<section class="zs-hero">
+  <!-- Left: title, tagline, actions -->
+  <div class="zs-hero__copy">
+    <p class="zs-hero__eyebrow">Official Documentation</p>
+    <h1 class="zs-hero__title" id="_top" data-page-title>
+      ZSoftly Public &amp; Private<br />Cloud Platform
+    </h1>
+    <p class="zs-hero__tagline">
+      User guides, CLI references, API docs, and architecture guides for
+      <strong>ZCP</strong> (Public Cloud) and <strong>ZPCP</strong> (Private Cloud).
+    </p>
+    {
+      actions.length > 0 && (
+        <div class="zs-hero__actions">
+          {actions.map(({ link: href, text, variant }) => (
+            <a href={href} class={`zs-hero__btn zs-hero__btn--${variant ?? 'secondary'}`}>
+              {text}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Right: philosophy quote panel -->
+  <aside class="zs-hero__quote" aria-label="ZSoftly philosophy">
+    <div class="zs-hero__quote-inner">
+      <div class="zs-hero__quote-mark" aria-hidden="true">"</div>
+      <blockquote>
+        Your infrastructure should answer to you — not to a hyperscaler's quarterly earnings call.
+      </blockquote>
+      <div class="zs-hero__quote-meta">
+        <span class="zs-hero__quote-rule"></span>
+        <span class="zs-hero__quote-source">The ZSoftly Principle</span>
+      </div>
+      <ul class="zs-hero__pillars">
+        <li>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg
+          >
+          Data sovereignty
+        </li>
+        <li>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><circle cx="12" cy="12" r="10"></circle><path
+              d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"
+            ></path></svg
+          >
+          No vendor lock-in
+        </li>
+        <li>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg
+          >
+          Sovereign infrastructure
+        </li>
+      </ul>
+    </div>
+  </aside>
+</section>
+
+<style>
+  /* ── Hero layout ──────────────────────────────────────────── */
+  .zs-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-block: 2.5rem 2rem;
+    align-items: center;
+  }
+
+  @media (min-width: 60rem) {
+    .zs-hero {
+      grid-template-columns: 1fr 320px;
+      gap: 3rem;
+      padding-block: 3rem 2.5rem;
+    }
+  }
+
+  /* ── Left copy ────────────────────────────────────────────── */
+  .zs-hero__eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sl-color-accent);
+    margin: 0 0 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .zs-hero__eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 1.25rem;
+    height: 2px;
+    background: var(--sl-color-accent);
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  .zs-hero__title {
+    font-size: clamp(1.625rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--sl-color-text);
+    margin: 0 0 1rem;
+    border: none;
+    padding: 0;
+  }
+
+  :root[data-theme='dark'] .zs-hero__title {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .zs-hero__tagline {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--sl-color-gray-2);
+    margin: 0 0 2rem;
+    max-width: 46ch;
+  }
+
+  .zs-hero__tagline strong {
+    color: var(--sl-color-text);
+    font-weight: 600;
+  }
+
+  :root[data-theme='dark'] .zs-hero__tagline strong {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* Action buttons */
+  .zs-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .zs-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.25rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition:
+      background-color 150ms ease,
+      transform 150ms ease,
+      box-shadow 200ms ease,
+      border-color 150ms ease;
+  }
+
+  .zs-hero__btn--primary {
+    background: var(--sl-color-accent);
+    color: #ffffff !important;
+  }
+
+  .zs-hero__btn--primary:hover {
+    background: var(--sl-color-accent-high);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -8px rgba(0, 25, 138, 0.45);
+  }
+
+  :root[data-theme='dark'] .zs-hero__btn--primary:hover {
+    box-shadow: 0 8px 20px -8px rgba(107, 142, 245, 0.4);
+  }
+
+  .zs-hero__btn--secondary {
+    background: transparent;
+    border: 1.5px solid var(--sl-color-gray-4);
+    color: var(--sl-color-text) !important;
+  }
+
+  .zs-hero__btn--secondary:hover {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-accent) !important;
+  }
+
+  /* ── Right quote panel ────────────────────────────────────── */
+  .zs-hero__quote-inner {
+    position: relative;
+    padding: 1.75rem;
+    border-radius: 12px;
+    border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-bg-sidebar);
+    overflow: hidden;
+  }
+
+  /* Top-right glow accent */
+  .zs-hero__quote-inner::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(ellipse at top right, rgba(0, 25, 138, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  :root[data-theme='dark'] .zs-hero__quote-inner::before {
+    background: radial-gradient(
+      ellipse at top right,
+      rgba(107, 142, 245, 0.13) 0%,
+      transparent 70%
+    );
+  }
+
+  .zs-hero__quote-mark {
+    font-size: 4.5rem;
+    line-height: 0.75;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--sl-color-accent);
+    opacity: 0.2;
+    margin-bottom: 0.25rem;
+    user-select: none;
+  }
+
+  .zs-hero__quote-inner blockquote {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--sl-color-text);
+    font-style: italic;
+    margin: 0 0 1.125rem;
+    border: none;
+    padding: 0;
+    quotes: none;
+  }
+
+  :root[data-theme='dark'] .zs-hero__quote-inner blockquote {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .zs-hero__quote-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .zs-hero__quote-rule {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.5px;
+    background: var(--sl-color-accent);
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  .zs-hero__quote-source {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sl-color-accent);
+  }
+
+  .zs-hero__pillars {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-gray-6);
+  }
+
+  .zs-hero__pillars li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--sl-color-gray-2);
+  }
+
+  .zs-hero__pillars svg {
+    flex-shrink: 0;
+    color: var(--sl-color-accent);
+    opacity: 0.75;
+  }
+</style>

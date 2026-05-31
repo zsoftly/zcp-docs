@@ -1,0 +1,35 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/Footer.astro';
+import { version } from '../../package.json';
+---
+
+<Default {...Astro.props} />
+
+<div class="site-footer">
+  <div class="site-footer__inner">
+    <nav class="site-footer__nav" aria-label="Footer navigation">
+      <a href="/public-cloud/getting-started/introduction">ZCP</a>
+      <a href="/private-cloud/overview">ZPCP</a>
+      <a href="/public-cloud/cli/installation">CLI</a>
+      <a href="/public-cloud/api/authentication">API</a>
+      <a href="https://cloud.zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer">Console</a>
+      <a href="https://github.com/zsoftly/zcp-docs" target="_blank" rel="noopener noreferrer"
+        >GitHub</a
+      >
+    </nav>
+    <p class="site-footer__copy">
+      © {new Date().getFullYear()} ZSoftly Technologies Inc.
+      <span class="site-footer__version">v{version}</span>
+    </p>
+  </div>
+</div>
+
+<style>
+  .site-footer__version {
+    margin-inline-start: 0.75rem;
+    font-size: 0.7rem;
+    color: var(--sl-color-gray-4);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

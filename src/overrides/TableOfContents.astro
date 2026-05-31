@@ -1,0 +1,238 @@
+---
+// Starlight default TOC + "Copy as Markdown" button below it.
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/TableOfContents.astro';
+
+const { toc } = Astro.locals.starlightRoute;
+---
+
+<Default {...Astro.props} />
+
+{
+  toc && toc.items.length > 0 && (
+    <div class="copy-md-wrapper">
+      <button id="copy-md-btn" type="button" class="copy-md-btn" aria-label="Copy page as Markdown">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+        </svg>
+        <span class="copy-md-label">Copy as Markdown</span>
+      </button>
+    </div>
+  )
+}
+
+<script>
+  const btn = document.getElementById('copy-md-btn');
+  if (!btn) throw new Error('copy-md-btn not found');
+
+  btn.addEventListener('click', async () => {
+    const label = btn.querySelector('.copy-md-label') as HTMLElement;
+    const content = document.querySelector('.sl-markdown-content');
+    if (!content || !label) return;
+
+    const markdown = htmlToMarkdown(content as HTMLElement);
+
+    try {
+      await navigator.clipboard.writeText(markdown);
+      label.textContent = 'Copied!';
+      setTimeout(() => {
+        label.textContent = 'Copy as Markdown';
+      }, 2000);
+    } catch {
+      label.textContent = 'Failed';
+      setTimeout(() => {
+        label.textContent = 'Copy as Markdown';
+      }, 2000);
+    }
+  });
+
+  function htmlToMarkdown(root: HTMLElement): string {
+    const lines: string[] = [];
+
+    function walk(node: Node, context: { listType?: 'ul' | 'ol'; depth?: number } = {}): string {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return (node.textContent ?? '').replace(/\n+/g, ' ');
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+      const el = node as HTMLElement;
+      const tag = el.tagName.toLowerCase();
+      const children = Array.from(el.childNodes);
+      const inner = () => children.map((c) => walk(c, context)).join('');
+
+      switch (tag) {
+        case 'h1':
+          return `\n# ${inner().trim()}\n`;
+        case 'h2':
+          return `\n## ${inner().trim()}\n`;
+        case 'h3':
+          return `\n### ${inner().trim()}\n`;
+        case 'h4':
+          return `\n#### ${inner().trim()}\n`;
+        case 'h5':
+          return `\n##### ${inner().trim()}\n`;
+        case 'h6':
+          return `\n###### ${inner().trim()}\n`;
+
+        case 'p':
+          return `\n${inner().trim()}\n`;
+
+        case 'strong':
+        case 'b':
+          return `**${inner()}**`;
+
+        case 'em':
+        case 'i':
+          return `*${inner()}*`;
+
+        case 'code': {
+          const text = el.textContent ?? '';
+          if (el.closest('pre')) return text;
+          return `\`${text}\``;
+        }
+
+        case 'pre': {
+          const codeEl = el.querySelector('code');
+          const langClass = codeEl?.className?.match(/language-(\w+)/)?.[1] ?? '';
+          const code = (codeEl?.textContent ?? el.textContent ?? '').trimEnd();
+          return `\n\`\`\`${langClass}\n${code}\n\`\`\`\n`;
+        }
+
+        case 'blockquote':
+          return inner()
+            .trim()
+            .split('\n')
+            .map((l) => `> ${l}`)
+            .join('\n');
+
+        case 'a': {
+          const href = el.getAttribute('href') ?? '';
+          const text = inner().trim();
+          if (!href || href === text) return text;
+          return `[${text}](${href})`;
+        }
+
+        case 'ul': {
+          const items = children
+            .filter((c) => (c as HTMLElement).tagName?.toLowerCase() === 'li')
+            .map((li) => {
+              const content = walk(li, { listType: 'ul', depth: (context.depth ?? 0) + 1 })
+                .trim()
+                .replace(/\n/g, '\n  ');
+              return `${'  '.repeat(context.depth ?? 0)}- ${content}`;
+            });
+          return `\n${items.join('\n')}\n`;
+        }
+
+        case 'ol': {
+          let idx = 1;
+          const items = children
+            .filter((c) => (c as HTMLElement).tagName?.toLowerCase() === 'li')
+            .map((li) => {
+              const content = walk(li, { listType: 'ol', depth: (context.depth ?? 0) + 1 })
+                .trim()
+                .replace(/\n/g, '\n   ');
+              return `${'  '.repeat(context.depth ?? 0)}${idx++}. ${content}`;
+            });
+          return `\n${items.join('\n')}\n`;
+        }
+
+        case 'li':
+          return inner().trim();
+
+        case 'hr':
+          return '\n---\n';
+
+        case 'br':
+          return '\n';
+
+        case 'table': {
+          const rows = Array.from(el.querySelectorAll('tr'));
+          if (!rows.length) return '';
+          const toRow = (tr: Element) =>
+            '| ' +
+            Array.from(tr.querySelectorAll('th,td'))
+              .map((c) => (c.textContent ?? '').trim().replace(/\|/g, '\\|'))
+              .join(' | ') +
+            ' |';
+          const header = toRow(rows[0]);
+          const sep =
+            '| ' +
+            Array.from(rows[0].querySelectorAll('th,td'))
+              .map(() => '---')
+              .join(' | ') +
+            ' |';
+          const body = rows.slice(1).map(toRow).join('\n');
+          return `\n${header}\n${sep}\n${body}\n`;
+        }
+
+        // Skip decorative/nav elements
+        case 'button':
+        case 'nav':
+        case 'aside':
+        case 'svg':
+        case 'script':
+        case 'style':
+          return '';
+
+        default:
+          return inner();
+      }
+    }
+
+    return walk(root)
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+</script>
+
+<style>
+  .copy-md-wrapper {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-gray-6);
+  }
+
+  .copy-md-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.4rem 0.625rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--sl-color-gray-2);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease;
+    font-family: inherit;
+  }
+
+  .copy-md-btn:hover {
+    background-color: var(--sl-color-gray-6);
+    border-color: var(--sl-color-gray-4);
+    color: var(--sl-color-gray-1);
+  }
+
+  .copy-md-btn svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+</style>

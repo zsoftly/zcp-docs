@@ -1,0 +1,26 @@
+name: Documentation error
+description: Report a typo, factual error, or outdated content
+labels: ['bug', 'documentation']
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Page URL
+      description: Link to the affected page on docs.zsoftly.ca
+      placeholder: https://docs.zsoftly.ca/public-cloud/...
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong?
+      description: Describe the error clearly. Quote the incorrect text if possible.
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: What should it say?
+      description: Provide the correct content or describe what is missing.
+    validations:
+      required: false

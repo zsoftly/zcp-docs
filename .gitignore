@@ -1,0 +1,129 @@
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Exclude terraform.tfvars (contains API credentials)
+terraform.tfvars
+
+# Override files as they may contain sensitive info
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
+# Lock files
+.terraform.lock.hcl
+
+# sensitive files
+**/.env
+**/.env.*
+
+# Exclude generated docs
+docs/_build/
+
+# AWS specific
+.aws/
+.aws-credentials
+credentials
+config
+
+# MacOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux specific
+*~
+.directory
+
+# Python virtual environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# IDE specific
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+
+# Editor files
+*.swp
+*.swo
+*.bak
+*~
+.~lock.*
+
+# Log files
+*.log
+
+# SSH Keys
+*.pem
+*.key
+
+# WireGuard private keys - NEVER commit these!
+**/privatekey
+**/private.key
+**/*-private.key
+**/wg-private-*
+**/*.conf
+# Allow template files
+!**/wg0.conf.j2
+!**/client-config.conf.j2
+!**/*.conf.j2
+!**/templates/*.conf
+
+# Ignore Terraform plan output files
+plan.out
+plan.json
+
+# Implementation summaries (internal docs)
+IMPLEMENTATION_SUMMARY_*.md
+
+# Ai
+.claude/settings.local.json
+
+# Ansible Galaxy roles (installed via requirements.yml, not committed)
+ansible/roles/PowerDNS.*
+
+# Node.js
+node_modules/
+package-lock.json
+.claude
+
+tmp/
+# API Discovery Playbooks
+**/explore-*.yml
+
+# Local test/deployment scripts
+ansible/cloudstack/tests/
+
+# Astro / Starlight
+dist/
+.astro/
+.pnpm-store/
+
+# Legacy Docusaurus artifacts (safety — do not commit if re-generated)
+build/
+.docusaurus/
+.cache-loader/

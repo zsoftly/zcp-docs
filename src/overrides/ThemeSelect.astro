@@ -1,0 +1,144 @@
+---
+// Sun/moon icon toggle replacing Starlight's default dropdown.
+// Hooks into StarlightThemeProvider (initialised inline by ThemeProvider.astro).
+---
+
+<starlight-theme-toggle>
+  <button type="button" class="theme-toggle-btn" aria-label="Toggle dark/light mode">
+    <!-- Moon: visible in light mode — click to go dark -->
+    <svg
+      class="theme-icon moon"
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    <!-- Sun: visible in dark mode — click to go light -->
+    <svg
+      class="theme-icon sun"
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </button>
+</starlight-theme-toggle>
+
+{/* Keep StarlightThemeProvider pickers in sync */}
+<script is:inline>
+  StarlightThemeProvider.updatePickers();
+</script>
+
+<script>
+  type Theme = 'light' | 'dark';
+
+  const storageKey = 'starlight-theme';
+
+  function getStoredTheme(): Theme | null {
+    const v = typeof localStorage !== 'undefined' ? localStorage.getItem(storageKey) : null;
+    return v === 'light' || v === 'dark' ? v : null;
+  }
+
+  function getSystemTheme(): Theme {
+    return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+
+  function getActiveTheme(): Theme {
+    return (document.documentElement.dataset.theme as Theme) ?? getSystemTheme();
+  }
+
+  function applyTheme(theme: Theme) {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem(storageKey, theme);
+    // Keep any remaining Starlight pickers (pagefind UI etc.) in sync
+    (window as any).StarlightThemeProvider?.updatePickers(theme);
+  }
+
+  class StarlightThemeToggle extends HTMLElement {
+    private moon: HTMLElement | null;
+    private sun: HTMLElement | null;
+
+    constructor() {
+      super();
+      this.moon = this.querySelector<HTMLElement>('.moon');
+      this.sun = this.querySelector<HTMLElement>('.sun');
+
+      this.syncIcons(getActiveTheme());
+
+      // Reflect external theme changes (e.g. from ThemeProvider on page load)
+      const observer = new MutationObserver(() => {
+        this.syncIcons(getActiveTheme());
+      });
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme'],
+      });
+
+      this.querySelector('button')?.addEventListener('click', () => {
+        const next: Theme = getActiveTheme() === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        this.syncIcons(next);
+      });
+    }
+
+    syncIcons(theme: Theme) {
+      if (this.moon) this.moon.style.display = theme === 'dark' ? 'none' : 'block';
+      if (this.sun) this.sun.style.display = theme === 'dark' ? 'block' : 'none';
+    }
+  }
+
+  customElements.define('starlight-theme-toggle', StarlightThemeToggle);
+</script>
+
+<style>
+  .theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--sl-color-gray-1);
+    border-radius: 0.375rem;
+    transition:
+      color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .theme-toggle-btn:hover {
+    color: var(--sl-color-accent);
+    background-color: var(--sl-color-gray-6);
+  }
+
+  .theme-icon {
+    display: none;
+    flex-shrink: 0;
+  }
+</style>

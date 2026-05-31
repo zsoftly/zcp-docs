@@ -1,0 +1,30 @@
+name: Missing content
+description: Request documentation for a topic that isn't covered
+labels: ['enhancement', 'documentation']
+body:
+  - type: input
+    id: topic
+    attributes:
+      label: What topic is missing?
+      placeholder: e.g. How to resize a Kubernetes node pool
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Why do you need this?
+      description: Briefly explain your use case or what you were trying to do.
+    validations:
+      required: false
+  - type: dropdown
+    id: section
+    attributes:
+      label: Which section does this belong in?
+      options:
+        - Public Cloud (ZCP)
+        - Private Cloud (ZPCP)
+        - CLI
+        - API
+        - Not sure
+    validations:
+      required: true
