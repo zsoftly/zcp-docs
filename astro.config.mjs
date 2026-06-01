@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 
 export default defineConfig({
-  site: 'https://docs.zsoftly.ca',
+  site: 'https://docs.zcp.zsoftly.ca',
   integrations: [
     starlight({
       title: 'ZSoftly Docs',
@@ -75,6 +75,7 @@ export default defineConfig({
                 { label: 'Introduction', slug: 'public-cloud/getting-started/introduction' },
                 { label: 'Account Signup', slug: 'public-cloud/getting-started/account-signup' },
                 { label: 'Profile Setup', slug: 'public-cloud/getting-started/profile-setup' },
+                { label: 'Regions', slug: 'public-cloud/getting-started/regions' },
                 { label: 'Quickstart', slug: 'public-cloud/getting-started/quickstart' },
               ],
             },
@@ -84,6 +85,8 @@ export default defineConfig({
               items: [
                 { label: 'Create Instance', slug: 'public-cloud/compute/create-instance' },
                 { label: 'Instance Overview', slug: 'public-cloud/compute/instance-overview' },
+                { label: 'Plan Names', slug: 'public-cloud/compute/plan-names' },
+                { label: 'Instance Types', slug: 'public-cloud/compute/instance-types' },
                 { label: 'Connect via SSH', slug: 'public-cloud/compute/connect-ssh' },
                 { label: 'Connect via RDP', slug: 'public-cloud/compute/connect-rdp' },
                 { label: 'Console Access', slug: 'public-cloud/compute/console-access' },
@@ -103,6 +106,11 @@ export default defineConfig({
                     { label: 'SSH Keys', slug: 'public-cloud/compute/settings/ssh-keys' },
                   ],
                 },
+                { label: 'Load Balancer', slug: 'public-cloud/load-balancer' },
+                { label: 'Affinity Groups', slug: 'public-cloud/affinity-groups' },
+                { label: 'Auto Scaling', slug: 'public-cloud/auto-scaling' },
+                { label: 'VM Snapshots', slug: 'public-cloud/backups-snapshots/vm-snapshots' },
+                { label: 'Backups', slug: 'public-cloud/backups-snapshots/backups' },
               ],
             },
             {
@@ -142,7 +150,7 @@ export default defineConfig({
                   collapsed: true,
                   items: [
                     { label: 'Create Volume', slug: 'public-cloud/storage/block-storage/create-volume' },
-                    { label: 'Snapshots', slug: 'public-cloud/storage/block-storage/snapshots' },
+                    { label: 'Volume Snapshots', slug: 'public-cloud/storage/block-storage/snapshots' },
                   ],
                 },
                 {
@@ -166,7 +174,6 @@ export default defineConfig({
                 { label: 'Dashboard Access', slug: 'public-cloud/kubernetes/dashboard-access' },
               ],
             },
-            { label: 'Load Balancer', slug: 'public-cloud/load-balancer' },
             {
               label: 'DNS',
               collapsed: true,
@@ -175,18 +182,6 @@ export default defineConfig({
                 { label: 'Records', slug: 'public-cloud/dns/records' },
               ],
             },
-            {
-              label: 'Backups & Snapshots',
-              collapsed: true,
-              items: [
-                { label: 'VM Snapshots', slug: 'public-cloud/backups-snapshots/vm-snapshots' },
-                { label: 'Volume Snapshots', slug: 'public-cloud/backups-snapshots/volume-snapshots' },
-                { label: 'Backups', slug: 'public-cloud/backups-snapshots/backups' },
-              ],
-            },
-            { label: 'Affinity Groups', slug: 'public-cloud/affinity-groups' },
-            { label: 'Auto Scaling', slug: 'public-cloud/auto-scaling' },
-            { label: 'Billing', slug: 'public-cloud/billing' },
           ],
         },
 
@@ -212,14 +207,21 @@ export default defineConfig({
               collapsed: true,
               items: [
                 { label: 'Apache CloudStack', slug: 'private-cloud/reference/apache-cloudstack' },
+                { label: 'OpenStack', slug: 'private-cloud/reference/openstack' },
                 { label: 'Ceph Storage', slug: 'private-cloud/reference/ceph-storage' },
                 { label: 'VPN Connectivity', slug: 'private-cloud/reference/vpn-connectivity' },
-                { label: 'Support', slug: 'private-cloud/reference/support' },
+                { label: 'Identity & SSO', slug: 'private-cloud/reference/identity-sso' },
               ],
             },
+            { label: 'Support', slug: 'private-cloud/reference/support' },
           ],
         },
 
+        // ── Billing ────────────────────────────────────────────
+        {
+          label: 'Billing',
+          items: [{ label: 'Billing', slug: 'public-cloud/billing' }],
+        },
       ],
 
       // Algolia DocSearch — uncomment once credentials are issued

@@ -1,7 +1,7 @@
 # ZSoftly Documentation
 
-Source for [docs.zsoftly.ca](https://docs.zsoftly.ca) — the official documentation for the ZSoftly
-Cloud Platform (ZCP) and ZSoftly Private Cloud Platform (ZPCP).
+Source for [docs.zcp.zsoftly.ca](https://docs.zcp.zsoftly.ca), the official documentation for the
+ZSoftly Cloud Platform (ZCP) and ZSoftly Private Cloud Platform (ZPCP).
 
 Built with [Starlight](https://starlight.astro.build) (Astro).
 
@@ -49,6 +49,15 @@ title: Page Title
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Contributor docs
+
+Guides in [docs/](./docs/):
+
+- [content-standards.md](./docs/content-standards.md): writing style and Starlight authoring rules
+- [release-process.md](./docs/release-process.md): branch naming, commit format, local validation,
+  the PR
+- [launch-checklist.md](./docs/launch-checklist.md): content and quality checks before publishing
 
 ## License
 

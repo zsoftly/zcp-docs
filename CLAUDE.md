@@ -8,6 +8,12 @@ AI assistant instructions for this repository (the ZSoftly documentation site).
 
 - **[README.md](./README.md)** — overview and local setup
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** — workflow, quality checks, commit style, PRs
+- **[docs/](./docs/)** — contributor guides: [content-standards](./docs/content-standards.md),
+  [release-process](./docs/release-process.md), [launch-checklist](./docs/launch-checklist.md)
+- **Internal platform docs** — for product, API, or operations details not documented here, search
+  the platform repo ([github.com/zsoftly/platform](https://github.com/zsoftly/platform) → `docs/`,
+  typically a sibling checkout at `../platform`) as the source of truth. Do not copy internal-only
+  details into these public pages.
 
 ---
 
@@ -86,7 +92,7 @@ These are Starlight-specific and easy to get wrong:
 
 ## Environment Names
 
-Always use the short forms (they match `deploy/caddy/{dev,stg,prd}.Caddyfile`):
+Always use the short forms:
 
 | Use   | Never use            |
 | ----- | -------------------- |
@@ -104,7 +110,6 @@ Always use the short forms (they match `deploy/caddy/{dev,stg,prd}.Caddyfile`):
 - Layout overrides: `src/overrides/*.astro`; global styles: `src/styles/custom.css`
 - Package manager: **pnpm 10**
 - Link checking: `starlight-links-validator` (the build fails on broken internal links)
-- Hosting: **Caddy + Docker** (`Dockerfile`, `deploy/caddy/`)
 
 ---
 

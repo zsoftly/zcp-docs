@@ -6,8 +6,8 @@ body:
     id: page
     attributes:
       label: Page URL
-      description: Link to the affected page on docs.zsoftly.ca
-      placeholder: https://docs.zsoftly.ca/public-cloud/...
+      description: Link to the affected page on docs.zcp.zsoftly.ca
+      placeholder: https://docs.zcp.zsoftly.ca/public-cloud/...
     validations:
       required: true
   - type: textarea
