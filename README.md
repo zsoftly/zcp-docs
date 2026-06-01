@@ -50,6 +50,17 @@ title: Page Title
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
+## Engineering and process docs
+
+Internal source-of-truth specs in [docs/](./docs/):
+
+- [release-process.md](./docs/release-process.md) — git workflow, branch naming, cutting and
+  shipping releases
+- [cicd.md](./docs/cicd.md) — the four GitHub Actions workflows, CI gates, secrets, runners
+- [environments.md](./docs/environments.md) — dev, stg, prd definitions
+- [content-standards.md](./docs/content-standards.md) — writing style and Starlight authoring rules
+- [launch-checklist.md](./docs/launch-checklist.md) — pre-launch validation
+
 ## License
 
 Source code and tooling: [MIT](./LICENSE)

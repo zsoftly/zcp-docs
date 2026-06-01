@@ -1,4 +1,4 @@
-name: '20: Deploy — Staging'
+name: '20: Deploy Staging'
 
 # Manual deploy to staging from a release branch.
 # Deploy runs on zsoftly-iaas (self-hosted) — touches Dokploy API secrets.

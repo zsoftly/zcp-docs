@@ -1,4 +1,4 @@
-name: '10: Deploy — Dev'
+name: '10: Deploy Dev'
 
 # Auto-deploys to dev on every push to main after CI passes.
 # Deploy runs on zsoftly-iaas (self-hosted) — touches Dokploy API secrets.

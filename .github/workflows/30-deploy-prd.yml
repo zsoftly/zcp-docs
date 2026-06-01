@@ -1,4 +1,4 @@
-name: '30: Deploy — Production'
+name: '30: Deploy Production'
 
 # Manual deploy to production (docs.zcp.zsoftly.ca).
 # Prod runs on bare metal — rsync over SSH, same VM as zcp.zsoftly.ca.

@@ -8,6 +8,9 @@ AI assistant instructions for this repository (the ZSoftly documentation site).
 
 - **[README.md](./README.md)** — overview and local setup
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** — workflow, quality checks, commit style, PRs
+- **[docs/](./docs/)** — engineering source of truth: [release-process](./docs/release-process.md),
+  [cicd](./docs/cicd.md), [environments](./docs/environments.md),
+  [content-standards](./docs/content-standards.md), [launch-checklist](./docs/launch-checklist.md)
 
 ---
 
