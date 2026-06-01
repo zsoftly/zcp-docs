@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 
 export default defineConfig({
-  site: 'https://docs.zsoftly.ca',
+  site: 'https://docs.zcp.zsoftly.ca',
   integrations: [
     starlight({
       title: 'ZSoftly Docs',
