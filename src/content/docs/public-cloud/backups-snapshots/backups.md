@@ -35,4 +35,4 @@ Screenshots coming.
 
 :::
 
-See also: [VM Snapshots](./vm-snapshots), [Volume Snapshots](./volume-snapshots)
+See also: [VM Snapshots](./vm-snapshots), [Volume Snapshots](../storage/block-storage/snapshots)

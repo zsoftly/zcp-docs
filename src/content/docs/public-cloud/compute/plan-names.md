@@ -12,26 +12,26 @@ name — no lookup table required.
 
 A plan ID is a **series** followed by a `.` and a **size**:
 
-```
-ca2.l
-│││ └── size
-││└──── region  (1 = Ottawa · 2 = Montreal)
-│└───── processor (i = Intel · a = AMD)
-└────── c = compute
+```mermaid
+graph LR
+  ID["ca2.l"]
+  ID --> C["c = compute"]
+  ID --> P["a = processor (i Intel / a AMD)"]
+  ID --> R["2 = region (1 YOW / 2 YUL)"]
+  ID --> S["l = size"]
 ```
 
 Memory- and CPU-optimized plans add a family letter, and the budget storage tier adds a trailing
 `s`:
 
-```
-cam2.2xl        ca2s.s
-│││││ └── size   ││││ └── size
-││││└──── region │││└──── s = Premium SSD budget variant
-│││└───── 2 YUL  ││└───── region (2 = Montreal)
-││└────── m mem- │└────── processor (a = AMD)
-││        optim. └─────── c = compute
-│└─────── processor       (no family letter = general purpose)
-└──────── c = compute
+```mermaid
+graph LR
+  C["c = compute"] --> P["processor (i / a)"]
+  P --> F["family (none = general / m = memory / c = CPU)"]
+  F --> R["region (1 YOW / 2 YUL)"]
+  R --> V["variant (none = NVMe / s = Premium SSD budget)"]
+  V --> D["."]
+  D --> Z["size (xs to 6xl)"]
 ```
 
 ## Segments
@@ -41,23 +41,23 @@ cam2.2xl        ca2s.s
 | Prefix    | `c`                                     | Compute                                            |
 | Processor | `i` / `a`                               | Intel / AMD                                        |
 | Family    | _(none)_ / `m` / `c`                    | General purpose / Memory-optimized / CPU-optimized |
-| Region    | `1` / `2`                               | Ottawa (YOW) / Montreal (YUL)                      |
+| Region    | `1` / `2`                               | YOW / YUL                                          |
 | Variant   | _(none)_ / `s`                          | Standard NVMe / Premium SSD budget tier            |
 | Size      | `xs` `s` `m` `l` `xl` `2xl` `4xl` `6xl` | Relative capacity, smallest to largest             |
 
 ## Plan series
 
-| Series | Region         | Processor | Storage     | Family                   |
-| ------ | -------------- | --------- | ----------- | ------------------------ |
-| `ci1`  | Ottawa (YOW)   | Intel     | NVMe        | General purpose          |
-| `ca1`  | Ottawa (YOW)   | AMD       | NVMe        | General purpose          |
-| `ca2`  | Montreal (YUL) | AMD       | Pro NVMe    | General purpose          |
-| `ca2s` | Montreal (YUL) | AMD       | Premium SSD | General purpose (budget) |
-| `cim1` | Ottawa (YOW)   | Intel     | NVMe        | Memory-optimized         |
-| `cam1` | Ottawa (YOW)   | AMD       | NVMe        | Memory-optimized         |
-| `cam2` | Montreal (YUL) | AMD       | Pro NVMe    | Memory-optimized         |
-| `cac1` | Ottawa (YOW)   | AMD       | NVMe        | CPU-optimized            |
-| `cac2` | Montreal (YUL) | AMD       | Pro NVMe    | CPU-optimized            |
+| Series | Region | Processor | Storage     | Family                   |
+| ------ | ------ | --------- | ----------- | ------------------------ |
+| `ci1`  | YOW    | Intel     | NVMe        | General purpose          |
+| `ca1`  | YOW    | AMD       | NVMe        | General purpose          |
+| `ca2`  | YUL    | AMD       | Pro NVMe    | General purpose          |
+| `ca2s` | YUL    | AMD       | Premium SSD | General purpose (budget) |
+| `cim1` | YOW    | Intel     | NVMe        | Memory-optimized         |
+| `cam1` | YOW    | AMD       | NVMe        | Memory-optimized         |
+| `cam2` | YUL    | AMD       | Pro NVMe    | Memory-optimized         |
+| `cac1` | YOW    | AMD       | NVMe        | CPU-optimized            |
+| `cac2` | YUL    | AMD       | Pro NVMe    | CPU-optimized            |
 
 ## vCPU-to-RAM ratios
 

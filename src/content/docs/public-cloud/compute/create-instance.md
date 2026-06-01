@@ -31,8 +31,11 @@ Screenshots coming.
 
 ## Choose an Image
 
-Select an OS or application template. Available OS images are listed. Import a custom ISO if needed.
-For Microsoft Windows, only official evaluation versions are available.
+Select an OS or application template. Import a custom ISO if needed. For Microsoft Windows, only
+official evaluation versions are available.
+
+Browse the full catalogs: [OS Images](https://zcp.zsoftly.ca/marketplace/os-images) and
+[One-Click Apps](https://zcp.zsoftly.ca/marketplace/apps).
 
 :::note
 
@@ -67,6 +70,9 @@ Screenshots coming.
   in-memory databases, big data processing, and real-time caching systems.
 - **Database Optimized (DO)**: Specifically tuned for database workloads, offering enhanced I/O
   performance and memory-to-disk ratio for transactional or analytical database systems.
+
+See [Instance Types](./instance-types) for families and storage tiers, and the
+[pricing page](https://zcp.zsoftly.ca/pricing) for per-size specs and pricing.
 
 :::note
 
