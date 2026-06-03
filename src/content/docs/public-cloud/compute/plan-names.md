@@ -21,43 +21,48 @@ graph LR
   ID --> S["l = size"]
 ```
 
-Memory- and CPU-optimized plans add a family letter, and the budget storage tier adds a trailing
-`s`:
+Memory- and CPU-optimized plans add a family letter, and budget storage tiers add a trailing `s`
+(Premium SSD, YUL) or `h` (HDD, YOW):
 
 ```mermaid
 graph LR
   C["c = compute"] --> P["processor (i / a)"]
   P --> F["family (none = general / m = memory / c = CPU)"]
   F --> R["region (1 YOW / 2 YUL)"]
-  R --> V["variant (none = NVMe / s = Premium SSD budget)"]
+  R --> V["variant (none = standard / s = Premium SSD budget / h = HDD budget)"]
   V --> D["."]
   D --> Z["size (xs to 6xl)"]
 ```
 
 ## Segments
 
-| Position  | Values                                  | Meaning                                            |
-| --------- | --------------------------------------- | -------------------------------------------------- |
-| Prefix    | `c`                                     | Compute                                            |
-| Processor | `i` / `a`                               | Intel / AMD                                        |
-| Family    | _(none)_ / `m` / `c`                    | General purpose / Memory-optimized / CPU-optimized |
-| Region    | `1` / `2`                               | YOW / YUL                                          |
-| Variant   | _(none)_ / `s`                          | Standard NVMe / Premium SSD budget tier            |
-| Size      | `xs` `s` `m` `l` `xl` `2xl` `4xl` `6xl` | Relative capacity, smallest to largest             |
+| Position  | Values                                  | Meaning                                                     |
+| --------- | --------------------------------------- | ----------------------------------------------------------- |
+| Prefix    | `c`                                     | Compute                                                     |
+| Processor | `i` / `a`                               | Intel / AMD                                                 |
+| Family    | _(none)_ / `m` / `c`                    | General purpose / Memory-optimized / CPU-optimized          |
+| Region    | `1` / `2`                               | YOW / YUL                                                   |
+| Variant   | _(none)_ / `s` / `h`                    | Standard tier / Premium SSD budget (YUL) / HDD budget (YOW) |
+| Size      | `xs` `s` `m` `l` `xl` `2xl` `4xl` `6xl` | Relative capacity, smallest to largest                      |
 
 ## Plan series
 
-| Series | Region | Processor | Storage     | Family                   |
-| ------ | ------ | --------- | ----------- | ------------------------ |
-| `ci1`  | YOW    | Intel     | NVMe        | General purpose          |
-| `ca1`  | YOW    | AMD       | NVMe        | General purpose          |
-| `ca2`  | YUL    | AMD       | Pro NVMe    | General purpose          |
-| `ca2s` | YUL    | AMD       | Premium SSD | General purpose (budget) |
-| `cim1` | YOW    | Intel     | NVMe        | Memory-optimized         |
-| `cam1` | YOW    | AMD       | NVMe        | Memory-optimized         |
-| `cam2` | YUL    | AMD       | Pro NVMe    | Memory-optimized         |
-| `cac1` | YOW    | AMD       | NVMe        | CPU-optimized            |
-| `cac2` | YUL    | AMD       | Pro NVMe    | CPU-optimized            |
+| Series  | Region | Processor | Storage     | Family                    |
+| ------- | ------ | --------- | ----------- | ------------------------- |
+| `ci1`   | YOW    | Intel     | NVMe        | General purpose           |
+| `ci1h`  | YOW    | Intel     | HDD         | General purpose (budget)  |
+| `ca1`   | YOW    | AMD       | NVMe        | General purpose           |
+| `ca1h`  | YOW    | AMD       | HDD         | General purpose (budget)  |
+| `ca2`   | YUL    | AMD       | Pro NVMe    | General purpose           |
+| `ca2s`  | YUL    | AMD       | Premium SSD | General purpose (budget)  |
+| `cim1`  | YOW    | Intel     | NVMe        | Memory-optimized          |
+| `cim1h` | YOW    | Intel     | HDD         | Memory-optimized (budget) |
+| `cam1`  | YOW    | AMD       | NVMe        | Memory-optimized          |
+| `cam2`  | YUL    | AMD       | Pro NVMe    | Memory-optimized          |
+| `cam2s` | YUL    | AMD       | Premium SSD | Memory-optimized (budget) |
+| `cac1`  | YOW    | AMD       | NVMe        | CPU-optimized             |
+| `cac2`  | YUL    | AMD       | Pro NVMe    | CPU-optimized             |
+| `cac2s` | YUL    | AMD       | Premium SSD | CPU-optimized (budget)    |
 
 ## vCPU-to-RAM ratios
 

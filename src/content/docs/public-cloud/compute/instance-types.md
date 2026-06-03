@@ -6,7 +6,7 @@ description:
   pricing page.
 ---
 
-ZCP compute plans come in three families across two regions and three storage tiers. For how a plan
+ZCP compute plans come in three families across two regions and four storage tiers. For how a plan
 ID encodes all of that, see [Plan Names](./plan-names). For the **live per-size specs (vCPU, RAM,
 root disk) and pricing of every plan**, see the [pricing page](https://zcp.zsoftly.ca/pricing),
 which is the source of truth.
@@ -24,11 +24,12 @@ which is the source of truth.
 The storage tier is fixed per series and varies by region (see
 [Regions](../getting-started/regions)):
 
-| Tier        | Regions | Series                               |
-| ----------- | ------- | ------------------------------------ |
-| NVMe        | YOW     | `ci1`, `ca1`, `cim1`, `cam1`, `cac1` |
-| Pro NVMe    | YUL     | `ca2`, `cam2`, `cac2`                |
-| Premium SSD | YUL     | `ca2s` (general purpose budget tier) |
+| Tier        | Regions | Series                                 |
+| ----------- | ------- | -------------------------------------- |
+| NVMe        | YOW     | `ci1`, `ca1`, `cim1`, `cam1`, `cac1`   |
+| Pro NVMe    | YUL     | `ca2`, `cam2`, `cac2`                  |
+| Premium SSD | YUL     | `ca2s`, `cam2s`, `cac2s` (budget tier) |
+| HDD         | YOW     | `ci1h`, `ca1h`, `cim1h` (budget tier)  |
 
 ## Sizes
 
