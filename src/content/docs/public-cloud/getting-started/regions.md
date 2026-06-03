@@ -8,7 +8,7 @@ volume, cluster). Resources are region-scoped: a VM uses networks and volumes in
 
 | Code  | Location | Processors | Storage tiers                  |
 | ----- | -------- | ---------- | ------------------------------ |
-| `YOW` | Ottawa   | Intel, AMD | NVMe                           |
+| `YOW` | Ottawa   | Intel, AMD | NVMe, HDD (budget)             |
 | `YUL` | Montreal | AMD        | Pro NVMe, Premium SSD (budget) |
 
 The region is encoded in every plan ID (`1` = YOW, `2` = YUL). See
@@ -20,7 +20,8 @@ region.
 
 - **Latency:** pick the region closest to your users.
 - **Processor:** YOW offers both Intel and AMD; YUL is AMD.
-- **Storage:** YUL adds a Premium SSD budget tier for cost-sensitive workloads.
+- **Storage:** both regions add a budget tier for cost-sensitive workloads — Premium SSD in YUL, HDD
+  in YOW.
 - **Data residency:** both regions are in Canada.
 
 ## See also
