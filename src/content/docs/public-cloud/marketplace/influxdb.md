@@ -51,7 +51,7 @@ only readable by root.
 
 Open a browser and navigate to:
 
-```
+```text
 http://<your-vm-ip>:8086
 ```
 

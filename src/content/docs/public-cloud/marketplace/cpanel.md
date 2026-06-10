@@ -23,7 +23,7 @@ that sits above cPanel.
 cPanel licenses are IP-based and are activated when you access WHM for the first time from the VM's
 public IP. Open a browser and navigate to:
 
-```
+```text
 https://<your-vm-ip>:2087
 ```
 
@@ -54,7 +54,7 @@ Work through the wizard before creating any hosting accounts.
 In WHM, go to **Account Functions → Create a New Account** to set up a hosting account. Each account
 gets its own cPanel interface accessible at:
 
-```
+```text
 https://<your-vm-ip>:2083
 ```
 

@@ -60,7 +60,7 @@ cd /opt/lemp && docker compose ps
 
 Open a browser and navigate to:
 
-```
+```text
 http://<your-vm-ip>
 ```
 

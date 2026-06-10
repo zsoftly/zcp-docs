@@ -43,7 +43,7 @@ journalctl -u n8n-first-boot.service -f
 
 Open a browser and navigate to:
 
-```
+```text
 http://<your-vm-ip>:5678
 ```
 

@@ -49,7 +49,7 @@ sudo cat /etc/gitlab/initial_root_password
 
 Open a browser and navigate to your VM's IP or hostname:
 
-```
+```text
 http://<your-vm-ip>
 ```
 

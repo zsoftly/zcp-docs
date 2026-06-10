@@ -43,7 +43,7 @@ journalctl -u wordpress-first-boot.service -f
 
 Open a browser and navigate to:
 
-```
+```text
 http://<your-vm-ip>
 ```
 
@@ -60,7 +60,7 @@ The WordPress setup wizard will guide you through:
 
 After completing the wizard, log in at:
 
-```
+```text
 http://<your-vm-ip>/wp-admin
 ```
 

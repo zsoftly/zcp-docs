@@ -36,7 +36,7 @@ systemctl status grafana-server
 
 Open a browser and navigate to:
 
-```
+```text
 http://<your-vm-ip>:3000
 ```
 

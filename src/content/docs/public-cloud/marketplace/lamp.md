@@ -40,7 +40,7 @@ php --version
 
 Open a browser and navigate to:
 
-```
+```text
 http://<your-vm-ip>
 ```
 
