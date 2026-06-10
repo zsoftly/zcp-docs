@@ -35,7 +35,7 @@ automatically — credentials generated, services configured, ready to use.
 </div>
 <div class="service-grid mp-featured">
 
-  <a href="./wordpress" class="service-card">
+  <a href="/public-cloud/marketplace/wordpress" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/wordpress.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -45,7 +45,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./docker" class="service-card">
+  <a href="/public-cloud/marketplace/docker" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/docker.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -55,7 +55,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./lamp" class="service-card">
+  <a href="/public-cloud/marketplace/lamp" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/lamp.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -65,7 +65,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./postgresql" class="service-card">
+  <a href="/public-cloud/marketplace/postgresql" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/postgresql.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -75,7 +75,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./gitlab" class="service-card">
+  <a href="/public-cloud/marketplace/gitlab" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/gitlab.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -97,7 +97,7 @@ automatically — credentials generated, services configured, ready to use.
 </div>
 <div class="service-grid">
 
-  <a href="./mongodb" class="service-card">
+  <a href="/public-cloud/marketplace/mongodb" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/mongodb.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -107,7 +107,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./mariadb" class="service-card">
+  <a href="/public-cloud/marketplace/mariadb" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/mariadb.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -117,7 +117,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./mysql" class="service-card">
+  <a href="/public-cloud/marketplace/mysql" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/mysql.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -127,7 +127,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./postgresql" class="service-card">
+  <a href="/public-cloud/marketplace/postgresql" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/postgresql.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -137,7 +137,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./valkey" class="service-card">
+  <a href="/public-cloud/marketplace/valkey" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/valkey.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -147,7 +147,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./elasticsearch" class="service-card">
+  <a href="/public-cloud/marketplace/elasticsearch" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/elasticsearch.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -157,7 +157,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./influxdb" class="service-card">
+  <a href="/public-cloud/marketplace/influxdb" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/influxdb.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -179,7 +179,7 @@ automatically — credentials generated, services configured, ready to use.
 </div>
 <div class="service-grid">
 
-  <a href="./wordpress" class="service-card">
+  <a href="/public-cloud/marketplace/wordpress" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/wordpress.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -189,7 +189,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./lamp" class="service-card">
+  <a href="/public-cloud/marketplace/lamp" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/lamp.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -199,7 +199,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./lemp" class="service-card">
+  <a href="/public-cloud/marketplace/lemp" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/lemp.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -221,7 +221,7 @@ automatically — credentials generated, services configured, ready to use.
 </div>
 <div class="service-grid">
 
-  <a href="./grafana" class="service-card">
+  <a href="/public-cloud/marketplace/grafana" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/grafana.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -231,7 +231,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./n8n" class="service-card">
+  <a href="/public-cloud/marketplace/n8n" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/n8n.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -253,7 +253,7 @@ automatically — credentials generated, services configured, ready to use.
 </div>
 <div class="service-grid">
 
-  <a href="./docker" class="service-card">
+  <a href="/public-cloud/marketplace/docker" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/docker.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -263,7 +263,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./nodejs" class="service-card">
+  <a href="/public-cloud/marketplace/nodejs" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/nodejs.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -273,7 +273,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./openclaw" class="service-card">
+  <a href="/public-cloud/marketplace/openclaw" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/openclaw-dark.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -295,7 +295,7 @@ automatically — credentials generated, services configured, ready to use.
 </div>
 <div class="service-grid mp-solo">
 
-  <a href="./gitlab" class="service-card">
+  <a href="/public-cloud/marketplace/gitlab" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/gitlab.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -317,7 +317,7 @@ automatically — credentials generated, services configured, ready to use.
 </div>
 <div class="service-grid">
 
-  <a href="./tailscale" class="service-card">
+  <a href="/public-cloud/marketplace/tailscale" class="service-card">
     <div class="mp-brand-icon">
       <img class="icon-for-light" src="/icons/marketplace/tailscale.svg" alt="" width="26" height="26" aria-hidden="true">
       <img class="icon-for-dark" src="/icons/marketplace/tailscale-light.svg" alt="" width="26" height="26" aria-hidden="true">
@@ -328,7 +328,7 @@ automatically — credentials generated, services configured, ready to use.
     </div>
   </a>
 
-  <a href="./netbird" class="service-card">
+  <a href="/public-cloud/marketplace/netbird" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/netbird.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -350,7 +350,7 @@ automatically — credentials generated, services configured, ready to use.
 </div>
 <div class="service-grid mp-solo">
 
-  <a href="./cpanel" class="service-card">
+  <a href="/public-cloud/marketplace/cpanel" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/cpanel.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
