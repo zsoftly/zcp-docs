@@ -2,8 +2,6 @@
 title: LEMP Stack
 ---
 
-# LEMP Stack
-
 The LEMP stack — Linux, Nginx, MariaDB, and PHP — is a high-performance alternative to the classic
 LAMP stack. Nginx handles HTTP traffic more efficiently under load than Apache, making it a good
 choice for production web applications. This image runs the entire stack in Docker Compose for easy
@@ -125,9 +123,12 @@ sudo ufw allow 443/tcp
 sudo ufw delete allow 80/tcp
 ```
 
-> MariaDB is not exposed outside the Docker network. Only Nginx is bound to the host network. To
-> enable HTTPS, configure an SSL certificate in the Nginx container or place a reverse proxy in
-> front.
+:::note
+
+MariaDB is not exposed outside the Docker network. Only Nginx is bound to the host network. To
+enable HTTPS, configure an SSL certificate in the Nginx container or place a reverse proxy in front.
+
+:::
 
 ## Next steps
 

@@ -2,8 +2,6 @@
 title: Tailscale
 ---
 
-# Tailscale
-
 Tailscale is a zero-config VPN built on WireGuard. It connects your devices and servers into a
 private network with end-to-end encryption, without requiring you to manage firewall rules, open
 ports, or configure certificates. This image ships a VM with the Tailscale client pre-installed,
@@ -103,8 +101,12 @@ for Tailnet traffic. UFW remains enabled and allows SSH (port 22) only.
 Once connected to your Tailnet, other Tailnet devices can reach this VM at its `100.x.x.x` address.
 Access control is managed via Tailscale ACLs in the admin console.
 
-> Auth keys expire. For long-lived deployments, use a reusable auth key or pre-approved key from the
-> Tailscale admin console.
+:::caution
+
+Auth keys expire. For long-lived deployments, use a reusable auth key or pre-approved key from the
+Tailscale admin console.
+
+:::
 
 ## Next steps
 

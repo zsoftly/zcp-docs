@@ -2,8 +2,6 @@
 title: NetBird
 ---
 
-# NetBird
-
 NetBird is an open-source, WireGuard-based network overlay that connects servers and devices into a
 peer-to-peer private network. It does not require opening inbound ports or configuring firewall
 rules — all connections are initiated outbound. This image ships the NetBird client pre-installed,

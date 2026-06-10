@@ -2,8 +2,6 @@
 title: cPanel
 ---
 
-# cPanel
-
 cPanel is the industry-standard web hosting control panel used by hosting providers and website
 owners worldwide. It provides a graphical interface for managing websites, email accounts,
 databases, DNS, FTP, and more. WHM (Web Host Manager) is the server-level administration interface

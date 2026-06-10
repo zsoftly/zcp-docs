@@ -2,8 +2,6 @@
 title: InfluxDB 2
 ---
 
-# InfluxDB 2
-
 InfluxDB is a purpose-built time series database optimised for storing and querying metrics, events,
 and real-time analytics. It is commonly paired with Grafana for infrastructure monitoring and IoT
 data pipelines.
@@ -113,8 +111,12 @@ ssh -L 8086:localhost:8086 ubuntu@<your-vm-ip>
 http://localhost:8086
 ```
 
-> The admin API token grants full access to all data. Store it securely and create scoped tokens for
-> individual applications.
+:::caution
+
+The admin API token grants full access to all data. Store it securely and create scoped tokens for
+individual applications.
+
+:::
 
 ## Next steps
 

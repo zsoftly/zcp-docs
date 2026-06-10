@@ -2,8 +2,6 @@
 title: Node.js 24
 ---
 
-# Node.js 24
-
 This image provides a clean Ubuntu 24.04 environment with Node.js 24 LTS and PM2 pre-installed. It
 is designed for deploying Node.js applications that need to run persistently as a managed process.
 

@@ -2,8 +2,6 @@
 title: WordPress
 ---
 
-# WordPress
-
 WordPress is the world's most popular open-source content management system, powering over 40% of
 all websites. This image ships a complete LAMP stack — Apache, MariaDB, and PHP — with WordPress
 pre-installed and ready to configure.
@@ -54,7 +52,11 @@ The WordPress setup wizard will guide you through:
 3. Creating your WordPress admin username and password
 4. Entering your admin email address
 
-> Choose a strong admin password. This is the account that controls your entire WordPress site.
+:::caution
+
+Choose a strong admin password. This is the account that controls your entire WordPress site.
+
+:::
 
 ### 4. Log in to the WordPress dashboard
 
@@ -105,8 +107,12 @@ sudo ufw allow 443/tcp
 sudo ufw delete allow 80/tcp
 ```
 
-> Change the WordPress admin password immediately after setup. Install a security plugin such as
-> Wordfence to monitor for threats and limit login attempts.
+:::caution
+
+Change the WordPress admin password immediately after setup. Install a security plugin such as
+Wordfence to monitor for threats and limit login attempts.
+
+:::
 
 ## Next steps
 
