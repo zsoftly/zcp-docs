@@ -31,6 +31,7 @@ export default defineConfig({
       ],
       customCss: ['./src/styles/custom.css'],
       components: {
+        Head: './src/overrides/Head.astro',
         Header: './src/overrides/Header.astro',
         Hero: './src/overrides/Hero.astro',
         ThemeSelect: './src/overrides/ThemeSelect.astro',
