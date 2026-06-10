@@ -2,8 +2,6 @@
 title: n8n
 ---
 
-# n8n
-
 n8n is an open-source workflow automation platform that lets you connect apps, APIs, and services
 using a visual node-based editor. It supports hundreds of integrations and can run custom JavaScript
 logic inside workflows.

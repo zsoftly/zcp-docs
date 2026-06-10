@@ -2,8 +2,6 @@
 title: PostgreSQL 17
 ---
 
-# PostgreSQL 17
-
 PostgreSQL is a powerful, open-source object-relational database known for its reliability,
 standards compliance, and extensibility. It supports advanced data types, full-text search, JSON,
 and a wide range of extensions.
@@ -102,7 +100,11 @@ ssh -L 5432:localhost:5432 ubuntu@<your-vm-ip>
 psql -U postgres -h 127.0.0.1
 ```
 
-> Avoid exposing port 5432 to `0.0.0.0`. Restrict access to known IPs or use an SSH tunnel.
+:::caution
+
+Avoid exposing port 5432 to `0.0.0.0`. Restrict access to known IPs or use an SSH tunnel.
+
+:::
 
 ## Next steps
 

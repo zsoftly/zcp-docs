@@ -2,8 +2,6 @@
 title: Valkey 9.0
 ---
 
-# Valkey 9.0
-
 Valkey is an open-source, high-performance in-memory data store and Redis-compatible alternative. It
 is commonly used for caching, session storage, real-time leaderboards, pub/sub messaging, and job
 queues.
@@ -106,8 +104,12 @@ ssh -L 6379:localhost:6379 ubuntu@<your-vm-ip>
 valkey-cli -a "<password>"
 ```
 
-> Avoid exposing port 6379 to `0.0.0.0`. Valkey is an in-memory store — unauthorised access exposes
-> all cached data. Restrict to known IPs or use an SSH tunnel.
+:::caution
+
+Avoid exposing port 6379 to `0.0.0.0`. Valkey is an in-memory store — unauthorised access exposes
+all cached data. Restrict to known IPs or use an SSH tunnel.
+
+:::
 
 ## Next steps
 

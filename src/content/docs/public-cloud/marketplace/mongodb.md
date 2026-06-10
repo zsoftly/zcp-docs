@@ -2,8 +2,6 @@
 title: MongoDB 8.0
 ---
 
-# MongoDB 8.0
-
 MongoDB is a general-purpose, document-oriented NoSQL database that stores data as flexible
 JSON-like documents. It is well suited for applications that need rich queries, horizontal scaling,
 or schemas that evolve over time.
@@ -94,7 +92,11 @@ ssh -L 27017:localhost:27017 ubuntu@<your-vm-ip>
 mongosh -u admin -p "<password>" --authenticationDatabase admin
 ```
 
-> Avoid exposing port 27017 to `0.0.0.0`. Restrict access to known IPs or use an SSH tunnel.
+:::caution
+
+Avoid exposing port 27017 to `0.0.0.0`. Restrict access to known IPs or use an SSH tunnel.
+
+:::
 
 ## Next steps
 

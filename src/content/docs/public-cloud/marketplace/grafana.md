@@ -2,8 +2,6 @@
 title: Grafana
 ---
 
-# Grafana
-
 Grafana is an open-source observability platform for visualising metrics, logs, and traces. It
 connects to data sources such as InfluxDB, Prometheus, Elasticsearch, and MySQL, and renders them as
 interactive dashboards with alerting. It is widely used for infrastructure monitoring, application
@@ -100,8 +98,12 @@ http://localhost:3000
 **For production use**, place Grafana behind a reverse proxy such as Nginx or Caddy so you can serve
 it on port 443 with a TLS certificate.
 
-> Change the default `admin` password immediately after first login. Grafana has access to all
-> connected data sources — treat it as a sensitive internal tool and restrict access to known IPs.
+:::caution
+
+Change the default `admin` password immediately after first login. Grafana has access to all
+connected data sources — treat it as a sensitive internal tool and restrict access to known IPs.
+
+:::
 
 ## Next steps
 

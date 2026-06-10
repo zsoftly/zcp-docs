@@ -2,8 +2,6 @@
 title: OpenClaw
 ---
 
-# OpenClaw
-
 OpenClaw is a Node.js-based tool for building and running automated workflows and integrations. This
 image ships Node.js 24 with the OpenClaw package pre-installed globally, ready for you to configure
 with your API keys and channels.

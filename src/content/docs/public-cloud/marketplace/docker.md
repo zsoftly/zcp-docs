@@ -2,8 +2,6 @@
 title: Docker
 ---
 
-# Docker
-
 Docker is an open-source platform for building, shipping, and running applications in containers.
 This image provides a clean Ubuntu 24.04 environment with Docker CE and Docker Compose
 pre-installed, ready for you to deploy any containerised workload.

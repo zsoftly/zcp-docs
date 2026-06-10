@@ -2,8 +2,6 @@
 title: LAMP Stack
 ---
 
-# LAMP Stack
-
 The LAMP stack — Linux, Apache, MariaDB, and PHP — is the classic combination for hosting web
 applications and dynamic websites. This image ships all four components pre-installed and configured
 to work together, ready for you to deploy your application.
@@ -116,8 +114,12 @@ sudo ufw allow 443/tcp
 sudo ufw delete allow 80/tcp
 ```
 
-> Set a strong MariaDB root password and restrict database users to `localhost` unless remote access
-> is required.
+:::caution
+
+Set a strong MariaDB root password and restrict database users to `localhost` unless remote access
+is required.
+
+:::
 
 ## Next steps
 

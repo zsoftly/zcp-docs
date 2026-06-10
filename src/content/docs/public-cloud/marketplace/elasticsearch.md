@@ -2,8 +2,6 @@
 title: Elasticsearch 8
 ---
 
-# Elasticsearch 8
-
 Elasticsearch is a distributed, RESTful search and analytics engine built on Apache Lucene. It is
 used for full-text search, log aggregation, application monitoring, and real-time data analysis.
 
@@ -121,8 +119,12 @@ ssh -L 9200:localhost:9200 ubuntu@<your-vm-ip>
 curl -k -u elastic:"<password>" https://localhost:9200
 ```
 
-> Elasticsearch 8 enables security by default. The `elastic` user has full cluster access — create
-> role-scoped users for individual applications.
+:::caution
+
+Elasticsearch 8 enables security by default. The `elastic` user has full cluster access — create
+role-scoped users for individual applications.
+
+:::
 
 ## Next steps
 

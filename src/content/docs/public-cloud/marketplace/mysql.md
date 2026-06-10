@@ -2,8 +2,6 @@
 title: MySQL 8.4
 ---
 
-# MySQL 8.4
-
 MySQL is one of the most widely deployed open-source relational databases in the world. This image
 ships MySQL 8.4 LTS, a long-term support release intended for production workloads.
 
@@ -87,7 +85,11 @@ ssh -L 3306:localhost:3306 ubuntu@<your-vm-ip>
 mysql -u root -p"<root-password>"
 ```
 
-> Avoid exposing port 3306 to `0.0.0.0`. Restrict access to known IPs or use an SSH tunnel.
+:::caution
+
+Avoid exposing port 3306 to `0.0.0.0`. Restrict access to known IPs or use an SSH tunnel.
+
+:::
 
 ## Next steps
 

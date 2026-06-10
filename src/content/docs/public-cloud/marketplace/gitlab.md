@@ -2,8 +2,6 @@
 title: GitLab CE 18.11
 ---
 
-# GitLab CE 18.11
-
 GitLab Community Edition is a complete DevOps platform delivered as a single application. It
 provides Git repository hosting, CI/CD pipelines, issue tracking, container registry, and more — all
 self-hosted on your own infrastructure.
@@ -42,8 +40,12 @@ The MOTD on login will confirm when GitLab is ready.
 sudo cat /etc/gitlab/initial_root_password
 ```
 
-> This file is automatically deleted 24 hours after first boot. Log in and change the root password
-> before it expires.
+:::caution
+
+This file is automatically deleted 24 hours after first boot. Log in and change the root password
+before it expires.
+
+:::
 
 ### 4. Access the GitLab UI
 
@@ -129,8 +131,12 @@ Then run:
 sudo gitlab-ctl reconfigure
 ```
 
-> Restrict SSH Git access (port 22) to known IP ranges if your GitLab is not intended to be public.
-> Create individual user accounts — avoid sharing the root account.
+:::tip
+
+Restrict SSH Git access (port 22) to known IP ranges if your GitLab is not intended to be public.
+Create individual user accounts — avoid sharing the root account.
+
+:::
 
 ## Next steps
 

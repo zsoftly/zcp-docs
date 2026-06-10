@@ -2,8 +2,6 @@
 title: MariaDB 11.4
 ---
 
-# MariaDB 11.4
-
 MariaDB is an open-source relational database management system and a drop-in replacement for MySQL.
 It is widely used for web applications, content management systems, and general-purpose data
 storage.
@@ -102,7 +100,11 @@ ssh -L 3306:localhost:3306 ubuntu@<your-vm-ip>
 mariadb -u app -p"<app-password>" app
 ```
 
-> Avoid exposing port 3306 to `0.0.0.0`. Restrict access to known IPs or use an SSH tunnel.
+:::caution
+
+Avoid exposing port 3306 to `0.0.0.0`. Restrict access to known IPs or use an SSH tunnel.
+
+:::
 
 ## Next steps
 
