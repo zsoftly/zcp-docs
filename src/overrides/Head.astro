@@ -7,6 +7,31 @@ import Default from '@astrojs/starlight/components/Head.astro';
 <script is:inline>
   var t_code = 'DS-16725-4230-982';
 </script>
+<script is:inline>
+  (function () {
+    function openExternalLinksInNewTab() {
+      document.querySelectorAll('a[href]').forEach(function (a) {
+        var href = a.getAttribute('href');
+        var isExternal = false;
+        try {
+          isExternal = new URL(href, location.href).origin !== location.origin;
+        } catch (e) {
+          return;
+        }
+        if (!isExternal) return;
+        if (!a.getAttribute('target')) {
+          a.setAttribute('target', '_blank');
+        }
+        var rel = (a.getAttribute('rel') || '').split(/\s+/).filter(Boolean);
+        if (!rel.includes('noopener')) rel.push('noopener');
+        if (!rel.includes('noreferrer')) rel.push('noreferrer');
+        a.setAttribute('rel', rel.join(' '));
+      });
+    }
+    document.addEventListener('DOMContentLoaded', openExternalLinksInNewTab);
+    document.addEventListener('astro:page-load', openExternalLinksInNewTab);
+  })();
+</script>
 <script is:inline src="//ds360.co/track/script.js"></script>
 <script
   id="zym-pixel-src"
