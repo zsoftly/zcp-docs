@@ -624,6 +624,163 @@
 }
 
 /* ============================================================
+   Marketplace index page
+   ============================================================ */
+
+/* Last card in any service-grid has no orphan right border */
+.service-grid .service-card:last-child {
+  border-right: none;
+}
+
+/* Single-item grid: card spans full width */
+.service-grid.mp-solo .service-card {
+  grid-column: 1 / -1;
+  border-right: none;
+}
+
+/* Featured (Most Popular) grid: 3-column so 5 cards lay out as 3+2 */
+.service-grid.mp-featured {
+  grid-template-columns: repeat(3, 1fr);
+}
+.service-grid.mp-featured .service-card:nth-child(even) {
+  border-right: 1px solid var(--sl-color-gray-6);
+}
+.service-grid.mp-featured .service-card:nth-child(3n) {
+  border-right: none;
+}
+@media (max-width: 640px) {
+  .service-grid.mp-featured {
+    grid-template-columns: 1fr 1fr;
+  }
+  .service-grid.mp-featured .service-card:nth-child(3n) {
+    border-right: 1px solid var(--sl-color-gray-6);
+  }
+  .service-grid.mp-featured .service-card:nth-child(even) {
+    border-right: none;
+  }
+}
+
+/* Stats bar */
+.mp-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--sl-color-bg-sidebar);
+  margin: 1.5rem 0 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .mp-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.mp-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.125rem 0.875rem;
+  text-align: center;
+  border-right: 1px solid var(--sl-color-gray-6);
+  gap: 0.2rem;
+}
+
+.mp-stat:last-child {
+  border-right: none;
+}
+
+@media (max-width: 640px) {
+  .mp-stat:nth-child(2) {
+    border-right: none;
+  }
+  .mp-stat:nth-child(n + 3) {
+    border-top: 1px solid var(--sl-color-gray-6);
+  }
+}
+
+.mp-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--sl-color-accent);
+}
+
+.mp-num--sm {
+  font-size: 1rem;
+}
+
+.mp-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--sl-color-gray-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Category section */
+.mp-section {
+  margin-bottom: 2.25rem;
+}
+
+.mp-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.875rem;
+}
+
+.mp-cat-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--cat-dim, rgba(0, 25, 138, 0.12));
+  color: var(--cat-color, #00198a);
+}
+
+.mp-cat-title {
+  font-size: 1.0625rem !important;
+  font-weight: 700 !important;
+  color: var(--sl-color-text) !important;
+  margin: 0 !important;
+  border: none !important;
+  padding: 0 !important;
+  letter-spacing: -0.015em;
+}
+
+/* Brand icon container (official SVG logos) */
+.mp-brand-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.04);
+  margin-top: 1px;
+}
+:root[data-theme='dark'] .mp-brand-icon {
+  background: rgba(255, 255, 255, 0.08);
+}
+.mp-brand-icon .icon-for-dark {
+  display: none;
+}
+:root[data-theme='dark'] .mp-brand-icon .icon-for-dark {
+  display: block;
+}
+:root[data-theme='dark'] .mp-brand-icon .icon-for-light {
+  display: none;
+}
+
+/* ============================================================
    Site footer
    ============================================================ */
 .site-footer {

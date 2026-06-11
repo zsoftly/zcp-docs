@@ -194,6 +194,74 @@ export default defineConfig({
                 { label: 'Records', slug: 'public-cloud/dns/records' },
               ],
             },
+            {
+              label: 'Marketplace',
+              collapsed: true,
+              items: [
+                { label: 'Overview', slug: 'public-cloud/marketplace' },
+                {
+                  label: 'Databases',
+                  collapsed: true,
+                  items: [
+                    { label: 'MongoDB 8.0', slug: 'public-cloud/marketplace/mongodb' },
+                    { label: 'MariaDB 11.4', slug: 'public-cloud/marketplace/mariadb' },
+                    { label: 'MySQL 8.4', slug: 'public-cloud/marketplace/mysql' },
+                    { label: 'PostgreSQL 17', slug: 'public-cloud/marketplace/postgresql' },
+                    { label: 'Valkey 9.0', slug: 'public-cloud/marketplace/valkey' },
+                    { label: 'Elasticsearch 8', slug: 'public-cloud/marketplace/elasticsearch' },
+                    { label: 'InfluxDB 2', slug: 'public-cloud/marketplace/influxdb' },
+                  ],
+                },
+                {
+                  label: 'Web Stacks',
+                  collapsed: true,
+                  items: [
+                    { label: 'WordPress', slug: 'public-cloud/marketplace/wordpress' },
+                    { label: 'LAMP Stack', slug: 'public-cloud/marketplace/lamp' },
+                    { label: 'LEMP Stack', slug: 'public-cloud/marketplace/lemp' },
+                  ],
+                },
+                {
+                  label: 'Monitoring & Automation',
+                  collapsed: true,
+                  items: [
+                    { label: 'Grafana', slug: 'public-cloud/marketplace/grafana' },
+                    { label: 'n8n', slug: 'public-cloud/marketplace/n8n' },
+                  ],
+                },
+                {
+                  label: 'Developer Tools',
+                  collapsed: true,
+                  items: [
+                    { label: 'Docker', slug: 'public-cloud/marketplace/docker' },
+                    { label: 'Node.js 24', slug: 'public-cloud/marketplace/nodejs' },
+                    { label: 'OpenClaw', slug: 'public-cloud/marketplace/openclaw' },
+                  ],
+                },
+                {
+                  label: 'DevOps & Source Control',
+                  collapsed: true,
+                  items: [
+                    { label: 'GitLab CE 18.11', slug: 'public-cloud/marketplace/gitlab' },
+                  ],
+                },
+                {
+                  label: 'Networking & VPN',
+                  collapsed: true,
+                  items: [
+                    { label: 'Tailscale', slug: 'public-cloud/marketplace/tailscale' },
+                    { label: 'NetBird', slug: 'public-cloud/marketplace/netbird' },
+                  ],
+                },
+                {
+                  label: 'Control Panels',
+                  collapsed: true,
+                  items: [
+                    { label: 'cPanel', slug: 'public-cloud/marketplace/cpanel' },
+                  ],
+                },
+              ],
+            },
           ],
         },
 
