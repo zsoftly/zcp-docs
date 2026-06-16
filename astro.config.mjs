@@ -4,7 +4,9 @@ import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 
 export default defineConfig({
-  site: 'https://docs.zcp.zsoftly.ca',
+  // Prod builds (iaas play, no PUBLIC_SITE_URL) resolve to the canonical host;
+  // dev/stg Docker builds set PUBLIC_SITE_URL to their own host.
+  site: process.env.PUBLIC_SITE_URL ?? 'https://docs.zcp.zsoftly.ca',
   integrations: [
     starlight({
       title: 'ZSoftly Docs',
@@ -113,8 +115,14 @@ export default defineConfig({
                     { label: 'Change OS', slug: 'public-cloud/compute/settings/change-os' },
                     { label: 'Firewall', slug: 'public-cloud/compute/settings/firewall' },
                     { label: 'Networks', slug: 'public-cloud/compute/settings/networks' },
-                    { label: 'Port Forwarding', slug: 'public-cloud/compute/settings/port-forwarding' },
-                    { label: 'Startup Scripts', slug: 'public-cloud/compute/settings/startup-scripts' },
+                    {
+                      label: 'Port Forwarding',
+                      slug: 'public-cloud/compute/settings/port-forwarding',
+                    },
+                    {
+                      label: 'Startup Scripts',
+                      slug: 'public-cloud/compute/settings/startup-scripts',
+                    },
                     { label: 'SSH Keys', slug: 'public-cloud/compute/settings/ssh-keys' },
                   ],
                 },
@@ -135,8 +143,14 @@ export default defineConfig({
                   items: [
                     { label: 'Create', slug: 'public-cloud/networking/public-network/create' },
                     { label: 'Overview', slug: 'public-cloud/networking/public-network/overview' },
-                    { label: 'Public IPs', slug: 'public-cloud/networking/public-network/public-ips' },
-                    { label: 'Egress Rules', slug: 'public-cloud/networking/public-network/egress-rules' },
+                    {
+                      label: 'Public IPs',
+                      slug: 'public-cloud/networking/public-network/public-ips',
+                    },
+                    {
+                      label: 'Egress Rules',
+                      slug: 'public-cloud/networking/public-network/egress-rules',
+                    },
                   ],
                 },
                 {
@@ -161,16 +175,28 @@ export default defineConfig({
                   label: 'Block Storage',
                   collapsed: true,
                   items: [
-                    { label: 'Create Volume', slug: 'public-cloud/storage/block-storage/create-volume' },
-                    { label: 'Volume Snapshots', slug: 'public-cloud/storage/block-storage/snapshots' },
+                    {
+                      label: 'Create Volume',
+                      slug: 'public-cloud/storage/block-storage/create-volume',
+                    },
+                    {
+                      label: 'Volume Snapshots',
+                      slug: 'public-cloud/storage/block-storage/snapshots',
+                    },
                   ],
                 },
                 {
                   label: 'Object Storage',
                   collapsed: true,
                   items: [
-                    { label: 'Create Bucket', slug: 'public-cloud/storage/object-storage/create-bucket' },
-                    { label: 'Access Keys', slug: 'public-cloud/storage/object-storage/access-keys' },
+                    {
+                      label: 'Create Bucket',
+                      slug: 'public-cloud/storage/object-storage/create-bucket',
+                    },
+                    {
+                      label: 'Access Keys',
+                      slug: 'public-cloud/storage/object-storage/access-keys',
+                    },
                     { label: 'S3 API Usage', slug: 'public-cloud/storage/object-storage/s3-usage' },
                   ],
                 },
@@ -241,9 +267,7 @@ export default defineConfig({
                 {
                   label: 'DevOps & Source Control',
                   collapsed: true,
-                  items: [
-                    { label: 'GitLab CE 18.11', slug: 'public-cloud/marketplace/gitlab' },
-                  ],
+                  items: [{ label: 'GitLab CE 18.11', slug: 'public-cloud/marketplace/gitlab' }],
                 },
                 {
                   label: 'Networking & VPN',
@@ -256,9 +280,7 @@ export default defineConfig({
                 {
                   label: 'Control Panels',
                   collapsed: true,
-                  items: [
-                    { label: 'cPanel', slug: 'public-cloud/marketplace/cpanel' },
-                  ],
+                  items: [{ label: 'cPanel', slug: 'public-cloud/marketplace/cpanel' }],
                 },
               ],
             },
@@ -276,8 +298,14 @@ export default defineConfig({
               label: 'Getting Started',
               collapsed: true,
               items: [
-                { label: 'After Deployment', slug: 'private-cloud/getting-started/after-deployment' },
-                { label: 'Accessing CloudStack', slug: 'private-cloud/getting-started/accessing-cloudstack' },
+                {
+                  label: 'After Deployment',
+                  slug: 'private-cloud/getting-started/after-deployment',
+                },
+                {
+                  label: 'Accessing CloudStack',
+                  slug: 'private-cloud/getting-started/accessing-cloudstack',
+                },
                 { label: 'VPN Access', slug: 'private-cloud/getting-started/vpn-access' },
                 { label: 'Zone Setup', slug: 'private-cloud/getting-started/zone-setup' },
               ],
@@ -307,7 +335,10 @@ export default defineConfig({
               label: 'Getting Started',
               collapsed: true,
               items: [
-                { label: 'Provisioning a Cluster', slug: 'cloud-storage/getting-started/provisioning' },
+                {
+                  label: 'Provisioning a Cluster',
+                  slug: 'cloud-storage/getting-started/provisioning',
+                },
                 {
                   label: 'Accessing Your Cluster',
                   slug: 'cloud-storage/getting-started/accessing-your-cluster',
@@ -322,7 +353,10 @@ export default defineConfig({
                 { label: 'Block Storage (RBD)', slug: 'cloud-storage/reference/block-storage' },
                 { label: 'File Storage (CephFS)', slug: 'cloud-storage/reference/file-storage' },
                 { label: 'Replication & DR', slug: 'cloud-storage/reference/replication-dr' },
-                { label: 'Performance & Tiering', slug: 'cloud-storage/reference/performance-tiering' },
+                {
+                  label: 'Performance & Tiering',
+                  slug: 'cloud-storage/reference/performance-tiering',
+                },
                 { label: 'Ceph Versions', slug: 'cloud-storage/reference/ceph-versions' },
               ],
             },
