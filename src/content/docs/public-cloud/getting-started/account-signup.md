@@ -34,16 +34,13 @@ own billing and IAM.
 
 ### Register Account
 
-- Visit the ZSoftly Public Cloud website and navigate to the **Sign-In** or **Create Account**
-  section.
-- Enter the necessary details, such as your name, email address, and password.
-- Click **Register** to proceed to the next step.
+- Go to the registration page at
+  [cloud.zcp.zsoftly.ca/register](https://cloud.zcp.zsoftly.ca/register).
+- Enter your name, email address, phone number, and a password, then accept the **Terms and
+  Conditions**. You can also sign up with **GitHub** or **Google**.
+- Click **Create Account** to proceed to the next step.
 
-:::note
-
-Screenshots coming.
-
-:::
+![ZCP registration page with the Create Your Account form](../../../../assets/account-signup/register-create-account.webp)
 
 ### Verify Your Email
 
@@ -52,11 +49,11 @@ Screenshots coming.
 - Enter the **OTP** in the provided field on the website.
 - Click **Verify** to confirm and proceed to the billing setup.
 
-:::note
+![Verification email containing the one-time password (OTP)](../../../../assets/account-signup/verify-email-otp.webp)
 
-Screenshots coming.
+Once verified, ZSoftly Public Cloud sends a welcome email confirming your account is ready.
 
-:::
+![Welcome email confirming the account is ready](../../../../assets/account-signup/welcome-email.webp)
 
 ### Set Up Billing Method
 
@@ -70,9 +67,38 @@ Screenshots coming.
 
 :::note
 
-Screenshots coming.
+To create your account, a minimum payment of **CA$1.00** is required (processed securely through
+Stripe, shown as **Infra Credits**). This is used to verify and validate your account. The amount
+you add is credited to your account as **infra credit you can spend**, so you keep the full value.
 
 :::
+
+![Stripe checkout for the CA$1.00 Infra Credits account-activation payment](../../../../assets/account-signup/billing-stripe-checkout.webp)
+
+### Account Credit
+
+New accounts receive **CAD $100 in credit** automatically at sign-up, valid for **30 days**.
+
+After you spend **CAD $200** on the platform, you can claim an extra **CAD $200 in credit**: request
+it from your account email address through our
+[contact page](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), including your **account
+number** and referencing **"$200 Credit Request"**. We'll apply the **CAD $200** credit to your
+account directly, valid for **60 days** — for up to **CAD $300 total**.
+
+The credit applies to Small through XLarge plans. The offer is available until **December 31,
+2026**.
+
+### Payment Methods
+
+ZSoftly Public Cloud accepts:
+
+- **Card** — Visa, Mastercard, and American Express, processed securely through **Stripe**.
+- **PayPal** — pay from your PayPal balance or a linked account.
+- **Bank Transfer / Wire** — for manual payments, contact our
+  [Sales team](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) and they will arrange the
+  transfer and apply the funds to your account as infra credit.
+
+Card and PayPal are self-serve in the portal. Bank transfer and wire are arranged with Sales.
 
 ### Choose a Payment Plan
 
@@ -81,15 +107,16 @@ Screenshots coming.
 - Prepaid accounts require you to load credits in advance, which you'll use to create resources
   within the platform.
 - To use resources, purchase infrastructure credits by selecting the desired amount.
-- Choose a payment method (e.g., Stripe, PayPal, Razorpay) and click **Proceed** to complete the
-  payment.
+- Pay with **Stripe** or **PayPal** and click **Proceed** to complete the payment, or contact
+  [Sales](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) to pay by bank transfer or wire.
 
 #### Postpaid:
 
 - Postpaid accounts allow you to pay after consuming resources. This option requires additional
   verification, such as detailed billing information or credit checks.
-- Choose a payment method (e.g., Stripe, PayPal, Razorpay, Manual) and click **Save Card** to
-  complete the payment.
+- Add **Stripe** or **PayPal** as your payment method and click **Save Card** to complete setup, or
+  contact [Sales](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) to arrange manual
+  payment by bank transfer or wire.
 
 :::note
 

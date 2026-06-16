@@ -2,7 +2,7 @@
 # Domain: docs.zcp.zsoftly.ca
 
 {
-  email security@zsoftly.com
+  email security@zsoftly.ca
 
   servers {
     # TLS terminated upstream (HAProxy -> Traefik); trust private proxies so
