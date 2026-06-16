@@ -27,6 +27,17 @@ Navigate to **Billing → Summary** for an overview of your account's financial 
 **Billing → Payment Methods**: manage payment preferences and add infrastructure credits. Enter the
 credit amount and it charges to your default payment method.
 
+We accept:
+
+- **Card** — Visa, Mastercard, and American Express, processed securely through **Stripe**.
+- **PayPal** — pay from your PayPal balance or a linked account.
+- **Bank Transfer / Wire** — for manual payments, contact our
+  [Sales team](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) and they will set up the
+  transfer and apply the funds to your account as infra credit.
+
+Card and PayPal payments are self-serve in the portal. Bank transfer and wire are arranged with
+Sales.
+
 ### Transactions
 
 **Billing → Transactions**: complete history of all transactions including amounts and details.
