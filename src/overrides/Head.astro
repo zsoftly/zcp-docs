@@ -1,13 +1,13 @@
 ---
 import Default from '@astrojs/starlight/components/Head.astro';
+
+// Third-party marketing trackers load only on the production host (not dev/stg/local).
+const enableTracking = import.meta.env.PROD && Astro.site?.hostname === 'docs.zcp.zsoftly.ca';
 ---
 
 <Default {...Astro.props} />
 
-<!-- Lead Onion + Zymplify tracking — vendor-supplied snippet, do not modify -->
-<script is:inline>
-  var t_code = 'DS-16725-4230-982';
-</script>
+<!-- External links open in a new tab (utility, all environments) -->
 <script is:inline>
   (function () {
     function openExternalLinksInNewTab() {
@@ -33,9 +33,18 @@ import Default from '@astrojs/starlight/components/Head.astro';
     document.addEventListener('astro:page-load', openExternalLinksInNewTab);
   })();
 </script>
-<script is:inline src="//ds360.co/track/script.js"></script>
-<script
-  id="zym-pixel-src"
-  is:inline
-  src="https://cdn.pixel.zymplify.com/pixels/39e8fff7-f079-4c31-a8df-5f3317682b4d/p.js"
-  async></script>
+<!-- Lead Onion + Zymplify tracking — vendor-supplied snippet, do not modify -->
+{
+  enableTracking && (
+    <Fragment>
+      <script is:inline>var t_code = 'DS-16725-4230-982';</script>
+      <script is:inline src="//ds360.co/track/script.js" />
+      <script
+        id="zym-pixel-src"
+        is:inline
+        src="https://cdn.pixel.zymplify.com/pixels/39e8fff7-f079-4c31-a8df-5f3317682b4d/p.js"
+        async
+      />
+    </Fragment>
+  )
+}

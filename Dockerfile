@@ -10,6 +10,11 @@ COPY pnpm-lock.yaml package.json ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
+
+# Non-prod host for Docker (dev/stg) builds; prod is built by the iaas play
+# without this arg and falls back to the canonical host in astro.config.mjs.
+ARG PUBLIC_SITE_URL=https://dev-docs.apps.zcp.zsoftly.ca
+ENV PUBLIC_SITE_URL=$PUBLIC_SITE_URL
 RUN pnpm build
 
 FROM caddy:2-alpine

@@ -29,9 +29,9 @@ credit amount and it charges to your default payment method.
 
 We accept:
 
-- **Card** — Visa, Mastercard, and American Express, processed securely through **Stripe**.
-- **PayPal** — pay from your PayPal balance or a linked account.
-- **Bank Transfer / Wire** — for manual payments, contact our
+- **Card**: Visa, Mastercard, and American Express, processed securely through **Stripe**.
+- **PayPal**: pay from your PayPal balance or a linked account.
+- **Bank Transfer / Wire**: for manual payments, contact our
   [Sales team](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) and they will set up the
   transfer and apply the funds to your account as infra credit.
 
