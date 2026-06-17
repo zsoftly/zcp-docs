@@ -2,21 +2,31 @@
 import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Footer.astro';
 import { version } from '../../package.json';
+
+const localePrefix = Astro.locals.starlightRoute.locale === 'fr' ? '/fr' : '';
 ---
 
 <Default {...Astro.props} />
 
 <div class="site-footer">
   <div class="site-footer__inner">
-    <nav class="site-footer__nav" aria-label="Footer navigation">
-      <a href="/public-cloud/getting-started/introduction">ZCP</a>
-      <a href="/private-cloud/overview">ZPCP</a>
-      <a href="/public-cloud/cli/installation">CLI</a>
-      <a href="/public-cloud/api/authentication">API</a>
-      <a href="https://zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer">Website</a>
-      <a href="https://zcp.zsoftly.ca/pricing" target="_blank" rel="noopener noreferrer">Pricing</a>
-      <a href="https://zcp.zsoftly.ca/contact" target="_blank" rel="noopener noreferrer">Contact</a>
-      <a href="https://cloud.zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer">Console</a>
+    <nav class="site-footer__nav" aria-label={Astro.locals.t('zs.footer.navLabel')}>
+      <a href={`${localePrefix}/public-cloud/getting-started/introduction`}>ZCP</a>
+      <a href={`${localePrefix}/private-cloud/overview`}>ZPCP</a>
+      <a href={`${localePrefix}/public-cloud/cli/installation`}>CLI</a>
+      <a href={`${localePrefix}/public-cloud/api/authentication`}>API</a>
+      <a href="https://zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer"
+        >{Astro.locals.t('zs.footer.website')}</a
+      >
+      <a href="https://zcp.zsoftly.ca/pricing" target="_blank" rel="noopener noreferrer"
+        >{Astro.locals.t('zs.footer.pricing')}</a
+      >
+      <a href="https://zcp.zsoftly.ca/contact" target="_blank" rel="noopener noreferrer"
+        >{Astro.locals.t('zs.footer.contact')}</a
+      >
+      <a href="https://cloud.zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer"
+        >{Astro.locals.t('zs.footer.console')}</a
+      >
       <a href="https://github.com/zsoftly/zcp-docs" target="_blank" rel="noopener noreferrer"
         >GitHub</a
       >

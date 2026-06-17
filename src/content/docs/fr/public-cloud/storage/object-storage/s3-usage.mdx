@@ -1,0 +1,265 @@
+---
+title: Utilisation de l'API S3
+sidebar_position: 3
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Le stockage objet ZSoftly est compatible S3. Tout outil ou SDK prenant en charge S3 fonctionne avec
+celui-ci.
+
+**Points de terminaison :**
+
+<table>
+  <thead>
+    <tr>
+      <th>Région</th>
+      <th>Point de terminaison</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>YUL (Montreal)</td>
+      <td>
+        <code>https://objects.yul.zcp.zsoftly.ca</code>
+      </td>
+    </tr>
+    <tr>
+      <td>YOW (Ottawa)</td>
+      <td>
+        <code>https://objects.yow.zcp.zsoftly.ca</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+Les exemples ci-dessous utilisent le point de terminaison YUL. Remplacez-le par YOW si votre
+compartiment se trouve à Ottawa.
+
+### Se connecter et lister les compartiments
+
+Configurez votre client avec le point de terminaison régional et vos clés d'accès, puis listez vos
+compartiments. Choisissez votre langage :
+
+<Tabs>
+<TabItem label="AWS CLI">
+
+```bash
+# Store your credentials once
+aws configure set aws_access_key_id <access-key>
+aws configure set aws_secret_access_key <secret-key>
+
+# List buckets
+aws s3 ls --endpoint-url https://objects.yul.zcp.zsoftly.ca
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import boto3
+
+s3 = boto3.client(
+    "s3",
+    endpoint_url="https://objects.yul.zcp.zsoftly.ca",
+    aws_access_key_id="<access-key>",
+    aws_secret_access_key="<secret-key>",
+)
+
+for bucket in s3.list_buckets()["Buckets"]:
+    print(bucket["Name"])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+import { S3Client, ListBucketsCommand } from '@aws-sdk/client-s3';
+
+const client = new S3Client({
+  endpoint: 'https://objects.yul.zcp.zsoftly.ca',
+  region: 'us-east-1',
+  credentials: { accessKeyId: '<access-key>', secretAccessKey: '<secret-key>' },
+  forcePathStyle: true,
+});
+
+const { Buckets } = await client.send(new ListBucketsCommand({}));
+for (const b of Buckets ?? []) console.log(b.Name);
+```
+
+</TabItem>
+<TabItem label="TypeScript">
+
+```ts
+import { S3Client, ListBucketsCommand, type Bucket } from '@aws-sdk/client-s3';
+
+const client = new S3Client({
+  endpoint: 'https://objects.yul.zcp.zsoftly.ca',
+  region: 'us-east-1',
+  credentials: { accessKeyId: '<access-key>', secretAccessKey: '<secret-key>' },
+  forcePathStyle: true,
+});
+
+const { Buckets } = await client.send(new ListBucketsCommand({}));
+Buckets?.forEach((b: Bucket) => console.log(b.Name));
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+)
+
+func main() {
+	client := s3.New(s3.Options{
+		BaseEndpoint: aws.String("https://objects.yul.zcp.zsoftly.ca"),
+		Region:       "us-east-1",
+		Credentials:  credentials.NewStaticCredentialsProvider("<access-key>", "<secret-key>", ""),
+		UsePathStyle: true,
+	})
+
+	out, err := client.ListBuckets(context.TODO(), &s3.ListBucketsInput{})
+	if err != nil {
+		panic(err)
+	}
+	for _, b := range out.Buckets {
+		fmt.Println(*b.Name)
+	}
+}
+```
+
+</TabItem>
+<TabItem label="C#">
+
+```csharp
+using Amazon.S3;
+
+var config = new AmazonS3Config
+{
+    ServiceURL = "https://objects.yul.zcp.zsoftly.ca",
+    ForcePathStyle = true,
+};
+using var client = new AmazonS3Client("<access-key>", "<secret-key>", config);
+
+var response = await client.ListBucketsAsync();
+foreach (var bucket in response.Buckets)
+{
+    Console.WriteLine(bucket.BucketName);
+}
+```
+
+</TabItem>
+<TabItem label="Java">
+
+```java
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
+
+import java.net.URI;
+
+public class ListBuckets {
+    public static void main(String[] args) {
+        S3Client s3 = S3Client.builder()
+            .endpointOverride(URI.create("https://objects.yul.zcp.zsoftly.ca"))
+            .region(Region.US_EAST_1)
+            .credentialsProvider(StaticCredentialsProvider.create(
+                AwsBasicCredentials.create("<access-key>", "<secret-key>")))
+            .serviceConfiguration(S3Configuration.builder()
+                .pathStyleAccessEnabled(true).build())
+            .build();
+
+        s3.listBuckets().buckets().forEach(b -> System.out.println(b.name()));
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Ruby">
+
+```ruby
+require "aws-sdk-s3"
+
+s3 = Aws::S3::Client.new(
+  endpoint: "https://objects.yul.zcp.zsoftly.ca",
+  region: "us-east-1",
+  access_key_id: "<access-key>",
+  secret_access_key: "<secret-key>",
+  force_path_style: true
+)
+
+s3.list_buckets.buckets.each { |b| puts b.name }
+```
+
+</TabItem>
+<TabItem label="PHP">
+
+```php
+<?php
+require "vendor/autoload.php";
+
+use Aws\S3\S3Client;
+
+$s3 = new S3Client([
+    "version" => "latest",
+    "region" => "us-east-1",
+    "endpoint" => "https://objects.yul.zcp.zsoftly.ca",
+    "use_path_style_endpoint" => true,
+    "credentials" => [
+        "key" => "<access-key>",
+        "secret" => "<secret-key>",
+    ],
+]);
+
+foreach ($s3->listBuckets()["Buckets"] as $bucket) {
+    echo $bucket["Name"] . "\n";
+}
+```
+
+</TabItem>
+</Tabs>
+
+:::tip
+
+Activez toujours l'adressage path-style : `forcePathStyle` (JS/TS), `UsePathStyle` (Go),
+`ForcePathStyle` (C#), `pathStyleAccessEnabled` (Java), `force_path_style` (Ruby) ou
+`use_path_style_endpoint` (PHP). Le stockage objet ZSoftly l'exige. Le style virtual-hosted n'est
+pas pris en charge.
+
+:::
+
+### Opérations courantes
+
+Une fois votre client (ou AWS CLI) configuré, toutes les opérations S3 standard fonctionnent. Avec
+AWS CLI :
+
+```bash
+# Create a bucket
+aws s3 mb s3://my-bucket --endpoint-url https://objects.yul.zcp.zsoftly.ca
+
+# Upload a file
+aws s3 cp ./file.txt s3://my-bucket/ --endpoint-url https://objects.yul.zcp.zsoftly.ca
+
+# Download a file
+aws s3 cp s3://my-bucket/file.txt ./file.txt --endpoint-url https://objects.yul.zcp.zsoftly.ca
+
+# List objects in a bucket
+aws s3 ls s3://my-bucket/ --endpoint-url https://objects.yul.zcp.zsoftly.ca
+
+# Delete an object
+aws s3 rm s3://my-bucket/file.txt --endpoint-url https://objects.yul.zcp.zsoftly.ca
+```
+
+Voir aussi : [Clés d'accès](/fr/public-cloud/storage/object-storage/access-keys),
+[Créer un compartiment](/fr/public-cloud/storage/object-storage/create-bucket)

@@ -12,16 +12,16 @@ import type { Props } from '@astrojs/starlight/props';
   }
 </script>
 
-<div id="promo-bar" class="promo-bar" role="region" aria-label="Promotional offer">
+<div id="promo-bar" class="promo-bar" role="region" aria-label={Astro.locals.t('zs.promo.label')}>
   <div class="promo-inner">
-    <span class="promo-live" aria-label="Live offer">
+    <span class="promo-live" aria-label={Astro.locals.t('zs.promo.liveLabel')}>
       <span class="live-dot" aria-hidden="true"></span>
-      Live
+      {Astro.locals.t('zs.promo.live')}
     </span>
     <span class="promo-sep" aria-hidden="true">·</span>
-    <span class="promo-text">$100 credit at signup, up to $300 total</span>
+    <span class="promo-text">{Astro.locals.t('zs.promo.credit')}</span>
     <span class="promo-sep" aria-hidden="true">·</span>
-    <span class="promo-text">Offer ends December 31, 2026</span>
+    <span class="promo-text">{Astro.locals.t('zs.promo.ends')}</span>
     <span class="promo-sep" aria-hidden="true">·</span>
     <a
       href="https://cloud.zcp.zsoftly.ca/register"
@@ -29,10 +29,15 @@ import type { Props } from '@astrojs/starlight/props';
       target="_blank"
       rel="noopener noreferrer"
     >
-      Get started →
+      {Astro.locals.t('zs.promo.cta')}
     </a>
   </div>
-  <button id="promo-dismiss" class="promo-dismiss" type="button" aria-label="Dismiss announcement">
+  <button
+    id="promo-dismiss"
+    class="promo-dismiss"
+    type="button"
+    aria-label={Astro.locals.t('zs.promo.dismiss')}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="14"
@@ -61,7 +66,7 @@ import type { Props } from '@astrojs/starlight/props';
   class="sidebar-resizer"
   role="separator"
   aria-orientation="vertical"
-  aria-label="Resize sidebar"
+  aria-label={Astro.locals.t('zs.resize.sidebar')}
   tabindex="0"
 >
 </div>
@@ -71,7 +76,7 @@ import type { Props } from '@astrojs/starlight/props';
   class="toc-resizer"
   role="separator"
   aria-orientation="vertical"
-  aria-label="Resize table of contents"
+  aria-label={Astro.locals.t('zs.resize.toc')}
   tabindex="0"
 >
 </div>

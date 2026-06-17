@@ -3,13 +3,142 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 
+/** @type {Record<string, string>} */
+const frSidebarLabels = {
+  Installation: 'Installation',
+  Quickstart: 'Démarrage rapide',
+  Configuration: 'Configuration',
+  Reference: 'Référence',
+  Authentication: 'Authentification',
+  'Getting Started': 'Premiers pas',
+  Introduction: 'Introduction',
+  'Account Signup': 'Création de compte',
+  'Profile Setup': 'Configuration du profil',
+  Regions: 'Régions',
+  Projects: 'Projets',
+  Overview: "Vue d'ensemble",
+  Users: 'Utilisateurs',
+  'Roles & Permissions': 'Rôles et autorisations',
+  'Account Security': 'Sécurité du compte',
+  Compute: 'Calcul',
+  'Create Instance': 'Créer une instance',
+  'Instance Overview': "Vue d'ensemble de l'instance",
+  'Plan Names': 'Noms des plans',
+  'Instance Types': "Types d'instances",
+  'Connect via SSH': 'Connexion par SSH',
+  'Connect via RDP': 'Connexion par RDP',
+  'Console Access': 'Accès console',
+  'Power Management': "Gestion de l'alimentation",
+  'Activity Logs': "Journaux d'activité",
+  'Instance Settings': "Paramètres de l'instance",
+  'Block Storage': 'Stockage bloc',
+  'Resize Plan': 'Redimensionner le plan',
+  'Change OS': 'Changer le système',
+  Firewall: 'Pare-feu',
+  Networks: 'Réseaux',
+  'Port Forwarding': 'Redirection de ports',
+  'Startup Scripts': 'Scripts de démarrage',
+  'SSH Keys': 'Clés SSH',
+  'Load Balancer': 'Répartiteur de charge',
+  'Affinity Groups': "Groupes d'affinité",
+  'Auto Scaling': "Mise à l'échelle automatique",
+  'VM Snapshots': 'Instantanés de VM',
+  Backups: 'Sauvegardes',
+  Networking: 'Réseautage',
+  'Public Network': 'Réseau public',
+  Create: 'Créer',
+  'Public IPs': 'IP publiques',
+  'Egress Rules': 'Règles de sortie',
+  VPC: 'VPC',
+  'Create VPC': 'Créer un VPC',
+  'Add Subnet': 'Ajouter un sous-réseau',
+  'Network ACLs': 'ACL réseau',
+  'VPN Gateway': 'Passerelle VPN',
+  'VPN Users': 'Utilisateurs VPN',
+  Storage: 'Stockage',
+  'Create Volume': 'Créer un volume',
+  'Volume Snapshots': 'Instantanés de volume',
+  'Object Storage': 'Stockage objet',
+  'Create Bucket': 'Créer un compartiment',
+  'Access Keys': "Clés d'accès",
+  'S3 API Usage': "Utilisation de l'API S3",
+  Kubernetes: 'Kubernetes',
+  'Create Cluster': 'Créer un cluster',
+  'Cluster Overview': "Vue d'ensemble du cluster",
+  'kubectl Access': 'Accès kubectl',
+  'Dashboard Access': 'Accès au tableau de bord',
+  DNS: 'DNS',
+  Domains: 'Domaines',
+  Records: 'Enregistrements',
+  Marketplace: 'Marketplace',
+  Databases: 'Bases de données',
+  'Web Stacks': 'Piles Web',
+  'Monitoring & Automation': 'Surveillance et automatisation',
+  'Developer Tools': 'Outils de développement',
+  'DevOps & Source Control': 'DevOps et contrôle de source',
+  'Networking & VPN': 'Réseautage et VPN',
+  'Control Panels': 'Panneaux de contrôle',
+  'Private Cloud': 'Nuage privé',
+  'Platform Components': 'Composants de plateforme',
+  'After Deployment': 'Après le déploiement',
+  'Accessing CloudStack': 'Accéder à CloudStack',
+  'VPN Access': 'Accès VPN',
+  'Zone Setup': 'Configuration des zones',
+  'Apache CloudStack': 'Apache CloudStack',
+  OpenStack: 'OpenStack',
+  'Ceph Storage': 'Stockage Ceph',
+  'VPN Connectivity': 'Connectivité VPN',
+  'Identity & SSO': 'Identité et SSO',
+  Support: 'Soutien',
+  'Cloud Storage': 'Stockage infonuagique',
+  'Provisioning a Cluster': 'Provisionner un cluster',
+  'Accessing Your Cluster': 'Accéder à votre cluster',
+  'Object Storage (S3)': 'Stockage objet (S3)',
+  'Block Storage (RBD)': 'Stockage bloc (RBD)',
+  'File Storage (CephFS)': 'Stockage fichier (CephFS)',
+  'Replication & DR': 'Réplication et reprise après sinistre',
+  'Performance & Tiering': 'Performance et hiérarchisation',
+  'Ceph Versions': 'Versions de Ceph',
+  Billing: 'Facturation',
+  Troubleshooting: 'Dépannage',
+  'Detach/Delete Blocked by Snapshot': 'Détachement/suppression bloqués par un instantané',
+};
+
+/**
+ * @param {any[]} items
+ * @returns {any[]}
+ */
+function translateSidebar(items) {
+  return items.map((item) => {
+    if (typeof item === 'string' || !('label' in item)) return item;
+
+    const translation = frSidebarLabels[item.label];
+    const translated = translation
+      ? { ...item, translations: { ...(item.translations ?? {}), fr: translation } }
+      : { ...item };
+
+    if ('items' in translated && Array.isArray(translated.items)) {
+      translated.items = translateSidebar(translated.items);
+    }
+
+    return translated;
+  });
+}
+
 export default defineConfig({
   // Prod builds (iaas play, no PUBLIC_SITE_URL) resolve to the canonical host;
   // dev/stg Docker builds set PUBLIC_SITE_URL to their own host.
   site: process.env.PUBLIC_SITE_URL ?? 'https://docs.zcp.zsoftly.ca',
   integrations: [
     starlight({
-      title: 'ZSoftly Docs',
+      title: {
+        en: 'ZSoftly Docs',
+        fr: 'Documentation ZSoftly',
+      },
+      locales: {
+        root: { label: 'English', lang: 'en' },
+        fr: { label: 'Français', lang: 'fr' },
+      },
       // Fails the build on broken internal links (404s, bad anchors).
       // errorOnRelativeLinks: false — our content uses relative links (./page,
       // ../section) which resolve correctly; we only want to catch real breakage.
@@ -42,7 +171,7 @@ export default defineConfig({
         TableOfContents: './src/overrides/TableOfContents.astro',
         PageFrame: './src/overrides/PageFrame.astro',
       },
-      sidebar: [
+      sidebar: translateSidebar([
         // ── CLI ────────────────────────────────────────────────
         {
           label: 'CLI',
@@ -381,7 +510,7 @@ export default defineConfig({
             },
           ],
         },
-      ],
+      ]),
 
       // Algolia DocSearch — uncomment once credentials are issued
       // See: https://starlight.astro.build/guides/site-search/
