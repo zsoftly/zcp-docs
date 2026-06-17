@@ -5,6 +5,7 @@ import starlightLinksValidator from 'starlight-links-validator';
 
 /** @type {Record<string, string>} */
 const frSidebarLabels = {
+  Changelog: 'Journal des modifications',
   Installation: 'Installation',
   Quickstart: 'Démarrage rapide',
   Configuration: 'Configuration',
@@ -62,6 +63,7 @@ const frSidebarLabels = {
   'Create Bucket': 'Créer un compartiment',
   'Access Keys': "Clés d'accès",
   'S3 API Usage': "Utilisation de l'API S3",
+  'CLI & Advanced Features': 'CLI et fonctionnalités avancées',
   Kubernetes: 'Kubernetes',
   'Create Cluster': 'Créer un cluster',
   'Cluster Overview': "Vue d'ensemble du cluster",
@@ -172,6 +174,9 @@ export default defineConfig({
         PageFrame: './src/overrides/PageFrame.astro',
       },
       sidebar: translateSidebar([
+        // ── Changelog ──────────────────────────────────────────
+        { label: 'Changelog', slug: 'changelog' },
+
         // ── CLI ────────────────────────────────────────────────
         {
           label: 'CLI',
@@ -327,6 +332,10 @@ export default defineConfig({
                       slug: 'public-cloud/storage/object-storage/access-keys',
                     },
                     { label: 'S3 API Usage', slug: 'public-cloud/storage/object-storage/s3-usage' },
+                    {
+                      label: 'CLI & Advanced Features',
+                      slug: 'public-cloud/storage/object-storage/cli',
+                    },
                   ],
                 },
               ],

@@ -23,6 +23,16 @@ const encodedPath = entry?.filePath
   : null;
 const editUrl = encodedPath ? `${DOCS_REPO}/edit/main/${encodedPath}` : `${DOCS_REPO}`;
 const feedbackUrl = `${DOCS_REPO}/issues/new?labels=feedback&title=Feedback+on+docs`;
+
+// "Ask AI about this page" — open the current page in an AI assistant, prompted
+// to read its canonical (public) URL. `Astro.site` is the canonical host, so the
+// links point at the published page even when previewing locally.
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const aiPrompt = `Read ${pageUrl} so I can ask questions about it.`;
+const encodedPrompt = encodeURIComponent(aiPrompt);
+const chatgptUrl = `https://chatgpt.com/?hints=search&q=${encodedPrompt}`;
+const claudeUrl = `https://claude.ai/new?q=${encodedPrompt}`;
+const cursorUrl = `cursor://anysphere.cursor-deeplink/prompt?text=${encodedPrompt}`;
 ---
 
 <div class="zs-toc-panel">
@@ -143,6 +153,112 @@ const feedbackUrl = `${DOCS_REPO}/issues/new?labels=feedback&title=Feedback+on+d
       </svg>
       <span class="zs-action-label-all">{Astro.locals.t('zs.toc.copyCode')}</span>
     </button>
+  </div>
+
+  <div class="zs-toc-ai">
+    <p class="zs-toc-ai-label">{Astro.locals.t('zs.toc.askAi')}</p>
+
+    <a href={chatgptUrl} target="_blank" rel="noopener noreferrer" class="zs-action-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+      </svg>
+      {Astro.locals.t('zs.toc.openChatgpt')}
+      <svg
+        class="zs-ext"
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M7 17 17 7M7 7h10v10"></path>
+      </svg>
+    </a>
+
+    <a href={claudeUrl} target="_blank" rel="noopener noreferrer" class="zs-action-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"></path>
+      </svg>
+      {Astro.locals.t('zs.toc.openClaude')}
+      <svg
+        class="zs-ext"
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M7 17 17 7M7 7h10v10"></path>
+      </svg>
+    </a>
+
+    <a href={cursorUrl} class="zs-action-btn">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path
+          d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+        ></path>
+        <path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"></path>
+      </svg>
+      {Astro.locals.t('zs.toc.openCursor')}
+      <svg
+        class="zs-ext"
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M7 17 17 7M7 7h10v10"></path>
+      </svg>
+    </a>
   </div>
 </div>
 
@@ -390,5 +506,30 @@ const feedbackUrl = `${DOCS_REPO}/issues/new?labels=feedback&title=Feedback+on+d
   .zs-action-btn svg {
     flex-shrink: 0;
     opacity: 0.65;
+  }
+
+  /* Ask AI about this page */
+  .zs-toc-ai {
+    margin-top: 1rem;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--sl-color-gray-6);
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .zs-toc-ai-label {
+    margin: 0 0 0.375rem;
+    padding: 0 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--sl-color-gray-3);
+  }
+
+  .zs-action-btn .zs-ext {
+    margin-left: auto;
+    opacity: 0.45;
   }
 </style>

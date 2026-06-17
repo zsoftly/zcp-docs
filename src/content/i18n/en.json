@@ -34,5 +34,9 @@
   "zs.toc.copyCode": "Copy all code",
   "zs.toc.copyCodeAria": "Copy all code blocks on this page",
   "zs.toc.copied": "Copied!",
-  "zs.toc.failed": "Failed"
+  "zs.toc.failed": "Failed",
+  "zs.toc.askAi": "Ask AI about this page",
+  "zs.toc.openChatgpt": "Open in ChatGPT",
+  "zs.toc.openClaude": "Open in Claude",
+  "zs.toc.openCursor": "Open in Cursor"
 }
