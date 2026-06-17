@@ -9,14 +9,12 @@ const { actions = [] } = data.hero || {};
 <section class="zs-hero">
   <!-- Left: title, tagline, actions -->
   <div class="zs-hero__copy">
-    <p class="zs-hero__eyebrow">Official Documentation</p>
+    <p class="zs-hero__eyebrow">{Astro.locals.t('zs.hero.eyebrow')}</p>
     <h1 class="zs-hero__title" id="_top" data-page-title>
-      ZSoftly Public &amp; Private<br />Cloud Platform
+      {Astro.locals.t('zs.hero.titleLine1')}<br />{Astro.locals.t('zs.hero.titleLine2')}
     </h1>
     <p class="zs-hero__tagline">
-      User guides, CLI references, API docs, and architecture guides for
-      <strong>ZCP</strong> (Public Cloud), <strong>ZPCP</strong> (Private Cloud), and
-      <strong>ZCS</strong> (Cloud Storage).
+      {Astro.locals.t('zs.hero.tagline')}
     </p>
     {
       actions.length > 0 && (
@@ -32,15 +30,13 @@ const { actions = [] } = data.hero || {};
   </div>
 
   <!-- Right: philosophy quote panel -->
-  <aside class="zs-hero__quote" aria-label="ZSoftly philosophy">
+  <aside class="zs-hero__quote" aria-label={Astro.locals.t('zs.hero.quoteLabel')}>
     <div class="zs-hero__quote-inner">
       <div class="zs-hero__quote-mark" aria-hidden="true">"</div>
-      <blockquote>
-        Your infrastructure should answer to you. Not to a hyperscaler's quarterly earnings call.
-      </blockquote>
+      <blockquote>{Astro.locals.t('zs.hero.quote')}</blockquote>
       <div class="zs-hero__quote-meta">
         <span class="zs-hero__quote-rule"></span>
-        <span class="zs-hero__quote-source">The ZSoftly Principle</span>
+        <span class="zs-hero__quote-source">{Astro.locals.t('zs.hero.quoteSource')}</span>
       </div>
       <ul class="zs-hero__pillars">
         <li>
@@ -56,7 +52,7 @@ const { actions = [] } = data.hero || {};
             stroke-linejoin="round"
             aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg
           >
-          Data sovereignty
+          {Astro.locals.t('zs.hero.pillarSovereignty')}
         </li>
         <li>
           <svg
@@ -74,7 +70,7 @@ const { actions = [] } = data.hero || {};
               d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"
             ></path></svg
           >
-          No vendor lock-in
+          {Astro.locals.t('zs.hero.pillarLockIn')}
         </li>
         <li>
           <svg
@@ -90,7 +86,7 @@ const { actions = [] } = data.hero || {};
             aria-hidden="true"
             ><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg
           >
-          Sovereign infrastructure
+          {Astro.locals.t('zs.hero.pillarInfrastructure')}
         </li>
       </ul>
     </div>
@@ -102,8 +98,8 @@ const { actions = [] } = data.hero || {};
   .zs-hero {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
-    padding-block: 2.5rem 2rem;
+    gap: 1.75rem;
+    padding-block: 1rem 1.25rem;
     align-items: center;
   }
 
@@ -111,7 +107,7 @@ const { actions = [] } = data.hero || {};
     .zs-hero {
       grid-template-columns: 1fr 320px;
       gap: 3rem;
-      padding-block: 3rem 2.5rem;
+      padding-block: 1.5rem 1.5rem;
     }
   }
 
@@ -122,7 +118,7 @@ const { actions = [] } = data.hero || {};
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--sl-color-accent);
-    margin: 0 0 0.875rem;
+    margin: 0 0 0.625rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -139,12 +135,12 @@ const { actions = [] } = data.hero || {};
   }
 
   .zs-hero__title {
-    font-size: clamp(1.625rem, 3vw, 2.5rem);
+    font-size: clamp(1.5rem, 2.5vw, 2.125rem);
     font-weight: 700;
     line-height: 1.15;
     letter-spacing: -0.025em;
     color: var(--sl-color-text);
-    margin: 0 0 1rem;
+    margin: 0 0 0.75rem;
     border: none;
     padding: 0;
   }
@@ -155,9 +151,9 @@ const { actions = [] } = data.hero || {};
 
   .zs-hero__tagline {
     font-size: 1rem;
-    line-height: 1.7;
+    line-height: 1.6;
     color: var(--sl-color-gray-2);
-    margin: 0 0 2rem;
+    margin: 0 0 1.25rem;
     max-width: 46ch;
   }
 

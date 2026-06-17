@@ -413,7 +413,7 @@
   display: grid;
   grid-template-columns: 1fr 18rem;
   gap: 2rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
   align-items: start;
 }
 @media (max-width: 900px) {
@@ -433,7 +433,7 @@
 }
 
 .home-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 .home-section--alt {
   padding-top: 2rem;
@@ -880,4 +880,27 @@
   font-size: 0.8rem;
   color: var(--sl-color-gray-4);
   margin: 0;
+}
+
+/* ============================================================
+   Global content typography — compact, docs-density scale.
+   Font family unchanged; tightens the heading scale, body
+   line-height, and section gaps on doc pages. CSS only, so it
+   is independent of content, config, and i18n work.
+   ============================================================ */
+:root {
+  --sl-text-h1: 1.875rem;
+  --sl-text-h2: 1.5rem;
+  --sl-text-h3: 1.25rem;
+  --sl-text-h4: 1.0625rem;
+  --sl-text-h5: 1rem;
+  --sl-line-height: 1.65;
+}
+
+/* Tighter space above section headings (Starlight's default is airier) */
+.sl-markdown-content :is(h2, h3, h4, h5, h6) {
+  margin-top: 1.75rem;
+}
+.sl-markdown-content :is(h2) {
+  margin-top: 2.25rem;
 }
