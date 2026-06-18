@@ -23,7 +23,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 // labeled subsection so its code block survives.
 function toPlainMarkdown(body: string): string {
   return body
-    .replace(/^\s*import\s+\{[^}]*\}\s+from\s+['"]@astrojs\/starlight\/components['"];\s*$/gm, '')
+    .replace(/^\s*import\s+\{[^}]*\}\s+from\s+['"]@astrojs\/starlight\/components['"];?\s*$/gm, '')
     .replace(/<TabItem\b[^>]*\blabel=["']([^"']+)["'][^>]*>/g, '\n#### $1\n')
     .replace(/<\/?TabItem\b[^>]*>/g, '')
     .replace(/<\/?Tabs\b[^>]*>/g, '')

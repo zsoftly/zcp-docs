@@ -261,6 +261,12 @@ const cursorUrl = `https://cursor.com/link/prompt?text=${encodedPrompt}`;
 </div>
 
 <script>
+  // How long to wait for the source-Markdown fetch before giving up and
+  // converting the rendered DOM instead. 8s is generous for a same-origin static
+  // file yet short enough that a slow/unreachable endpoint doesn't leave the user
+  // waiting before the fallback kicks in.
+  const MARKDOWN_FETCH_TIMEOUT_MS = 8000;
+
   // Copy all code blocks
   const copyAllBtn = document.getElementById('copy-all-code-btn');
   if (copyAllBtn) {
@@ -297,11 +303,17 @@ const cursorUrl = `https://cursor.com/link/prompt?text=${encodedPrompt}`;
       let markdown = '';
       const mdUrl = btn.dataset.mdUrl;
       if (mdUrl) {
+        // AbortController + setTimeout (rather than AbortSignal.timeout) for the
+        // widest runtime support; aborting trips the catch -> DOM fallback.
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), MARKDOWN_FETCH_TIMEOUT_MS);
         try {
-          const res = await fetch(mdUrl);
+          const res = await fetch(mdUrl, { signal: controller.signal });
           if (res.ok) markdown = (await res.text()).trim();
         } catch {
           /* fall through to DOM conversion */
+        } finally {
+          clearTimeout(timer);
         }
       }
       if (!markdown) {
