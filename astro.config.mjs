@@ -159,7 +159,7 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/zsoftly/zcp-cli',
+          href: 'https://github.com/zsoftly/zcp-docs',
         },
       ],
       customCss: ['./src/styles/custom.css'],
