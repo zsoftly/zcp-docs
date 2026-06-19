@@ -189,7 +189,9 @@ Connectez-vous ensuite :
 
 - **Clé SSH** — utilisez la clé ajoutée dans _Configurer les paramètres du serveur_.
 - **Mot de passe** — si vous n'avez pas ajouté de clé, utilisez le **Provisioning Password** depuis
-  l'onglet Overview de l'instance ; changez-le après votre première connexion.
+  l'onglet Overview de l'instance (voir
+  [Connexion par SSH](/fr/public-cloud/compute/connect-ssh#où-trouver-le-mot-de-passe)) ; changez-le
+  après votre première connexion.
 
 Consultez [Connexion par SSH](/fr/public-cloud/compute/connect-ssh) pour les commandes exactes.
 Aucune règle réseau n'est nécessaire pour l'[Accès console](/fr/public-cloud/compute/console-access)
