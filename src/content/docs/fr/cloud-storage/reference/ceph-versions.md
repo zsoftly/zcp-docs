@@ -7,7 +7,7 @@ sidebar_position: 6
 
 Votre cluster utilise par défaut une version stable récente de Ceph. Vous avez besoin d'une version
 précise pour correspondre à un cluster existant avec lequel vous répliquez des données, ou pour
-respecter la plage prise en charge par un outil? Sélectionnez-la avec l'équipe ZSoftly pendant le
+respecter la plage prise en charge par un outil. Sélectionnez-la avec l'équipe ZSoftly pendant le
 [provisionnement](/fr/cloud-storage/getting-started/provisioning#données-de-dimensionnement).
 
 Votre [document d'identifiants](/fr/cloud-storage/getting-started/provisioning#ce-que-vous-recevez)

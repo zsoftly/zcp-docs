@@ -63,7 +63,7 @@ commande pour une sortie lisible par machine, et `-y` pour ignorer les invites d
 :::note
 
 Les commandes de stockage objet exigent une **région** et un **projet**. Le stockage objet utilise
-ses propres régions — `os-yul` / `os-yow` (et non les régions de calcul `yul-1`/`yow-1`).
+ses propres régions : `os-yul` / `os-yow` (et non les régions de calcul `yul-1`/`yow-1`).
 Définissez-les avec `--region`/`--project`, `ZCP_REGION`/`ZCP_PROJECT`, ou une valeur par défaut du
 profil (`zcp profile add`). Par exemple : `export ZCP_REGION=os-yow ZCP_PROJECT=default-9` avant les
 commandes ci-dessous.

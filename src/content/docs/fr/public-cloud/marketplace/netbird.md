@@ -14,6 +14,16 @@ client NetBird préinstallé, prêt à joindre votre réseau.
 | NetBird   | 0.71.4    |
 | Ubuntu    | 24.04 LTS |
 
+## Variables d'environnement
+
+Vous pouvez éventuellement fournir une clé de configuration NetBird lors du déploiement depuis la
+marketplace. Si elle est définie, la VM rejoint automatiquement votre réseau NetBird au premier
+démarrage ; sinon, connectez-vous manuellement avec `netbird up` après le déploiement.
+
+| Variable       | Description                                                            |
+| -------------- | ---------------------------------------------------------------------- |
+| `NB_SETUP_KEY` | Clé de configuration NetBird pour rejoindre votre réseau au démarrage. |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

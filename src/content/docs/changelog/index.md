@@ -12,7 +12,7 @@ own changelog: **platform & services**, the **Marketplace**, the **`zcp` CLI**, 
 :::tip
 
 Each component keeps its own `CHANGELOG.md` on GitHub. The **CLI** section below mirrors
-[`zcp-cli/CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md); use it for the
+[`zcp-cli/CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md). Use it for the
 complete, commit-level history.
 
 :::
@@ -75,21 +75,21 @@ UI-vs-CLI availability matrix.
   version, and `restore` (undelete).
 - **Download objects** to a local file (`object download`).
 - **Bucket policies**: read, set (from a JSON file), or delete a bucket's raw S3 policy.
-- **Tagging** on buckets and objects; **default encryption** (SSE-S3); **lifecycle rules** (expire
-  current/old versions and incomplete uploads); **CORS rules**.
+- **Tagging** on buckets and objects, **default encryption** (SSE-S3), **lifecycle rules** (expire
+  current/old versions and incomplete uploads), and **CORS rules**.
 - **Presigned URLs**: time-limited download _and_ upload links that need no credentials, even on a
   private bucket.
 - **Server-side copy / move**, **object stat** (full metadata), and `put --metadata`.
 - **Make buckets public/private**, **empty a bucket**, and **clean up incomplete uploads**.
-- **Simpler create**: `zcp plan object-storage` lists plans; `create --plan` derives the storage
+- **Simpler create**: `zcp plan object-storage` lists plans, and `create --plan` derives the storage
   category for you.
 
 **CLI usability.**
 
 - **Clear argument errors**: every command names what's missing, the usage, and an example.
 - **Unknown subcommands now error** (non-zero exit) instead of silently printing help.
-- **Cloud provider auto-detected**: saved to your profile on `zcp auth validate`; you no longer pass
-  `--cloud-provider`.
+- **Cloud provider auto-detected**: saved to your profile on `zcp auth validate`, so you no longer
+  pass `--cloud-provider`.
 - **`-o yaml`** is now supported for policy, lifecycle, and CORS output.
 
 ### v0.0.16: June 11, 2026
@@ -101,18 +101,18 @@ UI-vs-CLI availability matrix.
   lists.
 - **`network get`**: show a network's CIDR, state, VPC membership, and attached ACL.
 - **`plan network`**: list network plans (the slugs for `--network-plan`).
-- **Fixes**: VPC `get`/`create` now show CIDR/status; plan tables include a SLUG column;
-  `vpc delete` polls for completion instead of a false-negative warning; clearer "already deleted"
+- **Fixes**: VPC `get`/`create` now show CIDR/status, plan tables include a SLUG column, and
+  `vpc delete` polls for completion instead of a false-negative warning. Clearer "already deleted"
   handling.
 
 ### v0.0.15: June 10, 2026
 
 - **VPN**: new IKE/ESP Diffie-Hellman and Perfect-Forward-Secrecy flags (`--ike-dh`, `--esp-dh`,
-  `--esp-pfs`) on customer-gateway create/update; the full VPN configuration is now returned
+  `--esp-pfs`) on customer-gateway create/update. The full VPN configuration is now returned
   reliably after create/update.
 - **`ip allocate --project`**: assign an IP to a specific project at allocation time.
 - **Fixes**: VPN gateway/customer-gateway and VPC/network update commands no longer return blank
-  fields; clearing a `--description` now works.
+  fields. Clearing a `--description` now works.
 
 ### v0.0.14: June 10, 2026
 
@@ -123,14 +123,14 @@ UI-vs-CLI availability matrix.
 ### v0.0.12: June 9, 2026
 
 - **`kubernetes upgrade-version`**: upgrade a running cluster's Kubernetes version
-  (`--version v1.x.y`); the correct version for the cluster's region is resolved automatically.
+  (`--version v1.x.y`). The correct version for the cluster's region is resolved automatically.
 
 ### v0.0.11: June 8, 2026
 
 - **`instance create --user-data` / `--user-data-file`**: pass a cloud-init / startup script inline
   or from a file at VM creation.
-- **Fixes**: instance Private IP now displays correctly; `instance get` retries the brief window
-  right after creation; `instance create --blockstorage-plan` is now optional (auto-assigned).
+- **Fixes**: instance Private IP now displays correctly, `instance get` retries the brief window
+  right after creation, and `instance create --blockstorage-plan` is now optional (auto-assigned).
 
 ### v0.0.10: June 7, 2026
 
@@ -146,7 +146,7 @@ UI-vs-CLI availability matrix.
 
 - **Environment-variable overrides**: `ZCP_PROJECT`, `ZCP_REGION`, `ZCP_CLOUD_PROVIDER`,
   `ZCP_OUTPUT`, `ZCP_DEBUG` reduce repetitive flags in scripts and CI/CD.
-- **Zero-config mode**: run with only `ZCP_BEARER_TOKEN` and `ZCP_API_URL`, no config file needed;
+- **Zero-config mode**: run with only `ZCP_BEARER_TOKEN` and `ZCP_API_URL`, with no config file.
   `ZCP_PROFILE` selects the active profile.
 
 ### v0.0.8: April 9, 2026
@@ -174,8 +174,8 @@ consistent response format. A large set of command groups arrived:
 
 ### v0.0.5: March 31, 2026
 
-- **Reliability fixes**: delete commands now verify the resource is gone; volume list deduplicates
-  entries; clearer messages for snapshots on detached volumes and for empty accounts.
+- **Reliability fixes**: delete commands now verify the resource is gone, volume list deduplicates
+  entries, and messages are clearer for snapshots on detached volumes and for empty accounts.
 
 ### v0.0.4: March 27, 2026
 
@@ -188,7 +188,7 @@ consistent response format. A large set of command groups arrived:
 
 ### v0.0.2: March 23, 2026
 
-- **Default zone per profile**: set it once and stop typing `--zone` on every command; an explicit
+- **Default zone per profile**: set it once and stop typing `--zone` on every command. An explicit
   flag still overrides.
 
 ### v0.0.1: March 15, 2026
@@ -203,5 +203,5 @@ consistent response format. A large set of command groups arrived:
 ## Terraform / OpenTofu provider
 
 Manage ZCP infrastructure as code. The provider is in active development at
-[github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp);
-released versions will be listed here.
+[github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+Released versions will be listed here.

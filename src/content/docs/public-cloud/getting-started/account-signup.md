@@ -59,8 +59,8 @@ Once verified, ZSoftly Public Cloud sends a welcome email confirming your accoun
 
 - After verifying your account, you'll be prompted to set up your billing information.
 - Choose a billing type:
-  - **Individual**: For personal use; enter details like your address.
-  - **Company**: For organizational use; provide details such as your company name, website, and
+  - **Individual**: For personal use. Enter details like your address.
+  - **Company**: For organizational use. Provide details such as your company name, website, and
     address.
 
 - If you have a coupon, redeem it at checkout to receive a discount or promotional offer.
@@ -148,7 +148,7 @@ in**.
 
 If you forget your password, click **Forgot Password?** on the sign-in page (or go to
 [cloud.zcp.zsoftly.ca/forgot-password](https://cloud.zcp.zsoftly.ca/forgot-password)). Enter your
-account email and click **Send Reset Link** — you'll receive reset instructions by email.
+account email and click **Send Reset Link**. You'll receive reset instructions by email.
 
 ![ZCP portal forgot-password page with the email field and Send Reset Link button](../../../../assets/account-signup/portal-forgot-password.webp)
 

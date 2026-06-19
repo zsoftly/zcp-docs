@@ -13,6 +13,17 @@ la recherche plein texte, JSON et un vaste éventail d'extensions.
 | PostgreSQL | 17.x      |
 | Ubuntu     | 24.04 LTS |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de PostgreSQL depuis la marketplace. Laissez un
+champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable            | Description                                         |
+| ------------------- | --------------------------------------------------- |
+| `POSTGRES_PASSWORD` | Mot de passe du superutilisateur `postgres`         |
+| `POSTGRES_DB`       | Nom de la base de données applicative à créer       |
+| `POSTGRES_USER`     | Nom d'utilisateur de la base de données applicative |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

@@ -169,12 +169,12 @@ toutes dernières versions. Sur une version récente comme Ubuntu 26.04, l'insta
 :::note
 
 Le slug de projet **n'est pas** le mot `default`. Le premier projet d'un nouveau compte a un slug
-comme `default-9`. Passer `--project default` échoue avec `The selected project is invalid` ;
-utilisez donc toujours le slug affiché par `zcp project list`.
+comme `default-9`. Passer `--project default` échoue avec `The selected project is invalid`.
+Utilisez donc toujours le slug affiché par `zcp project list`.
 
-La catégorie de stockage est propre à une région. `nvme` est valide dans `yow-1` ; d'autres régions
-peuvent exposer `pro-nvme`, `premium-ssd` ou `hdd-storage`. Vérifiez avec `zcp plan storage` pour
-votre région.
+La catégorie de stockage est propre à une région. `nvme` est valide dans `yow-1`, et d'autres
+régions peuvent exposer `pro-nvme`, `premium-ssd` ou `hdd-storage`. Vérifiez avec `zcp plan storage`
+pour votre région.
 
 :::
 
@@ -265,7 +265,7 @@ zcp instance create \
 
 ## Étape 7 : Trouver l'IP publique et ouvrir les ports
 
-Affichez d'abord les détails de la VM pour le nom d'utilisateur de connexion (**Username** ; les
+Affichez d'abord les détails de la VM pour le nom d'utilisateur de connexion (**Username**, les
 images Ubuntu se connectent avec `ubuntu`) :
 
 ```bash
@@ -334,7 +334,7 @@ ssh -i ~/.ssh/id_ed25519 ubuntu@<ip-publique>
 
 :::note
 
-`zcp instance ssh` résout d'abord l'**IP privée** de la VM ; il ne fonctionne donc que si votre
+`zcp instance ssh` résout d'abord l'**IP privée** de la VM. Il ne fonctionne donc que si votre
 machine est sur le même réseau (par exemple via un VPN). Depuis un poste de travail ordinaire,
 connectez-vous en SSH à l'**IP publique** comme ci-dessus.
 

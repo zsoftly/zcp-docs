@@ -31,10 +31,11 @@ zcp auth validate
 
 :::note
 
-Almost every command requires a region and project. The profile defaults above satisfy that; you can
-still override per command with `--region`/`--project` or `ZCP_REGION`/`ZCP_PROJECT`. Only
-account-level commands (`dns`, `auth`, `profile`, `region`, `project`, `cloud-provider`, `currency`,
-`billing-cycle`, `server`, billing/support/dashboard) are exempt.
+Almost every command requires a region and project. The profile defaults above satisfy that
+requirement. You can still override per command with `--region`/`--project` or
+`ZCP_REGION`/`ZCP_PROJECT`. Only account-level commands (`dns`, `auth`, `profile`, `region`,
+`project`, `cloud-provider`, `currency`, `billing-cycle`, `server`, billing/support/dashboard) are
+exempt.
 
 :::
 
@@ -101,7 +102,7 @@ zcp instance list -o json | jq '.[].name'
 ### CI/CD usage
 
 ```bash
-# Use environment variables — no config file needed
+# Use environment variables with no config file
 export ZCP_BEARER_TOKEN="your-token"
 export ZCP_API_URL="https://api.zcp.zsoftly.ca/api"
 export ZCP_PROJECT="default"

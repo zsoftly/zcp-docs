@@ -16,6 +16,14 @@ flux de travail.
 | Docker Compose | Dernière stable |
 | Ubuntu         | 24.04 LTS       |
 
+## Variables d'environnement
+
+Vous pouvez définir cette valeur lors du déploiement de n8n depuis la marketplace.
+
+| Variable   | Description                     |
+| ---------- | ------------------------------- |
+| `N8N_HOST` | Hôte ou domaine public pour n8n |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

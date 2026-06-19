@@ -33,7 +33,7 @@ zcp auth validate
 :::note
 
 Presque toutes les commandes exigent une région et un projet. Les valeurs par défaut du profil
-ci-dessus suffisent ; vous pouvez aussi les remplacer par commande avec `--region`/`--project` ou
+ci-dessus suffisent. Vous pouvez aussi les remplacer par commande avec `--region`/`--project` ou
 `ZCP_REGION`/`ZCP_PROJECT`. Seules les commandes de niveau compte (`dns`, `auth`, `profile`,
 `region`, `project`, `cloud-provider`, `currency`, `billing-cycle`, `server`,
 `billing`/`support`/`dashboard`) sont exemptées.

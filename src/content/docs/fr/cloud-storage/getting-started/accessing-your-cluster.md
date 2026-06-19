@@ -46,7 +46,7 @@ bord.
 
 L'accès root permet de reconfigurer directement les pools, les règles CRUSH et les OSD. Les
 changements au placement des données et à la réplication ont un impact sur la durabilité et la
-performance. Planifiez-les avec soin. Demandez au soutien ZSoftly de réviser un changement au
+performance. Planifiez-les avec soin. Demandez au support ZSoftly de réviser un changement au
 préalable si vous souhaitez un deuxième avis.
 
 :::

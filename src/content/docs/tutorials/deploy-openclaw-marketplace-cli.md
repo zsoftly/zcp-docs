@@ -26,7 +26,7 @@ Plan for about 10 minutes. Most of it is the VM booting.
 The slugs in this tutorial (region `yow-1`, project `default-9`, the OpenClaw template, plans, and
 so on) are **examples from one account**. Yours will differ. Every step shows the `list` command
 that prints the right value for your account and region. Always use those, don't copy the examples
-verbatim. OpenClaw is published in **both YOW and YUL**; pick the region closest to you.
+verbatim. OpenClaw is published in **both YOW and YUL**. Pick the region closest to you.
 
 :::
 
@@ -38,7 +38,7 @@ verbatim. OpenClaw is published in **both YOW and YUL**; pick the region closest
   Windows).
 - An SSH key pair. This tutorial creates one for you if you do not have it.
 - For the configuration step at the end, an API key for a model provider (for example OpenAI or
-  Anthropic). You can deploy and SSH in without one; you need it before the assistant can answer.
+  Anthropic). You can deploy and SSH in without one. You need it before the assistant can answer.
 
 ## Step 1: Install the CLI
 
@@ -117,8 +117,8 @@ zcp plan storage --region yow-1   # use a value from the STORAGE CATEGORY column
 :::note
 
 The project slug is **not** the word `default`. A new account's first project has a slug like
-`default-9`. The storage category is region-specific (`nvme` in `yow-1`; other regions may expose
-`pro-nvme` or `premium-ssd`). Check the `list` output for your region.
+`default-9`. The storage category is region-specific (`nvme` in `yow-1`, while other regions may
+expose `pro-nvme` or `premium-ssd`). Check the `list` output for your region.
 
 :::
 
@@ -198,7 +198,7 @@ zcp ip list
 ![zcp ip list showing the source-NAT public IP for the VM](../../../assets/deploy-openclaw-marketplace-cli/06-ip-list.webp)
 
 Note the **IP ADDRESS** and the **SLUG** of the row whose `VM` is `openclaw`. The source-NAT IP
-gives the VM outbound internet; inbound is blocked until you open it. Open SSH (port `22`):
+gives the VM outbound internet. Inbound is blocked until you open it. Open SSH (port `22`):
 
 ```bash
 # Replace <ip-slug> with the SLUG from `zcp ip list`

@@ -13,6 +13,16 @@ Everything runs on your own infrastructure.
 | GitLab CE | 18.11.x   |
 | Ubuntu    | 24.04 LTS |
 
+## Environment variables
+
+You can optionally set these when deploying GitLab from the marketplace. Leave any field blank to
+have a secure random value generated automatically.
+
+| Variable               | Description                                  |
+| ---------------------- | -------------------------------------------- |
+| `GITLAB_ROOT_PASSWORD` | Initial password for the GitLab root account |
+| `GITLAB_EXTERNAL_URL`  | External URL GitLab is served from           |
+
 ## Getting started
 
 ### 1. Connect to your VM

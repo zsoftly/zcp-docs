@@ -27,7 +27,7 @@ la sécurité dans un réseau privé.
 ### Configuration réseau et nom
 
 - **Network Address** et **Network Size** : définissez l'adresse de base (par exemple `10.0.0.10`)
-  et la taille du sous-réseau (par exemple `/24 — 256 adresses IP utilisables`) qui définissent la
+  et la taille du sous-réseau (par exemple `/24`, 256 adresses IP utilisables) qui définissent la
   plage d'IP du VPC.
 - **Network Name** et **Network Description** : donnez au VPC un nom unique et identifiable.
 

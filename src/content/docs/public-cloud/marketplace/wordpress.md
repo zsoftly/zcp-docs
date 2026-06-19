@@ -16,6 +16,19 @@ pre-installed and ready to configure.
 | PHP       | 8.3          |
 | Ubuntu    | 24.04 LTS    |
 
+## Environment variables
+
+Set these when deploying WordPress from the marketplace. `SITE_URL` and `ADMIN_EMAIL` must contain
+your deployment's real values. You can leave `ADMIN_USER` and `ADMIN_PASSWORD` blank to have secure
+random values generated automatically.
+
+| Variable         | Description                 |
+| ---------------- | --------------------------- |
+| `SITE_URL`       | Public URL of the site      |
+| `ADMIN_USER`     | Administrator username      |
+| `ADMIN_PASSWORD` | Administrator password      |
+| `ADMIN_EMAIL`    | Administrator email address |
+
 ## Getting started
 
 ### 1. Connect to your VM

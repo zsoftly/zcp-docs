@@ -13,6 +13,18 @@ data pipelines.
 | InfluxDB  | 2.x       |
 | Ubuntu    | 24.04 LTS |
 
+## Environment variables
+
+You can optionally set these when deploying InfluxDB from the marketplace. Leave any field blank to
+have a secure random value generated automatically.
+
+| Variable                        | Description               |
+| ------------------------------- | ------------------------- |
+| `DOCKER_INFLUXDB_INIT_USERNAME` | Initial admin username    |
+| `DOCKER_INFLUXDB_INIT_PASSWORD` | Initial admin password    |
+| `DOCKER_INFLUXDB_INIT_ORG`      | Initial organization name |
+| `DOCKER_INFLUXDB_INIT_BUCKET`   | Initial bucket name       |
+
 ## Getting started
 
 ### 1. Connect to your VM

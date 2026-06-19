@@ -13,6 +13,16 @@ or schemas that evolve over time.
 | MongoDB Community | 8.0.x     |
 | Ubuntu            | 24.04 LTS |
 
+## Environment variables
+
+You can optionally set these when deploying MongoDB from the marketplace. Leave any field blank to
+have a secure random value generated automatically.
+
+| Variable                     | Description           |
+| ---------------------------- | --------------------- |
+| `MONGO_INITDB_ROOT_USERNAME` | MongoDB root username |
+| `MONGO_INITDB_ROOT_PASSWORD` | MongoDB root password |
+
 ## Getting started
 
 ### 1. Connect to your VM

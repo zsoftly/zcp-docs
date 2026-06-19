@@ -12,6 +12,18 @@ ships MySQL 8.4 LTS, a long-term support release intended for production workloa
 | MySQL Server | 8.4.x (LTS) |
 | Ubuntu       | 24.04 LTS   |
 
+## Environment variables
+
+You can optionally set these when deploying MySQL from the marketplace. Leave any field blank to
+have a secure random value generated automatically.
+
+| Variable              | Description                                |
+| --------------------- | ------------------------------------------ |
+| `MYSQL_ROOT_PASSWORD` | Database root password                     |
+| `MYSQL_DATABASE`      | Name of the application database to create |
+| `MYSQL_USER`          | Application database username              |
+| `MYSQL_PASSWORD`      | Application database user password         |
+
 ## Getting started
 
 ### 1. Connect to your VM

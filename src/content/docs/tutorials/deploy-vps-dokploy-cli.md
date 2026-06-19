@@ -166,7 +166,7 @@ The project slug is **not** the word `default`. A new account's first project ha
 `default-9`. Passing `--project default` fails with `The selected project is invalid`, so always use
 the slug from `zcp project list`.
 
-The storage category is region-specific. `nvme` is valid in `yow-1`; other regions may expose
+The storage category is region-specific. `nvme` is valid in `yow-1`, while other regions may expose
 `pro-nvme`, `premium-ssd`, or `hdd-storage` instead. Check `zcp plan storage` for your region.
 
 :::

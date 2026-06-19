@@ -12,6 +12,15 @@ used for full-text search, log aggregation, application monitoring, and real-tim
 | Elasticsearch | 8.x       |
 | Ubuntu        | 24.04 LTS |
 
+## Environment variables
+
+You can optionally set these when deploying Elasticsearch from the marketplace. Leave any field
+blank to have a secure random value generated automatically.
+
+| Variable           | Description                        |
+| ------------------ | ---------------------------------- |
+| `ELASTIC_PASSWORD` | Password for the elastic superuser |
+
 ## Getting started
 
 ### 1. Connect to your VM

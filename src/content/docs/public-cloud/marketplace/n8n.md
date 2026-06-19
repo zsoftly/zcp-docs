@@ -15,6 +15,14 @@ logic inside workflows.
 | Docker Compose | Latest stable |
 | Ubuntu         | 24.04 LTS     |
 
+## Environment variables
+
+You can optionally set this when deploying n8n from the marketplace.
+
+| Variable   | Description                   |
+| ---------- | ----------------------------- |
+| `N8N_HOST` | Public host or domain for n8n |
+
 ## Getting started
 
 ### 1. Connect to your VM

@@ -49,7 +49,7 @@ comment les fournir.
 
 - **Définissez-les une fois** : `zcp profile add` demande maintenant une région par défaut (requise)
   et un projet, comme `aws configure`. Ensuite, la plupart des commandes n'ont plus besoin de
-  `--region`/`--project` ; vous pouvez toujours les remplacer par commande ou avec les variables
+  `--region`/`--project`, et vous pouvez toujours les remplacer par commande ou avec les variables
   d'environnement `ZCP_REGION`/`ZCP_PROJECT`.
 - **Les listes sont limitées à votre région et à votre projet** : chaque liste de ressources et de
   catalogue filtre désormais sa sortie, donc `plan`, `template list`, `iso list`, `marketplace list`
@@ -63,7 +63,7 @@ comment les fournir.
   résolvant une erreur 500 à l'import, et valide le nom de la clé côté client (20 caractères
   maximum).
 - **`instance create --ssh-key <name>`** active désormais correctement l'authentification par clé
-  SSH. Importez d'abord la clé avec `ssh-key import` ; les noms de clé et le contenu de la clé
+  SSH. Importez d'abord la clé avec `ssh-key import`. Les noms de clé et le contenu de la clé
   publique doivent être uniques.
 
 **Erreurs plus claires.**
@@ -92,7 +92,7 @@ complète et un tableau comparatif interface vs CLI.
   `put --metadata`.
 - **Rendre les compartiments publics/privés**, **vider un compartiment** et **nettoyer les
   téléversements incomplets**.
-- **Création simplifiée** : `zcp plan object-storage` liste les plans ; `create --plan` déduit la
+- **Création simplifiée** : `zcp plan object-storage` liste les plans, et `create --plan` déduit la
   catégorie de stockage.
 
 **Ergonomie du CLI.**
@@ -114,7 +114,7 @@ complète et un tableau comparatif interface vs CLI.
   listes séparées par des virgules.
 - **`network get`** : afficher le CIDR, l'état, l'appartenance au VPC et l'ACL d'un réseau.
 - **`plan network`** : lister les plans réseau (les valeurs de `--network-plan`).
-- **Corrections** : `vpc get`/`create` affichent maintenant le CIDR/l'état ; les tableaux de plans
+- **Corrections** : `vpc get`/`create` affichent maintenant le CIDR/l'état, les tableaux de plans
   incluent une colonne SLUG ; `vpc delete` attend la fin de l'opération ; meilleure gestion du cas «
   déjà supprimé ».
 
@@ -144,7 +144,7 @@ complète et un tableau comparatif interface vs CLI.
 
 - **`instance create --user-data` / `--user-data-file`** : fournir un script cloud-init / de
   démarrage en ligne ou depuis un fichier à la création d'une VM.
-- **Corrections** : l'IP privée d'une instance s'affiche correctement ; `instance get` réessaie
+- **Corrections** : l'IP privée d'une instance s'affiche correctement, et `instance get` réessaie
   pendant le bref intervalle suivant la création ; `instance create --blockstorage-plan` est
   maintenant optionnel (attribué automatiquement).
 

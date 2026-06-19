@@ -13,6 +13,17 @@ and a wide range of extensions.
 | PostgreSQL | 17.x      |
 | Ubuntu     | 24.04 LTS |
 
+## Environment variables
+
+You can optionally set these when deploying PostgreSQL from the marketplace. Leave any field blank
+to have a secure random value generated automatically.
+
+| Variable            | Description                                |
+| ------------------- | ------------------------------------------ |
+| `POSTGRES_PASSWORD` | Password for the postgres superuser        |
+| `POSTGRES_DB`       | Name of the application database to create |
+| `POSTGRES_USER`     | Application database username              |
+
 ## Getting started
 
 ### 1. Connect to your VM

@@ -13,6 +13,15 @@ queues.
 | Valkey    | 9.0.x     |
 | Ubuntu    | 24.04 LTS |
 
+## Environment variables
+
+You can optionally set these when deploying Valkey from the marketplace. Leave any field blank to
+have a secure random value generated automatically.
+
+| Variable          | Description                            |
+| ----------------- | -------------------------------------- |
+| `VALKEY_PASSWORD` | Password required to connect to Valkey |
+
 ## Getting started
 
 ### 1. Connect to your VM

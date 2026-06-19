@@ -27,7 +27,7 @@ private network.
 ### Network configuration and name
 
 - **Network Address** and **Network Size**: set the base address (for example `10.0.0.10`) and the
-  subnet size (for example `/24 — 256 usable IP addresses`) that define the VPC's IP range.
+  subnet size (for example `/24`, 256 usable IP addresses) that define the VPC's IP range.
 - **Network Name** and **Network Description**: give the VPC a unique, identifiable name.
 
 ![Create VPC Network form: Network Address, Network Size, Network Name, and Description](../../../../../assets/networking/create-vpc-config.webp)

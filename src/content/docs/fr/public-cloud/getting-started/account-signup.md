@@ -158,7 +158,7 @@ cliquez sur **Sign in**.
 
 Si vous oubliez votre mot de passe, cliquez sur **Forgot Password?** sur la page de connexion (ou
 allez à [cloud.zcp.zsoftly.ca/forgot-password](https://cloud.zcp.zsoftly.ca/forgot-password)).
-Saisissez le courriel de votre compte et cliquez sur **Send Reset Link** — vous recevrez les
+Saisissez le courriel de votre compte et cliquez sur **Send Reset Link**. Vous recevrez les
 instructions de réinitialisation par courriel.
 
 ![Page de mot de passe oublié du portail ZCP avec le champ courriel et le bouton Send Reset Link](../../../../../assets/account-signup/portal-forgot-password.webp)

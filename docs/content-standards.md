@@ -2,7 +2,7 @@
 
 How to write and structure documentation in this repo. This is the content equivalent of a code
 style guide. The Starlight-specific authoring rules are also summarized in
-[CLAUDE.md](../CLAUDE.md); this file is the human reference.
+[CLAUDE.md](../CLAUDE.md). This file is the human reference.
 
 ---
 
@@ -35,15 +35,14 @@ Avoid these in prose: `leverage`, `utilize`, `delve`, `seamless`, `robust`, `pow
 `cutting-edge`, `game-changer`, `unlock`, `revolutionize`, `harness`, `realm`, `landscape`,
 `tapestry`, `navigating`, `in conclusion`, `furthermore`, `moreover`.
 
-`can` and `may` are fine in reference docs where precision needs them; prefer the direct form when
-the sentence reads cleanly without them.
+Prefer the direct form when the sentence reads cleanly without extra qualifiers.
 
 ---
 
 ## Headings
 
 - Use Title Case for headings, consistent across a page and with sibling pages.
-- One `<h1>` per page comes from the `title` frontmatter; start body headings at `##`.
+- One `<h1>` per page comes from the `title` frontmatter. Start body headings at `##`.
 - Keep headings short and scannable. The right-hand on-page nav is built from them.
 
 ---
@@ -65,9 +64,9 @@ description: Register, transfer, and manage DNS domains in the ZSoftly Cloud Pla
 ## Asides (callouts)
 
 Valid types are **`note`, `tip`, `caution`, `danger`** only. `:::warning` is not valid and renders
-as plain text; use `:::caution`.
+as plain text. Use `:::caution`.
 
-Always use the blank-line block form. Prettier (`proseWrap: always`) can otherwise collapse an
+Always use the blank-line block form. Prettier (`proseWrap: always`) might otherwise collapse an
 inline aside and break rendering:
 
 ```md
@@ -91,7 +90,7 @@ Content jammed onto the `:::type` line, or a closing `:::` on a content line, do
   import { Tabs, TabItem } from '@astrojs/starlight/components';
   ```
 - **GFM tables do not render in `.mdx`.** They work in `.md`. In `.mdx`, write tables as raw HTML
-  (`<table>...</table>`); Starlight styles them the same.
+  (`<table>...</table>`). Starlight styles them the same.
 
 ---
 
@@ -137,8 +136,7 @@ src/content/docs/
 
 The docs are **fully bilingual**: every page exists in English (`src/content/docs/**`, no locale
 prefix) and French (`src/content/docs/fr/**`). Starlight is configured with `en` (default/root) and
-`fr` locales; if a French page is ever missing it falls back to the English content for that URL, so
-nothing 404s.
+`fr` locales. Missing French pages fall back to English content for the same URL, so nothing 404s.
 
 **English is the source of truth.** Author and update pages in English first.
 
@@ -151,15 +149,15 @@ Translation workflow:
 
 Rules for the French copy:
 
-- **Code blocks are identical** to the English source. Only prose is translated; never let a command
+- **Code blocks are identical** to the English source. Only prose is translated. Never let a command
   or flag diverge between languages.
 - Internal links use the `/fr/…` prefix.
-- Frontmatter `title`/`description` values are translated; keys are not.
+- Frontmatter `title`/`description` values are translated. Keys are not.
 - Keep the same page structure and headings so the two versions stay diffable.
 
-When you change an English page, flag that its French counterpart needs re-translation and review
-(the reviewer keeps them aligned). Do not commit raw machine translation, and do not hand-edit
-French prose without the reviewer.
+When you change an English page, flag the French counterpart for re-translation and review. The
+reviewer keeps them aligned. Do not commit raw machine translation, and do not hand-edit French
+prose without the reviewer.
 
 ---
 
@@ -169,5 +167,5 @@ French prose without the reviewer.
 pnpm fmt && pnpm lint && pnpm typecheck && pnpm build
 ```
 
-All four must pass. `pnpm fmt` rewraps prose to 100 columns and normalizes formatting; run it last
+All four must pass. `pnpm fmt` rewraps prose to 100 columns and normalizes formatting. Run it last
 so the diff is clean.

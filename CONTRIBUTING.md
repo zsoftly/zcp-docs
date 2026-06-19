@@ -1,14 +1,14 @@
 # Contributing to ZSoftly Documentation
 
-Thanks for helping improve the ZSoftly docs — they're open source. There are three ways to
-contribute, use whichever suits you:
+Thanks for helping improve the ZSoftly docs. They're open source. There are three ways to
+contribute. Use whichever suits you:
 
-- **Open an issue** — report a problem or request a change.
-- **Open a pull request** — propose the fix directly.
-- **Send an email** — to **<docs-support@zsoftly.ca>** and we'll take it from there.
+- **Open an issue** to report a problem or request a change.
+- **Open a pull request** to propose the fix directly.
+- **Send an email** to **<docs-support@zsoftly.ca>** and we'll take it from there.
 
 **Turnaround:** we aim to triage and fulfill documentation requests within **20 business days**.
-Complex changes may take longer; we'll say so on the issue or PR.
+Complex changes may take longer. We'll say so on the issue or PR.
 
 **Not here:** platform bugs, billing, or account/support requests. Use the support ticket system in
 the [ZSoftly Console](https://cloud.zcp.zsoftly.ca) for those.
@@ -16,9 +16,9 @@ the [ZSoftly Console](https://cloud.zcp.zsoftly.ca) for those.
 ## A note on languages
 
 The docs are bilingual (English + French). **English is the source of truth.** Contribute in
-**English** — you do not need to touch the French version. We machine-translate changes to French
-and a dedicated native bilingual reviewer reviews them before they ship. (If you do submit French
-edits, they go through the same review.)
+**English**. You do not need to touch the French version. We machine-translate changes to French and
+a dedicated native bilingual reviewer reviews them before they ship. (If you do submit French edits,
+they go through the same review.)
 
 ## Report an issue
 
@@ -46,8 +46,8 @@ pnpm install
 
 All docs live in `src/content/docs/` (English). Each page is Markdown with a `title` frontmatter
 field. Follow [docs/content-standards.md](./docs/content-standards.md) for style, asides, code
-blocks, and structure. Don't edit `src/content/docs/fr/**` — the French copy is handled by our
-translation/review workflow.
+blocks, and structure. Don't edit `src/content/docs/fr/**`. Our translation/review workflow handles
+the French copy.
 
 ### 3. Run the checks
 
@@ -81,5 +81,5 @@ Follow [Conventional Commits](https://www.conventionalcommits.org):
 
 - Promotional or marketing content in technical pages
 - Internal ZSoftly infrastructure details, credentials, or IP addresses
-- Content that duplicates upstream documentation (CloudStack, Ceph, etc.) — we link to it instead
+- Content that duplicates upstream documentation (CloudStack, Ceph, etc.). We link to it instead
 - Unreviewed machine translation

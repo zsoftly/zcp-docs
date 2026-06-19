@@ -59,8 +59,8 @@ confirmation prompts.
 
 :::note
 
-Object-storage commands require a **region** and a **project**. Object storage uses its own regions
-— `os-yul` / `os-yow` (not the compute `yul-1`/`yow-1`). Set them with `--region`/`--project`,
+Object-storage commands require a **region** and a **project**. Object storage uses its own regions:
+`os-yul` / `os-yow` (not the compute `yul-1`/`yow-1`). Set them with `--region`/`--project`,
 `ZCP_REGION`/`ZCP_PROJECT`, or a profile default (`zcp profile add`). For example:
 `export ZCP_REGION=os-yow ZCP_PROJECT=default-9` before the commands below.
 
