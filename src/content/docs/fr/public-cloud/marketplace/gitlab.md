@@ -13,6 +13,16 @@ conteneurs et plus encore. L'ensemble s'exécute sur votre propre infrastructure
 | GitLab CE | 18.11.x   |
 | Ubuntu    | 24.04 LTS |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de GitLab depuis la marketplace. Laissez un
+champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable               | Description                                       |
+| ---------------------- | ------------------------------------------------- |
+| `GITLAB_ROOT_PASSWORD` | Mot de passe initial du compte `root` de GitLab   |
+| `GITLAB_EXTERNAL_URL`  | URL externe à partir de laquelle GitLab est servi |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

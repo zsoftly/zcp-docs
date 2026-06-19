@@ -13,6 +13,18 @@ le stockage de données généraliste.
 | MariaDB Server | 11.4.x (LTS) |
 | Ubuntu         | 24.04 LTS    |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de MariaDB depuis la marketplace. Laissez un
+champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable              | Description                                                     |
+| --------------------- | --------------------------------------------------------------- |
+| `MYSQL_ROOT_PASSWORD` | Mot de passe `root` de la base de données                       |
+| `MYSQL_DATABASE`      | Nom de la base de données applicative à créer                   |
+| `MYSQL_USER`          | Nom d'utilisateur de la base de données applicative             |
+| `MYSQL_PASSWORD`      | Mot de passe de l'utilisateur de la base de données applicative |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

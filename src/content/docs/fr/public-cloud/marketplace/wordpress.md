@@ -16,6 +16,18 @@ WordPress préinstallé et prêt à configurer.
 | PHP       | 8.3            |
 | Ubuntu    | 24.04 LTS      |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de WordPress depuis la marketplace. Laissez un
+champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable         | Description                           |
+| ---------------- | ------------------------------------- |
+| `SITE_URL`       | URL publique du site                  |
+| `ADMIN_USER`     | Nom d'utilisateur de l'administrateur |
+| `ADMIN_PASSWORD` | Mot de passe de l'administrateur      |
+| `ADMIN_EMAIL`    | Adresse courriel de l'administrateur  |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

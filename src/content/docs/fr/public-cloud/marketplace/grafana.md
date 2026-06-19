@@ -15,6 +15,16 @@ l'intelligence d'affaires.
 | Grafana OSS | Dernière stable |
 | Ubuntu      | 24.04 LTS       |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de Grafana depuis la marketplace. Laissez un
+champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable                     | Description                                 |
+| ---------------------------- | ------------------------------------------- |
+| `GF_SECURITY_ADMIN_USER`     | Nom d'utilisateur administrateur de Grafana |
+| `GF_SECURITY_ADMIN_PASSWORD` | Mot de passe administrateur de Grafana      |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

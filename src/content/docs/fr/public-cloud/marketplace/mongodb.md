@@ -13,6 +13,16 @@ requêtes riches, une mise à l'échelle horizontale ou des schémas qui évolue
 | MongoDB Community | 8.0.x     |
 | Ubuntu            | 24.04 LTS |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de MongoDB depuis la marketplace. Laissez un
+champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable                     | Description                       |
+| ---------------------------- | --------------------------------- |
+| `MONGO_INITDB_ROOT_USERNAME` | Nom d'utilisateur root de MongoDB |
+| `MONGO_INITDB_ROOT_PASSWORD` | Mot de passe root de MongoDB      |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

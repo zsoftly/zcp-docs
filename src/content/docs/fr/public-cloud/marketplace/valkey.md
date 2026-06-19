@@ -13,6 +13,15 @@ réel, la messagerie pub/sub et les files de tâches.
 | Valkey    | 9.0.x     |
 | Ubuntu    | 24.04 LTS |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de Valkey depuis la marketplace. Laissez un
+champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable          | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `VALKEY_PASSWORD` | Mot de passe requis pour se connecter à Valkey |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

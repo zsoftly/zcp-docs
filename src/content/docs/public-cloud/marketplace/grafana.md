@@ -14,6 +14,16 @@ performance tracking, and business intelligence.
 | Grafana OSS | Latest stable |
 | Ubuntu      | 24.04 LTS     |
 
+## Environment variables
+
+You can optionally set these when deploying Grafana from the marketplace. Leave any field blank to
+have a secure random value generated automatically.
+
+| Variable                     | Description            |
+| ---------------------------- | ---------------------- |
+| `GF_SECURITY_ADMIN_USER`     | Grafana admin username |
+| `GF_SECURITY_ADMIN_PASSWORD` | Grafana admin password |
+
 ## Getting started
 
 ### 1. Connect to your VM

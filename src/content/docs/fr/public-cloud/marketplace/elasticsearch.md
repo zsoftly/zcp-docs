@@ -13,6 +13,15 @@ l'analyse de données en temps réel.
 | Elasticsearch | 8.x       |
 | Ubuntu        | 24.04 LTS |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement d'Elasticsearch depuis la marketplace. Laissez
+un champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable           | Description                              |
+| ------------------ | ---------------------------------------- |
+| `ELASTIC_PASSWORD` | Mot de passe du superutilisateur elastic |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

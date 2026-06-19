@@ -16,6 +16,17 @@ flux de travail.
 | Docker Compose | Dernière stable |
 | Ubuntu         | 24.04 LTS       |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de n8n depuis la marketplace. Laissez un champ
+vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable                  | Description                                           |
+| ------------------------- | ----------------------------------------------------- |
+| `N8N_BASIC_AUTH_USER`     | Nom d'utilisateur pour l'authentification de base n8n |
+| `N8N_BASIC_AUTH_PASSWORD` | Mot de passe pour l'authentification de base n8n      |
+| `N8N_HOST`                | Hôte ou domaine public pour n8n                       |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

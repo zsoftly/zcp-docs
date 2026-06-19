@@ -13,6 +13,18 @@ la surveillance d'infrastructure et les pipelines de données IoT.
 | InfluxDB  | 2.x       |
 | Ubuntu    | 24.04 LTS |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement d'InfluxDB depuis la marketplace. Laissez un
+champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable                        | Description                              |
+| ------------------------------- | ---------------------------------------- |
+| `DOCKER_INFLUXDB_INIT_USERNAME` | Nom d'utilisateur administrateur initial |
+| `DOCKER_INFLUXDB_INIT_PASSWORD` | Mot de passe administrateur initial      |
+| `DOCKER_INFLUXDB_INIT_ORG`      | Nom de l'organisation initiale           |
+| `DOCKER_INFLUXDB_INIT_BUCKET`   | Nom du bucket initial                    |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM
