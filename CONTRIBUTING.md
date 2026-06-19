@@ -1,23 +1,40 @@
 # Contributing to ZSoftly Documentation
 
-Thank you for helping improve the ZSoftly docs. This guide covers how to report issues, suggest
-changes, and submit pull requests.
+Thanks for helping improve the ZSoftly docs — they're open source. There are three ways to
+contribute, use whichever suits you:
 
-## Reporting issues
+- **Open an issue** — report a problem or request a change.
+- **Open a pull request** — propose the fix directly.
+- **Send an email** — to **<docs-support@zsoftly.ca>** and we'll take it from there.
 
-Use [GitHub Issues](https://github.com/zsoftly/zcp-docs/issues) for:
+**Turnaround:** we aim to triage and fulfill documentation requests within **20 business days**.
+Complex changes may take longer; we'll say so on the issue or PR.
+
+**Not here:** platform bugs, billing, or account/support requests. Use the support ticket system in
+the [ZSoftly Console](https://cloud.zcp.zsoftly.ca) for those.
+
+## A note on languages
+
+The docs are bilingual (English + French). **English is the source of truth.** Contribute in
+**English** — you do not need to touch the French version. We machine-translate changes to French
+and a dedicated native bilingual reviewer reviews them before they ship. (If you do submit French
+edits, they go through the same review.)
+
+## Report an issue
+
+Open a [GitHub Issue](https://github.com/zsoftly/zcp-docs/issues) for:
 
 - Typos, factual errors, or outdated content
 - Missing topics or gaps in coverage
 - Broken links or incorrect code examples
 - Unclear explanations
+- Translation problems (English or French)
 
-**Not the right place for:** platform bugs, billing issues, or support requests — use the
-[ZSoftly Console](https://cloud.zcp.zsoftly.ca) support ticket system for those.
+Be specific: link the exact page, quote the wrong text, and say what it should be.
 
-## Making changes
+## Open a pull request
 
-### 1. Fork and clone
+### 1. Fork, clone, install
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/zcp-docs
@@ -25,45 +42,29 @@ cd zcp-docs
 pnpm install
 ```
 
-### 2. Run locally
+### 2. Edit the English content
 
-```bash
-pnpm build && pnpm preview
-```
+All docs live in `src/content/docs/` (English). Each page is Markdown with a `title` frontmatter
+field. Follow [docs/content-standards.md](./docs/content-standards.md) for style, asides, code
+blocks, and structure. Don't edit `src/content/docs/fr/**` — the French copy is handled by our
+translation/review workflow.
 
-> Use `pnpm preview` (not `pnpm dev`) to verify code block rendering and search.
-
-### 3. Edit content
-
-All docs live in `src/content/docs/`. Each file is standard Markdown with a `title` frontmatter
-field:
-
-```yaml
----
-title: Page Title
----
-```
-
-- Keep sentences short and direct.
-- Use code blocks with a language tag (` ```bash `, ` ```python `, etc.).
-- Replace screenshots with the `:::note Screenshot pending:::` admonition if you cannot take a fresh
-  one.
-- Do not reference internal ZSoftly infrastructure details, credentials, or IP addresses.
-
-### 4. Run quality checks
+### 3. Run the checks
 
 ```bash
 pnpm fmt && pnpm lint && pnpm typecheck && pnpm build
 ```
 
-All four must pass before opening a pull request.
+All four must pass. `pnpm build` validates internal links and fails on breakage. Run `pnpm fmt` last
+so the diff is clean.
 
-### 5. Open a pull request
+### 4. Open the PR
 
 - Target the `main` branch.
-- Title: short description of what changed (e.g. `fix: correct S3 endpoint for YOW region`).
-- Description: what you changed and why.
-- One logical change per PR — split unrelated fixes into separate PRs.
+- Title: a short summary (e.g. `fix: correct S3 endpoint for the YOW region`).
+- Description: what changed and why. One logical change per PR.
+
+We'll review, request changes if needed, and handle the French translation after merge.
 
 ## Commit style
 
@@ -76,14 +77,9 @@ Follow [Conventional Commits](https://www.conventionalcommits.org):
 | `chore:` | Config, tooling, dependency updates  |
 | `style:` | Formatting-only changes              |
 
-## What we will not merge
+## What we don't publish
 
-- Promotional or marketing content
-- Changes that expose internal ZSoftly infrastructure
-- Content that duplicates upstream documentation (CloudStack, Ceph, etc.) — link to it instead
-- AI-generated content that has not been reviewed for accuracy
-
-## Questions
-
-Open a [GitHub Discussion](https://github.com/zsoftly/zcp-docs/discussions) or a GitHub Issue with
-the `question` label.
+- Promotional or marketing content in technical pages
+- Internal ZSoftly infrastructure details, credentials, or IP addresses
+- Content that duplicates upstream documentation (CloudStack, Ceph, etc.) — we link to it instead
+- Unreviewed machine translation

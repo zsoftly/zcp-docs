@@ -23,10 +23,26 @@ profiles:
   - name: default
     bearer_token: 'your-token-here'
     api_url: 'https://api.zcp.zsoftly.ca/api'
+    region: 'yow-1'
+    project: 'default-9'
   - name: staging
     bearer_token: 'staging-token-here'
     api_url: 'https://api.staging.zcp.zsoftly.ca/api'
+    region: 'yul-1'
+    project: 'default-9'
 ```
+
+:::note
+
+**Une région et un projet sont requis pour presque toutes les commandes.** Les ressources et le
+catalogue sont propres à une région/un projet. Fournissez-les avec `--region`/`--project`, les
+variables `ZCP_REGION`/`ZCP_PROJECT`, ou — recommandé — des valeurs par défaut par profil
+enregistrées par `zcp profile add` (qui demande une région et un projet par défaut, comme
+`aws configure`). Seules les commandes de niveau compte sont exemptées : `dns`, `auth`, `profile`,
+`region`, `project`, `cloud-provider`, `currency`, `billing-cycle`, `server`, `support`,
+`dashboard`, `billing`, `product` et `store`.
+
+:::
 
 ### Gestion des profils
 

@@ -8,6 +8,17 @@ Full command reference for the ZCP CLI v0.0.9.
 For the interactive reference with search, see the
 [ZCP CLI reference on the main site](https://cloud.zcp.zsoftly.ca).
 
+:::note
+
+Almost every command requires a **region** and **project** (resources and the catalog are
+region/project-specific). Set them once with `zcp profile add` (it captures a default region and
+project, like `aws configure`), or pass `--region`/`--project` / set `ZCP_REGION`/`ZCP_PROJECT`. The
+examples below assume a configured default. Account-level commands (`dns`, `auth`, `profile`,
+`region`, `project`, `cloud-provider`, `currency`, `billing-cycle`, `server`,
+billing/support/dashboard) are exempt. See [Configuration](/public-cloud/cli/configuration).
+
+:::
+
 ---
 
 ### Core
