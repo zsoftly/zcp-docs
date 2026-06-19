@@ -23,11 +23,12 @@ sous-réseaux au besoin.
 
 Cliquez sur **Soumettre** pour créer le sous-réseau.
 
-:::note
+![Boîte de dialogue d'ajout d'un réseau VPC avec les champs Nom, Description, liste ACL réseau et masque réseau](../../../../../../assets/networking/vpc-add-subnet.webp)
 
-Captures d'écran à venir.
+Le nouveau sous-réseau apparaît ensuite dans l'onglet **Réseau** avec son CIDR, son ACL et son état
+d'allocation.
 
-:::
+![Onglet Réseau du VPC listant le sous-réseau créé avec le CIDR, l'ACL et l'état Allocated](../../../../../../assets/networking/vpc-subnet-list.webp)
 
 Voir aussi : [ACL réseau](/fr/public-cloud/networking/vpc/network-acls),
 [Vue d'ensemble du VPC](/fr/public-cloud/networking/vpc/create-vpc)

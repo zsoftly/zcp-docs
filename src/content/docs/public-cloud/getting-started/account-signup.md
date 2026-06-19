@@ -135,6 +135,30 @@ Screenshots coming.
 - **Postpaid Users**: After verification, your account will display as active with the account type
   set to postpaid.
 
+### Sign in to the portal
+
+Once your account is active, sign in at
+[cloud.zcp.zsoftly.ca/login](https://cloud.zcp.zsoftly.ca/login). Enter your **email** and
+**password** (or use **GitHub** or **Google**), pass the verification challenge, and click **Sign
+in**.
+
+![ZCP portal sign-in page with email and password fields](../../../../assets/account-signup/portal-login.webp)
+
+#### Reset your password
+
+If you forget your password, click **Forgot Password?** on the sign-in page (or go to
+[cloud.zcp.zsoftly.ca/forgot-password](https://cloud.zcp.zsoftly.ca/forgot-password)). Enter your
+account email and click **Send Reset Link** — you'll receive reset instructions by email.
+
+![ZCP portal forgot-password page with the email field and Send Reset Link button](../../../../assets/account-signup/portal-forgot-password.webp)
+
+#### Sign out
+
+To end your session, use the account menu and select sign out. The portal confirms you have logged
+out, and you can sign back in anytime.
+
+![ZCP portal logout confirmation page](../../../../assets/account-signup/portal-logout.webp)
+
 Setting up your ZSoftly Public Cloud account is a straightforward process. Register, verify your
 email, configure billing, and choose a payment plan that best suits your needs. Once completed,
 you'll have full access to the ZSoftly Public Cloud dashboard and its features, enabling you to

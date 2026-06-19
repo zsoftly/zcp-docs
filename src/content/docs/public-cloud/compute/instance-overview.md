@@ -6,6 +6,11 @@ sidebar_position: 2
 The Instance Overview page provides a detailed summary and management options for your VM. It
 includes instance status, location, operating system, performance metrics, and quick actions.
 
+Open **Virtual Machines → Instances** in the portal to see all your VMs, each with its status,
+region, project, operating system, and IP. Select an instance to open its overview.
+
+![ZCP portal Instances list showing each VM's status, region, project, OS, and IP](../../../../assets/compute/instances-list.webp)
+
 ## Action Buttons
 
 Available from the three-dot menu or overview page:

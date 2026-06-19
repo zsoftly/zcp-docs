@@ -7,6 +7,12 @@ La page de vue d'ensemble d'une instance fournit un résumé détaillé de votre
 gestion disponibles. Elle affiche l'état de l'instance, son emplacement, son système d'exploitation,
 ses métriques de performance et les actions rapides.
 
+Ouvrez **Virtual Machines → Instances** dans le portail pour voir toutes vos VM, chacune avec son
+état, sa région, son projet, son système d'exploitation et son IP. Sélectionnez une instance pour
+ouvrir sa vue d'ensemble.
+
+![Liste des instances du portail ZCP montrant l'état, la région, le projet, l'OS et l'IP de chaque VM](../../../../../assets/compute/instances-list.webp)
+
 ## Boutons d'action
 
 Ces actions sont disponibles depuis le menu à trois points ou la page de vue d'ensemble :

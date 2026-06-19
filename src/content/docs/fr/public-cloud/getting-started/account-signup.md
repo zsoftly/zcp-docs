@@ -145,6 +145,31 @@ Captures d'écran à venir.
 - **Utilisateurs postpayés** : après la vérification, votre compte s'affichera comme actif, avec le
   type de compte postpayé.
 
+### Se connecter au portail
+
+Une fois votre compte actif, connectez-vous à
+[cloud.zcp.zsoftly.ca/login](https://cloud.zcp.zsoftly.ca/login). Saisissez votre **courriel** et
+votre **mot de passe** (ou utilisez **GitHub** ou **Google**), réussissez la vérification, puis
+cliquez sur **Sign in**.
+
+![Page de connexion du portail ZCP avec les champs courriel et mot de passe](../../../../../assets/account-signup/portal-login.webp)
+
+#### Réinitialiser votre mot de passe
+
+Si vous oubliez votre mot de passe, cliquez sur **Forgot Password?** sur la page de connexion (ou
+allez à [cloud.zcp.zsoftly.ca/forgot-password](https://cloud.zcp.zsoftly.ca/forgot-password)).
+Saisissez le courriel de votre compte et cliquez sur **Send Reset Link** — vous recevrez les
+instructions de réinitialisation par courriel.
+
+![Page de mot de passe oublié du portail ZCP avec le champ courriel et le bouton Send Reset Link](../../../../../assets/account-signup/portal-forgot-password.webp)
+
+#### Se déconnecter
+
+Pour mettre fin à votre session, utilisez le menu du compte et sélectionnez la déconnexion. Le
+portail confirme que vous êtes déconnecté, et vous pouvez vous reconnecter à tout moment.
+
+![Page de confirmation de déconnexion du portail ZCP](../../../../../assets/account-signup/portal-logout.webp)
+
 La configuration d'un compte ZSoftly Public Cloud est un processus simple : inscrivez-vous, vérifiez
 votre courriel, configurez la facturation et choisissez le plan de paiement qui correspond à vos
 besoins. Une fois ces étapes terminées, vous aurez accès au tableau de bord ZSoftly Public Cloud et

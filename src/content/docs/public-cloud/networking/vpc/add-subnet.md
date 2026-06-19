@@ -21,11 +21,11 @@ The Network tab displays all networks (subnets) created inside the VPC. Add new 
 
 Click **Submit** to create the subnet.
 
-:::note
+![Add VPC Network dialog with Name, Description, Network ACL List, and Netmask fields](../../../../../assets/networking/vpc-add-subnet.webp)
 
-Screenshots coming.
+The new subnet then appears under the **Network** tab with its CIDR, ACL, and allocation status.
 
-:::
+![VPC Network tab listing the created subnet with CIDR, ACL, and Allocated status](../../../../../assets/networking/vpc-subnet-list.webp)
 
 See also: [Network ACLs](/public-cloud/networking/vpc/network-acls),
 [VPC Overview](/public-cloud/networking/vpc/create-vpc)

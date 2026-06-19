@@ -242,11 +242,11 @@ curl -s -X POST "https://api.zcp.zsoftly.ca/api/virtual-machines" \
   -H "Accept: application/json" \
   -d '{
     "name": "my-server",
-    "project": "my-project",
+    "project": "default",
     "region": "yow",
     "boot_source": "template",
     "template": "ubuntu-24-04",
-    "plan": "general-1vcpu-1gb",
+    "plan": "ci1xs",
     "network_type": "public",
     "networks": ["my-public-network"],
     "is_public": true,
@@ -266,11 +266,11 @@ TOKEN = "your-token"
 
 vm = {
     "name": "my-server",
-    "project": "my-project",
+    "project": "default",
     "region": "yow",
     "boot_source": "template",
     "template": "ubuntu-24-04",
-    "plan": "general-1vcpu-1gb",
+    "plan": "ci1xs",
     "network_type": "public",
     "networks": ["my-public-network"],
     "is_public": True,
@@ -302,11 +302,11 @@ const res = await fetch(`${BASE}/virtual-machines`, {
   },
   body: JSON.stringify({
     name: 'my-server',
-    project: 'my-project',
+    project: 'default',
     region: 'yow',
     boot_source: 'template',
     template: 'ubuntu-24-04',
-    plan: 'general-1vcpu-1gb',
+    plan: 'ci1xs',
     network_type: 'public',
     networks: ['my-public-network'],
     is_public: true,
@@ -333,11 +333,11 @@ const res = await fetch(`${BASE}/virtual-machines`, {
   },
   body: JSON.stringify({
     name: 'my-server',
-    project: 'my-project',
+    project: 'default',
     region: 'yow',
     boot_source: 'template',
     template: 'ubuntu-24-04',
-    plan: 'general-1vcpu-1gb',
+    plan: 'ci1xs',
     network_type: 'public',
     networks: ['my-public-network'],
     is_public: true,
@@ -367,11 +367,11 @@ func main() {
 
 	body := []byte(`{
 		"name": "my-server",
-		"project": "my-project",
+		"project": "default",
 		"region": "yow",
 		"boot_source": "template",
 		"template": "ubuntu-24-04",
-		"plan": "general-1vcpu-1gb",
+		"plan": "ci1xs",
 		"network_type": "public",
 		"networks": ["my-public-network"],
 		"is_public": true,
@@ -418,11 +418,11 @@ class Program
         var body = """
         {
           "name": "my-server",
-          "project": "my-project",
+          "project": "default",
           "region": "yow",
           "boot_source": "template",
           "template": "ubuntu-24-04",
-          "plan": "general-1vcpu-1gb",
+          "plan": "ci1xs",
           "network_type": "public",
           "networks": ["my-public-network"],
           "is_public": true,
@@ -461,11 +461,11 @@ public class CreateVm {
         String body = """
             {
               "name": "my-server",
-              "project": "my-project",
+              "project": "default",
               "region": "yow",
               "boot_source": "template",
               "template": "ubuntu-24-04",
-              "plan": "general-1vcpu-1gb",
+              "plan": "ci1xs",
               "network_type": "public",
               "networks": ["my-public-network"],
               "is_public": true,
@@ -507,11 +507,11 @@ req["Content-Type"] = "application/json"
 req["Accept"] = "application/json"
 req.body = {
   name: "my-server",
-  project: "my-project",
+  project: "default",
   region: "yow",
   boot_source: "template",
   template: "ubuntu-24-04",
-  plan: "general-1vcpu-1gb",
+  plan: "ci1xs",
   network_type: "public",
   networks: ["my-public-network"],
   is_public: true,
@@ -533,11 +533,11 @@ $token = "your-token";
 
 $vm = [
     "name" => "my-server",
-    "project" => "my-project",
+    "project" => "default",
     "region" => "yow",
     "boot_source" => "template",
     "template" => "ubuntu-24-04",
-    "plan" => "general-1vcpu-1gb",
+    "plan" => "ci1xs",
     "network_type" => "public",
     "networks" => ["my-public-network"],
     "is_public" => true,

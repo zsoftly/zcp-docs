@@ -133,6 +133,36 @@ src/content/docs/
 
 ---
 
+## Languages (English + French)
+
+The docs are **fully bilingual**: every page exists in English (`src/content/docs/**`, no locale
+prefix) and French (`src/content/docs/fr/**`). Starlight is configured with `en` (default/root) and
+`fr` locales; if a French page is ever missing it falls back to the English content for that URL, so
+nothing 404s.
+
+**English is the source of truth.** Author and update pages in English first.
+
+Translation workflow:
+
+1. Write or change the English page.
+2. Machine-translate it to French (AI) into the matching `fr/` path.
+3. A **dedicated native bilingual reviewer** reviews the French for accuracy and tone, then commits
+   it. French ships **reviewed**, not raw machine output, and is kept in sync with English.
+
+Rules for the French copy:
+
+- **Code blocks are identical** to the English source. Only prose is translated; never let a command
+  or flag diverge between languages.
+- Internal links use the `/fr/…` prefix.
+- Frontmatter `title`/`description` values are translated; keys are not.
+- Keep the same page structure and headings so the two versions stay diffable.
+
+When you change an English page, flag that its French counterpart needs re-translation and review
+(the reviewer keeps them aligned). Do not commit raw machine translation, and do not hand-edit
+French prose without the reviewer.
+
+---
+
 ## Before you open a PR
 
 ```bash

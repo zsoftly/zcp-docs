@@ -14,51 +14,23 @@ private network.
 - From the left-hand menu, click **Networks** → **VPC Network** tab.
 - Click the **+** icon to open the creation page.
 
-:::note
+![Your Networks page on the VPC Network tab, with the add (+) button](../../../../../assets/networking/networks-list.webp)
 
-Screenshots coming.
+### Assign to a Project and choose a Location
 
-:::
+- Under **Choose Project**, select the project the VPC belongs to.
+- Under **Select Location**, pick the data center region (for example `YUL-1` or `YOW-1`). A VPC and
+  its resources live in a single region.
 
-### Choose a Location
+![Create VPC Network form: Choose Project and Select Location](../../../../../assets/networking/create-vpc-project-location.webp)
 
-Select the data center location for the VPC.
+### Network configuration and name
 
-:::note
+- **Network Address** and **Network Size**: set the base address (for example `10.0.0.10`) and the
+  subnet size (for example `/24 — 256 usable IP addresses`) that define the VPC's IP range.
+- **Network Name** and **Network Description**: give the VPC a unique, identifiable name.
 
-Screenshots coming.
-
-:::
-
-### Assign to a Project
-
-Assign the VPC to a project.
-
-:::note
-
-Screenshots coming.
-
-:::
-
-### Network Configurations
-
-Configure the gateway and network mask. Choose the network size from the available options.
-
-:::note
-
-Screenshots coming.
-
-:::
-
-### Name
-
-Provide a unique name and optional description for the VPC.
-
-:::note
-
-Screenshots coming.
-
-:::
+![Create VPC Network form: Network Address, Network Size, Network Name, and Description](../../../../../assets/networking/create-vpc-config.webp)
 
 ### Create
 
@@ -66,7 +38,21 @@ Screenshots coming.
   Tri-annually.
 - **Billing rules supported**: Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed
   Prorata, Unfixed Prorata.
-- Review the price summary and click **Create VPC**.
+- Pick a **Billing Cycle**, review the **Price Summary**, and click **Create VPC**. A confirmation
+  dialog shows the price breakdown (subtotal, tax, and net payable) before you confirm.
+
+![Create VPC confirmation dialog with the price breakdown](../../../../../assets/networking/create-vpc-confirm.webp)
+
+Once created, the VPC's **Details** tab shows its ID, region, network domain, and CIDR.
+
+![VPC details page showing ID, region, network domain, and CIDR](../../../../../assets/networking/vpc-details.webp)
+
+:::note
+
+A VPC on its own has no usable subnet and cannot host a VM yet. Add at least one network (subnet)
+inside it next.
+
+:::
 
 See also: [Add Subnet](/public-cloud/networking/vpc/add-subnet),
 [Network ACLs](/public-cloud/networking/vpc/network-acls),

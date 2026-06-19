@@ -60,6 +60,16 @@ pour des exemples par langage.
 compartiment, `<key>` la clé d'un objet. Ajoutez `-o json` (ou `-o yaml`) à n'importe quelle
 commande pour une sortie lisible par machine, et `-y` pour ignorer les invites de confirmation.
 
+:::note
+
+Les commandes de stockage objet exigent une **région** et un **projet**. Le stockage objet utilise
+ses propres régions — `os-yul` / `os-yow` (et non les régions de calcul `yul-1`/`yow-1`).
+Définissez-les avec `--region`/`--project`, `ZCP_REGION`/`ZCP_PROJECT`, ou une valeur par défaut du
+profil (`zcp profile add`). Par exemple : `export ZCP_REGION=os-yow ZCP_PROJECT=default-9` avant les
+commandes ci-dessous.
+
+:::
+
 ### Instance
 
 ```bash
@@ -73,7 +83,7 @@ zcp object-storage delete <storage> -y
 zcp plan object-storage                        # lister les plans + tailles + prix
 zcp object-storage create \
   --name my-store --project default \
-  --region os-yow --billing-cycle hourly --plan o1100g
+  --region os-yow --billing-cycle hourly --plan o2100g
 ```
 
 | Option (`create`)    | Description                                                                      |
