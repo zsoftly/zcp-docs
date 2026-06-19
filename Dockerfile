@@ -1,13 +1,16 @@
-FROM node:22-alpine AS builder
-
-# Patch Alpine OS packages with fixes published since the base image was built
-RUN apk upgrade --no-cache
+FROM node:22-bookworm-slim AS builder
 
 WORKDIR /app
 RUN corepack enable pnpm
 
 COPY pnpm-lock.yaml package.json ./
 RUN pnpm install --frozen-lockfile
+
+# Chromium for Playwright — rehype-mermaid renders Mermaid diagrams to static
+# SVG at build time. Debian base (not Alpine) is required because Playwright's
+# Chromium needs glibc. This builder stage is discarded; the runtime image below
+# stays caddy:2-alpine.
+RUN pnpm exec playwright install --with-deps chromium
 
 COPY . .
 

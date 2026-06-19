@@ -26,6 +26,8 @@
     "eslint-plugin-astro": "^1.0.0",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
+    "playwright": "^1.49.0",
+    "rehype-mermaid": "^3.0.0",
     "starlight-links-validator": "^0.24.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.60.0"

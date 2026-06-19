@@ -88,10 +88,13 @@ jobs:
       - name: '01: Setup Node.js'
         uses: ./.github/actions/setup-node
 
-      - name: '02: Build'
+      - name: '02: Install Chromium for Playwright (build-time Mermaid SVG)'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: '03: Build'
         run: pnpm build
 
-      - name: '03: Verify build output'
+      - name: '04: Verify build output'
         run: |
           if [ ! -d "dist" ]; then
             echo "[FAIL] Build output not found at dist/"
@@ -104,7 +107,7 @@ jobs:
             exit 1
           fi
 
-      - name: '04: Upload build artifact on failure'
+      - name: '05: Upload build artifact on failure'
         if: failure()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
