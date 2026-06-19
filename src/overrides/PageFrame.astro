@@ -12,6 +12,211 @@ import type { Props } from '@astrojs/starlight/props';
   }
 </script>
 
+{/* Site-wide brand background — animated bokeh field (styles in custom.css) */}
+<div class="zs-bg" aria-hidden="true">
+  <svg
+    class="zs-bokeh"
+    viewBox="0 0 1600 900"
+    preserveAspectRatio="xMidYMid slice"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <radialGradient id="zs-dot" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--zs-dot-core)" stop-opacity="0.9"></stop>
+        <stop offset="70%" stop-color="var(--zs-dot-core)" stop-opacity="0"></stop>
+      </radialGradient>
+    </defs>
+    <g class="zs-far">
+      <circle cx="995.2" cy="386.6" r="9.4" opacity="0.07"></circle>
+      <circle
+        class="zs-ring"
+        cx="461.4"
+        cy="176.0"
+        r="15.9"
+        stroke-width="1.5"
+        stroke-opacity="0.29"></circle>
+      <circle cx="434.8" cy="263.5" r="9.1" opacity="0.27"></circle>
+      <circle cx="906.2" cy="144.9" r="15.8" opacity="0.08"></circle>
+      <circle cx="784.4" cy="159.4" r="16.5" opacity="0.13"></circle>
+      <circle cx="635.6" cy="474.1" r="16.8" opacity="0.14"></circle>
+      <circle cx="495.7" cy="681.8" r="10.8" opacity="0.11"></circle>
+      <circle cx="750.3" cy="650.5" r="16.8" opacity="0.19"></circle>
+      <circle cx="792.8" cy="35.5" r="10.1" opacity="0.27"></circle>
+      <circle cx="1550.7" cy="449.1" r="8.9" opacity="0.29"></circle>
+      <circle cx="727.3" cy="345.5" r="14.1" opacity="0.35"></circle>
+      <circle cx="1012.5" cy="204.9" r="12.2" opacity="0.24"></circle>
+      <circle cx="400.8" cy="762.9" r="15.9" opacity="0.28"></circle>
+      <circle cx="548.2" cy="568.2" r="13.3" opacity="0.26"></circle>
+      <circle cx="1260.6" cy="578.0" r="16.3" opacity="0.36"></circle>
+      <circle cx="1201.5" cy="702.1" r="9.2" opacity="0.23"></circle>
+      <circle cx="492.7" cy="865.3" r="11.2" opacity="0.38"></circle>
+      <circle cx="725.8" cy="424.3" r="11.7" opacity="0.14"></circle>
+      <circle cx="520.6" cy="52.7" r="15.7" opacity="0.30"></circle>
+      <circle cx="146.7" cy="696.1" r="8.8" opacity="0.36"></circle>
+      <circle cx="320.6" cy="642.0" r="9.6" opacity="0.39"></circle>
+      <circle cx="389.5" cy="169.1" r="10.8" opacity="0.13"></circle>
+      <circle cx="1563.6" cy="580.7" r="8.6" opacity="0.23"></circle>
+      <circle cx="220.0" cy="121.9" r="9.8" opacity="0.08"></circle>
+      <circle cx="1135.5" cy="842.8" r="10.3" opacity="0.20"></circle>
+      <circle cx="378.6" cy="287.3" r="9.3" opacity="0.30"></circle>
+      <circle cx="287.1" cy="190.8" r="16.3" opacity="0.33"></circle>
+      <circle cx="925.9" cy="476.6" r="16.7" opacity="0.35"></circle>
+      <circle
+        class="zs-ring"
+        cx="1451.9"
+        cy="77.3"
+        r="13.1"
+        stroke-width="1.5"
+        stroke-opacity="0.22"></circle>
+      <circle cx="1458.0" cy="885.8" r="9.1" opacity="0.28"></circle>
+      <circle cx="815.2" cy="623.9" r="9.4" opacity="0.15"></circle>
+      <circle cx="1270.4" cy="234.3" r="9.3" opacity="0.37"></circle>
+      <circle cx="535.3" cy="142.5" r="9.1" opacity="0.20"></circle>
+      <circle cx="1169.6" cy="570.3" r="15.0" opacity="0.38"></circle>
+      <circle cx="1385.3" cy="156.1" r="9.2" opacity="0.27"></circle>
+      <circle cx="100.9" cy="646.9" r="13.7" opacity="0.08"></circle>
+      <circle
+        class="zs-ring"
+        cx="188.1"
+        cy="251.2"
+        r="10.2"
+        stroke-width="2.4"
+        stroke-opacity="0.29"></circle>
+      <circle cx="888.6" cy="853.5" r="12.5" opacity="0.16"></circle>
+      <circle class="zs-ring" cx="2.3" cy="173.0" r="16.5" stroke-width="2.0" stroke-opacity="0.31"
+      ></circle>
+      <circle cx="220.9" cy="363.1" r="10.8" opacity="0.27"></circle>
+      <circle cx="234.9" cy="242.4" r="15.6" opacity="0.11"></circle>
+      <circle cx="1073.4" cy="665.9" r="11.6" opacity="0.10"></circle>
+      <circle cx="1141.9" cy="636.2" r="14.0" opacity="0.28"></circle>
+    </g>
+    <g class="zs-near">
+      <circle cx="461.0" cy="635.8" r="2.5" opacity="0.12"></circle>
+      <circle cx="52.3" cy="322.7" r="2.1" opacity="0.27"></circle>
+      <circle class="zs-ring" cx="984.0" cy="382.1" r="5.0" stroke-width="2.1" stroke-opacity="0.15"
+      ></circle>
+      <circle class="zs-ring" cx="634.0" cy="294.0" r="2.0" stroke-width="2.6" stroke-opacity="0.22"
+      ></circle>
+      <circle
+        class="zs-ring"
+        cx="1411.3"
+        cy="518.1"
+        r="2.1"
+        stroke-width="1.6"
+        stroke-opacity="0.32"></circle>
+      <circle cx="643.3" cy="677.0" r="3.6" opacity="0.17"></circle>
+      <circle cx="276.5" cy="165.5" r="6.1" opacity="0.24"></circle>
+      <circle cx="659.2" cy="370.1" r="2.6" opacity="0.13"></circle>
+      <circle cx="568.5" cy="798.4" r="5.4" opacity="0.24"></circle>
+      <circle cx="1408.9" cy="351.3" r="7.8" opacity="0.33"></circle>
+      <circle cx="631.8" cy="277.4" r="4.3" opacity="0.26"></circle>
+      <circle cx="1127.4" cy="345.0" r="6.6" opacity="0.13"></circle>
+      <circle class="zs-ring" cx="544.7" cy="479.0" r="3.6" stroke-width="2.2" stroke-opacity="0.29"
+      ></circle>
+      <circle cx="103.4" cy="647.6" r="2.4" opacity="0.35"></circle>
+      <circle class="zs-ring" cx="766.9" cy="202.9" r="7.0" stroke-width="2.8" stroke-opacity="0.21"
+      ></circle>
+      <circle cx="233.4" cy="652.6" r="7.0" opacity="0.19"></circle>
+      <circle cx="523.5" cy="62.3" r="2.0" opacity="0.24"></circle>
+      <circle cx="1533.8" cy="434.1" r="4.0" opacity="0.35"></circle>
+      <circle cx="1529.5" cy="475.3" r="4.3" opacity="0.38"></circle>
+      <circle cx="1598.3" cy="637.2" r="2.8" opacity="0.31"></circle>
+      <circle cx="1083.7" cy="524.5" r="3.1" opacity="0.17"></circle>
+      <circle cx="875.0" cy="223.7" r="2.2" opacity="0.09"></circle>
+      <circle cx="64.2" cy="339.8" r="7.6" opacity="0.09"></circle>
+      <circle cx="1352.9" cy="568.4" r="2.6" opacity="0.39"></circle>
+      <circle cx="742.5" cy="267.0" r="5.5" opacity="0.38"></circle>
+      <circle cx="1295.9" cy="217.9" r="4.1" opacity="0.32"></circle>
+      <circle cx="1505.8" cy="50.3" r="5.5" opacity="0.26"></circle>
+      <circle cx="620.3" cy="597.5" r="2.9" opacity="0.13"></circle>
+      <circle cx="1323.8" cy="270.5" r="2.1" opacity="0.35"></circle>
+      <circle cx="2.8" cy="516.5" r="2.2" opacity="0.18"></circle>
+      <circle cx="365.2" cy="63.8" r="4.9" opacity="0.18"></circle>
+      <circle cx="1142.7" cy="710.5" r="6.4" opacity="0.12"></circle>
+      <circle cx="909.2" cy="202.1" r="5.7" opacity="0.38"></circle>
+      <circle class="zs-ring" cx="710.8" cy="137.9" r="7.6" stroke-width="2.8" stroke-opacity="0.15"
+      ></circle>
+      <circle class="zs-ring" cx="977.1" cy="615.5" r="3.5" stroke-width="1.3" stroke-opacity="0.27"
+      ></circle>
+      <circle class="zs-ring" cx="929.9" cy="374.3" r="3.9" stroke-width="2.9" stroke-opacity="0.19"
+      ></circle>
+      <circle cx="409.7" cy="176.9" r="7.6" opacity="0.13"></circle>
+      <circle
+        class="zs-ring"
+        cx="1334.1"
+        cy="730.9"
+        r="2.3"
+        stroke-width="2.6"
+        stroke-opacity="0.25"></circle>
+      <circle cx="1361.5" cy="253.9" r="2.2" opacity="0.18"></circle>
+      <circle cx="1260.7" cy="199.2" r="2.5" opacity="0.23"></circle>
+      <circle cx="1504.8" cy="687.7" r="5.5" opacity="0.08"></circle>
+      <circle class="zs-ring" cx="34.5" cy="296.1" r="2.0" stroke-width="2.4" stroke-opacity="0.21"
+      ></circle>
+      <circle cx="44.7" cy="353.2" r="2.1" opacity="0.30"></circle>
+      <circle cx="891.4" cy="256.8" r="2.2" opacity="0.31"></circle>
+      <circle cx="755.5" cy="196.9" r="6.1" opacity="0.15"></circle>
+      <circle cx="909.7" cy="512.3" r="2.0" opacity="0.13"></circle>
+      <circle cx="1261.4" cy="41.2" r="4.4" opacity="0.13"></circle>
+      <circle cx="773.8" cy="796.4" r="4.0" opacity="0.11"></circle>
+      <circle
+        class="zs-ring"
+        cx="1041.3"
+        cy="527.6"
+        r="7.1"
+        stroke-width="2.5"
+        stroke-opacity="0.20"></circle>
+      <circle cx="625.1" cy="825.1" r="3.4" opacity="0.37"></circle>
+      <circle cx="972.9" cy="402.5" r="2.9" opacity="0.36"></circle>
+      <circle
+        class="zs-ring"
+        cx="1062.7"
+        cy="813.6"
+        r="3.7"
+        stroke-width="1.5"
+        stroke-opacity="0.25"></circle>
+      <circle cx="522.3" cy="887.2" r="2.5" opacity="0.08"></circle>
+      <circle cx="181.4" cy="778.1" r="7.0" opacity="0.27"></circle>
+      <circle cx="748.6" cy="143.0" r="2.6" opacity="0.18"></circle>
+      <circle cx="719.4" cy="222.1" r="2.1" opacity="0.27"></circle>
+      <circle cx="1249.5" cy="275.8" r="2.0" opacity="0.29"></circle>
+      <circle cx="453.6" cy="712.7" r="3.2" opacity="0.25"></circle>
+      <circle cx="511.9" cy="258.0" r="2.0" opacity="0.19"></circle>
+      <circle cx="254.9" cy="626.9" r="6.2" opacity="0.25"></circle>
+      <circle cx="39.9" cy="697.0" r="6.5" opacity="0.26"></circle>
+      <circle cx="307.5" cy="358.3" r="2.3" opacity="0.32"></circle>
+      <circle cx="1021.5" cy="252.4" r="4.0" opacity="0.18"></circle>
+      <circle cx="1140.8" cy="49.1" r="3.4" opacity="0.11"></circle>
+      <circle cx="1404.4" cy="819.0" r="4.4" opacity="0.40"></circle>
+      <circle cx="1215.3" cy="550.8" r="6.0" opacity="0.32"></circle>
+      <circle cx="685.3" cy="233.1" r="6.3" opacity="0.22"></circle>
+      <circle cx="1039.0" cy="373.9" r="5.5" opacity="0.19"></circle>
+      <circle cx="177.5" cy="61.9" r="4.4" opacity="0.37"></circle>
+      <circle cx="772.6" cy="243.4" r="2.3" opacity="0.15"></circle>
+      <circle cx="448.5" cy="269.6" r="2.8" opacity="0.28"></circle>
+      <circle cx="1455.8" cy="427.5" r="7.2" opacity="0.10"></circle>
+      <circle cx="263.5" cy="551.2" r="7.5" opacity="0.19"></circle>
+      <circle cx="407.1" cy="638.7" r="2.2" opacity="0.13"></circle>
+      <circle class="zs-ring" cx="177.8" cy="883.3" r="2.8" stroke-width="2.0" stroke-opacity="0.13"
+      ></circle>
+      <circle cx="567.2" cy="875.0" r="2.0" opacity="0.39"></circle>
+      <circle cx="268.5" cy="410.0" r="3.2" opacity="0.13"></circle>
+      <circle class="zs-ring" cx="444.6" cy="420.1" r="7.9" stroke-width="2.3" stroke-opacity="0.17"
+      ></circle>
+      <circle cx="58.2" cy="357.4" r="4.2" opacity="0.08"></circle>
+      <circle cx="1597.2" cy="34.0" r="6.1" opacity="0.21"></circle>
+      <circle cx="203.2" cy="165.0" r="7.3" opacity="0.09"></circle>
+      <circle class="zs-ring" cx="898.7" cy="833.3" r="4.5" stroke-width="2.9" stroke-opacity="0.16"
+      ></circle>
+      <circle cx="630.2" cy="296.1" r="4.9" opacity="0.12"></circle>
+      <circle cx="1218.1" cy="136.3" r="5.0" opacity="0.07"></circle>
+      <circle cx="730.9" cy="503.5" r="2.8" opacity="0.25"></circle>
+      <circle cx="215.5" cy="56.9" r="6.7" opacity="0.26"></circle>
+      <circle cx="128.6" cy="541.2" r="2.9" opacity="0.29"></circle>
+    </g>
+  </svg>
+</div>
+
 <div id="promo-bar" class="promo-bar" role="region" aria-label={Astro.locals.t('zs.promo.label')}>
   <div class="promo-inner">
     <span class="promo-live" aria-label={Astro.locals.t('zs.promo.liveLabel')}>
