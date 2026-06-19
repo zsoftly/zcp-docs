@@ -18,8 +18,8 @@ mount -t ceph <mon-host>:6789:/ /mnt/cephfs \
 
 L'hôte moniteur, le nom du client et la clé proviennent de votre
 [document d'identifiants](/fr/cloud-storage/getting-started/provisioning#ce-que-vous-recevez). Pour
-Kubernetes, le pilote [Ceph CSI](https://github.com/ceph/ceph-csi) provisionne dynamiquement des
-volumes CephFS.
+Kubernetes, le pilote [Ceph CSI](https://github.com/ceph/ceph-csi) provisionne de manière dynamique
+des volumes CephFS.
 
 ## Quand choisir CephFS
 
