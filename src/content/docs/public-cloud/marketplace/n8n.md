@@ -17,14 +17,11 @@ logic inside workflows.
 
 ## Environment variables
 
-You can optionally set these when deploying n8n from the marketplace. Leave any field blank to have
-a secure random value generated automatically.
+You can optionally set this when deploying n8n from the marketplace.
 
-| Variable                  | Description                           |
-| ------------------------- | ------------------------------------- |
-| `N8N_BASIC_AUTH_USER`     | Username for n8n basic authentication |
-| `N8N_BASIC_AUTH_PASSWORD` | Password for n8n basic authentication |
-| `N8N_HOST`                | Public host or domain for n8n         |
+| Variable   | Description                   |
+| ---------- | ----------------------------- |
+| `N8N_HOST` | Public host or domain for n8n |
 
 ## Getting started
 

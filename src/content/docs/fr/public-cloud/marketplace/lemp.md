@@ -18,6 +18,18 @@ Compose pour simplifier la gestion.
 | Docker Compose | Dernière stable |
 | Ubuntu         | 24.04 LTS       |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de LEMP depuis la marketplace. Laissez un champ
+vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable                | Description                                         |
+| ----------------------- | --------------------------------------------------- |
+| `MARIADB_ROOT_PASSWORD` | Mot de passe root de la base de données             |
+| `MARIADB_DATABASE`      | Nom de la base de données applicative à créer       |
+| `MARIADB_USER`          | Nom d'utilisateur de la base de données applicative |
+| `MARIADB_PASSWORD`      | Mot de passe de l'utilisateur applicatif            |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

@@ -16,6 +16,18 @@ configurés pour fonctionner ensemble, prêts pour le déploiement de votre appl
 | Extensions PHP | cli, mysql, curl, gd, mbstring, xml, zip, bcmath, intl |
 | Ubuntu         | 24.04 LTS                                              |
 
+## Variables d'environnement
+
+Vous pouvez définir ces valeurs lors du déploiement de LAMP depuis la marketplace. Laissez un champ
+vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable              | Description                                         |
+| --------------------- | --------------------------------------------------- |
+| `MYSQL_ROOT_PASSWORD` | Mot de passe root de la base de données             |
+| `MYSQL_DATABASE`      | Nom de la base de données applicative à créer       |
+| `MYSQL_USER`          | Nom d'utilisateur de la base de données applicative |
+| `MYSQL_PASSWORD`      | Mot de passe de l'utilisateur applicatif            |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

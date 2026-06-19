@@ -14,6 +14,16 @@ ready to join your network.
 | NetBird   | 0.71.4    |
 | Ubuntu    | 24.04 LTS |
 
+## Environment variables
+
+You can optionally provide a NetBird setup key when deploying from the marketplace. If set, the VM
+joins your NetBird network automatically at first boot; if left blank, connect manually with
+`netbird up` after deploy.
+
+| Variable       | Description                                          |
+| -------------- | ---------------------------------------------------- |
+| `NB_SETUP_KEY` | NetBird setup key used to join your network on boot. |
+
 ## Getting started
 
 ### 1. Connect to your VM

@@ -14,6 +14,16 @@ ready to join your Tailnet.
 | Tailscale | Latest stable |
 | Ubuntu    | 24.04 LTS     |
 
+## Environment variables
+
+You can optionally provide a Tailscale auth key when deploying from the marketplace. If set, the VM
+joins your Tailnet automatically at first boot; if left blank, connect manually with `tailscale up`
+after deploy.
+
+| Variable     | Description                                           |
+| ------------ | ----------------------------------------------------- |
+| `TS_AUTHKEY` | Tailscale auth key used to join your Tailnet on boot. |
+
 ## Getting started
 
 ### 1. Connect to your VM

@@ -14,6 +14,16 @@ Tailscale préinstallé, prête à joindre votre Tailnet.
 | Tailscale | Dernière stable |
 | Ubuntu    | 24.04 LTS       |
 
+## Variables d'environnement
+
+Vous pouvez éventuellement fournir une clé d'authentification Tailscale lors du déploiement depuis
+la marketplace. Si elle est définie, la VM rejoint automatiquement votre Tailnet au premier
+démarrage ; sinon, connectez-vous manuellement avec `tailscale up` après le déploiement.
+
+| Variable     | Description                                                                 |
+| ------------ | --------------------------------------------------------------------------- |
+| `TS_AUTHKEY` | Clé d'authentification Tailscale pour rejoindre votre Tailnet au démarrage. |
+
 ## Bien démarrer
 
 ### 1. Connectez-vous à votre VM

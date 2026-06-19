@@ -18,6 +18,18 @@ management.
 | Docker Compose | Latest stable |
 | Ubuntu         | 24.04 LTS     |
 
+## Environment variables
+
+You can optionally set these when deploying LEMP from the marketplace. Leave any field blank to have
+a secure random value generated automatically.
+
+| Variable                | Description                                |
+| ----------------------- | ------------------------------------------ |
+| `MARIADB_ROOT_PASSWORD` | Database root password                     |
+| `MARIADB_DATABASE`      | Name of the application database to create |
+| `MARIADB_USER`          | Application database username              |
+| `MARIADB_PASSWORD`      | Application database user password         |
+
 ## Getting started
 
 ### 1. Connect to your VM
