@@ -10,14 +10,32 @@ Manage your instance using a terminal and SSH for secure remote access.
 Before connecting, ensure you have:
 
 - **IP Address**: Available on the instance card or Instance Overview.
-- **Default Username**: Depending on OS (`root`, `ubuntu`, `ec2-user`).
-- **Authentication Method**: SSH Key (recommended) or Default Password (found in Instance Overview).
+- **Default Username**: Depends on the OS image — see the table below.
+- **Authentication Method**: SSH Key (recommended) or the **Provisioning Password** shown on the
+  instance's Overview tab (see below).
 
-:::note
+### Default username by OS
 
-Screenshots coming.
+| OS image     | Default username |
+| ------------ | ---------------- |
+| Ubuntu       | `ubuntu`         |
+| Debian       | `debian`         |
+| Rocky Linux  | `rocky`          |
+| AlmaLinux    | `almalinux`      |
+| CentOS       | `centos`         |
+| Oracle Linux | `opc`            |
+| Fedora       | `fedora`         |
 
-:::
+If an image has no distribution-specific user, it may use `root`. The exact username is shown in
+**Instance Overview**. Windows instances use [RDP](/public-cloud/compute/connect-rdp), not SSH.
+
+### Where to find the password
+
+If you deployed without an SSH key, open the instance's **Overview** tab and reveal the
+**Provisioning Password** — click the eye icon to show it, or the copy icon to copy it. Use it with
+the default username above.
+
+![Virtual Machine Overview with the Provisioning Password field highlighted](../../../../assets/compute/provisioning-password.webp)
 
 ## Connecting
 

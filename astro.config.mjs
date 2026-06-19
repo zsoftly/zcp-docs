@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
+import rehypeMermaid from 'rehype-mermaid';
+import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
 /** @type {Record<string, string>} */
 const frSidebarLabels = {
@@ -133,6 +135,16 @@ export default defineConfig({
   // Prod builds (iaas play, no PUBLIC_SITE_URL) resolve to the canonical host;
   // dev/stg Docker builds set PUBLIC_SITE_URL to their own host.
   site: process.env.PUBLIC_SITE_URL ?? 'https://docs.zcp.zsoftly.ca',
+  // Build-time Mermaid. remarkMermaid rewrites mermaid code fences to
+  // <pre class="mermaid"> so Expressive Code ignores them; rehype-mermaid then
+  // renders static inline SVG via Playwright/Chromium — no client JS, no CSP
+  // change. Diagrams are single-theme (build-time SVG can't follow the toggle).
+  markdown: {
+    remarkPlugins: [remarkMermaid],
+    rehypePlugins: [
+      [rehypeMermaid, { strategy: 'inline-svg', mermaidConfig: { theme: 'neutral' } }],
+    ],
+  },
   integrations: [
     starlight({
       title: {

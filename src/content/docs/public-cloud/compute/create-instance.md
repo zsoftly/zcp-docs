@@ -74,8 +74,6 @@ Screenshots coming.
   processing, analytics, and high-speed processing workloads.
 - **Memory Optimized (RO)**: Tailored for applications requiring high memory capacity, such as
   in-memory databases, big data processing, and real-time caching systems.
-- **Database Optimized (DO)**: Specifically tuned for database workloads, offering enhanced I/O
-  performance and memory-to-disk ratio for transactional or analytical database systems.
 
 See [Instance Types](/public-cloud/compute/instance-types) for families and storage tiers, and the
 [pricing page](https://zcp.zsoftly.ca/pricing) for per-size specs and pricing.
@@ -154,6 +152,43 @@ Screenshots coming.
 - Supported billing rules: Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed
   Prorata, Unfixed Prorata.
 - Verify all configuration details and click **Review & Deploy**.
+
+## Connect to your instance
+
+Once the instance is running, open **Instance Overview** to get its **IP address**, the **default
+username** (depends on the OS image — `ubuntu` for Ubuntu, `rocky` for Rocky Linux, and so on; see
+[Connect With SSH](/public-cloud/compute/connect-ssh)), and — if you did not add an SSH key — the
+**Provisioning Password**.
+
+To reach it over SSH (port 22) from the internet, the instance needs a public IP **and** a rule that
+allows the traffic. This is not opened automatically:
+
+**Public Network**
+
+- Make sure the instance has a public IPv4 address — see
+  [Public IPs](/public-cloud/networking/public-network/public-ips).
+- Allow SSH: add a [firewall](/public-cloud/compute/settings/firewall) rule for TCP **22**, then a
+  [port-forwarding](/public-cloud/compute/settings/port-forwarding) rule mapping port 22 on the
+  public IP to port 22 on the instance.
+
+**VPC Network**
+
+- Assign a [public IP](/public-cloud/networking/vpc/public-ips) and add a
+  [port-forwarding](/public-cloud/compute/settings/port-forwarding) rule for port 22.
+- Allow the traffic inbound in your [Network ACL](/public-cloud/networking/vpc/network-acls) (TCP
+  22).
+
+Then connect:
+
+- **SSH key** — use the key you added under _Configure Server Settings_.
+- **Password** — if you did not add a key, use the **Provisioning Password** from the instance's
+  Overview tab (see
+  [Connect With SSH](/public-cloud/compute/connect-ssh#where-to-find-the-password)); change it after
+  your first login.
+
+See [Connect With SSH](/public-cloud/compute/connect-ssh) for the exact commands. No network rules
+are needed for [Console Access](/public-cloud/compute/console-access) (browser-based), and Windows
+instances use [Connect With RDP](/public-cloud/compute/connect-rdp).
 
 ## See also
 

@@ -78,9 +78,6 @@ Captures d'écran à venir.
 - **Memory Optimized (RO)** : conçu pour les applications exigeant une grande capacité mémoire,
   comme les bases de données en mémoire, le traitement de mégadonnées et les systèmes de cache en
   temps réel.
-- **Database Optimized (DO)** : optimisé pour les charges de travail de bases de données, avec des
-  performances E/S améliorées et un ratio mémoire/disque adapté aux systèmes transactionnels ou
-  analytiques.
 
 Consultez [Types d'instances](/fr/public-cloud/compute/instance-types) pour les familles et niveaux
 de stockage, ainsi que la [page de tarification](https://zcp.zsoftly.ca/pricing) pour les
@@ -161,6 +158,45 @@ Captures d'écran à venir.
 - Règles de facturation prises en charge : Date to Date, Fixed Calendar Month, Unfixed Calendar
   Month, Fixed Prorata, Unfixed Prorata.
 - Vérifiez tous les détails de configuration, puis cliquez sur **Review & Deploy**.
+
+## Se connecter à votre instance
+
+Une fois l'instance en cours d'exécution, ouvrez **Instance Overview** pour obtenir son **adresse
+IP**, le **nom d'utilisateur par défaut** (selon l'image du SE — `ubuntu` pour Ubuntu, `rocky` pour
+Rocky Linux, etc. ; voir [Connexion par SSH](/fr/public-cloud/compute/connect-ssh)) et, si vous
+n'avez pas ajouté de clé SSH, le **Provisioning Password**.
+
+Pour l'atteindre en SSH (port 22) depuis Internet, l'instance a besoin d'une IP publique **et**
+d'une règle autorisant le trafic. Cela n'est pas ouvert automatiquement :
+
+**Réseau public**
+
+- Assurez-vous que l'instance a une adresse IPv4 publique — voir
+  [IP publiques](/fr/public-cloud/networking/public-network/public-ips).
+- Autorisez le SSH : ajoutez une règle de [pare-feu](/fr/public-cloud/compute/settings/firewall)
+  pour le TCP **22**, puis une règle de
+  [redirection de ports](/fr/public-cloud/compute/settings/port-forwarding) associant le port 22 de
+  l'IP publique au port 22 de l'instance.
+
+**Réseau VPC**
+
+- Attribuez une [IP publique](/fr/public-cloud/networking/vpc/public-ips) et ajoutez une règle de
+  [redirection de ports](/fr/public-cloud/compute/settings/port-forwarding) pour le port 22.
+- Autorisez le trafic entrant dans votre [ACL réseau](/fr/public-cloud/networking/vpc/network-acls)
+  (TCP 22).
+
+Connectez-vous ensuite :
+
+- **Clé SSH** — utilisez la clé ajoutée dans _Configurer les paramètres du serveur_.
+- **Mot de passe** — si vous n'avez pas ajouté de clé, utilisez le **Provisioning Password** depuis
+  l'onglet Overview de l'instance (voir
+  [Connexion par SSH](/fr/public-cloud/compute/connect-ssh#où-trouver-le-mot-de-passe)) ; changez-le
+  après votre première connexion.
+
+Consultez [Connexion par SSH](/fr/public-cloud/compute/connect-ssh) pour les commandes exactes.
+Aucune règle réseau n'est nécessaire pour l'[Accès console](/fr/public-cloud/compute/console-access)
+(via navigateur), et les instances Windows utilisent la
+[Connexion par RDP](/fr/public-cloud/compute/connect-rdp).
 
 ## Voir aussi
 
