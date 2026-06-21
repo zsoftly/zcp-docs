@@ -69,6 +69,43 @@ have no access to create or delete instances, networks, or other infrastructure.
 **Developer** role might grant **Virtual Machine Manage**, **Block Storage Manage**, and **Network
 Manage** while excluding billing.
 
+## Manage roles from the CLI
+
+Everything above is also available in the [ZCP CLI](/public-cloud/cli/installation). Role commands
+are account-level, so they need no `--region`/`--project`. Use the slugs from the
+[permissions reference](#permissions-reference) below. `zcp permission list` prints them.
+
+```bash
+# Discover permission slugs (filter by category if you like)
+zcp permission list
+zcp permission list --category "Virtual Machine"
+
+# Inspect the built-in roles and what they grant
+zcp role list
+zcp role get service-administrator
+
+# Create a custom role from permission slugs (at least one is required)
+zcp role create --name "Developer" --description "Compute and networking" \
+  --permission virtual-machine-read --permission virtual-machine-manage \
+  --permission block-storage-manage --permission network-manage
+
+# Update a role. --permission REPLACES the whole set (it is not additive), so list
+# every permission the role should end up with. Flags you omit are left unchanged.
+zcp role update developer \
+  --permission virtual-machine-read --permission virtual-machine-manage \
+  --permission block-storage-manage --permission network-manage --permission dns-read
+
+# Delete a custom role
+zcp role delete developer
+```
+
+:::note
+
+The built-in **Owner**, **Service Administrator**, and **Service Viewer** roles cannot be edited or
+deleted. The CLI rejects those operations with a clear message.
+
+:::
+
 ## Permissions reference
 
 The full catalog of permissions, grouped by area. Most services offer both **Read** and **Manage**;

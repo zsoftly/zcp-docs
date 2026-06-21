@@ -3,7 +3,7 @@ title: Référence CLI
 sidebar_position: 4
 ---
 
-Référence complète des commandes de la CLI ZCP v0.0.9.
+Référence complète des commandes de la CLI ZCP v0.0.19.
 
 Pour la référence interactive avec recherche, consultez la
 [référence de la CLI ZCP sur le site principal](https://cloud.zcp.zsoftly.ca).
@@ -15,8 +15,9 @@ sont propres à une région/un projet). Définissez-les une fois avec `zcp profi
 une région et un projet par défaut, comme `aws configure`), ou passez `--region`/`--project` / les
 variables `ZCP_REGION`/`ZCP_PROJECT`. Les exemples ci-dessous supposent une valeur par défaut
 configurée. Les commandes de niveau compte (`dns`, `auth`, `profile`, `region`, `project`,
-`cloud-provider`, `currency`, `billing-cycle`, `server`, `billing`/`support`/`dashboard`) sont
-exemptées. Voir [Configuration](/fr/public-cloud/cli/configuration).
+`cloud-provider`, `currency`, `billing-cycle`, `server`, `billing`/`support`/`dashboard`, ainsi que
+les commandes IAM `sub-user`/`role`/`permission`) sont exemptées. Voir
+[Configuration](/fr/public-cloud/cli/configuration).
 
 :::
 
@@ -142,6 +143,27 @@ exemptées. Voir [Configuration](/fr/public-cloud/cli/configuration).
 | `zcp project create` | Créer un projet                     |
 | `zcp billing list`   | Afficher le sommaire de facturation |
 | `zcp support list`   | Lister les billets de soutien       |
+
+### Identité et accès (IAM)
+
+De niveau compte — aucun `--region`/`--project` requis. Voir
+[Rôles et permissions](/fr/public-cloud/iam/roles) et [Utilisateurs](/fr/public-cloud/iam/users)
+pour le modèle et le catalogue complet des permissions.
+
+| Commande                           | Description                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------ |
+| `zcp permission list`              | Lister le catalogue des permissions (filtrer avec `--category`)                      |
+| `zcp role list`                    | Lister les rôles                                                                     |
+| `zcp role get <slug>`              | Afficher un rôle avec ses permissions et ses utilisateurs                            |
+| `zcp role create`                  | Créer un rôle (`--name`, `--permission <slug>` répétable)                            |
+| `zcp role update <slug>`           | Modifier un rôle (`--permission` **remplace** l'ensemble)                            |
+| `zcp role delete <slug>`           | Supprimer un rôle                                                                    |
+| `zcp sub-user list`                | Lister les sous-utilisateurs (filtres `--role`, `--blocked`)                         |
+| `zcp sub-user create`              | Créer un sous-utilisateur (`--name`, `--email`, `--password`, `--role`, `--project`) |
+| `zcp sub-user update <id\|email>`  | Modifier le nom, le courriel, le rôle ou les projets                                 |
+| `zcp sub-user block <id\|email>`   | Bloquer un sous-utilisateur (révoquer l'accès sans le supprimer)                     |
+| `zcp sub-user unblock <id\|email>` | Débloquer un sous-utilisateur                                                        |
+| `zcp sub-user delete <id\|email>`  | Supprimer un sous-utilisateur                                                        |
 
 Pour la liste complète de plus de 200 commandes, consultez le
 [dépôt GitHub](https://github.com/zsoftly/zcp-cli).

@@ -54,6 +54,35 @@ role scoped to only the `dev` Project.
 
 :::
 
+## Manage sub-users from the CLI
+
+The same actions are available in the [ZCP CLI](/public-cloud/cli/installation). Sub-user commands
+are account-level (no `--region`/`--project`), and a sub-user can be referenced by either its **ID**
+or its **email**.
+
+```bash
+# List sub-users (optionally filter by role or blocked state)
+zcp sub-user list
+zcp sub-user list --role service-administrator
+zcp sub-user list --blocked
+
+# Create a sub-user. --email must be a company address; --password needs 8+ chars
+# with mixed case, a number, and a symbol; --role is a role slug (see `zcp role list`);
+# --project is repeatable. New sub-users start blocked until you unblock them.
+zcp sub-user create --name "Jane Doe" --email jane@yourco.com \
+  --password 'S3cret!pass' --role service-viewer --project default-9
+
+# Change a sub-user's role or projects (referenced by email or ID)
+zcp sub-user update jane@yourco.com --role service-administrator
+
+# Revoke or restore access without deleting the account
+zcp sub-user block jane@yourco.com
+zcp sub-user unblock jane@yourco.com
+
+# Remove a sub-user entirely
+zcp sub-user delete jane@yourco.com
+```
+
 ## Related
 
 - [Roles & Permissions](/public-cloud/iam/roles): define what a user is allowed to do.

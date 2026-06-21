@@ -38,6 +38,31 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v0.0.19: June 21, 2026
+
+**Manage IAM from the CLI: sub-users, roles, and permissions.** Everything in the portal's Profile
+area is now scriptable. These commands are account-level (no `--region`/`--project`). See
+[Roles & Permissions](/public-cloud/iam/roles) and [Users](/public-cloud/iam/users).
+
+- **`zcp permission list`**: browse the permission catalog (filter with `--category`) to find the
+  slugs you assign to roles.
+- **`zcp role`**: `list`, `get <slug>` (shows permissions + assigned users), `create`, `update`, and
+  `delete`. `--permission` is repeatable and **replaces** the role's full set; the built-in
+  `owner`/`service-administrator`/`service-viewer` roles are protected from edits.
+- **`zcp sub-user`**: `list` (with `--role`/`--blocked` filters), `create`, `update`, `block`,
+  `unblock`, and `delete`. Sub-users are referenced by **ID or email**; new sub-users start blocked
+  until you `unblock` them.
+
+**Load balancers and instance references.**
+
+- **`zcp loadbalancer create` works**: it now sends the required first rule
+  (`--public-port`/`--private-port`/`--algorithm`) and can attach back-ends with `--vm`.
+- **Reference an instance by ID, name, or slug** in every `instance` subcommand, with a clear error
+  when a name is ambiguous; `instance list` now shows the `ID` column and returns **all** VMs (the
+  list is paginated).
+- **`reboot` refuses a non-`Running` VM** instead of silently no-op'ing, and `-o json`/`-o yaml`
+  emit full objects.
+
 ### v0.0.18: June 19, 2026
 
 **Region and project are now required for region- and project-scoped commands.** This makes results
