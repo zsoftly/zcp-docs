@@ -16,6 +16,18 @@ determines what they can do.
 From the list, use the action buttons to **edit** a user's details or role, or **re-invite** a user
 whose invitation is still pending.
 
+:::caution
+
+The portal has no **delete user** button yet. Portal-based deletion is planned for a future release.
+
+To remove someone's access from the portal, **block** (deactivate) the user with the action buttons
+on the Users list. The account stays in your organization but loses access to the platform.
+
+To delete an account, use the [ZCP CLI](#manage-sub-users-from-the-cli) (`zcp sub-user delete`) or
+the API.
+
+:::
+
 :::note
 
 Screenshots coming.

@@ -18,6 +18,20 @@ accès. Chaque utilisateur se connecte avec ses propres identifiants et reçoit 
 Depuis la liste, utilisez les boutons d'action pour modifier les renseignements ou le rôle d'un
 utilisateur, ou pour réinviter un utilisateur dont l'invitation est encore en attente.
 
+:::caution
+
+Le portail n'a pas encore de bouton **Supprimer l'utilisateur**. La suppression depuis le portail
+est prévue pour une version future.
+
+Pour retirer l'accès d'une personne depuis le portail, **bloquez** (désactivez) l'utilisateur à
+l'aide des boutons d'action de la liste Users. Le compte reste dans votre organisation mais perd
+l'accès à la plateforme.
+
+Pour supprimer un compte, utilisez la [CLI ZCP](/fr/public-cloud/cli/installation)
+(`zcp sub-user delete`) ou l'API.
+
+:::
+
 :::note
 
 Captures d'écran à venir.

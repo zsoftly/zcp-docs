@@ -6,34 +6,34 @@ description:
   links to Microsoft's official documentation.
 ---
 
-ZCP is building **Windows Server** images that ship with the paravirtual drivers and guest agent
-needed for good performance and clean management, and set a unique administrator password on first
-boot for immediate sign-in.
+ZCP **Windows Server** images ship with the paravirtual drivers and guest agent needed for good
+performance and clean management, and set a unique administrator password on first boot for
+immediate sign-in.
 
 Windows Server is licensed **bring-your-own-license (BYOL)**. The images are not activated, and you
 supply your own valid Windows Server license. See
 [Licensing](#licensing-bring-your-own-license-byol) below.
 
-:::caution
+:::tip
 
-**Windows Server images are still under development.** Every edition below is marked **Pending**
-while ZSoftly completes full validation. Some images might already be deployable in your region, but
-they are **not yet recommended for production use**. Treat them as preview/evaluation only. Each
-edition moves to **Available** once it has been validated end to end.
+**Windows Server 2025 (Standard and Datacenter) are validated and available.** Windows Server 2022
+(Standard and Datacenter) is still under development and marked **Pending**. It is deployable in
+some regions but is **not yet recommended for production**. Treat Pending editions as
+preview/evaluation only. We move each edition to **Available** after end-to-end validation.
 
 :::
 
 ## Availability
 
-ZCP is bringing the Windows Server lineup to both the **2022** and **2025** releases in the
-**Standard** and **Datacenter** editions.
+ZCP offers the Windows Server lineup across the **2022** and **2025** releases in the **Standard**
+and **Datacenter** editions.
 
-| Version             | Edition    | Status     |
-| ------------------- | ---------- | ---------- |
-| Windows Server 2022 | Standard   | 🚧 Pending |
-| Windows Server 2022 | Datacenter | 🚧 Pending |
-| Windows Server 2025 | Standard   | 🚧 Pending |
-| Windows Server 2025 | Datacenter | 🚧 Pending |
+| Version             | Edition    | Status       |
+| ------------------- | ---------- | ------------ |
+| Windows Server 2025 | Standard   | ✅ Available |
+| Windows Server 2025 | Datacenter | ✅ Available |
+| Windows Server 2022 | Standard   | 🚧 Pending   |
+| Windows Server 2022 | Datacenter | 🚧 Pending   |
 
 :::note
 
@@ -80,7 +80,7 @@ Standard's full feature set plus the software-defined datacenter capabilities:
 - **Software-Defined Networking** with the Network Controller for micro-segmentation and policy.
 - **Shielded VMs** for hardened, encrypted guest workloads in regulated environments.
 
-### Windows Server 2025 Standard, _Pending_
+### Windows Server 2025 Standard, _Available_
 
 The same role coverage as 2022 Standard, on the newest Long-Term Servicing Channel release:
 
@@ -89,7 +89,7 @@ The same role coverage as 2022 Standard, on the newest Long-Term Servicing Chann
 - Reduced reboots via **hotpatching** to keep services available during updates.
 - Improved Active Directory, security defaults, and management experience.
 
-### Windows Server 2025 Datacenter, _Pending_
+### Windows Server 2025 Datacenter, _Available_
 
 The 2025 feature set plus every Datacenter capability:
 
@@ -137,8 +137,9 @@ Confirm activation with `slmgr /xpr`.
 
 1. Go to **Compute → Create Instance** (see
    [Create Instance](/public-cloud/compute/create-instance/)).
-2. Choose a **Windows Server** image. All editions are currently **Pending** (preview/evaluation
-   only. They are not recommended for production yet).
+2. Choose a **Windows Server** image. Windows Server 2025 (Standard and Datacenter) are
+   **Available**; Windows Server 2022 editions are **Pending** (preview/evaluation only, not yet
+   recommended for production).
 3. Pick a region and a plan. Windows Server needs at least **4 GB RAM and 2 vCPUs**. Size the plan
    for your workload, not the minimum.
 4. Attach to a network and create the instance.
