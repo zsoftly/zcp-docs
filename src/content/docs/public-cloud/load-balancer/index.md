@@ -10,11 +10,7 @@ reliability, and improved performance.
 - From the left-hand menu, click **Load Balancer**.
 - Click the **+** icon.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create a load balancer](../../../../assets/load-balancer/load-balancer-create-a-load-balancer.webp)
 
 ### Steps
 
@@ -34,11 +30,7 @@ Screenshots coming.
    - One package per zone
    - Click **Create Load Balancer**
 
-:::note
-
-Screenshots coming.
-
-:::
+![Load balancer creation steps](../../../../assets/load-balancer/load-balancer-steps.webp)
 
 ### Attach Additional VMs
 

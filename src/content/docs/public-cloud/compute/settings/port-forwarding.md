@@ -9,8 +9,4 @@ example, forward external traffic on port 8080 to port 80 on your VM for web ser
 - Go to **VM Settings** → **Port Forwarding**.
 - Click **Manage** to change port configurations for the network.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Port forwarding settings](../../../../../assets/compute/settings/port-forwarding-port-forwarding.webp)
