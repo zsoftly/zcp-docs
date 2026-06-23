@@ -6,8 +6,8 @@ sidebar_position: 4
 ## Changer le système d'exploitation
 
 Ce paramètre réinstalle ou remplace le système d'exploitation de votre VM. Choisissez parmi les
-distributions Linux ou les images Windows. Windows Server 2025 est disponible; Windows 11 Enterprise
-sera disponible bientôt.
+distributions Linux ou les images Windows. Windows Server (2025 et 2022) et Windows 11 Pro sont tous
+deux disponibles.
 
 :::caution
 

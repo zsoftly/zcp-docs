@@ -16,10 +16,8 @@ supply your own valid Windows Server license. See
 
 :::tip
 
-**Windows Server 2025 (Standard and Datacenter) are validated and available.** Windows Server 2022
-(Standard and Datacenter) is still under development and marked **Pending**. It is deployable in
-some regions but is **not yet recommended for production**. Treat Pending editions as
-preview/evaluation only. We move each edition to **Available** after end-to-end validation.
+**All Windows Server editions are validated and available.** That covers 2025 and 2022, in both
+Standard and Datacenter.
 
 :::
 
@@ -32,16 +30,8 @@ and **Datacenter** editions.
 | ------------------- | ---------- | ------------ |
 | Windows Server 2025 | Standard   | ✅ Available |
 | Windows Server 2025 | Datacenter | ✅ Available |
-| Windows Server 2022 | Standard   | 🚧 Pending   |
-| Windows Server 2022 | Datacenter | 🚧 Pending   |
-
-:::note
-
-**Pending** means under development and not recommended for production, even where an image is
-already live in **Create Instance**. These pages stay published for planning and evaluation. Each
-edition becomes recommended once validation completes.
-
-:::
+| Windows Server 2022 | Standard   | ✅ Available |
+| Windows Server 2022 | Datacenter | ✅ Available |
 
 ## Editions: Standard vs Datacenter
 
@@ -61,7 +51,7 @@ Confirm how your entitlement applies to hosted/cloud instances with Microsoft or
 
 ## Use cases
 
-### Windows Server 2022 Standard, _Pending_
+### Windows Server 2022 Standard
 
 The default choice for most Windows workloads:
 
@@ -71,7 +61,7 @@ The default choice for most Windows workloads:
 - **Database hosting** (e.g. SQL Server) for line-of-business applications.
 - General-purpose, low-density server roles where you run one workload per instance.
 
-### Windows Server 2022 Datacenter, _Pending_
+### Windows Server 2022 Datacenter
 
 Standard's full feature set plus the software-defined datacenter capabilities:
 
@@ -80,7 +70,7 @@ Standard's full feature set plus the software-defined datacenter capabilities:
 - **Software-Defined Networking** with the Network Controller for micro-segmentation and policy.
 - **Shielded VMs** for hardened, encrypted guest workloads in regulated environments.
 
-### Windows Server 2025 Standard, _Available_
+### Windows Server 2025 Standard
 
 The same role coverage as 2022 Standard, on the newest Long-Term Servicing Channel release:
 
@@ -89,7 +79,7 @@ The same role coverage as 2022 Standard, on the newest Long-Term Servicing Chann
 - Reduced reboots via **hotpatching** to keep services available during updates.
 - Improved Active Directory, security defaults, and management experience.
 
-### Windows Server 2025 Datacenter, _Available_
+### Windows Server 2025 Datacenter
 
 The 2025 feature set plus every Datacenter capability:
 
@@ -137,9 +127,8 @@ Confirm activation with `slmgr /xpr`.
 
 1. Go to **Compute → Create Instance** (see
    [Create Instance](/public-cloud/compute/create-instance/)).
-2. Choose a **Windows Server** image. Windows Server 2025 (Standard and Datacenter) are
-   **Available**; Windows Server 2022 editions are **Pending** (preview/evaluation only, not yet
-   recommended for production).
+2. Choose a **Windows Server** image. All editions are available: Windows Server 2025 and 2022, in
+   Standard and Datacenter.
 3. Pick a region and a plan. Windows Server needs at least **4 GB RAM and 2 vCPUs**. Size the plan
    for your workload, not the minimum.
 4. Attach to a network and create the instance.

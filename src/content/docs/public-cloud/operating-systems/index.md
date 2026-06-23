@@ -64,20 +64,9 @@ Free and open-source, with no license or activation required.
 
 ### Windows
 
-Licensed **bring-your-own-license (BYOL)**. You supply and activate your own license. **Windows
-Server 2025 (Standard and Datacenter) are validated and available.** Windows Server 2022 and Windows
-11 Pro are still under development and not yet recommended for production.
+Licensed **bring-your-own-license (BYOL)**. You supply and activate your own license.
 
-| Image                                                                  | Editions / versions  | Status       |
-| ---------------------------------------------------------------------- | -------------------- | ------------ |
-| [Windows Server 2025](/public-cloud/operating-systems/windows-server/) | Standard, Datacenter | ✅ Available |
-| [Windows Server 2022](/public-cloud/operating-systems/windows-server/) | Standard, Datacenter | 🚧 Pending   |
-| [Windows 11 Pro](/public-cloud/operating-systems/windows-11/)          | 11 Pro               | 🚧 Pending   |
-
-:::caution
-
-**Pending** means under development and **not recommended for production**, even where an image is
-already live in **Create Instance**. These pages stay published for planning and evaluation. An
-image becomes recommended only after ZSoftly completes full validation.
-
-:::
+| Image                                                             | Editions / versions      | Status       |
+| ----------------------------------------------------------------- | ------------------------ | ------------ |
+| [Windows Server](/public-cloud/operating-systems/windows-server/) | 2022 Std/DC, 2025 Std/DC | ✅ Available |
+| [Windows 11 Pro](/public-cloud/operating-systems/windows-11/)     | 11 Pro                   | ✅ Available |

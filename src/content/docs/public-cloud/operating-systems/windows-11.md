@@ -13,11 +13,9 @@ first boot for immediate sign-in.
 Windows 11 is licensed **bring-your-own-license (BYOL)**. The image is not activated, and you supply
 your own valid Windows 11 license. See [Licensing](#licensing-bring-your-own-license-byol) below.
 
-:::caution
+:::tip
 
-**This image is still under development.** Windows 11 Pro is marked **Pending** while ZSoftly
-completes full validation. It might already be deployable in your region, but it is **not yet
-recommended for production use**. Treat it as preview/evaluation only until validation completes.
+**Windows 11 Pro is validated and available** in every region.
 
 :::
 

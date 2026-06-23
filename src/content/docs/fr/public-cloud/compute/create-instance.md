@@ -37,10 +37,11 @@ besoin.
 
 **Images Windows prises en charge :**
 
-| Image                 | État               |
-| --------------------- | ------------------ |
-| Windows Server 2025   | Disponible         |
-| Windows 11 Enterprise | Bientôt disponible |
+| Image               | État       |
+| ------------------- | ---------- |
+| Windows Server 2025 | Disponible |
+| Windows Server 2022 | Disponible |
+| Windows 11 Pro      | Disponible |
 
 Consultez les catalogues complets : [images de SE](https://zcp.zsoftly.ca/marketplace/os-images) et
 [applications en un clic](https://zcp.zsoftly.ca/marketplace/apps).

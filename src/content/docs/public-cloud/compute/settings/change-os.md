@@ -6,8 +6,8 @@ sidebar_position: 4
 ## Change Operating System
 
 This setting reinstalls or switches the operating system running on your VM. Choose from Linux
-distributions or Windows images. Windows Server 2025 is available now. Windows 11 Enterprise is
-coming soon.
+distributions or Windows images. Windows Server (2025 and 2022) and Windows 11 Pro are all
+available.
 
 :::caution
 
