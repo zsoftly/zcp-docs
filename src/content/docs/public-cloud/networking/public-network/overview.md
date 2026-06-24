@@ -16,11 +16,7 @@ shows:
 - **CIDR**: Specifies the network's IP range.
 - **Account**: The account that owns the network.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Public Network Overview tab showing network ID, type, traffic types, gateway, netmask, and CIDR](../../../../../assets/networking/overview-public-network-overview.webp)
 
 See also: [Create Public Network](/public-cloud/networking/public-network/create),
 [Public IPs](/public-cloud/networking/public-network/public-ips)

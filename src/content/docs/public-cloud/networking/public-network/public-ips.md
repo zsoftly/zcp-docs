@@ -10,11 +10,7 @@ include network-level DDoS mitigation, absorbing volumetric attacks before they 
 - Click **Acquire New IP** to request a new public IP.
 - Choose the desired **Billing Cycle** and click **Buy IP**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Public IP Addresses tab with the Acquire New IP button](../../../../../assets/networking/public-ips-public-ip-addresses.webp)
 
 See also: [Network Overview](/public-cloud/networking/public-network/overview),
 [Create Public Network](/public-cloud/networking/public-network/create)

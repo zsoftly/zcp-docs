@@ -11,62 +11,38 @@ to communicate with external systems over the internet.
 - From the left-hand menu, click **Networks** → **Public Network** tab.
 - Click the **+** icon to open the creation page.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Networks page on the Public Network tab with the add (+) button](../../../../../assets/networking/create-create-a-public-network.webp)
 
 ### Choose a Location
 
 Select the data center location where you want to host the network.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Public Network: choose a location](../../../../../assets/networking/create-choose-a-location.webp)
 
 ### Assign to a Project
 
 Assign the network to a project to organize resources.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Public Network: assign to a project](../../../../../assets/networking/create-assign-to-a-project.webp)
 
 ### Network Configurations
 
 Configure the gateway and network mask to define the routing and IP address structure.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Public Network: gateway and network mask configuration](../../../../../assets/networking/create-network-configurations.webp)
 
 ### Name
 
 Provide a unique name for your Public Network.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Public Network: name the network](../../../../../assets/networking/create-name.webp)
 
 ### Create
 
 - Choose the **Billing Cycle**: Hourly or Monthly.
 - Review the price summary and click **Create**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Public Network: billing cycle and price summary](../../../../../assets/networking/create-create.webp)
 
 See also: [Network Overview](/public-cloud/networking/public-network/overview),
 [Public IPs](/public-cloud/networking/public-network/public-ips)

@@ -13,11 +13,7 @@ the VPC.
 - Provide a **Name** and **Description**.
 - Click **Submit**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Network ACL List tab showing configured ACLs and the Add New List button](../../../../../assets/networking/network-acls-network-acl-list.webp)
 
 See also: [Add Subnet](/public-cloud/networking/vpc/add-subnet),
 [Create VPC](/public-cloud/networking/vpc/create-vpc)
