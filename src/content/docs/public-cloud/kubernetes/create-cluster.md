@@ -39,11 +39,7 @@ cluster's minor version. See [kubectl Access](/public-cloud/kubernetes/kubectl-a
 - From the left-hand menu, click **Kubernetes**.
 - Click **Create Cluster** or the **+** icon.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Kubernetes page with the Create Cluster (+) button](../../../../assets/kubernetes/create-cluster-create-a-cluster.webp)
 
 ### Steps
 
@@ -64,11 +60,7 @@ Screenshots coming.
      Unfixed Prorata
    - Click **Create Cluster**
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Kubernetes Cluster form: location, project, network, capacity, advanced settings, name, and billing](../../../../assets/kubernetes/create-cluster-steps.webp)
 
 ## After you create
 
