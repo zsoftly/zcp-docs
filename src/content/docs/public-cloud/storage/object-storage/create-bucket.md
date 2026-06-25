@@ -23,11 +23,7 @@ any unstructured data.
    Tri-annually. Billing rules: Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed
    Prorata, Unfixed Prorata. Click **Review and Create**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Object Storage instance: project, location, size, name, and billing](../../../../../assets/storage/object-storage/create-bucket-steps.webp)
 
 ### Create a Bucket
 
@@ -47,11 +43,7 @@ costs.
 
 - Click **Create**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Bucket dialog with name, versioning, and object locking options](../../../../../assets/storage/object-storage/create-bucket-create-a-bucket.webp)
 
 ### Manage Buckets
 
@@ -59,11 +51,7 @@ Screenshots coming.
 - **Upload Files**: Upload files directly through the portal.
 - **Create Folder**: Organize objects into folders within the bucket.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Bucket management view with Share, Upload Files, and Create Folder actions](../../../../../assets/storage/object-storage/create-bucket-manage-buckets.webp)
 
 ### Auto Scaling
 

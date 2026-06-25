@@ -15,11 +15,7 @@ The Cluster Overview page provides a summary and management options for your Kub
 - **Power Off**: gracefully shut down the cluster
 - **Delete**: permanently delete the cluster and all resources
 
-:::note
-
-Screenshots coming.
-
-:::
+![Cluster Overview action buttons: upgrade, refresh, download config, power off, and delete](../../../../assets/kubernetes/cluster-overview-action-buttons.webp)
 
 ### Cluster Overview
 
@@ -27,11 +23,7 @@ Screenshots coming.
 - **Control Nodes** / **Worker Nodes**
 - **Network**, **Status**
 
-:::note
-
-Screenshots coming.
-
-:::
+![Cluster Overview summary: total CPU and RAM, control and worker nodes, network, and status](../../../../assets/kubernetes/cluster-overview-cluster-overview.webp)
 
 ### Cluster Information
 
@@ -39,11 +31,7 @@ Screenshots coming.
 - Kubernetes Version, Auto Scaling (min/max node count if enabled)
 - All-Time Consumption, Network, SSH Key
 
-:::note
-
-Screenshots coming.
-
-:::
+![Cluster Information panel: project, endpoints, Kubernetes version, autoscaling, and consumption](../../../../assets/kubernetes/cluster-overview-cluster-information.webp)
 
 ### Node Config
 
