@@ -23,11 +23,7 @@ Available from the three-dot menu or overview page:
 - **Attach ISO for VM**: Mounts an ISO file to the VM.
 - **Delete**: Deletes the instance permanently.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Instance action buttons](../../../../assets/compute/instance-overview-action-buttons.webp)
 
 ## Instance Information
 
@@ -35,11 +31,7 @@ Screenshots coming.
 - **Created on**
 - **Status** (running/stopped)
 
-:::note
-
-Screenshots coming.
-
-:::
+![Instance information panel](../../../../assets/compute/instance-overview-instance-information.webp)
 
 ## Instance Details
 
@@ -47,11 +39,7 @@ Screenshots coming.
 - **Operating System**
 - **Cost** (all-time)
 
-:::note
-
-Screenshots coming.
-
-:::
+![Instance details panel](../../../../assets/compute/instance-overview-instance-details.webp)
 
 ## Resource Specifications
 
@@ -67,11 +55,7 @@ Screenshots coming.
 - **Affinity Group**
 - **Tag** (add via Add Tag → Key + Value → Submit)
 
-:::note
-
-Screenshots coming.
-
-:::
+![Resource specifications panel](../../../../assets/compute/instance-overview-resource-specifications.webp)
 
 ## Resource Usage
 
@@ -80,11 +64,7 @@ Screenshots coming.
 - **CPU Usage**: percentage
 - **RAM Usage**: memory consumption
 
-:::note
-
-Screenshots coming.
-
-:::
+![Resource usage metrics](../../../../assets/compute/instance-overview-resource-usage.webp)
 
 ## See also
 

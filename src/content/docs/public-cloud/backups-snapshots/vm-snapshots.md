@@ -11,11 +11,7 @@ specific point in time. Use them for backup, disaster recovery, and testing.
 - From the left-hand menu, click **Snapshots** → **Instances Snapshot** tab.
 - Click **Take Snapshot** or the **+** icon.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create a VM snapshot](../../../../assets/backups-snapshots/vm-snapshots-create-a-vm-snapshot.webp)
 
 ### Steps
 
@@ -25,11 +21,7 @@ Screenshots coming.
 4. **Snapshot Name**: provide a unique name.
 5. **Create**: Billing: Hourly only, Fixed Prorata rule. Click **Take Snapshot**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![VM snapshot creation steps](../../../../assets/backups-snapshots/vm-snapshots-steps.webp)
 
 See also: [Volume Snapshots](/public-cloud/storage/block-storage/snapshots),
 [Backups](/public-cloud/backups-snapshots/backups)

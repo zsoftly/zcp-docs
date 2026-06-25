@@ -29,11 +29,7 @@ Automatic backups cost 20% of the virtual machine's price.
    to also take an immediate backup.
 5. **Create**: Billing: Hourly only, Fixed Prorata rule. Click **Create Backup**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Backup schedule creation steps](../../../../assets/backups-snapshots/backups-steps.webp)
 
 See also: [VM Snapshots](/public-cloud/backups-snapshots/vm-snapshots),
 [Volume Snapshots](/public-cloud/storage/block-storage/snapshots)

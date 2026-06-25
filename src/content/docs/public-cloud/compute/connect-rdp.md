@@ -10,11 +10,7 @@ Remote Desktop Protocol (RDP) enables you to securely connect to and manage Wind
 - Go to **Instances** and select the Windows VM.
 - In the **VM Overview** tab, find and copy the **Username** and **Password** fields.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Instance overview showing the username and password used for RDP](../../../../assets/compute/connect-rdp-access-the-instance-overview.webp)
 
 ## Launch the RDP Client
 
@@ -24,11 +20,7 @@ Screenshots coming.
 - **Linux**: Install **Remmina** (`sudo apt install remmina` on Ubuntu/Debian). Open Remmina and
   select RDP.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Launching the RDP client](../../../../assets/compute/connect-rdp-launch-the-rdp-client.webp)
 
 ## Connect
 
@@ -39,11 +31,7 @@ Screenshots coming.
    click **Yes**.
 5. Click **OK** or **Connect**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Connecting to the VM over RDP](../../../../assets/compute/connect-rdp-connect.webp)
 
 ## See also
 

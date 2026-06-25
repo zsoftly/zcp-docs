@@ -10,11 +10,7 @@ ensuring availability while minimizing costs.
 - From the left-hand menu, click **Auto-Scaling**.
 - Click **Create New**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create an Auto-Scaling Group form](../../../../assets/auto-scaling/auto-scaling-create-an-auto-scaling-group.webp)
 
 ### Steps
 

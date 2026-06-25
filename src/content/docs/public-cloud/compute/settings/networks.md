@@ -13,11 +13,7 @@ addresses for internet access.
 - Click **Add Network** to add a new network interface.
 - Click on a network to change its configuration (bandwidth limits, IP assignment).
 
-:::note
-
-Screenshots coming.
-
-:::
+![Network configuration settings](../../../../../assets/compute/settings/networks-network-configuration.webp)
 
 See also: [Create VPC Networks](/public-cloud/networking/vpc/create-vpc),
 [Create Public Networks](/public-cloud/networking/public-network/create)

@@ -20,10 +20,6 @@ before proceeding. Delete snapshots and backups before changing the OS.
 - From **Templates**, select the OS and version.
 - Click **Change OS**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Change operating system settings](../../../../../assets/compute/settings/change-os-change-operating-system.webp)
 
 See also: [Create Instance](/public-cloud/compute/create-instance)
