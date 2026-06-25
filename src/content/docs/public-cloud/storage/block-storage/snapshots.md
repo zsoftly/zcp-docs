@@ -11,11 +11,7 @@ Use them for backup, recovery from accidental deletion, or corruption.
 - From the left-hand menu, click **Snapshots** → **Volume Snapshot** tab.
 - Click **Take Snapshot** or the **+** icon.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Snapshots page on the Volume Snapshot tab with the Take Snapshot (+) button](../../../../../assets/storage/block-storage/snapshots-create-a-volume-snapshot.webp)
 
 ### Steps
 
@@ -26,11 +22,7 @@ Screenshots coming.
 5. **Create**: Billing cycle: Hourly only. Billing rule: Fixed Prorata only. Click **Take
    Snapshot**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Take Volume Snapshot form: location, project, block storage, name, and billing](../../../../../assets/storage/block-storage/snapshots-steps.webp)
 
 See also: [Create Volume](/public-cloud/storage/block-storage/create-volume),
 [VM Snapshots](/public-cloud/backups-snapshots/vm-snapshots)

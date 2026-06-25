@@ -13,61 +13,37 @@ format and mount the volume to extend your VM's storage.
 - From the left-hand menu, click **Block Storages**.
 - Click **Create Block Storage** or the **+** icon.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Block Storages page with the Create Block Storage (+) button](../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
 
 ### Choose a Location
 
 Select the data center location.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Block Storage: choose a location](../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
 
 ### Assign to a Project
 
 Assign the volume to a project.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Block Storage: assign to a project](../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
 
 ### Choose Instance
 
 Select the VM instance to attach this volume to.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Block Storage: choose the instance to attach to](../../../../../assets/storage/block-storage/create-volume-choose-instance.webp)
 
 ### Select Volume Size
 
 Select storage type and size. Custom volumes are available.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Block Storage: select volume storage type and size](../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
 
 ### Name
 
 Provide a unique Volume Name.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Block Storage: name the volume](../../../../../assets/storage/block-storage/create-volume-name.webp)
 
 ### Create
 
@@ -76,11 +52,7 @@ Screenshots coming.
   Unfixed Prorata.
 - Review and click **Create Volume**.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create Block Storage: billing options and Create Volume](../../../../../assets/storage/block-storage/create-volume-create.webp)
 
 After creation, format and mount the volume inside the VM:
 
