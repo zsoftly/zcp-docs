@@ -14,7 +14,7 @@ services sont configurés et l'image est prête à utiliser.
     <span class="mp-label">images actives</span>
   </div>
   <div class="mp-stat">
-    <span class="mp-num">20</span>
+    <span class="mp-num">21</span>
     <span class="mp-label">bientôt</span>
   </div>
   <div class="mp-stat">
@@ -134,6 +134,11 @@ services sont configurés et l'image est prête à utiliser.
   <a href="/fr/public-cloud/marketplace/pterodactyl" class="service-card">
     <div class="service-icon" style="--icon-bg: #ef4444; --icon-bg-dim: rgba(239,68,68,0.15);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m12 12 8-4.5M12 12v9M12 12 4 7.5"/></svg></div>
     <div><p class="service-name">Pterodactyl <span class="mp-status">Bientôt</span></p><p class="service-desc">Panneau de contrôle de serveurs de jeu avec conteneurs isolés et administration Web.</p></div>
+  </a>
+
+  <a href="/fr/public-cloud/marketplace/drupal" class="service-card">
+    <div class="service-icon" style="--icon-bg: #0678be; --icon-bg-dim: rgba(6,120,190,0.15);"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5c4 5 7 8 7 11.5a7 7 0 1 1-14 0c0-3.5 3-6.5 7-11.5Z"/></svg></div>
+    <div><p class="service-name">Drupal <span class="mp-status">Bientôt</span></p><p class="service-desc">CMS libre et flexible pour sites et applications riches en contenu.</p></div>
   </a>
 
 </div>
