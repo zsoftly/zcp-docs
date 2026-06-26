@@ -14,11 +14,7 @@ adresses IP externes pour l'accès Internet.
 - Cliquez sur un réseau pour modifier sa configuration, comme les limites de bande passante ou
   l'assignation IP.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres de configuration réseau](../../../../../../assets/compute/settings/networks-network-configuration.webp)
 
 Voir aussi : [Créer des réseaux VPC](/fr/public-cloud/networking/vpc/create-vpc),
 [Créer un réseau public](/fr/public-cloud/networking/public-network/create)

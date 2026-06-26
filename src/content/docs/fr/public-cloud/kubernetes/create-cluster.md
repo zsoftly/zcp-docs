@@ -45,11 +45,7 @@ client `kubectl` à la version mineure du cluster. Voir
 - Dans le menu de gauche, cliquez sur **Kubernetes**.
 - Cliquez sur **Créer un cluster** ou sur l'icône **+**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Page Kubernetes avec le bouton Créer un cluster (+)](../../../../../assets/kubernetes/create-cluster-create-a-cluster.webp)
 
 ### Étapes
 
@@ -71,11 +67,7 @@ Captures d'écran à venir.
      Prorata, Unfixed Prorata
    - Cliquez sur **Créer un cluster**
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Formulaire de création de cluster Kubernetes : emplacement, projet, réseau, capacité, paramètres avancés, nom et facturation](../../../../../assets/kubernetes/create-cluster-steps.webp)
 
 ## Après la création
 

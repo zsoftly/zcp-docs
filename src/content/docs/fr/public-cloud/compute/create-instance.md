@@ -14,21 +14,13 @@ serveurs selon vos besoins.
 - Dans le menu de gauche, cliquez sur l'onglet **Instances**.
 - Pour créer une instance, cliquez sur l'icône **plus (+)** située à droite de la page.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Démarrage d'une nouvelle instance de calcul depuis l'onglet Instances](../../../../../assets/compute/create-instance-creating-a-compute-instance.webp)
 
 ## Choisir un emplacement
 
 Sélectionnez l'emplacement du centre de données où votre serveur sera hébergé physiquement.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Choix d'un emplacement de centre de données](../../../../../assets/compute/create-instance-choose-a-location.webp)
 
 ## Choisir une image
 
@@ -46,11 +38,7 @@ besoin.
 Consultez les catalogues complets : [images de SE](https://zcp.zsoftly.ca/marketplace/os-images) et
 [applications en un clic](https://zcp.zsoftly.ca/marketplace/apps).
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Choix d'une image de système d'exploitation](../../../../../assets/compute/create-instance-choose-an-image.webp)
 
 ## Choisir le type d'allocation CPU
 
@@ -63,11 +51,7 @@ Captures d'écran à venir.
 - **Cloud GPU** : accélération GPU pour les tâches exigeantes comme l'apprentissage automatique,
   l'IA, le rendu vidéo et les simulations scientifiques.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Choix du type d'allocation CPU](../../../../../assets/compute/create-instance-choose-the-type-of-cpu-allocation.webp)
 
 ## Choisir un plan
 
@@ -84,21 +68,13 @@ Consultez [Types d'instances](/fr/public-cloud/compute/instance-types) pour les 
 de stockage, ainsi que la [page de tarification](https://zcp.zsoftly.ca/pricing) pour les
 caractéristiques et prix par taille.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Choix d'un plan](../../../../../assets/compute/create-instance-choose-a-plan.webp)
 
 ## Assigner à un projet
 
 Assignez le serveur à l'un de vos projets afin d'organiser les ressources.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Attribution du serveur à un projet](../../../../../assets/compute/create-instance-assign-to-a-project.webp)
 
 ## Choisir un réseau
 
@@ -112,11 +88,7 @@ Captures d'écran à venir.
 
 Choisissez ensuite d'activer ou non l'IPv4 publique.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Choix d'un réseau](../../../../../assets/compute/create-instance-choose-a-network.webp)
 
 ## Configurer les paramètres du serveur
 
@@ -124,11 +96,7 @@ Captures d'écran à venir.
   comme Arch Linux, une clé SSH est requise.
 - Ajoutez un script de démarrage pour automatiser des actions pendant l'initialisation.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Configuration des paramètres du serveur](../../../../../assets/compute/create-instance-configure-server-settings.webp)
 
 ## Paramètres avancés (facultatif)
 
@@ -136,21 +104,13 @@ Captures d'écran à venir.
 - **Boot Type** : choisissez UEFI ou BIOS.
 - **Enable Dynamic Scaling** : permet la mise à l'échelle automatique des ressources.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres avancés (facultatif)](../../../../../assets/compute/create-instance-advanced-settings-optional.webp)
 
 ## Nom d'hôte du serveur
 
 Fournissez un **Server Name** unique et un **Server Hostname** valide.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Définition du nom et du nom d'hôte du serveur](../../../../../assets/compute/create-instance-server-hostname.webp)
 
 ## Vérifier et déployer
 

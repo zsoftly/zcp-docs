@@ -21,10 +21,6 @@ avant de changer le système d'exploitation.
 - Dans **Templates**, sélectionnez le système d'exploitation et la version.
 - Cliquez sur **Change OS**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres de changement du système d'exploitation](../../../../../../assets/compute/settings/change-os-change-operating-system.webp)
 
 Voir aussi : [Créer une instance](/fr/public-cloud/compute/create-instance)

@@ -16,11 +16,7 @@ affiche :
 - **CIDR** : précise la plage IP du réseau.
 - **Account** : compte propriétaire du réseau.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Onglet Vue d'ensemble du réseau public affichant l'ID du réseau, le type, les types de trafic, la passerelle, le masque réseau et le CIDR](../../../../../../assets/networking/overview-public-network-overview.webp)
 
 Voir aussi : [Créer un réseau public](/fr/public-cloud/networking/public-network/create),
 [IP publiques](/fr/public-cloud/networking/public-network/public-ips)

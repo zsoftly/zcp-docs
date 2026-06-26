@@ -62,11 +62,7 @@ Exemple :
 ssh root@192.168.1.1
 ```
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Connexion à une VM en SSH depuis un terminal](../../../../../assets/compute/connect-ssh-connecting.webp)
 
 ## Voir aussi
 

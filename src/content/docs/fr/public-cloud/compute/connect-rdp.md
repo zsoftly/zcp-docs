@@ -12,11 +12,7 @@ de les gérer à distance.
 - Dans l'onglet **VM Overview**, repérez et copiez les champs **Nom d'utilisateur** et **Mot de
   passe**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Vue d'ensemble de l'instance affichant le nom d'utilisateur et le mot de passe utilisés pour RDP](../../../../../assets/compute/connect-rdp-access-the-instance-overview.webp)
 
 ## Lancer le client RDP
 
@@ -26,11 +22,7 @@ Captures d'écran à venir.
 - **Linux** : installez **Remmina** (`sudo apt install remmina` sur Ubuntu/Debian), ouvrez Remmina
   et sélectionnez RDP.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Lancement du client RDP](../../../../../assets/compute/connect-rdp-launch-the-rdp-client.webp)
 
 ## Connexion
 
@@ -41,11 +33,7 @@ Captures d'écran à venir.
    computer", puis cliquez sur **Yes**.
 5. Cliquez sur **OK** ou **Connect**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Connexion à la VM via RDP](../../../../../assets/compute/connect-rdp-connect.webp)
 
 ## Voir aussi
 

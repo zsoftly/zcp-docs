@@ -6,11 +6,7 @@ Les groupes d'affinité contrôlent le placement des VM sur les hôtes hypervise
 l'infrastructure infonuagique. Utilisez-les pour regrouper des VM afin de réduire la latence ou pour
 les répartir entre plusieurs hôtes afin d'améliorer la tolérance aux pannes.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Page des groupes d'affinité dans le portail ZCP](../../../../../assets/affinity-groups/affinity-groups-affinity-groups.webp)
 
 ### Créer un groupe d'affinité
 

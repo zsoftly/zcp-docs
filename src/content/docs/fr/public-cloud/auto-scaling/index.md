@@ -10,11 +10,7 @@ temps réel, afin d'assurer la disponibilité tout en réduisant les coûts.
 - Dans le menu de gauche, cliquez sur **Auto-Scaling**.
 - Cliquez sur **Créer New**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Formulaire de création d'un groupe de mise à l'échelle automatique](../../../../../assets/auto-scaling/auto-scaling-create-an-auto-scaling-group.webp)
 
 ### Étapes
 

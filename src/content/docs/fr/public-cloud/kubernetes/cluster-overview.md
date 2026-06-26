@@ -16,11 +16,7 @@ Kubernetes.
 - **Power Off** : arrêter le cluster proprement
 - **Delete** : supprimer définitivement le cluster et toutes ses ressources
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Boutons d'action de la vue d'ensemble du cluster : mettre à niveau, actualiser, télécharger la configuration, éteindre et supprimer](../../../../../assets/kubernetes/cluster-overview-action-buttons.webp)
 
 ### Vue d'ensemble du cluster
 
@@ -28,11 +24,7 @@ Captures d'écran à venir.
 - **Noeuds de contrôle** / **noeuds de travail**
 - **Réseau**, **état**
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Sommaire de la vue d'ensemble du cluster : CPU et RAM totaux, noeuds de contrôle et de travail, réseau et état](../../../../../assets/kubernetes/cluster-overview-cluster-overview.webp)
 
 ### Informations sur le cluster
 
@@ -41,11 +33,7 @@ Captures d'écran à venir.
 - Version Kubernetes, mise à l'échelle automatique (nombre minimal et maximal de noeuds si activée)
 - Consommation totale, réseau, clé SSH
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Panneau d'informations sur le cluster : projet, points de terminaison, version Kubernetes, mise à l'échelle automatique et consommation](../../../../../assets/kubernetes/cluster-overview-cluster-information.webp)
 
 ### Configuration des noeuds
 

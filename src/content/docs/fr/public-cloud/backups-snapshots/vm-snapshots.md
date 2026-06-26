@@ -12,11 +12,7 @@ tests.
 - Dans le menu de gauche, cliquez sur **Instantanés** → onglet **Instances Snapshot**.
 - Cliquez sur **Take Snapshot** ou sur l'icône **+**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer un instantané de VM](../../../../../assets/backups-snapshots/vm-snapshots-create-a-vm-snapshot.webp)
 
 ### Étapes
 
@@ -26,11 +22,7 @@ Captures d'écran à venir.
 4. **Nom de l'instantané** : fournissez un nom unique.
 5. **Créer** : facturation : Hourly seulement, règle Fixed Prorata. Cliquez sur **Take Snapshot**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Étapes de création d'un instantané de VM](../../../../../assets/backups-snapshots/vm-snapshots-steps.webp)
 
 Voir aussi : [Instantanés de volume](/fr/public-cloud/storage/block-storage/snapshots),
 [Sauvegardes](/fr/public-cloud/backups-snapshots/backups)

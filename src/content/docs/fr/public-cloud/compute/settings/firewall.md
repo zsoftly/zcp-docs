@@ -13,11 +13,7 @@ et sortant de votre VM. Autorisez ou refusez l'accès à des adresses IP, ports 
 
 Exemple : bloquer tout le trafic sauf SSH (port 22) et le trafic Web (ports 80/443).
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres de configuration du pare-feu](../../../../../../assets/compute/settings/firewall-firewall-configuration.webp)
 
 Voir aussi : [Réseaux](/fr/public-cloud/compute/settings/networks),
 [Redirection de ports](/fr/public-cloud/compute/settings/port-forwarding)

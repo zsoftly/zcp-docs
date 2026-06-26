@@ -11,11 +11,7 @@ Utilisez-les pour la sauvegarde, la récupération après suppression accidentel
 - Dans le menu de gauche, cliquez sur **Instantanés** → onglet **Volume Snapshot**.
 - Cliquez sur **Take Snapshot** ou sur l'icône **+**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Page Instantanés sur l'onglet Volume Snapshot avec le bouton Take Snapshot (+)](../../../../../../assets/storage/block-storage/snapshots-create-a-volume-snapshot.webp)
 
 ### Étapes
 
@@ -26,11 +22,7 @@ Captures d'écran à venir.
 5. **Créer** : cycle de facturation : Hourly seulement. Règle de facturation : Fixed Prorata
    seulement. Cliquez sur **Take Snapshot**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Formulaire Take Volume Snapshot : emplacement, projet, stockage bloc, nom et facturation](../../../../../../assets/storage/block-storage/snapshots-steps.webp)
 
 Voir aussi : [Créer un volume](/fr/public-cloud/storage/block-storage/create-volume),
 [Instantanés de VM](/fr/public-cloud/backups-snapshots/vm-snapshots)

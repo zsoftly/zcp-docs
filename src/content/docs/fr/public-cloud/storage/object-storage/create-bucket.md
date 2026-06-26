@@ -24,11 +24,7 @@ sauvegardes, les ressources statiques ou toute donnée non structurée.
    Bi-annually, Tri-annually. Règles de facturation : Date to Date, Fixed Calendar Month, Unfixed
    Calendar Month, Fixed Prorata, Unfixed Prorata. Cliquez sur **Review and Create**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer une instance de stockage objet : projet, emplacement, taille, nom et facturation](../../../../../../assets/storage/object-storage/create-bucket-steps.webp)
 
 ### Créer un compartiment
 
@@ -49,11 +45,7 @@ dans vos coûts totaux de stockage.
 
 - Cliquez sur **Créer**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Boîte de dialogue Créer un compartiment avec les options de nom, versionnement et verrouillage d'objets](../../../../../../assets/storage/object-storage/create-bucket-create-a-bucket.webp)
 
 ### Gérer les compartiments
 
@@ -62,11 +54,7 @@ Captures d'écran à venir.
 - **Upload Files** : téléverser des fichiers directement depuis le portail.
 - **Create Folder** : organiser les objets dans des dossiers à l'intérieur du compartiment.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Vue de gestion des compartiments avec les actions Share, Upload Files et Create Folder](../../../../../../assets/storage/object-storage/create-bucket-manage-buckets.webp)
 
 ### Mise à l'échelle automatique
 
