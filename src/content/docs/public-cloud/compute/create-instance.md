@@ -13,21 +13,13 @@ Cloud, enabling you to launch and scale servers as needed.
 - From the left-hand menu, click on the **Instances** tab.
 - To create an instance, click the **plus (+)** icon located on the right side of the page.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Starting a new compute instance from the Instances tab](../../../../assets/compute/create-instance-creating-a-compute-instance.webp)
 
 ## Choose a Location
 
 Select the data center location where your server will be physically hosted.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Choosing a data center location](../../../../assets/compute/create-instance-choose-a-location.webp)
 
 ## Choose an Image
 
@@ -43,11 +35,7 @@ Select an OS or application template. Import a custom ISO if needed.
 Browse the full catalogs: [OS Images](https://zcp.zsoftly.ca/marketplace/os-images) and
 [One-Click Apps](https://zcp.zsoftly.ca/marketplace/apps).
 
-:::note
-
-Screenshots coming.
-
-:::
+![Choosing an operating system image](../../../../assets/compute/create-instance-choose-an-image.webp)
 
 ## Choose the Type of CPU Allocation
 
@@ -60,11 +48,7 @@ Screenshots coming.
 - **Cloud GPU**: Delivers GPU acceleration for demanding tasks like machine learning, AI, video
   rendering, and scientific simulations.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Choosing the type of CPU allocation](../../../../assets/compute/create-instance-choose-the-type-of-cpu-allocation.webp)
 
 ## Choose a Plan
 
@@ -78,21 +62,13 @@ Screenshots coming.
 See [Instance Types](/public-cloud/compute/instance-types) for families and storage tiers, and the
 [pricing page](https://zcp.zsoftly.ca/pricing) for per-size specs and pricing.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Choosing a plan](../../../../assets/compute/create-instance-choose-a-plan.webp)
 
 ## Assign to a Project
 
 Assign the server to one of your projects to organize resources.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Assigning the server to a project](../../../../assets/compute/create-instance-assign-to-a-project.webp)
 
 ## Choose a Network
 
@@ -105,11 +81,7 @@ Screenshots coming.
 
 Choose whether to enable public IPv4.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Choosing a network](../../../../assets/compute/create-instance-choose-a-network.webp)
 
 ## Configure Server Settings
 
@@ -117,11 +89,7 @@ Screenshots coming.
   is required.
 - Add a startup script to automate actions during initialization.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Configuring server settings](../../../../assets/compute/create-instance-configure-server-settings.webp)
 
 ## Advanced Settings (Optional)
 
@@ -129,21 +97,13 @@ Screenshots coming.
 - **Boot Type**: Choose between UEFI or BIOS.
 - **Enable Dynamic Scaling**: Allows automatic resource scaling.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Advanced settings (optional)](../../../../assets/compute/create-instance-advanced-settings-optional.webp)
 
 ## Server Hostname
 
 Provide a unique Server Name and valid Server Hostname.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Setting the server name and hostname](../../../../assets/compute/create-instance-server-hostname.webp)
 
 ## Review and Deploy
 

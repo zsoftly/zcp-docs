@@ -13,11 +13,7 @@ your VM. Allow or deny access to specific IP addresses, ports, or protocols.
 
 Example use case: block all traffic except SSH (port 22) and web traffic (ports 80/443).
 
-:::note
-
-Screenshots coming.
-
-:::
+![Firewall configuration settings](../../../../../assets/compute/settings/firewall-firewall-configuration.webp)
 
 See also: [Networks](/public-cloud/compute/settings/networks),
 [Port Forwarding](/public-cloud/compute/settings/port-forwarding)

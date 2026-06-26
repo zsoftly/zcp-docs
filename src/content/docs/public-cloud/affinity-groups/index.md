@@ -6,11 +6,7 @@ Affinity Groups control the placement of VMs on hypervisor hosts within the clou
 Use them to co-locate VMs for low-latency communication or spread them across hosts for fault
 tolerance.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Affinity Groups page in the ZCP portal](../../../../assets/affinity-groups/affinity-groups-affinity-groups.webp)
 
 ### Create an Affinity Group
 

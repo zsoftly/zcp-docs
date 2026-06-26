@@ -14,11 +14,7 @@ Available from the Instance Overview:
 - **Reboot**: restarts the VM
 - **Power On**: starts a stopped VM
 
-:::note
-
-Screenshots coming.
-
-:::
+![Manual power actions for an instance](../../../../assets/compute/power-management-manual-power-actions.webp)
 
 ## Scheduled Power Actions
 

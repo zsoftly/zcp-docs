@@ -16,10 +16,6 @@ You need to stop the Instance before performing a reset SSH Key operation.
 
 :::
 
-:::note
-
-Screenshots coming.
-
-:::
+![SSH key access settings](../../../../../assets/compute/settings/ssh-keys-ssh-key-access.webp)
 
 See also: [Connect With SSH](/public-cloud/compute/connect-ssh)
