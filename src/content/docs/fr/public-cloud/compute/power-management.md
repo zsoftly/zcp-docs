@@ -14,11 +14,7 @@ Disponibles depuis la vue d'ensemble de l'instance :
 - **Reboot** : redémarre la VM.
 - **Power On** : démarre une VM arrêtée.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Actions manuelles d'alimentation pour une instance](../../../../../assets/compute/power-management-manual-power-actions.webp)
 
 ## Actions planifiées
 

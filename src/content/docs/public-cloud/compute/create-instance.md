@@ -27,10 +27,11 @@ Select an OS or application template. Import a custom ISO if needed.
 
 **Supported Windows images:**
 
-| Image                 | Status      |
-| --------------------- | ----------- |
-| Windows Server 2025   | Available   |
-| Windows 11 Enterprise | Coming soon |
+| Image               | Status    |
+| ------------------- | --------- |
+| Windows Server 2025 | Available |
+| Windows Server 2022 | Available |
+| Windows 11 Pro      | Available |
 
 Browse the full catalogs: [OS Images](https://zcp.zsoftly.ca/marketplace/os-images) and
 [One-Click Apps](https://zcp.zsoftly.ca/marketplace/apps).

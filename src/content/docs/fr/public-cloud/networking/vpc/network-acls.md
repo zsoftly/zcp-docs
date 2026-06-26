@@ -13,11 +13,7 @@ dans le VPC.
 - Fournissez un **Nom** et une **Description**.
 - Cliquez sur **Soumettre**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Onglet Network ACL List affichant les ACL configurées et le bouton Add New List](../../../../../../assets/networking/network-acls-network-acl-list.webp)
 
 Voir aussi : [Ajouter un sous-réseau](/fr/public-cloud/networking/vpc/add-subnet),
 [Créer un VPC](/fr/public-cloud/networking/vpc/create-vpc)

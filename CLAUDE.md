@@ -41,6 +41,24 @@ No emojis in `.astro`, `.ts`, `.css`, `.mjs`, scripts, or GitHub Actions files. 
 Use `$HOME` or `~/` instead of `/Users/<name>/` or any specific username in docs, scripts, and
 config.
 
+### Always Run the Content Review Agent
+
+After every documentation update, before handing back, you MUST run the
+**[`content-review-agent`](~/.claude/agents/content-review-agent.md)** on the changed files. Every
+engineer in the organization has this agent installed and configured, so it is a required step of
+the development flow, not optional.
+
+- Run it on each file you added or modified (diff against `HEAD` for edits; full content for new
+  files).
+- It detects AI writing patterns (em dashes, banned/hyperbolic words, weak "not just X but Y"
+  constructions, filler adjectives, flowery marketing language) and fixes bad sentences.
+- Apply its fixes so zero violations remain. Then run the validation commands below.
+- Respect the docs constraints while it edits: keep Starlight markdown structure, valid aside types
+  (`note`/`tip`/`caution`/`danger`), vendor neutrality, env short forms, and all code/CLI examples
+  intact. Markdown is expected in these `.md`/`.mdx` docs — do not strip it.
+
+Invoke it via the Agent tool with `subagent_type: content-review-agent`.
+
 ---
 
 ## Docs Authoring Conventions
@@ -115,7 +133,10 @@ Always use the short forms:
 
 ## Validating Changes
 
-Run these to validate before handing back (do not commit afterward):
+Before handing back (do not commit afterward), first run the
+[`content-review-agent`](~/.claude/agents/content-review-agent.md) on every changed file and apply
+its fixes (see [Always Run the Content Review Agent](#always-run-the-content-review-agent)), then
+run these to validate:
 
 | Command          | Purpose                                     |
 | ---------------- | ------------------------------------------- |

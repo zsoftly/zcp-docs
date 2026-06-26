@@ -13,7 +13,7 @@ automatically. Credentials are generated, services are configured, and the image
     <span class="mp-label">live images</span>
   </div>
   <div class="mp-stat">
-    <span class="mp-num">44</span>
+    <span class="mp-num">45</span>
     <span class="mp-label">coming soon</span>
   </div>
   <div class="mp-stat">
@@ -883,6 +883,16 @@ automatically. Credentials are generated, services are configured, and the image
     <div>
       <p class="service-name">WG-Easy <span class="mp-status">Coming soon</span></p>
       <p class="service-desc">The easiest way to run WireGuard VPN with a web UI.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/drupal" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/drupal.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Drupal <span class="mp-status">Coming soon</span></p>
+      <p class="service-desc">Flexible open-source CMS for content-heavy sites and applications.</p>
     </div>
   </a>
 

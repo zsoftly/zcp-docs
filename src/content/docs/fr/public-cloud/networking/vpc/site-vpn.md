@@ -9,11 +9,7 @@ comme des centres de données sur site ou d'autres réseaux cloud.
 - Accédez à l'onglet **Passerelle VPN** pour gérer les connexions de passerelle VPN.
 - Prend en charge les connexions VPN site à site.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Onglet Passerelle VPN pour gérer les connexions VPN site à site](../../../../../../assets/networking/site-vpn-vpn-gateway.webp)
 
 ### Créer une connexion VPN site à site
 
@@ -22,11 +18,7 @@ Captures d'écran à venir.
 - Sélectionnez ou créez la **VPN Customer Gateway**.
 - Cochez **Passive** si nécessaire, puis cliquez sur **Soumettre**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Formulaire de création d'une connexion VPN site à site](../../../../../../assets/networking/site-vpn-create-a-site-to-site-vpn-connection.webp)
 
 Voir aussi : [Vue d'ensemble du VPC](/fr/public-cloud/networking/vpc/create-vpc),
 [ACL réseau](/fr/public-cloud/networking/vpc/network-acls),

@@ -11,11 +11,7 @@ disques indépendants qui stockent des données applicatives, des sauvegardes ou
   existants du volume.
 - Cliquez sur l'icône de caméra pour créer un nouvel instantané de l'état actuel du volume.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres de volume de stockage bloc](../../../../../../assets/compute/settings/block-storage-block-storage.webp)
 
 Voir aussi : [Créer un volume](/fr/public-cloud/storage/block-storage/create-volume),
 [Instantanés de volume](/fr/public-cloud/storage/block-storage/snapshots)

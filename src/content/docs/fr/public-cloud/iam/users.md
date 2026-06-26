@@ -18,6 +18,20 @@ accès. Chaque utilisateur se connecte avec ses propres identifiants et reçoit 
 Depuis la liste, utilisez les boutons d'action pour modifier les renseignements ou le rôle d'un
 utilisateur, ou pour réinviter un utilisateur dont l'invitation est encore en attente.
 
+:::caution
+
+Le portail n'a pas encore de bouton **Supprimer l'utilisateur**. La suppression depuis le portail
+est prévue pour une version future.
+
+Pour retirer l'accès d'une personne depuis le portail, **bloquez** (désactivez) l'utilisateur à
+l'aide des boutons d'action de la liste Users. Le compte reste dans votre organisation mais perd
+l'accès à la plateforme.
+
+Pour supprimer un compte, utilisez la [CLI ZCP](/fr/public-cloud/cli/installation)
+(`zcp sub-user delete`) ou l'API.
+
+:::
+
 :::note
 
 Captures d'écran à venir.
@@ -55,6 +69,36 @@ Associez un rôle à moindre privilège à une portée de projet stricte pour le
 exemple, un rôle _Développeur_ limité au seul projet `dev`.
 
 :::
+
+## Gérer les sous-utilisateurs avec la CLI
+
+Les mêmes actions sont disponibles dans la [CLI ZCP](/fr/public-cloud/cli/installation). Les
+commandes de sous-utilisateur sont de niveau compte (aucun `--region`/`--project`), et un
+sous-utilisateur peut être désigné par son **ID** ou son **courriel**.
+
+```bash
+# Lister les sous-utilisateurs (filtrer par rôle ou état bloqué au besoin)
+zcp sub-user list
+zcp sub-user list --role service-administrator
+zcp sub-user list --blocked
+
+# Créer un sous-utilisateur. --email doit être une adresse d'entreprise. --password
+# exige 8+ caractères avec majuscules/minuscules, un chiffre et un symbole. --role est
+# un slug de rôle (voir `zcp role list`). --project est répétable. Les nouveaux
+# sous-utilisateurs sont bloqués jusqu'à ce que vous les débloquiez.
+zcp sub-user create --name "Jane Doe" --email jane@yourco.com \
+  --password 'S3cret!pass' --role service-viewer --project default-9
+
+# Changer le rôle ou les projets d'un sous-utilisateur (désigné par courriel ou ID)
+zcp sub-user update jane@yourco.com --role service-administrator
+
+# Révoquer ou rétablir l'accès sans supprimer le compte
+zcp sub-user block jane@yourco.com
+zcp sub-user unblock jane@yourco.com
+
+# Supprimer complètement un sous-utilisateur
+zcp sub-user delete jane@yourco.com
+```
 
 ## Voir aussi
 

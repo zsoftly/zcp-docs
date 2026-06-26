@@ -7,7 +7,7 @@ description:
 
 A **role** is a named bundle of permissions. Rather than granting access to each user individually,
 you define roles once and assign them to [users](/public-cloud/iam/users). Change a role's
-permissions and every user with that role is updated.
+permissions and the change reaches every user with that role.
 
 Every service in the platform exposes two permission levels:
 
@@ -54,10 +54,9 @@ The role is now available to assign when you [add or edit a user](/public-cloud/
 :::tip
 
 Apply **least privilege**: start with no permissions and add only what the job needs. Grant **Read**
-where someone only needs visibility, and reserve **Manage** for the resources they actually operate.
-Combine the role with
-[Project scoping](/public-cloud/iam/users#restrict-a-user-to-specific-projects) to also limit
-_which_ resources it applies to.
+where someone only needs visibility, and reserve **Manage** for the resources they operate. Combine
+the role with [Project scoping](/public-cloud/iam/users#restrict-a-user-to-specific-projects) to
+also limit _which_ resources it applies to.
 
 :::
 
@@ -68,6 +67,43 @@ An account owner creates an **Accountant** role granting **Billing Read**, **Bil
 have no access to create or delete instances, networks, or other infrastructure. A separate
 **Developer** role might grant **Virtual Machine Manage**, **Block Storage Manage**, and **Network
 Manage** while excluding billing.
+
+## Manage roles from the CLI
+
+Everything above is also available in the [ZCP CLI](/public-cloud/cli/installation). Role commands
+are account-level, so they need no `--region`/`--project`. Use the slugs from the
+[permissions reference](#permissions-reference) below. `zcp permission list` prints them.
+
+```bash
+# Discover permission slugs (filter by category if you like)
+zcp permission list
+zcp permission list --category "Virtual Machine"
+
+# Inspect the built-in roles and what they grant
+zcp role list
+zcp role get service-administrator
+
+# Create a custom role from permission slugs (at least one is required)
+zcp role create --name "Developer" --description "Compute and networking" \
+  --permission virtual-machine-read --permission virtual-machine-manage \
+  --permission block-storage-manage --permission network-manage
+
+# Update a role. --permission REPLACES the whole set (it is not additive), so list
+# every permission the role should end up with. Flags you omit are left unchanged.
+zcp role update developer \
+  --permission virtual-machine-read --permission virtual-machine-manage \
+  --permission block-storage-manage --permission network-manage --permission dns-read
+
+# Delete a custom role
+zcp role delete developer
+```
+
+:::note
+
+The built-in **Owner**, **Service Administrator**, and **Service Viewer** roles cannot be edited or
+deleted. The CLI rejects those operations with a clear message.
+
+:::
 
 ## Permissions reference
 

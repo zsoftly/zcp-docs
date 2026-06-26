@@ -72,6 +72,44 @@ des réseaux ou d'autres ressources d'infrastructure. Un rôle **Developer** dis
 accorder **Virtual Machine Manage**, **Stockage bloc Manage** et **Réseau Manage**, tout en excluant
 la facturation.
 
+## Gérer les rôles avec la CLI
+
+Tout ce qui précède est aussi disponible dans la [CLI ZCP](/fr/public-cloud/cli/installation). Les
+commandes de rôle sont de niveau compte ; elles n'ont donc pas besoin de `--region`/`--project`.
+Utilisez les slugs de la [référence des permissions](#référence-des-permissions) ci-dessous. La
+commande `zcp permission list` les affiche.
+
+```bash
+# Découvrir les slugs de permissions (filtrer par catégorie au besoin)
+zcp permission list
+zcp permission list --category "Virtual Machine"
+
+# Inspecter les rôles intégrés et ce qu'ils accordent
+zcp role list
+zcp role get service-administrator
+
+# Créer un rôle personnalisé à partir de slugs (au moins un est requis)
+zcp role create --name "Developer" --description "Calcul et réseau" \
+  --permission virtual-machine-read --permission virtual-machine-manage \
+  --permission block-storage-manage --permission network-manage
+
+# Modifier un rôle. --permission REMPLACE tout l'ensemble (ce n'est pas additif) ;
+# listez donc toutes les permissions souhaitées. Les options omises restent inchangées.
+zcp role update developer \
+  --permission virtual-machine-read --permission virtual-machine-manage \
+  --permission block-storage-manage --permission network-manage --permission dns-read
+
+# Supprimer un rôle personnalisé
+zcp role delete developer
+```
+
+:::note
+
+Les rôles intégrés **Owner**, **Service Administrator** et **Service Viewer** ne peuvent être ni
+modifiés ni supprimés. La CLI rejette ces opérations avec un message clair.
+
+:::
+
 ## Référence des permissions
 
 Le catalogue complet des permissions est regroupé par domaine. La plupart des services offrent

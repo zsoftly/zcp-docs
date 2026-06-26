@@ -10,11 +10,7 @@ disponibilité, la fiabilité et de meilleures performances.
 - Dans le menu de gauche, cliquez sur **Équilibreur de charge**.
 - Cliquez sur l'icône **+**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer un équilibreur de charge](../../../../../assets/load-balancer/load-balancer-create-a-load-balancer.webp)
 
 ### Étapes
 
@@ -35,11 +31,7 @@ Captures d'écran à venir.
    - Un forfait par zone
    - Cliquez sur **Créer Équilibreur de charge**
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Étapes de création d'un équilibreur de charge](../../../../../assets/load-balancer/load-balancer-steps.webp)
 
 ### Attacher des VM supplémentaires
 

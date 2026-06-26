@@ -30,11 +30,7 @@ Les sauvegardes automatiques coûtent 20 % du prix de la machine virtuelle.
    cliquer sur **Take One Immediate** pour lancer une sauvegarde immédiate.
 5. **Créer** : facturation : Hourly seulement, règle Fixed Prorata. Cliquez sur **Créer Backup**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Étapes de création d'un calendrier de sauvegarde](../../../../../assets/backups-snapshots/backups-steps.webp)
 
 Voir aussi : [Instantanés de VM](/fr/public-cloud/backups-snapshots/vm-snapshots),
 [Instantanés de volume](/fr/public-cloud/storage/block-storage/snapshots)

@@ -13,61 +13,37 @@ Une fois le volume attaché, formatez-le et montez-le pour étendre le stockage 
 - Dans le menu de gauche, cliquez sur **Stockage blocs**.
 - Cliquez sur **Créer Stockage bloc** ou sur l'icône **+**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Page Stockages blocs avec le bouton Créer Stockage bloc (+)](../../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
 
 ### Choisir un emplacement
 
 Sélectionnez l'emplacement du centre de données.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer Stockage bloc : choisir un emplacement](../../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
 
 ### Assigner à un projet
 
 Assignez le volume à un projet.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer Stockage bloc : assigner à un projet](../../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
 
 ### Choisir une instance
 
 Sélectionnez l'instance VM à laquelle attacher ce volume.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer Stockage bloc : choisir l'instance à laquelle attacher le volume](../../../../../../assets/storage/block-storage/create-volume-choose-instance.webp)
 
 ### Sélectionner la taille du volume
 
 Sélectionnez le type et la taille de stockage. Des volumes personnalisés sont disponibles.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer Stockage bloc : sélectionner le type et la taille de stockage du volume](../../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
 
 ### Nom
 
 Fournissez un nom de volume unique.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer Stockage bloc : nommer le volume](../../../../../../assets/storage/block-storage/create-volume-name.webp)
 
 ### Créer
 
@@ -77,11 +53,7 @@ Captures d'écran à venir.
   Prorata, Unfixed Prorata.
 - Passez en revue, puis cliquez sur **Créer un volume**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Créer Stockage bloc : options de facturation et Créer un volume](../../../../../../assets/storage/block-storage/create-volume-create.webp)
 
 Après la création, formatez et montez le volume dans la VM :
 

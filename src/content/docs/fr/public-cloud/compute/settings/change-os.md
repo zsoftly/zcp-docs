@@ -6,8 +6,8 @@ sidebar_position: 4
 ## Changer le système d'exploitation
 
 Ce paramètre réinstalle ou remplace le système d'exploitation de votre VM. Choisissez parmi les
-distributions Linux ou les images Windows. Windows Server 2025 est disponible; Windows 11 Enterprise
-sera disponible bientôt.
+distributions Linux ou les images Windows. Windows Server (2025 et 2022) et Windows 11 Pro sont tous
+deux disponibles.
 
 :::caution
 
@@ -21,10 +21,6 @@ avant de changer le système d'exploitation.
 - Dans **Templates**, sélectionnez le système d'exploitation et la version.
 - Cliquez sur **Change OS**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres de changement du système d'exploitation](../../../../../../assets/compute/settings/change-os-change-operating-system.webp)
 
 Voir aussi : [Créer une instance](/fr/public-cloud/compute/create-instance)

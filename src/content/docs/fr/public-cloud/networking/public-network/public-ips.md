@@ -11,11 +11,7 @@ volumétriques avant qu'elles n'atteignent vos charges de travail.
 - Cliquez sur **Acquire New IP** pour demander une nouvelle IP publique.
 - Choisissez le **cycle de facturation** voulu et cliquez sur **Buy IP**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Onglet Adresses IP publiques avec le bouton Acquire New IP](../../../../../../assets/networking/public-ips-public-ip-addresses.webp)
 
 Voir aussi : [Vue d'ensemble du réseau](/fr/public-cloud/networking/public-network/overview),
 [Créer un réseau public](/fr/public-cloud/networking/public-network/create)

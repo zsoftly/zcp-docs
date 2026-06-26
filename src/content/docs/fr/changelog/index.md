@@ -40,6 +40,34 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
+### v0.0.19 : 21 juin 2026
+
+**Gérer l'IAM depuis la CLI : sous-utilisateurs, rôles et permissions.** Tout ce qui se trouve dans
+la section Profil du portail est maintenant scriptable. Ces commandes sont de niveau compte (aucun
+`--region`/`--project`). Voir [Rôles et permissions](/fr/public-cloud/iam/roles) et
+[Utilisateurs](/fr/public-cloud/iam/users).
+
+- **`zcp permission list`** : parcourir le catalogue des permissions (filtrer avec `--category`)
+  pour trouver les slugs à attribuer aux rôles.
+- **`zcp role`** : `list`, `get <slug>` (affiche les permissions et les utilisateurs assignés),
+  `create`, `update` et `delete`. `--permission` est répétable et **remplace** tout l'ensemble du
+  rôle ; les rôles intégrés `owner`/`service-administrator`/`service-viewer` sont protégés contre
+  les modifications.
+- **`zcp sub-user`** : `list` (avec les filtres `--role`/`--blocked`), `create`, `update`, `block`,
+  `unblock` et `delete`. Les sous-utilisateurs sont désignés par **ID ou courriel** ; les nouveaux
+  sous-utilisateurs sont bloqués jusqu'à ce que vous les débloquiez.
+
+**Équilibreurs de charge et références d'instances.**
+
+- **`zcp loadbalancer create` fonctionne** : la commande envoie désormais la première règle requise
+  (`--public-port`/`--private-port`/`--algorithm`) et peut attacher des serveurs dorsaux avec
+  `--vm`.
+- **Désigner une instance par ID, nom ou slug** dans chaque sous-commande `instance`, avec une
+  erreur claire quand un nom est ambigu ; `instance list` affiche maintenant la colonne `ID` et
+  renvoie **toutes** les VM (la liste est paginée).
+- **`reboot` refuse une VM qui n'est pas `Running`** au lieu de l'ignorer silencieusement, et
+  `-o json`/`-o yaml` renvoient des objets complets.
+
 ### v0.0.18 : 19 juin 2026
 
 **La région et le projet sont désormais requis pour les commandes liées à une région ou à un

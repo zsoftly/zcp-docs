@@ -10,8 +10,4 @@ de votre VM pour l'accès à un serveur Web.
 - Allez à **VM Settings** → **Redirection de ports**.
 - Cliquez sur **Gérer** pour modifier la configuration des ports du réseau.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres de redirection de ports](../../../../../../assets/compute/settings/port-forwarding-port-forwarding.webp)

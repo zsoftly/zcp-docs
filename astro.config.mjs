@@ -135,6 +135,11 @@ export default defineConfig({
   // Prod builds (iaas play, no PUBLIC_SITE_URL) resolve to the canonical host;
   // dev/stg Docker builds set PUBLIC_SITE_URL to their own host.
   site: process.env.PUBLIC_SITE_URL ?? 'https://docs.zcp.zsoftly.ca',
+  // OS image pages moved from /compute/ to /operating-systems/; keep old URLs alive.
+  redirects: {
+    '/public-cloud/compute/windows-11': '/public-cloud/operating-systems/windows-11',
+    '/public-cloud/compute/windows-server': '/public-cloud/operating-systems/windows-server',
+  },
   // Screenshots in src/assets are already optimized .webp exported at display
   // size, so skip Sharp's build-time re-encoding — it produced near-identical
   // files (one output was larger than its source) and required a native libvips
@@ -301,6 +306,19 @@ export default defineConfig({
                 { label: 'Auto Scaling', slug: 'public-cloud/auto-scaling' },
                 { label: 'VM Snapshots', slug: 'public-cloud/backups-snapshots/vm-snapshots' },
                 { label: 'Backups', slug: 'public-cloud/backups-snapshots/backups' },
+              ],
+            },
+            {
+              label: 'Operating System Images',
+              collapsed: true,
+              items: [
+                { label: 'Overview', slug: 'public-cloud/operating-systems' },
+                { label: 'Ubuntu', slug: 'public-cloud/operating-systems/ubuntu' },
+                { label: 'Rocky Linux', slug: 'public-cloud/operating-systems/rocky-linux' },
+                { label: 'AlmaLinux', slug: 'public-cloud/operating-systems/alma-linux' },
+                { label: 'Oracle Linux', slug: 'public-cloud/operating-systems/oracle-linux' },
+                { label: 'Windows 11 Pro', slug: 'public-cloud/operating-systems/windows-11' },
+                { label: 'Windows Server', slug: 'public-cloud/operating-systems/windows-server' },
               ],
             },
             {

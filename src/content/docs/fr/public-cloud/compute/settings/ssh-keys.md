@@ -16,10 +16,6 @@ Vous devez arrêter l'instance avant d'effectuer une opération de réinitialisa
 
 :::
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres d'accès par clé SSH](../../../../../../assets/compute/settings/ssh-keys-ssh-key-access.webp)
 
 Voir aussi : [Se connecter avec SSH](/fr/public-cloud/compute/connect-ssh)

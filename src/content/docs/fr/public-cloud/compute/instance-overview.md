@@ -25,11 +25,7 @@ Ces actions sont disponibles depuis le menu à trois points ou la page de vue d'
 - **Attach ISO for VM** : monte un fichier ISO sur la VM.
 - **Delete** : supprime définitivement l'instance.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Boutons d'action de l'instance](../../../../../assets/compute/instance-overview-action-buttons.webp)
 
 ## Informations sur l'instance
 
@@ -37,11 +33,7 @@ Captures d'écran à venir.
 - **Créée le**
 - **État** (running/stopped)
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Panneau d'informations sur l'instance](../../../../../assets/compute/instance-overview-instance-information.webp)
 
 ## Détails de l'instance
 
@@ -49,11 +41,7 @@ Captures d'écran à venir.
 - **Système d'exploitation**
 - **Coût** (total)
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Panneau des détails de l'instance](../../../../../assets/compute/instance-overview-instance-details.webp)
 
 ## Spécifications des ressources
 
@@ -69,11 +57,7 @@ Captures d'écran à venir.
 - **Groupe d'affinité**
 - **Tag** (ajout avec Ajouter Tag → Key + Value → Soumettre)
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Panneau des spécifications des ressources](../../../../../assets/compute/instance-overview-resource-specifications.webp)
 
 ## Utilisation des ressources
 
@@ -82,11 +66,7 @@ Captures d'écran à venir.
 - **Utilisation du CPU** : pourcentage d'utilisation
 - **Utilisation de la RAM** : consommation de mémoire
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Mesures d'utilisation des ressources](../../../../../assets/compute/instance-overview-resource-usage.webp)
 
 ## Voir aussi
 
