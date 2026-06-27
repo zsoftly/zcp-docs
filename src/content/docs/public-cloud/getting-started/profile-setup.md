@@ -8,10 +8,6 @@ title: Profile Setup
 The **ZSoftly Public Cloud** user profile setup feature lets you manage your personal information,
 configure payment settings, customize preferences, and monitor your account activity.
 
-Open the **Profile** menu by clicking your **username** in the top-right corner. It contains
-**Personal Details**, **Company Details**, **Account Preferences**, **Date & Time**,
-**Authentication**, **API**, **Activity Logs**, and **Login History**.
-
 :::tip
 
 Looking to invite teammates, create roles, enable two-factor authentication, or change your
