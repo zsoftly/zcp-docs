@@ -16,14 +16,49 @@ the marketplace and follow the steps below to install Ollama yourself.
 
 ## Requirements
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 4       | 8           |
-| RAM      | 8 GB    | 16 GB       |
-| Storage  | 20 GB   | 50 GB       |
+Ollama runs on **CPU and RAM**. A GPU is optional and speeds up inference. Two things decide the
+plan you need:
 
-Ollama runs on CPU out of the box. A GPU is optional but strongly recommended for larger models and
-faster inference. Model files are large, so size storage to fit the models you plan to pull.
+- **RAM** has to hold the model you run (about the model file size plus headroom for the context). A
+  model that does not fit in RAM will not run.
+- **Storage** has to hold the model files you pull, plus the operating system and working space. Add
+  the size of every extra model you keep, because they add up fast.
+
+Size the instance for the largest model you plan to run. The figures below use Q4 quantization,
+Ollama's default.
+
+| Model size | Example       | Model file (approx.) | Minimum RAM | Suggested disk |
+| ---------- | ------------- | -------------------- | ----------- | -------------- |
+| 1-3B       | Llama 3.2 3B  | 2-3 GB               | 8 GB        | 20 GB          |
+| 7-8B       | Llama 3.1 8B  | 5 GB                 | 8 GB        | 30 GB          |
+| 13-14B     | Llama 2 13B   | 9 GB                 | 16 GB       | 40 GB          |
+| 32-34B     | Qwen 2.5 32B  | 20 GB                | 32 GB       | 60 GB          |
+| 70B        | Llama 3.3 70B | 40 GB                | 64 GB       | 100 GB         |
+
+## Recommended plans by region
+
+Plan names and storage tiers differ by region. The general-purpose plans below give each model
+enough RAM, and their root disk holds the model files. See
+[Instance Types](/public-cloud/compute/instance-types/) and the
+[pricing page](https://zcp.zsoftly.ca/pricing) for current specs and prices.
+
+| Model size | YOW-1 (Ottawa)                     | YUL-1 (Montréal)                   |
+| ---------- | ---------------------------------- | ---------------------------------- |
+| 1-8B       | `ci1.l` (4 vCPU, 8 GB, 120 GB)     | `ca2.l` (4 vCPU, 8 GB, 120 GB)     |
+| 13-14B     | `ci1.xl` (4 vCPU, 16 GB, 160 GB)   | `ca2.xl` (4 vCPU, 16 GB, 160 GB)   |
+| 32-34B     | `ci1.2xl` (8 vCPU, 32 GB, 200 GB)  | `ca2.2xl` (8 vCPU, 32 GB, 200 GB)  |
+| 70B        | `ci1.4xl` (16 vCPU, 64 GB, 320 GB) | `ca2.4xl` (16 vCPU, 64 GB, 320 GB) |
+
+Adjust from there:
+
+- **Same RAM, lower cost**: the memory-optimized family gives the same RAM with fewer vCPUs, good
+  for occasional use. Use `cim1.*` in YOW-1 or `cam2.*` in YUL-1 (for example `cim1.xl` or `cam2.xl`
+  for 64 GB).
+- **Faster responses**: add vCPUs with the cpu-optimized family (`cac1.*` in YOW-1, `cac2.*` in
+  YUL-1), or choose a GPU plan for 13B and larger models.
+- **Several large models on one instance**: attach a
+  [block storage volume](/public-cloud/compute/settings/block-storage/) instead of moving to a
+  bigger plan.
 
 ## Deploy the base instance
 
