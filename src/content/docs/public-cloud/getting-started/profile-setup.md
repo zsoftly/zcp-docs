@@ -8,10 +8,9 @@ title: Profile Setup
 The **ZSoftly Public Cloud** user profile setup feature lets you manage your personal information,
 configure payment settings, customize preferences, and monitor your account activity.
 
-The **Profile** menu is not in the left-hand navigation — open it by clicking your **username** in
-the top-right corner. It contains **Personal Details**, **Company Details**, **Account
-Preferences**, **Date & Time**, **Authentication**, **API**, **Activity Logs**, and **Login
-History**.
+Open the **Profile** menu by clicking your **username** in the top-right corner. It contains
+**Personal Details**, **Company Details**, **Account Preferences**, **Date & Time**,
+**Authentication**, **API**, **Activity Logs**, and **Login History**.
 
 :::tip
 
@@ -37,13 +36,6 @@ Keep your personal details up-to-date to ensure that your profile reflects accur
 - Select **Company Details** and go to **Billing Details**.
 - Add or update the **Billing Address** and **Phone Number**.
 - Click on **Submit** to save changes.
-
-:::note
-
-For billing and payments (credits, invoices), use the separate **Billing** item in the left-hand
-menu.
-
-:::
 
 ![Billing Details section under Company Details](../../../../assets/profile-setup/profile-setup-billing-details.webp)
 
