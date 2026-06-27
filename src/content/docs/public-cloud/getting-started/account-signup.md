@@ -118,11 +118,7 @@ Card and PayPal are self-serve in the portal. Bank transfer and wire are arrange
   contact [Sales](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) to arrange manual
   payment by bank transfer or wire.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Choosing a payment plan with Prepaid and Postpaid options](../../../../assets/account-signup/payment-plan.webp)
 
 ### Final Steps
 
