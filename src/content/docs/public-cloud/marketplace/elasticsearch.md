@@ -138,5 +138,5 @@ role-scoped users for individual applications.
 ## Next steps
 
 - [Elasticsearch documentation](https://www.elastic.co/docs/current/elasticsearch)
-- [Index management guide](https://www.elastic.co/docs/current/elasticsearch/index-modules)
-- [Security overview](https://www.elastic.co/docs/current/elasticsearch/elasticsearch-security)
+- [Index management guide](https://www.elastic.co/docs/reference/elasticsearch/index-settings/index-modules)
+- [Security overview](https://www.elastic.co/demo-gallery/security-overview)
