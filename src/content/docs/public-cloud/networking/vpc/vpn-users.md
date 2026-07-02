@@ -11,11 +11,7 @@ Site-to-Site VPN and is used for individual user remote access.
 - Provide the username and click **Submit**.
 - Users download their VPN client configuration from the portal once created.
 
-:::note
-
-Screenshots coming.
-
-:::
+![VPN Users tab listing client VPN users with the Add VPN User button](../../../../../assets/networking/vpn-users-list.webp)
 
 See also: [VPN Gateway](/public-cloud/networking/vpc/site-vpn),
 [VPC Overview](/public-cloud/networking/vpc/create-vpc)

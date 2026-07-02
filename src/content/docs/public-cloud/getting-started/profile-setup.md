@@ -58,11 +58,7 @@ Keep your personal details up-to-date to ensure that your profile reflects accur
 - Select **Account Limit** to view the resource allocation table.
 - Click **Request To Increase** to submit a request for additional resources.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Account Limit page showing the resource allocation table with the Request To Increase button](../../../../assets/profile-setup/profile-setup-account-limit.webp)
 
 ### Track Activity Logs
 

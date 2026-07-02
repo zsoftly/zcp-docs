@@ -39,7 +39,7 @@ the account owner.
 When the built-in roles are broader than you need, create a role with exactly the permissions a job
 requires.
 
-- Navigate to the **Profile** section from the left-hand menu and select **Roles**.
+- Click your **username** (top-right) to open the **Profile** menu, then select **Roles**.
 - Click **Add New Role** (the **+** icon).
 - Enter a **Role Name** and **Description** (both required).
 - In the **Features** panel, pick a service (e.g. **Virtual Machine**).

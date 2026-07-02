@@ -128,11 +128,7 @@ sont organisés avec l'équipe des ventes.
   terminer la configuration. Pour organiser un paiement manuel par virement bancaire, communiquez
   avec [l'équipe des ventes](https://zcp.zsoftly.ca/contact?source=docs&topic=billing).
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Choix d'un plan de paiement avec les options Prépayé et Postpayé](../../../../../assets/account-signup/payment-plan.webp)
 
 ### Dernières étapes
 

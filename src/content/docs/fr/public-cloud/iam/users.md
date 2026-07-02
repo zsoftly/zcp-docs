@@ -11,7 +11,7 @@ accès. Chaque utilisateur se connecte avec ses propres identifiants et reçoit 
 
 ## Consulter les utilisateurs
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Users** pour afficher la liste complète des utilisateurs actifs et inactifs de
   votre organisation.
 
@@ -32,15 +32,11 @@ Pour supprimer un compte, utilisez la [CLI ZCP](/fr/public-cloud/cli/installatio
 
 :::
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Liste des utilisateurs dans la section Profil affichant les colonnes nom, courriel, rôles et dernière connexion](../../../../../assets/iam/users-view-users.webp)
 
 ## Ajouter un nouvel utilisateur
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Users**, puis cliquez sur **Add User**.
 - Entrez les renseignements de l'utilisateur et sélectionnez son **Role**. Consultez
   [Rôles et permissions](/fr/public-cloud/iam/roles) pour créer un rôle d'abord si celui dont vous
@@ -50,11 +46,7 @@ Captures d'écran à venir.
 L'utilisateur reçoit une invitation et, une fois celle-ci acceptée, peut se connecter avec les
 permissions accordées par son rôle.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Boîte de dialogue Ajouter un utilisateur avec les champs de renseignements et la sélection du rôle](../../../../../assets/iam/users-add-a-new-user.webp)
 
 ## Restreindre un utilisateur à des projets précis
 
