@@ -59,7 +59,7 @@ cluster's minor version. See [kubectl Access](/public-cloud/kubernetes/kubectl-a
      Unfixed Prorata
    - Click **Create Cluster**
 
-![Create Kubernetes Cluster form: location, project, network, capacity, advanced settings, name, and billing](../../../../assets/kubernetes/create-cluster-steps.webp)
+![Create Kubernetes Cluster form: project, location, capacity, advanced settings, name, and billing](../../../../assets/kubernetes/create-cluster-steps.webp)
 
 ## After you create
 
