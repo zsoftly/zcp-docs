@@ -59,7 +59,14 @@ sudo apt install -y nginx mysql-server
 sudo ufw allow 'Nginx Full'
 ```
 
-Install a supported Node.js LTS (Ghost supports the active LTS lines, this example uses 22):
+Secure MySQL and set a **root password** (you'll supply it when `ghost install` prompts for the
+database connection):
+
+```bash
+sudo mysql_secure_installation
+```
+
+Install a supported Node.js LTS (Ghost supports the active LTS lines; this example uses 22):
 
 ```bash
 sudo apt-get install -y ca-certificates curl gnupg

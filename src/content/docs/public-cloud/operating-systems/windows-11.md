@@ -80,7 +80,7 @@ Confirm activation with `slmgr /xpr` or in Settings → Activation.
    recommended for a responsive desktop.
 4. Attach to a network and create the instance.
 
-The instance boots straight through to the Windows desktop. There is no setup wizard or
+The instance boots straight through to the Windows desktop. There are no setup wizards or
 region/keyboard prompts.
 
 :::note

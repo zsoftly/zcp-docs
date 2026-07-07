@@ -100,7 +100,7 @@ Key files:
 
 **To adjust the heap size**, create a file in `/etc/elasticsearch/jvm.options.d/`:
 
-```
+```text
 -Xms2g
 -Xmx2g
 ```

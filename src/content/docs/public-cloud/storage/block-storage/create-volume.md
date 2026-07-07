@@ -15,17 +15,17 @@ format and mount the volume to extend your VM's storage.
 
 ![Block Storages page with the Create Block Storage (+) button](../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
 
-### Choose a Location
-
-Select the data center location.
-
-![Create Block Storage: choose a location](../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
-
 ### Assign to a Project
 
 Assign the volume to a project.
 
 ![Create Block Storage: assign to a project](../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
+
+### Choose a Location
+
+Select the data center location.
+
+![Create Block Storage: choose a location](../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
 
 ### Choose Instance
 

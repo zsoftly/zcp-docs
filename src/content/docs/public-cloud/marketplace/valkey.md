@@ -58,7 +58,7 @@ valkey-cli -a "$VALKEY_PASS"
 
 Confirm the connection:
 
-```
+```text
 127.0.0.1:6379> PING
 PONG
 ```
@@ -85,7 +85,7 @@ Configuration files:
 
 **To set a memory limit**, edit `/etc/valkey/99-memory.conf`:
 
-```
+```text
 maxmemory 512mb
 maxmemory-policy noeviction
 ```

@@ -9,11 +9,11 @@ credentials) and **bucket creation/listing** go through the ZSoftly control plan
 (`https://objects.<region>.zcp.zsoftly.ca`) using your instance's access/secret keys, which the CLI
 fetches for you.
 
-The result: the CLI exposes the full S3 feature set of the platform — including many capabilities
+The result: the CLI exposes the full S3 feature set of the platform: including many capabilities
 **not available in the portal UI** (lifecycle rules, CORS, bucket policies, default encryption,
 tagging, presigned URLs, server-side copy/move, object versioning workflows, and multipart cleanup).
 
-Install and configure the CLI first — see [Installation](/public-cloud/cli/installation) and
+Install and configure the CLI first; see [Installation](/public-cloud/cli/installation) and
 [Configuration](/public-cloud/cli/configuration). The cloud provider for object storage is selected
 automatically; you only choose a **region** and **project**.
 
@@ -48,7 +48,7 @@ automatically; you only choose a **region** and **project**.
 support is planned (see the note at the end of this page). You can also enable it directly against
 the S3 endpoint with an SDK at bucket creation.
 
-Anything marked **CLI / S3 API only** is also available through any S3-compatible SDK — see
+Anything marked **CLI / S3 API only** is also available through any S3-compatible SDK. See
 [S3 API Usage](/public-cloud/storage/object-storage/s3-usage) for language examples.
 
 ## Command reference
@@ -186,15 +186,15 @@ zcp object-storage object restore  <storage> <bucket> <key>                # und
 :::tip
 
 Presigned URLs (`object url` / `object put-url`) let you hand a single object to someone without
-sharing credentials or making the whole bucket public — the link works until it expires (max 7
-days), even on a private bucket.
+sharing credentials or making the whole bucket public. The link works until it expires (max 7 days),
+even on a private bucket.
 
 :::
 
 ## Not yet in the CLI
 
-- **Object Lock (WORM)** — enable it when creating a bucket in the portal, or directly against the
-  S3 endpoint with an SDK. CLI support is planned.
-- **Auto-scaling** the instance — use the portal.
+- **Object Lock (WORM)**: enable it when creating a bucket in the portal, or directly against the S3
+  endpoint with an SDK. CLI support is planned.
+- **Auto-scaling** the instance: use the portal.
 
 Everything else listed in the matrix above is fully supported in `zcp` today.

@@ -24,9 +24,9 @@ the marketplace and follow the steps below to install Wiki.js yourself.
 
 ## Deploy the base instance
 
-1. In the ZSoftly Cloud portal, open **Apps**, select **Wiki.js**, and click **Deploy**, or create
-   an **Ubuntu 24.04 LTS** instance from **Instances → Create**. Both give you a clean Ubuntu 24.04
-   VM.
+1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
+   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
+   Create**. Either way you get a clean Ubuntu 24.04 VM.
 2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
 3. When the instance is **Running**, connect over SSH:
 

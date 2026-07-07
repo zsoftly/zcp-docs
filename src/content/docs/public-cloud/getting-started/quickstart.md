@@ -4,8 +4,6 @@ sidebar_position: 4
 description: Deploy your first VM on ZSoftly Public Cloud in under 10 minutes.
 ---
 
-# Quickstart
-
 Deploy a VM, connect to it via SSH, and attach a block storage volume. End to end.
 
 ## Prerequisites
@@ -45,7 +43,7 @@ Your VM needs a network. For a simple setup, use a Public Network.
 3. Configure:
    - **Location**: same as your network
    - **Image**: choose an OS (e.g., Ubuntu 24.04)
-   - **CPU Type**: Shared CPU for testing, Dedicated for production
+   - **CPU Type**: Shared CPU for dev/test, Dedicated for prd
    - **Plan**: General Compute, pick the smallest that fits
    - **Project**: assign to your project
    - **Network**: select the public network you just created

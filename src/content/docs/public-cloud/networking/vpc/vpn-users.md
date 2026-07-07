@@ -3,7 +3,7 @@ title: VPN Users
 sidebar_position: 7
 ---
 
-VPN Users allows you to manage client VPN access to your VPC network. This is separate from
+The VPN Users tab lets you manage client VPN access to your VPC network. This is separate from
 Site-to-Site VPN and is used for individual user remote access.
 
 - Navigate to your VPC network and go to the **VPN Users** tab.

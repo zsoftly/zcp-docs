@@ -15,11 +15,30 @@ Cloud, enabling you to launch and scale servers as needed.
 
 ![Starting a new compute instance from the Instances tab](../../../../assets/compute/create-instance-creating-a-compute-instance.webp)
 
+## Assign to a Project
+
+Assign the server to one of your projects to organize resources.
+
+![Assigning the server to a project](../../../../assets/compute/create-instance-assign-to-a-project.webp)
+
 ## Choose a Location
 
 Select the data center location where your server will be physically hosted.
 
 ![Choosing a data center location](../../../../assets/compute/create-instance-choose-a-location.webp)
+
+## Choose the Type of CPU Allocation
+
+- **Shared CPU**: Affordable, with resources shared among users. Ideal for development, testing, and
+  low-performance workloads like small websites.
+- **Dedicated CPU**: Provides exclusive resources for consistent performance. Perfect for production
+  environments, high-traffic applications, and databases.
+- **High-Frequency Compute**: Offers high clock speeds for compute-intensive tasks like simulations,
+  financial modeling, and low-latency applications.
+- **Cloud GPU**: Delivers GPU acceleration for demanding tasks like machine learning, AI, video
+  rendering, and scientific simulations.
+
+![Choosing the type of CPU allocation](../../../../assets/compute/create-instance-choose-the-type-of-cpu-allocation.webp)
 
 ## Choose an Image
 
@@ -38,18 +57,10 @@ Browse the full catalogs: [OS Images](https://zcp.zsoftly.ca/marketplace/os-imag
 
 ![Choosing an operating system image](../../../../assets/compute/create-instance-choose-an-image.webp)
 
-## Choose the Type of CPU Allocation
+## Choose a Storage Type
 
-- **Shared CPU**: Affordable, with resources shared among users. Ideal for development, testing, and
-  low-performance workloads like small websites.
-- **Dedicated CPU**: Provides exclusive resources for consistent performance. Perfect for production
-  environments, high-traffic applications, and databases.
-- **High-Frequency Compute**: Offers high clock speeds for compute-intensive tasks like simulations,
-  financial modeling, and low-latency applications.
-- **Cloud GPU**: Delivers GPU acceleration for demanding tasks like machine learning, AI, video
-  rendering, and scientific simulations.
-
-![Choosing the type of CPU allocation](../../../../assets/compute/create-instance-choose-the-type-of-cpu-allocation.webp)
+Choose the storage type for your instance based on your performance needs (for example, `b2.g1` or
+`b2.g2`).
 
 ## Choose a Plan
 
@@ -65,12 +76,6 @@ See [Instance Types](/public-cloud/compute/instance-types) for families and stor
 
 ![Choosing a plan](../../../../assets/compute/create-instance-choose-a-plan.webp)
 
-## Assign to a Project
-
-Assign the server to one of your projects to organize resources.
-
-![Assigning the server to a project](../../../../assets/compute/create-instance-assign-to-a-project.webp)
-
 ## Choose a Network
 
 - **Public Network**: A simple, pre-configured network for external connectivity. Includes cloud
@@ -78,11 +83,24 @@ Assign the server to one of your projects to organize resources.
 - **VPC Network**: A Virtual Private Cloud (VPC) offering complete control over traffic routing and
   enhanced security. Supports VPN gateway, site-to-site VPN connections, and traffic segregation.
 
-> **Note:** By default, a VPC is created with a random CIDR block and one network tier.
+:::note
 
-Choose whether to enable public IPv4.
+By default, a VPC is created with a random CIDR block and one network tier.
+
+:::
 
 ![Choosing a network](../../../../assets/compute/create-instance-choose-a-network.webp)
+
+## Public IP
+
+Choose whether to enable a public IPv4 address. Enable it if the instance needs to be reachable
+directly from the internet. You can also assign one later from the
+[Public IPs](/public-cloud/networking/public-network/public-ips) page.
+
+## Affinity Groups
+
+Optionally place the instance in an affinity group to control how instances are distributed across
+physical hosts. See [Affinity Groups](/public-cloud/affinity-groups).
 
 ## Configure Server Settings
 
@@ -117,8 +135,8 @@ Provide a unique Server Name and valid Server Hostname.
 ## Connect to your instance
 
 Once the instance is running, open **Instance Overview** to get its **IP address**, the **default
-username** (depends on the OS image — `ubuntu` for Ubuntu, `rocky` for Rocky Linux, and so on; see
-[Connect With SSH](/public-cloud/compute/connect-ssh)), and — if you did not add an SSH key — the
+username** (depends on the OS image: `ubuntu` for Ubuntu, `rocky` for Rocky Linux, and so on; see
+[Connect With SSH](/public-cloud/compute/connect-ssh)), and, if you did not add an SSH key, the
 **Provisioning Password**.
 
 To reach it over SSH (port 22) from the internet, the instance needs a public IP **and** a rule that
@@ -126,7 +144,7 @@ allows the traffic. This is not opened automatically:
 
 **Public Network**
 
-- Make sure the instance has a public IPv4 address — see
+- Make sure the instance has a public IPv4 address; see
   [Public IPs](/public-cloud/networking/public-network/public-ips).
 - Allow SSH: add a [firewall](/public-cloud/compute/settings/firewall) rule for TCP **22**, then a
   [port-forwarding](/public-cloud/compute/settings/port-forwarding) rule mapping port 22 on the
@@ -141,8 +159,8 @@ allows the traffic. This is not opened automatically:
 
 Then connect:
 
-- **SSH key** — use the key you added under _Configure Server Settings_.
-- **Password** — if you did not add a key, use the **Provisioning Password** from the instance's
+- **SSH key**: use the key you added under _Configure Server Settings_.
+- **Password**: if you did not add a key, use the **Provisioning Password** from the instance's
   Overview tab (see
   [Connect With SSH](/public-cloud/compute/connect-ssh#where-to-find-the-password)); change it after
   your first login.
