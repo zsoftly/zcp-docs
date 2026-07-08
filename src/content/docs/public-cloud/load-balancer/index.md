@@ -14,8 +14,8 @@ reliability, and improved performance.
 
 ### Steps
 
-1. **Location**: select the data center.
-2. **Project**: assign to a project.
+1. **Project**: assign to a project.
+2. **Location**: select the data center.
 3. **Network**: select the network where the load balancer will operate.
 4. **IP**: choose an **Existing IP** or **Acquire New IP** (creates a default isolated IP in the
    selected zone).

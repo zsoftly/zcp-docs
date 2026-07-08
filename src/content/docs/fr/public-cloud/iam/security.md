@@ -13,7 +13,7 @@ profil.
 L'authentification à deux facteurs ajoute une deuxième étape de vérification lors de la connexion.
 Un mot de passe seul ne suffit donc pas pour accéder au compte.
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Authentication**, puis repérez **Two-Factor Authentication (2FA)**.
 - Cliquez sur **Set Up** sous **Email Authentication**.
 - Entrez votre **Email ID**, puis cliquez sur **Send OTP**.
@@ -27,24 +27,16 @@ utilisateur, pas seulement le propriétaire du compte.
 
 :::
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Configuration de l'authentification à deux facteurs dans la section Authentification du profil](../../../../../assets/iam/security-two-factor-authentication.webp)
 
 ## Changer votre mot de passe
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Authentication**, puis cliquez sur **Change Password**.
 - Entrez votre **Current Password**, puis entrez et confirmez votre **New Password**.
 - Cliquez sur **Change Password** pour enregistrer.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Formulaire de changement de mot de passe dans la section Authentification du profil](../../../../../assets/iam/security-change-password.webp)
 
 ## Voir aussi
 

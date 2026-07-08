@@ -4,7 +4,7 @@ sidebar_position: 2
 ---
 
 Volume Snapshots capture the current state of a block storage volume at a specific point in time.
-Use them for backup, recovery from accidental deletion, or corruption.
+Use them for backup and recovery from accidental deletion or corruption.
 
 ### Create a Volume Snapshot
 

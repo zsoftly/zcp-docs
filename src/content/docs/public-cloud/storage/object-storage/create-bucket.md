@@ -32,7 +32,7 @@ Once your object storage instance is active:
 - Click **Create Bucket**.
 - Enter a **Bucket Name**.
 - Optionally enable **Bucket Versioning** (required for Object Locking).
-- Optionally enable **Object Locking**: stores objects in write-once-read-many (WORM) model.
+- Optionally enable **Object Locking**: stores objects in a write-once-read-many (WORM) model.
 
 :::note
 

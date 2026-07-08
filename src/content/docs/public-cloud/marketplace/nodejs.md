@@ -82,5 +82,5 @@ serve HTTPS on port 443 and proxy requests to your Node.js app internally.
 ## Next steps
 
 - [Node.js documentation](https://nodejs.org/docs/latest/api/)
-- [PM2 documentation](https://pm2.keymetrics.io/docs/)
+- [PM2 documentation](https://pm2.keymetrics.io/docs/usage/pm2-doc-single-page/)
 - [npm documentation](https://docs.npmjs.com/)

@@ -17,7 +17,7 @@ This starts a local server at `http://localhost:8001`.
 
 ### Open the Dashboard
 
-```
+```text
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 ```
 

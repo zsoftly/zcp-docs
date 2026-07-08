@@ -38,11 +38,7 @@ environnements (`dev` et `prd`, par exemple), les équipes ou les clients.
 - Cliquez sur **Créer le projet**. Le projet est créé et devient disponible dans le sélecteur
   **Projet** lors de la création de ressources.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Boîte de dialogue Créer un nouveau projet avec les champs nom, description et objectif](../../../../../assets/projects/projects-create-a-new-project.webp)
 
 ## Ressources du projet
 
@@ -72,11 +68,7 @@ Invitez des collègues afin qu'ils puissent collaborer sur les ressources du pro
 
 L'utilisateur ajouté peut maintenant consulter et gérer les ressources de ce projet.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Vue Ajouter des utilisateurs au projet avec la barre de recherche et l'action Ajouter](../../../../../assets/projects/projects-add-users-to-a-project.webp)
 
 ## Définir les limites et les quotas du compte
 
@@ -99,11 +91,7 @@ Définir une limite de quota à `-1` accorde un quota **illimité** pour cette r
 
 - Cliquez sur **Soumettre** pour appliquer la nouvelle limite.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Section Limite du compte du projet affichant le quota et l'utilisation par ressource et par emplacement](../../../../../assets/projects/projects-set-account-limits-and-quotas.webp)
 
 ## Prochaines étapes
 

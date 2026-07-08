@@ -48,7 +48,8 @@ projets nécessaires.
 
 ## Où gérer l'IAM
 
-Tous les paramètres IAM se trouvent dans la section **Profile** du menu de gauche du portail :
+Tous les paramètres IAM se trouvent dans le menu **Profil**, accessible en cliquant sur votre **nom
+d'utilisateur** dans le coin supérieur droit du portail :
 
 - [Utilisateurs](/fr/public-cloud/iam/users) : inviter, modifier, réinviter et désactiver les
   personnes de votre organisation.

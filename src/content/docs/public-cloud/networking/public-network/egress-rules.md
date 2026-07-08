@@ -9,11 +9,7 @@ defined protocols and IP ranges.
 - In the **Egress Rules** tab, view all current egress rules.
 - Click **Add Egress Rule** to open the rule configuration form.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Egress Rules tab listing outbound rules with the Add Egress Rule button](../../../../../assets/networking/egress-rules-list.webp)
 
 ### Add a New Egress Rule
 

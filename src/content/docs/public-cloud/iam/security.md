@@ -11,7 +11,7 @@ settings live under the **Authentication** area of your profile.
 Two-factor authentication adds a second verification step at login, so a password alone isn't enough
 to access the account.
 
-- Navigate to the **Profile** section from the left-hand menu.
+- Click your **username** (top-right) to open the **Profile** menu.
 - Select **Authentication**, then locate **Two-Factor Authentication (2FA)**.
 - Click **Set Up** under **Email Authentication**.
 - Enter your **Email ID** and click **Send OTP**.
@@ -25,24 +25,16 @@ account owner.
 
 :::
 
-:::note
-
-Screenshots coming.
-
-:::
+![Two-Factor Authentication setup under the Authentication profile section](../../../../assets/iam/security-two-factor-authentication.webp)
 
 ## Change your password
 
-- Navigate to the **Profile** section from the left-hand menu.
+- Click your **username** (top-right) to open the **Profile** menu.
 - Select **Authentication**, then click **Change Password**.
 - Enter your **Current Password**, then enter and confirm your **New Password**.
 - Click **Change Password** to save.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Change Password form under the Authentication profile section](../../../../assets/iam/security-change-password.webp)
 
 ## Related
 

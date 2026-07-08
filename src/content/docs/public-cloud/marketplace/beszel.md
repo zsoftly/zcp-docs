@@ -85,7 +85,7 @@ docker ps
 1. Open `http://<your-vm-ip>:8090` in a browser and create your admin account on the first-run
    screen.
 2. Click **Add System**. Enter a name and the host the agent will run on (use `localhost` to monitor
-   this same VM). Beszel generates a **public key** and a **token**. Keep them, the agent needs
+   this same VM). Beszel generates a **public key** and a **token**. Keep them; the agent needs
    them.
 
 ### Add the agent

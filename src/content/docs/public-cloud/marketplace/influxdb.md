@@ -22,7 +22,7 @@ have a secure random value generated automatically.
 | ------------------------------- | ------------------------- |
 | `DOCKER_INFLUXDB_INIT_USERNAME` | Initial admin username    |
 | `DOCKER_INFLUXDB_INIT_PASSWORD` | Initial admin password    |
-| `DOCKER_INFLUXDB_INIT_ORG`      | Initial organization name |
+| `DOCKER_INFLUXDB_INIT_ORG`      | Initial organisation name |
 | `DOCKER_INFLUXDB_INIT_BUCKET`   | Initial bucket name       |
 
 ## Getting started

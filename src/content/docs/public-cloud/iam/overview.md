@@ -44,7 +44,8 @@ their job, and scope users to only the Projects they need.
 
 ## Where to manage IAM
 
-All IAM settings live under the **Profile** area in the portal's left-hand menu:
+All IAM settings live under the **Profile** menu, opened by clicking your **username** in the
+top-right corner of the portal:
 
 - [Users](/public-cloud/iam/users): invite, edit, re-invite, and deactivate people in your
   organization.

@@ -10,7 +10,7 @@ determines what they can do.
 
 ## View users
 
-- Navigate to the **Profile** section from the left-hand menu.
+- Click your **username** (top-right) to open the **Profile** menu.
 - Select **Users** to see the complete list of active and inactive users in your organization.
 
 From the list, use the action buttons to **edit** a user's details or role, or **re-invite** a user
@@ -28,15 +28,11 @@ the API.
 
 :::
 
-:::note
-
-Screenshots coming.
-
-:::
+![Users list in the Profile section showing name, email, roles, and last login columns](../../../../assets/iam/users-view-users.webp)
 
 ## Add a new user
 
-- Navigate to the **Profile** section from the left-hand menu.
+- Click your **username** (top-right) to open the **Profile** menu.
 - Select **Users** and click **Add User**.
 - Enter the user's details and select their **Role** (see
   [Roles & Permissions](/public-cloud/iam/roles) to create one first if the role you need doesn't
@@ -46,11 +42,7 @@ Screenshots coming.
 The user receives an invitation and, once accepted, can sign in with the permissions granted by
 their role.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Add User dialog with fields for the user's details and role selection](../../../../assets/iam/users-add-a-new-user.webp)
 
 ## Restrict a user to specific Projects
 

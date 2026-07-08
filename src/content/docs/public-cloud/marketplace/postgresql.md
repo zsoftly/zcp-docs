@@ -2,9 +2,9 @@
 title: PostgreSQL 17
 ---
 
-PostgreSQL is a powerful, open-source object-relational database known for its reliability,
-standards compliance, and extensibility. It supports advanced data types, full-text search, JSON,
-and a wide range of extensions.
+PostgreSQL is an open-source object-relational database known for its reliability, standards
+compliance, and extensibility. It supports advanced data types, full-text search, JSON, and a wide
+range of extensions.
 
 ## Software included
 

@@ -77,13 +77,13 @@ you add is credited to your account as **infra credit you can spend**, so you ke
 
 ### Account Credit
 
-New accounts receive **CAD $100 in credit** automatically at sign-up, valid for **30 days**.
+New accounts receive **CA$100 in credit** automatically at sign-up, valid for **30 days**.
 
-After you spend **CAD $200** on the platform, you can claim an extra **CAD $200 in credit**: request
-it from your account email address through our
+After you spend **CA$200** on the platform, you can claim an extra **CA$200 in credit**: request it
+from your account email address through our
 [contact page](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), including your **account
-number** and referencing **"$200 Credit Request"**. We'll apply the **CAD $200** credit to your
-account directly, valid for **60 days**, for up to **CAD $300 total**.
+number** and referencing **"$200 Credit Request"**. We'll apply the **CA$200** credit to your
+account directly, valid for **60 days**, for up to **CA$300 total**.
 
 The credit applies to Small through XLarge plans. The offer is available until **December 31,
 2026**.

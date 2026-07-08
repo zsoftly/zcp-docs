@@ -12,11 +12,7 @@ est distincte du VPN site à site et sert à l'accès distant des utilisateurs i
 - Les utilisateurs téléchargent leur configuration de client VPN depuis le portail après leur
   création.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Onglet Utilisateurs VPN listant les utilisateurs VPN clients avec le bouton Ajouter un utilisateur VPN](../../../../../../assets/networking/vpn-users-list.webp)
 
 Voir aussi : [Passerelle VPN](/fr/public-cloud/networking/vpc/site-vpn),
 [Vue d'ensemble du VPC](/fr/public-cloud/networking/vpc/create-vpc)

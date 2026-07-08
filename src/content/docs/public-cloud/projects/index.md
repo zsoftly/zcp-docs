@@ -38,11 +38,7 @@ clients.
 - Click **Create Project**. The Project is created and becomes available in the **Project** selector
   when you create resources.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Create a New Project dialog with name, description, and purpose fields](../../../../assets/projects/projects-create-a-new-project.webp)
 
 ## Project Resources
 
@@ -72,11 +68,7 @@ Invite teammates so they can collaborate on the Project's resources.
 
 The added user can now view and manage resources within this Project.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Add Users to the Project view with the search bar and Add action](../../../../assets/projects/projects-add-users-to-a-project.webp)
 
 ## Set Account Limits and Quotas
 
@@ -98,11 +90,7 @@ Setting a quota limit to `-1` grants **unlimited** quota for that resource.
 
 - Click **Submit** to apply the new limit.
 
-:::note
-
-Screenshots coming.
-
-:::
+![Project Account Limit section showing per-resource quota and usage by Location](../../../../assets/projects/projects-set-account-limits-and-quotas.webp)
 
 ## Next steps
 

@@ -63,7 +63,7 @@ mongosh -u admin -p "$MONGO_PASS" --authenticationDatabase admin
 
 Expected output:
 
-```
+```text
 test>
 ```
 

@@ -59,7 +59,7 @@ To make ZSoftly authoritative for your domain, replace the name servers at the r
 
 :::caution
 
-Name server changes take up to 24 to 48 hours to propagate globally, and often complete much sooner.
+Name server changes take 24 to 48 hours to propagate globally, and often complete much sooner.
 During propagation, visitors reach either the old or new DNS. Add your DNS records in ZCP _before_
 switching name servers to avoid downtime.
 

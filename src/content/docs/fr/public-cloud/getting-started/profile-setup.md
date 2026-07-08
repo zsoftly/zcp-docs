@@ -21,88 +21,60 @@ dans Utilisateurs, Rôles et permissions, et Sécurité du compte.
 
 Gardez vos renseignements personnels à jour afin que votre profil demeure exact.
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Personal Details** pour mettre à jour vos renseignements personnels.
 - Cliquez sur **Soumettre** pour enregistrer les changements.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Page Renseignements personnels dans le menu Profil](../../../../../assets/profile-setup/profile-setup-personal-details.webp)
 
 ### Gérer les renseignements de facturation
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Personal Details**, puis ouvrez **Billing Details**.
 - Ajoutez ou mettez à jour la **Billing Address** et le **Phone Number**.
 - Cliquez sur **Soumettre** pour enregistrer les changements.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Section Renseignements de facturation sous Détails de l'entreprise](../../../../../assets/profile-setup/profile-setup-billing-details.webp)
 
 ### Personnaliser les préférences du compte
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Account Preferences**.
 - Choisissez **Light Mode** ou **Dark Mode**.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Préférences du compte avec les options de mode clair et sombre](../../../../../assets/profile-setup/profile-setup-account-preferences.webp)
 
 ### Modifier les paramètres de date et d'heure
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Date and Time Settings**.
 - Choisissez votre **Preferred Time Zone** et votre **Date Time Format**.
 - Cliquez sur **Soumettre** pour appliquer les changements.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Paramètres de date et d'heure avec les options de fuseau horaire et de format de date](../../../../../assets/profile-setup/profile-setup-date-time-settings.webp)
 
 ### Définir les limites du compte
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Account Limit** pour consulter le tableau d'allocation des ressources.
 - Cliquez sur **Request To Increase** pour demander des ressources supplémentaires.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Page Limite du compte affichant le tableau d'allocation des ressources avec le bouton Demander une augmentation](../../../../../assets/profile-setup/profile-setup-account-limit.webp)
 
 ### Consulter les journaux d'activité
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Journaux d'activité** pour surveiller les actions et changements du système.
 - Utilisez la barre de recherche pour filtrer les journaux par mots-clés.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Journaux d'activité avec le filtre de recherche](../../../../../assets/profile-setup/profile-setup-activity-logs.webp)
 
 ### Consulter l'historique de connexion
 
-- Dans le menu de gauche, accédez à la section **Profile**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**.
 - Sélectionnez **Login History** pour consulter les connexions enregistrées.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Historique de connexion affichant les connexions récentes](../../../../../assets/profile-setup/profile-setup-login-history.webp)
 
 ### Conclusion
 

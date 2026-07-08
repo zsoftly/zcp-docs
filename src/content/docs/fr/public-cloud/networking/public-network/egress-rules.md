@@ -9,11 +9,7 @@ selon les protocoles et plages IP définis.
 - Dans l'onglet **Egress Rules**, consultez toutes les règles de sortie actuelles.
 - Cliquez sur **Ajouter Egress Rule** pour ouvrir le formulaire de configuration.
 
-:::note
-
-Captures d'écran à venir.
-
-:::
+![Onglet Egress Rules listant les règles de sortie avec le bouton Ajouter Egress Rule](../../../../../../assets/networking/egress-rules-list.webp)
 
 ### Ajouter une nouvelle règle de sortie
 

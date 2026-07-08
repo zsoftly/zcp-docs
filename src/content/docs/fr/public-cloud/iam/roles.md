@@ -40,7 +40,8 @@ Conservez les changements de quotas sous la responsabilité du propriétaire du 
 Lorsque les rôles intégrés sont trop larges, créez un rôle avec les permissions exactes requises par
 une fonction.
 
-- Dans le menu de gauche, accédez à la section **Profile**, puis sélectionnez **Roles**.
+- Cliquez sur votre **nom d'utilisateur** (en haut à droite) pour ouvrir le menu **Profil**, puis
+  sélectionnez **Roles**.
 - Cliquez sur **Add New Role** ou sur l'icône **+**.
 - Entrez un **Role Name** et une **Description**. Les deux champs sont requis.
 - Dans le panneau **Features**, choisissez un service, par exemple **Virtual Machine**.

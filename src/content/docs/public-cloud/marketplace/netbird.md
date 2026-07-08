@@ -87,5 +87,5 @@ Access control between peers is managed via policies in the NetBird management c
 ## Next steps
 
 - [NetBird documentation](https://docs.netbird.io/)
-- [Setup keys guide](https://docs.netbird.io/how-to/setup-keys)
+- [Setup keys guide](https://docs.netbird.io/manage/peers/register-machines-using-setup-keys)
 - [Access control policies](https://docs.netbird.io/how-to/manage-network-access)
