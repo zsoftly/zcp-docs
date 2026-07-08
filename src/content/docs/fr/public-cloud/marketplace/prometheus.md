@@ -31,7 +31,7 @@ Les besoins de stockage augmentent avec le nombre de séries et la période de r
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -91,8 +91,8 @@ sudo journalctl -u prometheus -f
 
 ## Sécurité
 
-Le port 9090 est ouvert sur l'interface réseau de la VM, et Prometheus n'a **pas d'authentification
-intégrée**. UFW est activé et autorise SSH (port 22) et Prometheus (port 9090).
+Le port 9090 est ouvert sur l'interface réseau de la machine virtuelle, et Prometheus n'a **pas
+d'authentification intégrée**. UFW est activé et autorise SSH (port 22) et Prometheus (port 9090).
 
 **Pour limiter l'interface à une adresse IP précise:**
 

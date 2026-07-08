@@ -66,7 +66,7 @@ Ajustez ensuite:
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -92,7 +92,7 @@ ollama run llama3.2 "Hello, what can you do?"
 
 ### 4. Utiliser l'API
 
-L'API écoute sur le port `11434`. Testez-la depuis la VM:
+L'API écoute sur le port `11434`. Testez-la depuis la machine virtuelle:
 
 ```bash
 curl http://localhost:11434/api/generate -d '{
@@ -102,7 +102,7 @@ curl http://localhost:11434/api/generate -d '{
 }'
 ```
 
-Depuis un autre hôte, remplacez `localhost` par l'IP de la VM.
+Depuis un autre hôte, remplacez `localhost` par l'IP de la machine virtuelle.
 
 ## Gérer Ollama
 
@@ -129,8 +129,9 @@ Les modèles sont stockés dans `/usr/share/ollama/.ollama/models`. Un résumé 
 
 ## Sécurité
 
-Le port 11434 est ouvert sur l'interface réseau de la VM, et Ollama n'a **pas d'authentification
-intégrée**. UFW est activé et autorise SSH (port 22) et l'API Ollama (port 11434).
+Le port 11434 est ouvert sur l'interface réseau de la machine virtuelle, et Ollama n'a **pas
+d'authentification intégrée**. UFW est activé et autorise SSH (port 22) et l'API Ollama (port
+11434).
 
 **Pour limiter l'API à une adresse IP précise:**
 

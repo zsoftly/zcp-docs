@@ -27,13 +27,14 @@ rapide, pilotée par des thèmes.
 :::caution
 
 Ghost exige un nom de domaine. Il ne fonctionne pas avec une simple adresse IP. Fournissez
-`GHOST_URL` au déploiement (voir ci-dessous) et pointez le DNS de ce domaine vers la VM.
+`GHOST_URL` au déploiement (voir ci-dessous) et pointez le DNS de ce domaine vers la machine
+virtuelle.
 
 :::
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Ghost depuis le Marketplace. Laissez `GHOST_DB_PASSWORD`
+Vous pouvez les définir au déploiement de Ghost depuis la Marketplace. Laissez `GHOST_DB_PASSWORD`
 vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable            | Description                                                  |
@@ -42,12 +43,12 @@ vide pour générer automatiquement une valeur aléatoire sécurisée.
 | `GHOST_ADMIN_EMAIL` | Adresse courriel du compte administrateur Ghost              |
 | `GHOST_DB_PASSWORD` | Mot de passe de l'utilisateur MySQL `ghost`                  |
 
-Si `GHOST_URL` n'est pas définie, la VM sert une page temporaire et laisse Ghost non configuré
-jusqu'à ce que vous fournissiez un domaine.
+Si `GHOST_URL` n'est pas définie, la machine virtuelle sert une page temporaire et laisse Ghost non
+configuré jusqu'à ce que vous fournissiez un domaine.
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -82,7 +83,8 @@ sudo cat /etc/ghost/credentials.txt
 ### 4. Activer HTTPS
 
 TLS n'est pas configuré automatiquement, car le DNS de votre domaine doit d'abord pointer vers la
-VM. Une fois la résolution DNS active, provisionnez un certificat Let's Encrypt gratuit:
+machine virtuelle. Une fois la résolution DNS active, provisionnez un certificat Let's Encrypt
+gratuit:
 
 ```bash
 cd /var/www/ghost
@@ -109,8 +111,8 @@ Répertoire d'installation: `/var/www/ghost`. Le contenu (thèmes, images et don
 
 ## Sécurité
 
-Les ports 80 et 443 sont ouverts sur l'interface réseau de la VM. UFW est activé et autorise SSH
-(port 22), HTTP (80) et HTTPS (443).
+Les ports 80 et 443 sont ouverts sur l'interface réseau de la machine virtuelle. UFW est activé et
+autorise SSH (port 22), HTTP (80) et HTTPS (443).
 
 **En production**, terminez l'étape Let's Encrypt ci-dessus afin que le site soit servi en HTTPS, et
 limitez l'accès SSH aux plages IP connues.

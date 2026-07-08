@@ -24,7 +24,7 @@ depuis une console web unique. L'interface s'exécute sur le port 9443 en HTTPS.
 
 ## Variables d'environnement
 
-Vous pouvez définir cette variable au déploiement de Portainer depuis le Marketplace. Laissez-la
+Vous pouvez définir cette variable au déploiement de Portainer depuis la Marketplace. Laissez-la
 vide pour créer le compte administrateur dans l'interface au premier accès.
 
 | Variable                   | Description                                   |
@@ -33,7 +33,7 @@ vide pour créer le compte administrateur dans l'interface au premier accès.
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -97,11 +97,12 @@ chemins est écrit dans `/etc/portainer/info.txt`.
 
 ## Sécurité
 
-Le port 9443 est ouvert sur l'interface réseau de la VM. UFW est activé et autorise SSH (port 22) et
-Portainer (port 9443). Les ports 8000, 9000 et l'API Docker ne sont pas ouverts par défaut.
+Le port 9443 est ouvert sur l'interface réseau de la machine virtuelle. UFW est activé et autorise
+SSH (port 22) et Portainer (port 9443). Les ports 8000, 9000 et l'API Docker ne sont pas ouverts par
+défaut.
 
 Portainer monte le socket Docker de l'hôte, ce qui lui donne le contrôle complet du démon Docker de
-la VM. Limitez l'accès au port 9443:
+la machine virtuelle. Limitez l'accès au port 9443:
 
 ```bash
 sudo ufw delete allow 9443/tcp

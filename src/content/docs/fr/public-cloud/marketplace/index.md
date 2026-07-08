@@ -3,10 +3,10 @@ title: Marketplace
 tableOfContents: false
 ---
 
-Les images du Marketplace ZCP sont des modèles de VM préconfigurés qui se déploient en quelques
-minutes depuis la console ZCP. Chaque image est fournie sur **Ubuntu 24.04 LTS** avec un service de
-premier démarrage qui termine la configuration automatiquement. Les identifiants sont générés, les
-services sont configurés et l'image est prête à utiliser.
+Les images de la Marketplace ZCP sont des modèles de machine virtuelle préconfigurés qui se
+déploient en quelques minutes depuis la console ZCP. Chaque image est fournie sur **Ubuntu 24.04
+LTS** avec un service de premier démarrage qui termine la configuration automatiquement. Les
+identifiants sont générés, les services sont configurés et l'image est prête à utiliser.
 
 <div class="mp-stats">
   <div class="mp-stat">
@@ -541,7 +541,7 @@ services sont configurés et l'image est prête à utiliser.
     </div>
     <div>
       <p class="service-name">Ollama</p>
-      <p class="service-desc">Exécutez des LLM locaux sur votre VM et servez des modèles avec l'API Ollama.</p>
+      <p class="service-desc">Exécutez des LLM locaux sur votre machine virtuelle et servez des modèles avec l'API Ollama.</p>
     </div>
   </a>
 

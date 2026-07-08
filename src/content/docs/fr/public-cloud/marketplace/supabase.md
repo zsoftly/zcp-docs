@@ -30,7 +30,7 @@ postgres-meta, le tout sur PostgreSQL 17.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Supabase depuis le Marketplace. Laissez un champ de mot de
+Vous pouvez les définir au déploiement de Supabase depuis la Marketplace. Laissez un champ de mot de
 passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable             | Description                                                      |
@@ -41,7 +41,7 @@ passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -100,8 +100,9 @@ sont stockées sous `/data/supabase/volumes`.
 
 ## Sécurité
 
-Les ports 8000, 80 et 443 sont ouverts sur l'interface réseau de la VM. UFW est activé et autorise
-ces ports ainsi que SSH (port 22). L'accès PostgreSQL direct (5432) n'est pas exposé.
+Les ports 8000, 80 et 443 sont ouverts sur l'interface réseau de la machine virtuelle. UFW est
+activé et autorise ces ports ainsi que SSH (port 22). L'accès PostgreSQL direct (5432) n'est pas
+exposé.
 
 Changez le mot de passe du tableau de bord Studio après la première connexion. **En production**,
 définissez `SUPABASE_PUBLIC_URL`, `API_EXTERNAL_URL` et `SITE_URL` dans `/data/supabase/.env` avec

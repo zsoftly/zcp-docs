@@ -19,7 +19,7 @@ elles-mêmes le code sous-jacent.
 | Ubuntu    | 24.04 LTS |
 
 Drupal s'exécute sur une pile LAMP native (Apache, MariaDB, PHP). Le site est préinstallé avec le
-profil **Standard**. Il est donc prêt à utiliser dès que la VM démarre.
+profil **Standard**. Il est donc prêt à utiliser dès que la machine virtuelle démarre.
 
 ## Prérequis
 
@@ -34,7 +34,7 @@ installés.
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -106,8 +106,8 @@ cd /var/www/drupal && vendor/bin/drush cache:rebuild
 
 ## Sécurité
 
-Le port 80 est ouvert sur l'interface réseau de la VM. UFW est activé et autorise SSH (port 22) et
-HTTP (port 80). L'image sert uniquement HTTP en clair.
+Le port 80 est ouvert sur l'interface réseau de la machine virtuelle. UFW est activé et autorise SSH
+(port 22) et HTTP (port 80). L'image sert uniquement HTTP en clair.
 
 :::caution
 

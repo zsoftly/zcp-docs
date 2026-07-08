@@ -25,7 +25,7 @@ s'exécute sur le port 8080.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Jenkins depuis le Marketplace. Laissez un champ de mot de
+Vous pouvez les définir au déploiement de Jenkins depuis la Marketplace. Laissez un champ de mot de
 passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable                 | Description                                        |
@@ -35,7 +35,7 @@ passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -89,8 +89,8 @@ Répertoire Jenkins home (tâches, plugins et configuration): `/var/lib/jenkins`
 
 ## Sécurité
 
-Le port 8080 est ouvert sur l'interface réseau de la VM. UFW est activé et autorise SSH (port 22) et
-Jenkins (port 8080). Aucun port d'agent de build (50000) n'est ouvert par défaut.
+Le port 8080 est ouvert sur l'interface réseau de la machine virtuelle. UFW est activé et autorise
+SSH (port 22) et Jenkins (port 8080). Aucun port d'agent de build (50000) n'est ouvert par défaut.
 
 **Pour limiter l'interface à une adresse IP précise:**
 

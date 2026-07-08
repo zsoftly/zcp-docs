@@ -28,18 +28,18 @@ Compose.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Keycloak depuis le Marketplace. Laissez un champ de mot de
+Vous pouvez les définir au déploiement de Keycloak depuis la Marketplace. Laissez un champ de mot de
 passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
-| Variable                  | Description                                                                                |
-| ------------------------- | ------------------------------------------------------------------------------------------ |
-| `KEYCLOAK_ADMIN`          | Nom d'utilisateur du compte administrateur initial. Par défaut: `admin`                    |
-| `KEYCLOAK_ADMIN_PASSWORD` | Mot de passe du compte administrateur initial                                              |
-| `KC_HOSTNAME`             | Nom d'hôte public ou IP depuis lequel Keycloak est servi. Par défaut: l'IP privée de la VM |
+| Variable                  | Description                                                                                               |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `KEYCLOAK_ADMIN`          | Nom d'utilisateur du compte administrateur initial. Par défaut: `admin`                                   |
+| `KEYCLOAK_ADMIN_PASSWORD` | Mot de passe du compte administrateur initial                                                             |
+| `KC_HOSTNAME`             | Nom d'hôte public ou IP depuis lequel Keycloak est servi. Par défaut: l'IP privée de la machine virtuelle |
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -101,13 +101,13 @@ Configuration d'environnement: `/opt/keycloak/.env`. Les données PostgreSQL son
 
 ## Sécurité
 
-Le port 8080 est ouvert sur l'interface réseau de la VM. UFW est activé et autorise SSH (port 22) et
-Keycloak (port 8080). Keycloak sert HTTP en clair sur 8080.
+Le port 8080 est ouvert sur l'interface réseau de la machine virtuelle. UFW est activé et autorise
+SSH (port 22) et Keycloak (port 8080). Keycloak sert HTTP en clair sur 8080.
 
 :::caution
 
-`KC_HOSTNAME` prend par défaut l'IP privée de la VM. Si vous associez ensuite une IP publique, un
-nom DNS ou un proxy inverse, définissez `KC_HOSTNAME` au déploiement (ou modifiez
+`KC_HOSTNAME` prend par défaut l'IP privée de la machine virtuelle. Si vous associez ensuite une IP
+publique, un nom DNS ou un proxy inverse, définissez `KC_HOSTNAME` au déploiement (ou modifiez
 `/opt/keycloak/.env` et exécutez `cd /opt/keycloak && docker compose up -d`), sinon les
 vérifications de nom d'hôte en mode production peuvent rejeter les requêtes provenant de la nouvelle
 adresse.

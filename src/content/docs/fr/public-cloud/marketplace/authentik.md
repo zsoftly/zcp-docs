@@ -29,7 +29,7 @@ Docker Compose.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement d'Authentik depuis le Marketplace. Laissez un champ de mot de
+Vous pouvez les définir au déploiement d'Authentik depuis la Marketplace. Laissez un champ de mot de
 passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable                       | Description                                               |
@@ -40,7 +40,7 @@ passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -98,9 +98,9 @@ certificats sont stockées sous `/opt/authentik`.
 
 ## Sécurité
 
-Les ports 9000 (HTTP) et 9443 (HTTPS) sont ouverts sur l'interface réseau de la VM. UFW est activé
-et autorise ces ports ainsi que SSH (port 22). Authentik sert un certificat autosigné par defaut
-sur 9443.
+Les ports 9000 (HTTP) et 9443 (HTTPS) sont ouverts sur l'interface réseau de la machine virtuelle.
+UFW est activé et autorise ces ports ainsi que SSH (port 22). Authentik sert un certificat autosigné
+par defaut sur 9443.
 
 **Pour limiter l'accès à une adresse IP précise:**
 
@@ -111,9 +111,9 @@ sudo ufw allow from <trusted-ip> to any port 9000
 sudo ufw allow from <trusted-ip> to any port 9443
 ```
 
-**En production**, pointez un enregistrement DNS vers la VM et placez Authentik derriere TLS, soit
-avec le HTTPS intégré sur 9443 et votre propre certificat, soit avec un proxy inverse (Caddy, nginx
-ou Traefik) qui termine TLS et relaie vers le port 9000.
+**En production**, pointez un enregistrement DNS vers la machine virtuelle et placez Authentik
+derriere TLS, soit avec le HTTPS intégré sur 9443 et votre propre certificat, soit avec un proxy
+inverse (Caddy, nginx ou Traefik) qui termine TLS et relaie vers le port 9000.
 
 ## Prochaines étapes
 

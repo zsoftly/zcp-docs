@@ -31,7 +31,7 @@ Les besoins en RAM et en stockage augmentent avec l'utilisation.
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -93,8 +93,8 @@ Configuration d'environnement: `/opt/dify/docker/.env`. Les données persistante
 
 ## Sécurité
 
-Les ports 80 et 443 sont ouverts sur l'interface réseau de la VM. UFW est activé et autorise SSH
-(port 22), HTTP (80) et HTTPS (443).
+Les ports 80 et 443 sont ouverts sur l'interface réseau de la machine virtuelle. UFW est activé et
+autorise SSH (port 22), HTTP (80) et HTTPS (443).
 
 Dify sert HTTP en clair par défaut. **En production**, placez Dify derrière votre propre proxy
 inverse avec TLS, ou configurez HTTPS et l'URL publique dans `/opt/dify/docker/.env`. Appliquez les

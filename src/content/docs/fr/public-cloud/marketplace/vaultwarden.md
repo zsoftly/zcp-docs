@@ -31,7 +31,7 @@ Vaultwarden consomme peu de ressources.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Vaultwarden depuis le Marketplace. Laissez `ADMIN_TOKEN`
+Vous pouvez les définir au déploiement de Vaultwarden depuis la Marketplace. Laissez `ADMIN_TOKEN`
 vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable             | Description                                                                             |
@@ -41,7 +41,7 @@ vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 ## Démarrage
 
-### 1. Se connecter à la VM
+### 1. Se connecter à la machine virtuelle
 
 ```bash
 ssh ubuntu@<your-vm-ip>
@@ -106,9 +106,9 @@ certificat sont stockés sous `/data/vaultwarden/data`.
 
 ## Sécurité
 
-Le port 8000 est ouvert sur l'interface réseau de la VM. UFW est activé et autorise SSH (port 22) et
-le coffre web Vaultwarden (port 8000). Les clients Bitwarden exigent HTTPS, que l'image sert avec un
-certificat autosigné par défaut.
+Le port 8000 est ouvert sur l'interface réseau de la machine virtuelle. UFW est activé et autorise
+SSH (port 22) et le coffre web Vaultwarden (port 8000). Les clients Bitwarden exigent HTTPS, que
+l'image sert avec un certificat autosigné par défaut.
 
 Traitez le jeton administrateur comme un mot de passe root.
 
