@@ -22,6 +22,16 @@ continuous delivery for almost any toolchain. The web UI runs on port 8080.
 | RAM      | 2 GB    | 4 GB        |
 | Storage  | 20 GB   | 50 GB       |
 
+## Environment variables
+
+You can optionally set these when deploying Jenkins from the marketplace. Leave a password field
+blank to have a secure random value generated automatically.
+
+| Variable                 | Description                            |
+| ------------------------ | -------------------------------------- |
+| `JENKINS_ADMIN_USER`     | Username for the initial admin account |
+| `JENKINS_ADMIN_PASSWORD` | Password for the initial admin account |
+
 ## Getting started
 
 ### 1. Connect to your VM

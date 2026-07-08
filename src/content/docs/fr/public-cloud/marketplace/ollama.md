@@ -64,14 +64,6 @@ Ajustez ensuite:
   [volume de stockage bloc](/fr/public-cloud/compute/settings/block-storage/) au lieu de passer à un
   forfait plus grand.
 
-## Variables d'environnement
-
-Vous pouvez définir cette variable au déploiement d'Ollama depuis le Marketplace.
-
-| Variable      | Description                                                                        |
-| ------------- | ---------------------------------------------------------------------------------- |
-| `OLLAMA_HOST` | Adresse et port d'écoute de l'API. Par défaut: `0.0.0.0:11434` (toutes interfaces) |
-
 ## Démarrage
 
 ### 1. Se connecter à la VM
@@ -82,8 +74,8 @@ ssh ubuntu@<your-vm-ip>
 
 ### 2. Attendre la configuration au premier démarrage
 
-Au premier démarrage, un script applique l'adresse d'écoute et lance le service. Cela prend moins
-d'une minute. Suivez la progression:
+Au premier démarrage, un script lance le service. Cela prend moins d'une minute. Suivez la
+progression:
 
 ```bash
 journalctl -u ollama-first-boot.service -f

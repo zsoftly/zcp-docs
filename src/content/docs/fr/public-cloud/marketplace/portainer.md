@@ -22,6 +22,15 @@ depuis une console web unique. L'interface s'exécute sur le port 9443 en HTTPS.
 | RAM       | 1 Go    | 2 Go       |
 | Stockage  | 20 Go   | 40 Go      |
 
+## Variables d'environnement
+
+Vous pouvez définir cette variable au déploiement de Portainer depuis le Marketplace. Laissez-la
+vide pour créer le compte administrateur dans l'interface au premier accès.
+
+| Variable                   | Description                                   |
+| -------------------------- | --------------------------------------------- |
+| `PORTAINER_ADMIN_PASSWORD` | Mot de passe du compte administrateur initial |
+
 ## Démarrage
 
 ### 1. Se connecter à la VM

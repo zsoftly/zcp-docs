@@ -22,6 +22,15 @@ The UI runs on port 9443 over HTTPS.
 | RAM      | 1 GB    | 2 GB        |
 | Storage  | 20 GB   | 40 GB       |
 
+## Environment variables
+
+You can optionally set this when deploying Portainer from the marketplace. Leave it blank to create
+the admin account in the UI on first visit.
+
+| Variable                   | Description                            |
+| -------------------------- | -------------------------------------- |
+| `PORTAINER_ADMIN_PASSWORD` | Password for the initial admin account |
+
 ## Getting started
 
 ### 1. Connect to your VM

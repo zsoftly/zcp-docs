@@ -32,12 +32,11 @@ stack.
 You can optionally set these when deploying Authentik from the marketplace. Leave a password field
 blank to have a secure random value generated automatically.
 
-| Variable                   | Description                                   |
-| -------------------------- | --------------------------------------------- |
-| `AUTHENTIK_ADMIN_EMAIL`    | Email for the initial `akadmin` account       |
-| `AUTHENTIK_ADMIN_PASSWORD` | Password for the initial `akadmin` account    |
-| `PG_PASS`                  | Password for the internal PostgreSQL database |
-| `AUTHENTIK_SECRET_KEY`     | Secret key used to sign sessions and tokens   |
+| Variable                       | Description                                    |
+| ------------------------------ | ---------------------------------------------- |
+| `AUTHENTIK_HOSTNAME`           | Public hostname or IP Authentik is served from |
+| `AUTHENTIK_BOOTSTRAP_EMAIL`    | Email for the initial `akadmin` account        |
+| `AUTHENTIK_BOOTSTRAP_PASSWORD` | Password for the initial `akadmin` account     |
 
 ## Getting started
 

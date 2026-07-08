@@ -63,14 +63,6 @@ Adjust from there:
   [block storage volume](/public-cloud/compute/settings/block-storage/) instead of moving to a
   bigger plan.
 
-## Environment variables
-
-You can optionally set this when deploying Ollama from the marketplace.
-
-| Variable      | Description                                                                     |
-| ------------- | ------------------------------------------------------------------------------- |
-| `OLLAMA_HOST` | Address and port the API binds to. Defaults to `0.0.0.0:11434` (all interfaces) |
-
 ## Getting started
 
 ### 1. Connect to your VM
@@ -81,8 +73,7 @@ ssh ubuntu@<your-vm-ip>
 
 ### 2. Wait for first-boot configuration
 
-On the first boot, a setup script applies the listen address and starts the service. This takes
-under a minute. Track progress:
+On the first boot, a setup script starts the service. This takes under a minute. Track progress:
 
 ```bash
 journalctl -u ollama-first-boot.service -f

@@ -39,6 +39,7 @@ vide pour générer automatiquement une valeur aléatoire sécurisée.
 | Variable            | Description                                                  |
 | ------------------- | ------------------------------------------------------------ |
 | `GHOST_URL`         | URL complète du site, par exemple `https://blog.example.com` |
+| `GHOST_ADMIN_EMAIL` | Adresse courriel du compte administrateur Ghost              |
 | `GHOST_DB_PASSWORD` | Mot de passe de l'utilisateur MySQL `ghost`                  |
 
 Si `GHOST_URL` n'est pas définie, la VM sert une page temporaire et laisse Ghost non configuré

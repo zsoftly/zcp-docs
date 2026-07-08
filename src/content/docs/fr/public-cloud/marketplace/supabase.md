@@ -30,11 +30,14 @@ postgres-meta, le tout sur PostgreSQL 17.
 
 ## Variables d'environnement
 
-Vous pouvez définir cette variable au déploiement de Supabase depuis le Marketplace.
+Vous pouvez les définir au déploiement de Supabase depuis le Marketplace. Laissez un champ de mot de
+passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
-| Variable        | Description                                                        |
-| --------------- | ------------------------------------------------------------------ |
-| `SUPABASE_FQDN` | Nom de domaine complet de l'instance, par exemple `db.example.com` |
+| Variable             | Description                                                      |
+| -------------------- | ---------------------------------------------------------------- |
+| `SITE_URL`           | URL publique de l'instance Supabase et du tableau de bord Studio |
+| `POSTGRES_PASSWORD`  | Mot de passe de la base PostgreSQL                               |
+| `DASHBOARD_PASSWORD` | Mot de passe de connexion au tableau de bord Studio              |
 
 ## Démarrage
 

@@ -28,6 +28,16 @@ port 8000 with a self-signed certificate generated on first boot.
 
 Vaultwarden is resource-light.
 
+## Environment variables
+
+You can optionally set these when deploying Vaultwarden from the marketplace. Leave `ADMIN_TOKEN`
+blank to have a secure random value generated automatically.
+
+| Variable             | Description                                                          |
+| -------------------- | -------------------------------------------------------------------- |
+| `VAULTWARDEN_DOMAIN` | Full public URL clients use, for example `https://vault.example.com` |
+| `ADMIN_TOKEN`        | Token for the `/admin` panel                                         |
+
 ## Getting started
 
 ### 1. Connect to your VM
@@ -99,7 +109,8 @@ self-signed certificate by default.
 
 Treat the admin token like a root password.
 
-**For production use**, set `DOMAIN` to your public IP or hostname in
+**For production use**, set `DOMAIN` to the full public URL clients use, including the scheme and
+any port or path (for example `https://vault.example.com` or `https://<public-ip>:8000`), in
 `/data/vaultwarden/vaultwarden.env`, replace the self-signed certificate with a trusted one (or
 front Vaultwarden with a reverse proxy such as Caddy that terminates TLS), and restart the stack:
 

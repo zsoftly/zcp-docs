@@ -28,17 +28,6 @@ vector store, and nginx).
 
 RAM and storage requirements grow with usage.
 
-## Environment variables
-
-You can optionally set these when deploying Dify from the marketplace. Leave any field blank to have
-a secure random value generated automatically.
-
-| Variable             | Description                                                                             |
-| -------------------- | --------------------------------------------------------------------------------------- |
-| `DIFY_PUBLIC_URL`    | Public base URL (for example `https://dify.example.com`) for console, API, and webhooks |
-| `DIFY_INIT_PASSWORD` | Optional password that gates the one-time `/install` setup wizard                       |
-| `DIFY_ENABLE_HTTPS`  | Set to `true` to have the bundled nginx serve HTTPS. Defaults to `false`                |
-
 ## Getting started
 
 ### 1. Connect to your VM
@@ -68,7 +57,7 @@ http://<your-vm-ip>/install
 ```
 
 Create the admin account (email and password of your choice), then sign in at
-`http://<your-vm-ip>/`. If you set `DIFY_INIT_PASSWORD`, enter it first to open the wizard.
+`http://<your-vm-ip>/`.
 
 ### 4. Add a model provider
 
@@ -106,9 +95,8 @@ Environment configuration: `/opt/dify/docker/.env`. Persistent data is stored un
 Ports 80 and 443 are open on the VM's network interface. UFW is enabled and allows SSH (port 22),
 HTTP (80), and HTTPS (443).
 
-Dify serves plain HTTP by default. **For production use**, set `DIFY_PUBLIC_URL` to your domain and
-enable HTTPS, either through the bundled nginx (`DIFY_ENABLE_HTTPS=true` with your own certificates)
-or your own reverse proxy. Apply `.env` changes with:
+Dify serves plain HTTP by default. **For production use**, put it behind your own reverse proxy with
+TLS, or configure HTTPS and the public URL in `/opt/dify/docker/.env`. Apply `.env` changes with:
 
 ```bash
 cd /opt/dify/docker && docker compose down && docker compose up -d

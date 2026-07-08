@@ -32,12 +32,11 @@ Docker Compose.
 Vous pouvez les définir au déploiement d'Authentik depuis le Marketplace. Laissez un champ de mot de
 passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
-| Variable                   | Description                                             |
-| -------------------------- | ------------------------------------------------------- |
-| `AUTHENTIK_ADMIN_EMAIL`    | Adresse courriel du compte initial `akadmin`            |
-| `AUTHENTIK_ADMIN_PASSWORD` | Mot de passe du compte initial `akadmin`                |
-| `PG_PASS`                  | Mot de passe de la base PostgreSQL interne              |
-| `AUTHENTIK_SECRET_KEY`     | Cle secrete utilisée pour signer les sessions et jetons |
+| Variable                       | Description                                               |
+| ------------------------------ | --------------------------------------------------------- |
+| `AUTHENTIK_HOSTNAME`           | Nom d'hôte public ou IP depuis lequel Authentik est servi |
+| `AUTHENTIK_BOOTSTRAP_EMAIL`    | Adresse courriel du compte initial `akadmin`              |
+| `AUTHENTIK_BOOTSTRAP_PASSWORD` | Mot de passe du compte initial `akadmin`                  |
 
 ## Démarrage
 

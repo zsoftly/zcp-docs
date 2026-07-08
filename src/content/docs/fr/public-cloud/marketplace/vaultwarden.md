@@ -29,6 +29,16 @@ port 8000 avec un certificat autosigné généré au premier démarrage.
 
 Vaultwarden consomme peu de ressources.
 
+## Variables d'environnement
+
+Vous pouvez les définir au déploiement de Vaultwarden depuis le Marketplace. Laissez `ADMIN_TOKEN`
+vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable             | Description                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| `VAULTWARDEN_DOMAIN` | URL publique complète utilisée par les clients, par exemple `https://vault.example.com` |
+| `ADMIN_TOKEN`        | Jeton du panneau `/admin`                                                               |
+
 ## Démarrage
 
 ### 1. Se connecter à la VM
@@ -102,10 +112,11 @@ certificat autosigné par défaut.
 
 Traitez le jeton administrateur comme un mot de passe root.
 
-**En production**, définissez `DOMAIN` avec votre IP publique ou nom d'hôte dans
-`/data/vaultwarden/vaultwarden.env`, remplacez le certificat autosigné par un certificat de
-confiance (ou placez Vaultwarden derrière un proxy inverse comme Caddy qui termine TLS), puis
-redémarrez la pile:
+**En production**, définissez `DOMAIN` avec l'URL publique complète utilisée par les clients, y
+compris le schéma et le port ou chemin éventuel (par exemple `https://vault.example.com` ou
+`https://<ip-publique>:8000`), dans `/data/vaultwarden/vaultwarden.env`, remplacez le certificat
+autosigné par un certificat de confiance (ou placez Vaultwarden derrière un proxy inverse comme
+Caddy qui termine TLS), puis redémarrez la pile:
 
 ```bash
 cd /data/vaultwarden && docker compose restart

@@ -3,10 +3,10 @@ title: Marketplace
 tableOfContents: false
 ---
 
-Les images du Marketplace ZCP sont des modÃÂ¨les de VM prÃÂ©configurÃÂ©s qui se dÃÂ©ploient en
-quelques minutes depuis la console ZCP. Chaque image est fournie sur **Ubuntu 24.04 LTS** avec un
-service de premier dÃÂ©marrage qui termine la configuration automatiquement. Les identifiants sont
-gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimage est prÃÂªte ÃÂ  utiliser.
+Les images du Marketplace ZCP sont des modèles de VM préconfigurés qui se déploient en quelques
+minutes depuis la console ZCP. Chaque image est fournie sur **Ubuntu 24.04 LTS** avec un service de
+premier démarrage qui termine la configuration automatiquement. Les identifiants sont générés, les
+services sont configurés et l'image est prête à utiliser.
 
 <div class="mp-stats">
   <div class="mp-stat">
@@ -15,14 +15,14 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
   </div>
   <div class="mp-stat">
     <span class="mp-num">33</span>
-    <span class="mp-label">ÃÂ  venir</span>
+    <span class="mp-label">à venir</span>
   </div>
   <div class="mp-stat">
     <span class="mp-num">11</span>
-    <span class="mp-label">catÃÂ©gories</span>
+    <span class="mp-label">catégories</span>
   </div>
   <div class="mp-stat">
-    <span class="mp-num mp-num--sm">Premier dÃÂ©marrage</span>
+    <span class="mp-num mp-num--sm">Premier démarrage</span>
     <span class="mp-label">configuration automatique</span>
   </div>
 </div>
@@ -42,7 +42,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">OpenClaw</p>
-      <p class="service-desc">Assistant IA personnel auto-hÃÂ©bergÃÂ© et passerelle multicanal.</p>
+      <p class="service-desc">Assistant IA personnel auto-hébergé et passerelle multicanal.</p>
     </div>
   </a>
 
@@ -52,7 +52,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">WordPress</p>
-      <p class="service-desc">CMS le plus populaire au monde, avec pile LAMP prÃÂ©configurÃÂ©e</p>
+      <p class="service-desc">CMS le plus populaire au monde, avec pile LAMP préconfigurée</p>
     </div>
   </a>
 
@@ -62,7 +62,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Docker</p>
-      <p class="service-desc">Moteur de conteneurs avec Docker CE et Docker Compose prÃÂ©installÃÂ©s</p>
+      <p class="service-desc">Moteur de conteneurs avec Docker CE et Docker Compose préinstallés</p>
     </div>
   </a>
 
@@ -72,7 +72,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">cPanel</p>
-      <p class="service-desc">Panneau de contrÃÂ´le dâhÃÂ©bergement web standard avec WHM</p>
+      <p class="service-desc">Panneau de contrôle d'hébergement web standard avec WHM</p>
     </div>
   </a>
 
@@ -82,7 +82,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">GitLab CE 18.11</p>
-      <p class="service-desc">Plateforme DevOps auto-hÃÂ©bergÃÂ©e avec Git, CI/CD et suivi des tickets</p>
+      <p class="service-desc">Plateforme DevOps auto-hébergée avec Git, CI/CD et suivi des tickets</p>
     </div>
   </a>
 
@@ -92,7 +92,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">n8n</p>
-      <p class="service-desc">Plateforme dâautomatisation de workflows avec ÃÂ©diteur visuel ÃÂ  nÃÂuds</p>
+      <p class="service-desc">Plateforme d'automatisation de workflows avec éditeur visuel à nœuds</p>
     </div>
   </a>
 
@@ -102,7 +102,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">NetBird</p>
-      <p class="service-desc">RÃÂ©seau superposÃÂ© WireGuard open source avec connexions pair ÃÂ  pair</p>
+      <p class="service-desc">Réseau superposé WireGuard open source avec connexions pair à pair</p>
     </div>
   </a>
 
@@ -112,7 +112,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">PostgreSQL 17</p>
-      <p class="service-desc">Base de donnÃÂ©es relationnelle open source avancÃÂ©e et trÃÂ¨s extensible</p>
+      <p class="service-desc">Base de données relationnelle open source avancée et très extensible</p>
     </div>
   </a>
 
@@ -122,7 +122,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">MariaDB 11.4</p>
-      <p class="service-desc">Base de donnÃÂ©es relationnelle open source et remplacement direct de MySQL</p>
+      <p class="service-desc">Base de données relationnelle open source et remplacement direct de MySQL</p>
     </div>
   </a>
 
@@ -132,7 +132,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Grafana</p>
-      <p class="service-desc">Plateforme open source pour visualiser mÃÂ©triques, journaux et traces</p>
+      <p class="service-desc">Plateforme open source pour visualiser métriques, journaux et traces</p>
     </div>
   </a>
 
@@ -144,7 +144,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
   <div class="mp-cat-icon" style="--cat-color: #f59e0b; --cat-dim: rgba(245,158,11,0.12);">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
   </div>
-  <h2 class="mp-cat-title">Panneaux de contrÃÂ´le</h2>
+  <h2 class="mp-cat-title">Panneaux de contrôle</h2>
 </div>
 <div class="service-grid mp-solo">
 
@@ -154,7 +154,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">cPanel</p>
-      <p class="service-desc">Panneau de contrÃÂ´le dâhÃÂ©bergement web standard avec WHM. GÃÂ©rez sites web, courriels, DNS et bases de donnÃÂ©es depuis une interface unique</p>
+      <p class="service-desc">Panneau de contrôle d'hébergement web standard avec WHM. Gérez sites web, courriels, DNS et bases de données depuis une interface unique</p>
     </div>
   </a>
 
@@ -208,7 +208,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">WordPress</p>
-      <p class="service-desc">SystÃÂ¨me de gestion de contenu le plus populaire au monde, avec pile LAMP complÃÂ¨te</p>
+      <p class="service-desc">Système de gestion de contenu le plus populaire au monde, avec pile LAMP complète</p>
     </div>
   </a>
 
@@ -240,7 +240,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
   <div class="mp-cat-icon" style="--cat-color: #a855f7; --cat-dim: rgba(168,85,247,0.12);">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
   </div>
-  <h2 class="mp-cat-title">Outils dÃÂ©veloppeur</h2>
+  <h2 class="mp-cat-title">Outils développeur</h2>
 </div>
 <div class="service-grid">
 
@@ -250,7 +250,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Docker</p>
-      <p class="service-desc">Moteur de conteneurs avec Docker CE et Docker Compose prÃÂ©installÃÂ©s</p>
+      <p class="service-desc">Moteur de conteneurs avec Docker CE et Docker Compose préinstallés</p>
     </div>
   </a>
 
@@ -270,7 +270,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">GitLab CE 18.11</p>
-      <p class="service-desc">Plateforme DevOps auto-hÃÂ©bergÃÂ©e avec Git, CI/CD et suivi des tickets in one application</p>
+      <p class="service-desc">Plateforme DevOps auto-hébergée avec Git, CI/CD et suivi des tickets in one application</p>
     </div>
   </a>
 
@@ -280,7 +280,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Jenkins</p>
-      <p class="service-desc">Serveur dâautomatisation pour compiler, tester et dÃÂ©ployer.</p>
+      <p class="service-desc">Serveur d'automatisation pour compiler, tester et déployer.</p>
     </div>
   </a>
 
@@ -290,7 +290,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Portainer</p>
-      <p class="service-desc">Interface web pour gÃÂ©rer Docker, Swarm et Kubernetes.</p>
+      <p class="service-desc">Interface web pour gérer Docker, Swarm et Kubernetes.</p>
     </div>
   </a>
 
@@ -300,7 +300,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Coolify</p>
-      <p class="service-desc">PaaS auto-hÃÂ©bergÃÂ© pour dÃÂ©ployer applications, bases de donnÃÂ©es et services.</p>
+      <p class="service-desc">PaaS auto-hébergé pour déployer applications, bases de données et services.</p>
     </div>
   </a>
 
@@ -312,7 +312,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
   <div class="mp-cat-icon" style="--cat-color: #f97316; --cat-dim: rgba(249,115,22,0.12);">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
   </div>
-  <h2 class="mp-cat-title">Bases de donnÃÂ©es</h2>
+  <h2 class="mp-cat-title">Bases de données</h2>
 </div>
 <div class="service-grid">
 
@@ -322,7 +322,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">MariaDB 11.4</p>
-      <p class="service-desc">Base de donnÃÂ©es relationnelle open source et remplacement direct de MySQL</p>
+      <p class="service-desc">Base de données relationnelle open source et remplacement direct de MySQL</p>
     </div>
   </a>
 
@@ -332,7 +332,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">PostgreSQL 17</p>
-      <p class="service-desc">Base de donnÃÂ©es relationnelle open source avancÃÂ©e et trÃÂ¨s extensible</p>
+      <p class="service-desc">Base de données relationnelle open source avancée et très extensible</p>
     </div>
   </a>
 
@@ -342,7 +342,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">MySQL 8.4</p>
-      <p class="service-desc">Base de donnÃÂ©es relationnelle open source la plus dÃÂ©ployÃÂ©e au monde</p>
+      <p class="service-desc">Base de données relationnelle open source la plus déployée au monde</p>
     </div>
   </a>
 
@@ -352,7 +352,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Valkey 9.0</p>
-      <p class="service-desc">Stockage de donnÃÂ©es en mÃÂ©moire haute performance, compatible Redis</p>
+      <p class="service-desc">Stockage de données en mémoire haute performance, compatible Redis</p>
     </div>
   </a>
 
@@ -362,7 +362,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Elasticsearch 8</p>
-      <p class="service-desc">Moteur distribuÃÂ© de recherche et dâanalyse basÃÂ© sur Apache Lucene</p>
+      <p class="service-desc">Moteur distribué de recherche et d'analyse basé sur Apache Lucene</p>
     </div>
   </a>
 
@@ -372,7 +372,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">InfluxDB 2</p>
-      <p class="service-desc">Base de donnÃÂ©es de sÃÂ©ries temporelles conÃÂ§ue pour mÃÂ©triques et analyses en temps rÃÂ©el</p>
+      <p class="service-desc">Base de données de séries temporelles conçue pour métriques et analyses en temps réel</p>
     </div>
   </a>
 
@@ -382,7 +382,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">MongoDB 8.0</p>
-      <p class="service-desc">Base NoSQL orientÃÂ©e documents pour stockage flexible de donnÃÂ©es de type JSON</p>
+      <p class="service-desc">Base NoSQL orientée documents pour stockage flexible de données de type JSON</p>
     </div>
   </a>
 
@@ -392,7 +392,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Supabase</p>
-      <p class="service-desc">Alternative open source ÃÂ  Firebase basÃÂ©e sur PostgreSQL.</p>
+      <p class="service-desc">Alternative open source à Firebase basée sur PostgreSQL.</p>
     </div>
   </a>
 
@@ -404,7 +404,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
   <div class="mp-cat-icon" style="--cat-color: #14b8a6; --cat-dim: rgba(20,184,166,0.12);">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
   </div>
-  <h2 class="mp-cat-title">Applications mÃÂ©tier</h2>
+  <h2 class="mp-cat-title">Applications métier</h2>
 </div>
 <div class="service-grid mp-solo">
 
@@ -414,7 +414,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">n8n</p>
-      <p class="service-desc">Plateforme dâautomatisation de workflows avec ÃÂ©diteur visuel ÃÂ  nÃÂuds</p>
+      <p class="service-desc">Plateforme d'automatisation de workflows avec éditeur visuel à nœuds</p>
     </div>
   </a>
 
@@ -426,7 +426,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
   <div class="mp-cat-icon" style="--cat-color: #06b6d4; --cat-dim: rgba(6,182,212,0.12);">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
   </div>
-  <h2 class="mp-cat-title">SÃÂ©curitÃÂ© et VPN</h2>
+  <h2 class="mp-cat-title">Sécurité et VPN</h2>
 </div>
 <div class="service-grid">
 
@@ -436,7 +436,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">NetBird</p>
-      <p class="service-desc">RÃÂ©seau superposÃÂ© WireGuard open source avec connexions pair ÃÂ  pair</p>
+      <p class="service-desc">Réseau superposé WireGuard open source avec connexions pair à pair</p>
     </div>
   </a>
 
@@ -447,7 +447,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Tailscale</p>
-      <p class="service-desc">Zero-config WireGuard-based VPN for connecting devices and servers</p>
+      <p class="service-desc">VPN WireGuard sans configuration pour connecter appareils et serveurs</p>
     </div>
   </a>
 
@@ -457,7 +457,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Keycloak</p>
-      <p class="service-desc">Gestion open source des identitÃÂ©s et des accÃÂ¨s avec SSO.</p>
+      <p class="service-desc">Gestion open source des identités et des accès avec SSO.</p>
     </div>
   </a>
 
@@ -467,7 +467,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Authentik</p>
-      <p class="service-desc">Fournisseur dâidentitÃÂ© flexible pour SSO, OAuth et SAML.</p>
+      <p class="service-desc">Fournisseur d'identité flexible pour SSO, OAuth et SAML.</p>
     </div>
   </a>
 
@@ -477,7 +477,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Vaultwarden</p>
-      <p class="service-desc">Gestionnaire de mots de passe lÃÂ©ger, auto-hÃÂ©bergÃÂ© et compatible Bitwarden.</p>
+      <p class="service-desc">Gestionnaire de mots de passe léger, auto-hébergé et compatible Bitwarden.</p>
     </div>
   </a>
 
@@ -499,7 +499,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Grafana</p>
-      <p class="service-desc">Plateforme open source pour visualiser mÃÂ©triques, journaux et traces</p>
+      <p class="service-desc">Plateforme open source pour visualiser métriques, journaux et traces</p>
     </div>
   </a>
 
@@ -509,7 +509,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Prometheus</p>
-      <p class="service-desc">Outil de collecte de mÃÂ©triques et dâalerte pour infrastructure.</p>
+      <p class="service-desc">Outil de collecte de métriques et d'alerte pour infrastructure.</p>
     </div>
   </a>
 
@@ -531,7 +531,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">OpenClaw</p>
-      <p class="service-desc">Assistant IA personnel auto-hÃÂ©bergÃÂ© et passerelle multicanal.</p>
+      <p class="service-desc">Assistant IA personnel auto-hébergé et passerelle multicanal.</p>
     </div>
   </a>
 
@@ -541,7 +541,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Ollama</p>
-      <p class="service-desc">ExÃÂ©cutez des LLM locaux sur votre VM et servez des modÃÂ¨les avec lâAPI Ollama.</p>
+      <p class="service-desc">Exécutez des LLM locaux sur votre VM et servez des modèles avec l'API Ollama.</p>
     </div>
   </a>
 
@@ -551,7 +551,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
     </div>
     <div>
       <p class="service-name">Dify</p>
-      <p class="service-desc">CrÃÂ©ez des applications LLM et agents IA avec workflows, RAG et fournisseurs de modÃÂ¨les.</p>
+      <p class="service-desc">Créez des applications LLM et agents IA avec workflows, RAG et fournisseurs de modèles.</p>
     </div>
   </a>
 
@@ -563,7 +563,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
   <div class="mp-cat-icon" style="--cat-color: #64748b; --cat-dim: rgba(100,116,139,0.12);">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>
   </div>
-  <h2 class="mp-cat-title">ÃÂ venir</h2>
+  <h2 class="mp-cat-title">À venir</h2>
 </div>
 <div class="service-grid">
 
@@ -572,8 +572,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/qdrant.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Qdrant <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Base vectorielle pour recherche sÃÂ©mantique et pipelines de rÃÂ©cupÃÂ©ration IA.</p>
+      <p class="service-name">Qdrant <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Base vectorielle pour recherche sémantique et pipelines de récupération IA.</p>
     </div>
   </a>
 
@@ -582,8 +582,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/medusa.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Medusa <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Moteur de commerce headless API-first pour boutiques en ligne personnalisÃÂ©es.</p>
+      <p class="service-name">Medusa <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Moteur de commerce headless API-first pour boutiques en ligne personnalisées.</p>
     </div>
   </a>
 
@@ -592,7 +592,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/bagisto.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Bagisto <span class="mp-status">ÃÂ venir</span></p>
+      <p class="service-name">Bagisto <span class="mp-status">À venir</span></p>
       <p class="service-desc">Plateforme e-commerce Laravel open source pour boutiques en ligne.</p>
     </div>
   </a>
@@ -602,8 +602,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/pterodactyl.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Pterodactyl <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">GÃÂ©rez des serveurs de jeu dans des conteneurs isolÃÂ©s via un panneau web.</p>
+      <p class="service-name">Pterodactyl <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Gérez des serveurs de jeu dans des conteneurs isolés via un panneau web.</p>
     </div>
   </a>
 
@@ -612,8 +612,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/pelican-panel.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Pelican Panel <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Panneau de contrÃÂ´le open source moderne et rapide pour serveurs de jeu.</p>
+      <p class="service-name">Pelican Panel <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Panneau de contrôle open source moderne et rapide pour serveurs de jeu.</p>
     </div>
   </a>
 
@@ -622,8 +622,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/erpnext.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">ERPNext <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">CRM, comptabilitÃÂ©, RH et inventaire dans une suite open source.</p>
+      <p class="service-name">ERPNext <span class="mp-status">À venir</span></p>
+      <p class="service-desc">CRM, comptabilité, RH et inventaire dans une suite open source.</p>
     </div>
   </a>
 
@@ -632,8 +632,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/nocodb.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">NocoDB <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Alternative open source ÃÂ  Airtable qui transforme des bases de donnÃÂ©es en tables.</p>
+      <p class="service-name">NocoDB <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Alternative open source à Airtable qui transforme des bases de données en tables.</p>
     </div>
   </a>
 
@@ -642,8 +642,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/directus.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Directus <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">CMS headless et plateforme de donnÃÂ©es au-dessus de bases SQL.</p>
+      <p class="service-name">Directus <span class="mp-status">À venir</span></p>
+      <p class="service-desc">CMS headless et plateforme de données au-dessus de bases SQL.</p>
     </div>
   </a>
 
@@ -652,7 +652,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/uptime-kuma.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Uptime Kuma <span class="mp-status">ÃÂ venir</span></p>
+      <p class="service-name">Uptime Kuma <span class="mp-status">À venir</span></p>
       <p class="service-desc">Surveillez sites et services avec tableaux de bord et alertes.</p>
     </div>
   </a>
@@ -662,8 +662,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/beszel.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Beszel <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Surveillance serveur lÃÂ©gÃÂ¨re en temps rÃÂ©el avec un petit agent.</p>
+      <p class="service-name">Beszel <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Surveillance serveur légère en temps réel avec un petit agent.</p>
     </div>
   </a>
 
@@ -672,8 +672,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/gatus.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Gatus <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Page de statut automatisÃÂ©e et tableau de santÃÂ© pour services.</p>
+      <p class="service-name">Gatus <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Page de statut automatisée et tableau de santé pour services.</p>
     </div>
   </a>
 
@@ -682,8 +682,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/headplane.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Headplane <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Interface web pour gÃÂ©rer votre rÃÂ©seau Headscale auto-hÃÂ©bergÃÂ©.</p>
+      <p class="service-name">Headplane <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Interface web pour gérer votre réseau Headscale auto-hébergé.</p>
     </div>
   </a>
 
@@ -692,8 +692,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/zammad.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Zammad <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Centre dâassistance et billetterie auto-hÃÂ©bergÃÂ©s pour support client.</p>
+      <p class="service-name">Zammad <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Centre d'assistance et billetterie auto-hébergés pour support client.</p>
     </div>
   </a>
 
@@ -702,8 +702,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/zabbix.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Zabbix <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Surveillance dâinfrastructure et d applications de niveau entreprise.</p>
+      <p class="service-name">Zabbix <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Surveillance d'infrastructure et d applications de niveau entreprise.</p>
     </div>
   </a>
 
@@ -712,8 +712,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/openbao.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">OpenBao <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Gestion open source des secrets et chiffrement des donnÃÂ©es.</p>
+      <p class="service-name">OpenBao <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Gestion open source des secrets et chiffrement des données.</p>
     </div>
   </a>
 
@@ -722,8 +722,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/rancher.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Rancher <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">GÃÂ©rez des clusters Kubernetes depuis une console web unique.</p>
+      <p class="service-name">Rancher <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Gérez des clusters Kubernetes depuis une console web unique.</p>
     </div>
   </a>
 
@@ -732,7 +732,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/nginx-proxy-manager.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Nginx Proxy Manager <span class="mp-status">ÃÂ venir</span></p>
+      <p class="service-name">Nginx Proxy Manager <span class="mp-status">À venir</span></p>
       <p class="service-desc">Gestion du proxy inverse et SSL avec une interface web simple.</p>
     </div>
   </a>
@@ -742,7 +742,7 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/nginx.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Nginx <span class="mp-status">ÃÂ venir</span></p>
+      <p class="service-name">Nginx <span class="mp-status">À venir</span></p>
       <p class="service-desc">Serveur web et proxy inverse haute performance.</p>
     </div>
   </a>
@@ -752,8 +752,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/haproxy.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">HAProxy <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">RÃÂ©partiteur de charge TCP et HTTP fiable et haute performance.</p>
+      <p class="service-name">HAProxy <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Répartiteur de charge TCP et HTTP fiable et haute performance.</p>
     </div>
   </a>
 
@@ -762,8 +762,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/apache-tomcat.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Apache Tomcat <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Java servlet container for running web applications.</p>
+      <p class="service-name">Apache Tomcat <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Conteneur de servlets Java pour exécuter des applications web.</p>
     </div>
   </a>
 
@@ -772,8 +772,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/rabbitmq.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">RabbitMQ <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Reliable message broker for queues and event-driven apps.</p>
+      <p class="service-name">RabbitMQ <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Broker de messages fiable pour files d'attente et applications événementielles.</p>
     </div>
   </a>
 
@@ -782,8 +782,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/apache-kafka.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Apache Kafka <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Distributed event streaming platform for real-time data.</p>
+      <p class="service-name">Apache Kafka <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Plateforme de streaming d'événements distribuée pour données en temps réel.</p>
     </div>
   </a>
 
@@ -792,8 +792,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/seaweedfs.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">SeaweedFS <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Fast distributed file and object storage system.</p>
+      <p class="service-name">SeaweedFS <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Stockage de fichiers et d'objets distribué, compatible S3.</p>
     </div>
   </a>
 
@@ -802,8 +802,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/nexus.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Nexus <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">DÃ©pÃ´t universel d’artefacts pour builds et dÃ©pendances.</p>
+      <p class="service-name">Nexus <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Dépôt universel d'artefacts pour builds et dépendances.</p>
     </div>
   </a>
 
@@ -812,8 +812,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/artifactory.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Artifactory <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">DÃ©pÃ´t d’artefacts JFrog pour binaires et paquets.</p>
+      <p class="service-name">Artifactory <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Dépôt d'artefacts JFrog pour binaires et paquets.</p>
     </div>
   </a>
 
@@ -822,8 +822,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/harbor.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Harbor <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Registre de conteneurs sÃÂ©curisÃÂ© avec analyse des vulnÃÂ©rabilitÃÂ©s.</p>
+      <p class="service-name">Harbor <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Registre de conteneurs sécurisé avec analyse des vulnérabilités.</p>
     </div>
   </a>
 
@@ -832,8 +832,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/forgejo.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Forgejo <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Forge Git auto-hÃÂ©bergÃÂ©e lÃÂ©gÃÂ¨re, dÃÂ©rivÃÂ©e de Gitea.</p>
+      <p class="service-name">Forgejo <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Forge Git auto-hébergée légère, dérivée de Gitea.</p>
     </div>
   </a>
 
@@ -842,8 +842,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/gitea.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Gitea <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Service Git auto-hÃÂ©bergÃÂ© lÃÂ©ger.</p>
+      <p class="service-name">Gitea <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Service Git auto-hébergé léger.</p>
     </div>
   </a>
 
@@ -852,8 +852,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/neo4j.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Neo4j <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Base de donnÃÂ©es graphe pour donnÃÂ©es connectÃÂ©es et requÃÂªtes relationnelles.</p>
+      <p class="service-name">Neo4j <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Base de données graphe pour données connectées et requêtes relationnelles.</p>
     </div>
   </a>
 
@@ -862,8 +862,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/clickhouse.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">ClickHouse <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Base de donnÃÂ©es en colonnes rapide pour analyses en temps rÃÂ©el (OLAP).</p>
+      <p class="service-name">ClickHouse <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Base de données en colonnes rapide pour analyses en temps réel (OLAP).</p>
     </div>
   </a>
 
@@ -872,8 +872,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/mattermost.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Mattermost <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Plateforme auto-hÃÂ©bergÃÂ©e de messagerie dâÃÂ©quipe et de collaboration.</p>
+      <p class="service-name">Mattermost <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Plateforme auto-hébergée de messagerie d'équipe et de collaboration.</p>
     </div>
   </a>
 
@@ -882,8 +882,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/wikijs.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">Wiki.js <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">Modern self-hosted wiki and documentation platform.</p>
+      <p class="service-name">Wiki.js <span class="mp-status">À venir</span></p>
+      <p class="service-desc">Wiki et plateforme de documentation moderne, auto-hébergé.</p>
     </div>
   </a>
 
@@ -892,8 +892,8 @@ gÃÂ©nÃÂ©rÃÂ©s, les services sont configurÃÂ©s et lâimag
       <img src="/icons/marketplace/wg-easy.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
-      <p class="service-name">WG-Easy <span class="mp-status">ÃÂ venir</span></p>
-      <p class="service-desc">The easiest way to run WireGuard VPN with a web UI.</p>
+      <p class="service-name">WG-Easy <span class="mp-status">À venir</span></p>
+      <p class="service-desc">La façon la plus simple d'exécuter un VPN WireGuard avec une interface web.</p>
     </div>
   </a>
 

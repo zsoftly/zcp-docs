@@ -15,8 +15,9 @@ pour les tableaux de bord.
 | Prometheus | 3.4.1     |
 | Ubuntu     | 24.04 LTS |
 
-L'image inclut seulement le serveur Prometheus. Ajoutez les exporters (comme `node_exporter`) et
-Alertmanager comme cibles séparées.
+L'image inclut seulement le serveur Prometheus. Ajoutez les exporters (comme `node_exporter`) comme
+cibles de collecte, et exécutez Alertmanager séparément, en tant que composant distinct, pour gérer
+le routage des alertes.
 
 ## Prérequis
 
@@ -28,14 +29,6 @@ Alertmanager comme cibles séparées.
 
 Les besoins de stockage augmentent avec le nombre de séries et la période de rétention.
 
-## Variables d'environnement
-
-Vous pouvez définir cette variable au déploiement de Prometheus depuis le Marketplace.
-
-| Variable                        | Description                                                      |
-| ------------------------------- | ---------------------------------------------------------------- |
-| `PROMETHEUS_WEB_LISTEN_ADDRESS` | Adresse et port d'écoute de l'UI/API. Par défaut: `0.0.0.0:9090` |
-
 ## Démarrage
 
 ### 1. Se connecter à la VM
@@ -46,8 +39,8 @@ ssh ubuntu@<your-vm-ip>
 
 ### 2. Attendre la configuration au premier démarrage
 
-Au premier démarrage, un script applique l'adresse d'écoute et lance le service. Cela prend moins
-d'une minute. Suivez la progression:
+Au premier démarrage, un script lance le service. Cela prend moins d'une minute. Suivez la
+progression:
 
 ```bash
 journalctl -u prometheus-first-boot.service -f

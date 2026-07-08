@@ -31,12 +31,11 @@ Compose.
 Vous pouvez les définir au déploiement de Keycloak depuis le Marketplace. Laissez un champ de mot de
 passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
-| Variable                  | Description                                                                         |
-| ------------------------- | ----------------------------------------------------------------------------------- |
-| `KEYCLOAK_ADMIN_PASSWORD` | Mot de passe du compte initial `admin`                                              |
-| `KC_DB_PASSWORD`          | Mot de passe de la base PostgreSQL interne                                          |
-| `KC_HOSTNAME`             | Nom d'hôte public ou IP depuis lequel Keycloak est servi. Par défaut: l'IP de la VM |
-| `KC_BEHIND_PROXY`         | Définir à `true` seulement si vous utilisez votre propre proxy inverse TLS          |
+| Variable                  | Description                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| `KEYCLOAK_ADMIN`          | Nom d'utilisateur du compte administrateur initial. Par défaut: `admin`                    |
+| `KEYCLOAK_ADMIN_PASSWORD` | Mot de passe du compte administrateur initial                                              |
+| `KC_HOSTNAME`             | Nom d'hôte public ou IP depuis lequel Keycloak est servi. Par défaut: l'IP privée de la VM |
 
 ## Démarrage
 
@@ -116,8 +115,8 @@ adresse.
 :::
 
 **En production**, placez Keycloak derrière un proxy inverse (Caddy, nginx ou Traefik) qui termine
-TLS sur le port 443 et relaie vers le port 8080, puis définissez `KC_BEHIND_PROXY=true`. Limitez
-l'accès direct au port 8080:
+TLS sur le port 443 et relaie vers le port 8080, puis définissez `KC_PROXY_HEADERS=xforwarded` dans
+`/opt/keycloak/.env`. Limitez l'accès direct au port 8080:
 
 ```bash
 sudo ufw delete allow 8080/tcp

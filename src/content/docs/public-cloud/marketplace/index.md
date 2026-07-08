@@ -792,7 +792,7 @@ automatically. Credentials are generated, services are configured, and the image
     </div>
     <div>
       <p class="service-name">SeaweedFS <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Fast distributed file and object storage system.</p>
+      <p class="service-desc">Fast distributed file store with S3-compatible object storage.</p>
     </div>
   </a>
 

@@ -23,6 +23,16 @@ s'exécute sur le port 8080.
 | RAM       | 2 Go    | 4 Go       |
 | Stockage  | 20 Go   | 50 Go      |
 
+## Variables d'environnement
+
+Vous pouvez les définir au déploiement de Jenkins depuis le Marketplace. Laissez un champ de mot de
+passe vide pour générer automatiquement une valeur aléatoire sécurisée.
+
+| Variable                 | Description                                        |
+| ------------------------ | -------------------------------------------------- |
+| `JENKINS_ADMIN_USER`     | Nom d'utilisateur du compte administrateur initial |
+| `JENKINS_ADMIN_PASSWORD` | Mot de passe du compte administrateur initial      |
+
 ## Démarrage
 
 ### 1. Se connecter à la VM

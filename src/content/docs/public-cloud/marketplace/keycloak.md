@@ -30,12 +30,11 @@ Keycloak runs in production mode (`start`) with a PostgreSQL database, as a Dock
 You can optionally set these when deploying Keycloak from the marketplace. Leave a password field
 blank to have a secure random value generated automatically.
 
-| Variable                  | Description                                                               |
-| ------------------------- | ------------------------------------------------------------------------- |
-| `KEYCLOAK_ADMIN_PASSWORD` | Password for the initial `admin` account                                  |
-| `KC_DB_PASSWORD`          | Password for the internal PostgreSQL database                             |
-| `KC_HOSTNAME`             | Public hostname or IP Keycloak is served from. Defaults to the VM's IP    |
-| `KC_BEHIND_PROXY`         | Set to `true` only when fronting Keycloak with your own TLS reverse proxy |
+| Variable                  | Description                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------ |
+| `KEYCLOAK_ADMIN`          | Username for the initial admin account. Defaults to `admin`                    |
+| `KEYCLOAK_ADMIN_PASSWORD` | Password for the initial admin account                                         |
+| `KC_HOSTNAME`             | Public hostname or IP Keycloak is served from. Defaults to the VM's private IP |
 
 ## Getting started
 
@@ -112,8 +111,8 @@ requests from the new address.
 :::
 
 **For production use**, front Keycloak with a reverse proxy (Caddy, nginx, or Traefik) that
-terminates TLS on port 443 and forwards to port 8080, and set `KC_BEHIND_PROXY=true`. Restrict
-direct access to port 8080:
+terminates TLS on port 443 and forwards to port 8080, and set `KC_PROXY_HEADERS=xforwarded` in
+`/opt/keycloak/.env`. Restrict direct access to port 8080:
 
 ```bash
 sudo ufw delete allow 8080/tcp

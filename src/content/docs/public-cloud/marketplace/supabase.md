@@ -30,11 +30,14 @@ postgres-meta, all on PostgreSQL 17.
 
 ## Environment variables
 
-You can optionally set this when deploying Supabase from the marketplace.
+You can optionally set these when deploying Supabase from the marketplace. Leave a password field
+blank to have a secure random value generated automatically.
 
-| Variable        | Description                                                                |
-| --------------- | -------------------------------------------------------------------------- |
-| `SUPABASE_FQDN` | Fully qualified domain name for the instance, for example `db.example.com` |
+| Variable             | Description                                               |
+| -------------------- | --------------------------------------------------------- |
+| `SITE_URL`           | Public URL for the Supabase instance and Studio dashboard |
+| `POSTGRES_PASSWORD`  | Password for the PostgreSQL database                      |
+| `DASHBOARD_PASSWORD` | Password for the Studio dashboard login                   |
 
 ## Getting started
 

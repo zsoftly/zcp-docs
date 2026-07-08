@@ -14,8 +14,8 @@ well with Grafana for dashboards.
 | Prometheus | 3.4.1     |
 | Ubuntu     | 24.04 LTS |
 
-The image ships the Prometheus server only. Add exporters (such as `node_exporter`) and Alertmanager
-as separate targets.
+The image ships the Prometheus server only. Add exporters (such as `node_exporter`) as scrape
+targets, and run Alertmanager separately as its own component to handle alert routing.
 
 ## Requirements
 
@@ -27,14 +27,6 @@ as separate targets.
 
 Storage requirements grow with the number of series and the retention period.
 
-## Environment variables
-
-You can optionally set this when deploying Prometheus from the marketplace.
-
-| Variable                        | Description                                                      |
-| ------------------------------- | ---------------------------------------------------------------- |
-| `PROMETHEUS_WEB_LISTEN_ADDRESS` | Address and port the UI/API binds to. Defaults to `0.0.0.0:9090` |
-
 ## Getting started
 
 ### 1. Connect to your VM
@@ -45,8 +37,7 @@ ssh ubuntu@<your-vm-ip>
 
 ### 2. Wait for first-boot configuration
 
-On the first boot, a setup script applies the listen address and starts the service. This takes
-under a minute. Track progress:
+On the first boot, a setup script starts the service. This takes under a minute. Track progress:
 
 ```bash
 journalctl -u prometheus-first-boot.service -f

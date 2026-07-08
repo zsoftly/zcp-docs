@@ -25,14 +25,6 @@ and a web dashboard, while keeping all your data under your control.
 
 Coolify also runs the applications you deploy, so size the instance for those workloads too.
 
-## Environment variables
-
-You can optionally set this when deploying Coolify from the marketplace.
-
-| Variable       | Description                                                                     |
-| -------------- | ------------------------------------------------------------------------------- |
-| `COOLIFY_FQDN` | Fully qualified domain name for the dashboard, for example `deploy.example.com` |
-
 ## Getting started
 
 ### 1. Connect to your VM

@@ -38,6 +38,7 @@ blank to have a secure random value generated automatically.
 | Variable            | Description                                           |
 | ------------------- | ----------------------------------------------------- |
 | `GHOST_URL`         | Full site URL, for example `https://blog.example.com` |
+| `GHOST_ADMIN_EMAIL` | Email for the Ghost admin account                     |
 | `GHOST_DB_PASSWORD` | Password for the MySQL `ghost` database user          |
 
 If `GHOST_URL` is not set, the VM serves a placeholder page and leaves Ghost unconfigured until you

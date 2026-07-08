@@ -26,14 +26,6 @@ flux Git et un tableau de bord web, tout en gardant vos données sous votre cont
 Coolify exécute aussi les applications que vous déployez. Dimensionnez donc l'instance pour ces
 charges de travail.
 
-## Variables d'environnement
-
-Vous pouvez définir cette variable au déploiement de Coolify depuis le Marketplace.
-
-| Variable       | Description                                                                 |
-| -------------- | --------------------------------------------------------------------------- |
-| `COOLIFY_FQDN` | Nom de domaine complet du tableau de bord, par exemple `deploy.example.com` |
-
 ## Démarrage
 
 ### 1. Se connecter à la VM

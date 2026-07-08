@@ -29,17 +29,6 @@ stockage vectoriel Weaviate et nginx).
 
 Les besoins en RAM et en stockage augmentent avec l'utilisation.
 
-## Variables d'environnement
-
-Vous pouvez les définir au déploiement de Dify depuis le Marketplace. Laissez un champ vide pour
-générer automatiquement une valeur aléatoire sécurisée.
-
-| Variable             | Description                                                                                 |
-| -------------------- | ------------------------------------------------------------------------------------------- |
-| `DIFY_PUBLIC_URL`    | URL de base publique (par exemple `https://dify.example.com`) pour console, API et webhooks |
-| `DIFY_INIT_PASSWORD` | Mot de passe facultatif qui protege l'assistant unique `/install`                           |
-| `DIFY_ENABLE_HTTPS`  | Definir a `true` pour que nginx intégré serve HTTPS. Par defaut: `false`                    |
-
 ## Démarrage
 
 ### 1. Se connecter à la VM
@@ -69,8 +58,7 @@ http://<your-vm-ip>/install
 ```
 
 Creez le compte administrateur (adresse courriel et mot de passe de votre choix), puis
-connectez-vous a `http://<your-vm-ip>/`. Si vous avez defini `DIFY_INIT_PASSWORD`, saisissez-le
-d'abord pour ouvrir l'assistant.
+connectez-vous a `http://<your-vm-ip>/`.
 
 ### 4. Ajouter un fournisseur de modèle
 
@@ -108,9 +96,9 @@ Configuration d'environnement: `/opt/dify/docker/.env`. Les données persistante
 Les ports 80 et 443 sont ouverts sur l'interface réseau de la VM. UFW est activé et autorise SSH
 (port 22), HTTP (80) et HTTPS (443).
 
-Dify sert HTTP en clair par defaut. **En production**, definissez `DIFY_PUBLIC_URL` avec votre
-domaine et activéz HTTPS, soit avec le nginx intégré (`DIFY_ENABLE_HTTPS=true` avec vos propres
-certificats), soit avec votre propre proxy inverse. Appliquez les changements `.env` avec:
+Dify sert HTTP en clair par défaut. **En production**, placez Dify derrière votre propre proxy
+inverse avec TLS, ou configurez HTTPS et l'URL publique dans `/opt/dify/docker/.env`. Appliquez les
+changements `.env` avec:
 
 ```bash
 cd /opt/dify/docker && docker compose down && docker compose up -d
