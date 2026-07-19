@@ -167,5 +167,9 @@ values, removed any stale entries, and that the domain isn't locked or expired a
 
 ## Next Steps
 
-- [Manage DNS records](/public-cloud/dns/records): add and edit A, CNAME, MX, TXT, and other records
-  once ZSoftly is authoritative.
+- [DNS overview](/public-cloud/dns/overview): how zones, name servers, and records fit together.
+- [Manage DNS records](/public-cloud/dns/records): add and edit A, AAAA, CNAME, MX, TXT, CAA, and NS
+  records once ZSoftly is authoritative.
+- [Worked examples](/public-cloud/dns/examples): host a website, route email, verify ownership,
+  restrict certificate issuance, or delegate a subdomain.
+- [Troubleshooting](/public-cloud/dns/troubleshooting): check propagation and fix common problems.

@@ -121,11 +121,17 @@ les commandes IAM `sub-user`/`role`/`permission`) sont exemptées. Voir
 
 ### Réseau : DNS
 
-| Commande                  | Description             |
-| ------------------------- | ----------------------- |
-| `zcp dns list`            | Lister les domaines DNS |
-| `zcp dns create`          | Ajouter un domaine      |
-| `zcp dns delete <domain>` | Retirer un domaine      |
+De niveau compte. Aucun `--region`/`--project` requis, sauf pour `zcp dns create`, qui reçoit
+`--project`. Voir [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli).
+
+| Commande                  | Description                                        |
+| ------------------------- | -------------------------------------------------- |
+| `zcp dns list`            | Lister les domaines DNS                            |
+| `zcp dns create`          | Ajouter un domaine                                 |
+| `zcp dns show <domain>`   | Afficher un domaine et ses enregistrements         |
+| `zcp dns record-create`   | Ajouter un enregistrement par nom, type et contenu |
+| `zcp dns record-delete`   | Supprimer un ensemble par nom et type              |
+| `zcp dns delete <domain>` | Retirer un domaine                                 |
 
 ### Réseau : adresses IP
 
@@ -146,7 +152,7 @@ les commandes IAM `sub-user`/`role`/`permission`) sont exemptées. Voir
 
 ### Identité et accès (IAM)
 
-De niveau compte — aucun `--region`/`--project` requis. Voir
+De niveau compte. Aucun `--region`/`--project` requis. Voir
 [Rôles et permissions](/fr/public-cloud/iam/roles) et [Utilisateurs](/fr/public-cloud/iam/users)
 pour le modèle et le catalogue complet des permissions.
 

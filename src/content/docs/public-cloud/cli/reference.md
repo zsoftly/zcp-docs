@@ -120,11 +120,17 @@ billing/support/dashboard, and the IAM commands `sub-user`/`role`/`permission`) 
 
 ### Networking: DNS
 
-| Command                   | Description      |
-| ------------------------- | ---------------- |
-| `zcp dns list`            | List DNS domains |
-| `zcp dns create`          | Add a domain     |
-| `zcp dns delete <domain>` | Remove a domain  |
+Account-level. No `--region`/`--project` needed, except `zcp dns create` takes `--project`. See
+[Manage DNS with the CLI](/public-cloud/dns/cli).
+
+| Command                   | Description                             |
+| ------------------------- | --------------------------------------- |
+| `zcp dns list`            | List DNS domains                        |
+| `zcp dns create`          | Add a domain                            |
+| `zcp dns show <domain>`   | Show a domain and its records           |
+| `zcp dns record-create`   | Add a record by name, type, and content |
+| `zcp dns record-delete`   | Delete a record set by name and type    |
+| `zcp dns delete <domain>` | Remove a domain                         |
 
 ### Networking: IP Addresses
 

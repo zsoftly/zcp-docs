@@ -40,6 +40,34 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
+### v0.0.25 : 18 juillet 2026
+
+**Les enregistrements `MX` fonctionnent désormais depuis le CLI.** `zcp dns record-create`
+n'envoyait jamais la priorité de l'enregistrement. Chaque création d'un `MX` échouait donc avec une
+erreur d'API. La commande reçoit maintenant l'option `--priority` (de 0 à 65535, obligatoire pour
+`MX`). Placez le serveur de courrier dans `--content` et le nombre de préférence dans `--priority`.
+Une préférence de `0` est envoyée correctement. Le CLI refuse `--priority` pour les autres types et
+affiche un message clair. Voir [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli).
+
+```bash
+zcp dns record-create --domain examplecom --name @ --type MX --content mail.example.com. --priority 10
+```
+
+### v0.0.24 : 16 juillet 2026
+
+**La suppression d'une VM libère maintenant son IP publique.** `instance delete` passe par le même
+flux d'annulation de service que la console. L'adresse attribuée automatiquement est donc libérée au
+lieu de rester allouée et facturable. L'IP publique d'un répartiteur de charge constitue une
+ressource distincte et réutilisable. Elle est conservée par défaut. Ajoutez `--release-ip` à
+`loadbalancer delete` pour la libérer aussi.
+
+- **`instance list` et `instance get` affichent maintenant l'IP publique**, et `get` affiche le
+  cycle de facturation.
+- **`ip list` et `loadbalancer list` renvoient tous les résultats** au lieu de s'arrêter à la
+  première page.
+- **Le CLI et son SDK sont maintenant sous licence Apache 2.0**, ce qui permet au fournisseur
+  Terraform / OpenTofu d'intégrer le SDK.
+
 ### v0.0.23 : 8 juillet 2026
 
 **`--wait` rapporte désormais l'état réel de l'instance.** L'état en cache de la plateforme accuse
@@ -309,6 +337,26 @@ Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié 
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v0.1.2 : 18 juillet 2026
+
+**Les enregistrements `MX` dans `zcp_dns_record`.** Un nouvel argument `priority`, de 0 à 65535,
+définit le nombre de préférence. Placez le serveur de courrier dans `content`. La priorité est
+obligatoire pour `MX` et refusée pour tous les autres types. Ces deux règles sont vérifiées pendant
+la planification afin qu'une erreur survienne avant l'application. Cette version repose sur le SDK
+du CLI `zcp` v0.0.25 et a été vérifiée avec l'API DNS en production.
+
+- **La valeur `SRV` a été retirée des valeurs de `type` documentées.** L'API DNS refuse les
+  enregistrements `SRV` et `LOC`. La présentation de `SRV` induisait donc en erreur. `type` demeure
+  une chaîne libre.
+
+### v0.1.1 : 18 juillet 2026
+
+**Les destructions libèrent les IP publiques attribuées automatiquement.** `zcp_instance` et
+`zcp_load_balancer` libèrent ces adresses au moyen du flux d'annulation de service. Une destruction
+ne laisse donc plus d'adresse facturable. Définissez `assign_public_ip = false` pour créer une
+instance sans IP publique. Cette version passe aussi au SDK du CLI `zcp` v0.0.24, qui parcourt
+toutes les pages des listes d'IP publiques et de répartiteurs de charge.
 
 ### v0.1.0 : 8 juillet 2026
 

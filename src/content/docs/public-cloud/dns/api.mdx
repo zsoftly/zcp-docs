@@ -1,0 +1,452 @@
+---
+title: Manage DNS with the API
+description:
+  List DNS zones, read records, and add or remove records over the ZSoftly Cloud Platform API.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Manage DNS records over the REST API. Every request uses the base URL
+`https://api.zcp.zsoftly.ca/api` and sends a Bearer token in the `Authorization` header. See
+[Authentication](/public-cloud/api/authentication) to create a token.
+
+:::note
+
+Create the zone first in the [portal](/public-cloud/dns/domains) or with the CLI (`zcp dns create`),
+then manage its records with the calls below. Each zone has a **slug** used by every record call.
+Read the slug from `zcp dns list` or the list call below.
+
+:::
+
+## List Your Zones
+
+<Tabs syncKey="lang">
+<TabItem label="cURL">
+
+```bash
+curl -s "https://api.zcp.zsoftly.ca/api/dns/domains" \
+  -H "Authorization: Bearer your-token" \
+  -H "Accept: application/json" | jq '.data'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import requests
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"
+
+resp = requests.get(
+    f"{BASE}/dns/domains",
+    headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/json"},
+)
+for zone in resp.json()["data"]:
+    print(zone["slug"], zone["name"], zone["status"])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token';
+
+const res = await fetch(`${BASE}/dns/domains`, {
+  headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/json' },
+});
+const { data } = await res.json();
+for (const zone of data) {
+  console.log(zone.slug, zone.name, zone.status);
+}
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	const base = "https://api.zcp.zsoftly.ca/api"
+	const token = "your-token"
+
+	req, _ := http.NewRequest("GET", base+"/dns/domains", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var env struct {
+		Data []struct {
+			Slug   string `json:"slug"`
+			Name   string `json:"name"`
+			Status bool   `json:"status"`
+		} `json:"data"`
+	}
+	json.NewDecoder(resp.Body).Decode(&env)
+	for _, zone := range env.Data {
+		fmt.Println(zone.Slug, zone.Name, zone.Status)
+	}
+}
+```
+
+</TabItem>
+</Tabs>
+
+Response:
+
+```json
+{
+  "status": "Success",
+  "message": "OK",
+  "total": 1,
+  "data": [{ "name": "example.com", "slug": "examplecom", "status": true }]
+}
+```
+
+## Show a Zone and Its Records
+
+Pass the zone slug. The response lists every record, including the `SOA` and `NS` records ZCP adds
+for you.
+
+<Tabs syncKey="lang">
+<TabItem label="cURL">
+
+```bash
+curl -s "https://api.zcp.zsoftly.ca/api/dns/domains/examplecom" \
+  -H "Authorization: Bearer your-token" \
+  -H "Accept: application/json" | jq '.data.records'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import requests
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"
+
+resp = requests.get(
+    f"{BASE}/dns/domains/examplecom",
+    headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/json"},
+)
+for rec in resp.json()["data"]["records"]:
+    print(rec["name"], rec["type"], rec["contents"], rec["ttl"])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token';
+
+const res = await fetch(`${BASE}/dns/domains/examplecom`, {
+  headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/json' },
+});
+const { data } = await res.json();
+for (const rec of data.records) {
+  console.log(rec.name, rec.type, rec.contents, rec.ttl);
+}
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	const base = "https://api.zcp.zsoftly.ca/api"
+	const token = "your-token"
+
+	req, _ := http.NewRequest("GET", base+"/dns/domains/examplecom", nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var env struct {
+		Data struct {
+			Records []struct {
+				Name     string   `json:"name"`
+				Type     string   `json:"type"`
+				Contents []string `json:"contents"`
+				TTL      int      `json:"ttl"`
+			} `json:"records"`
+		} `json:"data"`
+	}
+	json.NewDecoder(resp.Body).Decode(&env)
+	for _, rec := range env.Data.Records {
+		fmt.Println(rec.Name, rec.Type, rec.Contents, rec.TTL)
+	}
+}
+```
+
+</TabItem>
+</Tabs>
+
+The API groups records by name and type. A record set holds one or more values under `contents`:
+
+```json
+{
+  "name": "www.example.com.",
+  "type": "A",
+  "ttl": 14400,
+  "contents": ["203.0.113.10"]
+}
+```
+
+## Add a Record
+
+`POST` to the zone's `records` path. The `name` field is **relative** to the zone. Send `www`, not
+`www.example.com`. Use `@` for the zone root.
+
+:::note
+
+Supported types are `A`, `AAAA`, `CNAME`, `MX`, `TXT`, `CAA`, and `NS`. `SRV` and `LOC` are not
+available yet.
+
+:::
+
+<Tabs syncKey="lang">
+<TabItem label="cURL">
+
+```bash
+curl -s -X POST "https://api.zcp.zsoftly.ca/api/dns/domains/examplecom/records" \
+  -H "Authorization: Bearer your-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{ "name": "www", "type": "A", "content": "203.0.113.10", "ttl": 14400 }'
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import requests
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"
+
+record = {"name": "www", "type": "A", "content": "203.0.113.10", "ttl": 14400}
+
+resp = requests.post(
+    f"{BASE}/dns/domains/examplecom/records",
+    headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/json"},
+    json=record,
+)
+print(resp.json()["message"])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token';
+
+const res = await fetch(`${BASE}/dns/domains/examplecom/records`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${TOKEN}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+  body: JSON.stringify({ name: 'www', type: 'A', content: '203.0.113.10', ttl: 14400 }),
+});
+console.log((await res.json()).message);
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	const base = "https://api.zcp.zsoftly.ca/api"
+	const token = "your-token"
+
+	body := []byte(`{"name":"www","type":"A","content":"203.0.113.10","ttl":14400}`)
+
+	req, _ := http.NewRequest("POST", base+"/dns/domains/examplecom/records", bytes.NewReader(body))
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var env struct {
+		Message string `json:"message"`
+	}
+	json.NewDecoder(resp.Body).Decode(&env)
+	fmt.Println(env.Message)
+}
+```
+
+</TabItem>
+</Tabs>
+
+Response:
+
+```json
+{ "status": "Success", "message": "Domain record created successfully." }
+```
+
+There is no update endpoint. To change a record, delete it and create it again with the new value.
+
+### MX Records
+
+An `MX` record needs a **`priority`** field alongside `content`. Send the mail server in `content`
+and the preference number in `priority`.
+
+```bash
+curl -s -X POST "https://api.zcp.zsoftly.ca/api/dns/domains/examplecom/records" \
+  -H "Authorization: Bearer your-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{ "name": "@", "type": "MX", "content": "mail.example.com.", "priority": 10, "ttl": 3600 }'
+```
+
+The record then resolves as `10 mail.example.com.`. Omitting `priority` on an `MX` record fails.
+
+## Delete a Record
+
+`DELETE` the zone's `records` path with `name` and `type` query parameters. Here `name` is the
+**fully qualified** record name with a trailing dot.
+
+<Tabs syncKey="lang">
+<TabItem label="cURL">
+
+```bash
+curl -s -X DELETE \
+  "https://api.zcp.zsoftly.ca/api/dns/domains/examplecom/records?name=www.example.com.&type=A" \
+  -H "Authorization: Bearer your-token" \
+  -H "Accept: application/json"
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import requests
+
+BASE = "https://api.zcp.zsoftly.ca/api"
+TOKEN = "your-token"
+
+resp = requests.delete(
+    f"{BASE}/dns/domains/examplecom/records",
+    headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/json"},
+    params={"name": "www.example.com.", "type": "A"},
+)
+print(resp.json()["message"])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+const BASE = 'https://api.zcp.zsoftly.ca/api';
+const TOKEN = 'your-token';
+
+const url = new URL(`${BASE}/dns/domains/examplecom/records`);
+url.search = new URLSearchParams({ name: 'www.example.com.', type: 'A' }).toString();
+
+const res = await fetch(url, {
+  method: 'DELETE',
+  headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/json' },
+});
+console.log((await res.json()).message);
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/url"
+)
+
+func main() {
+	const base = "https://api.zcp.zsoftly.ca/api"
+	const token = "your-token"
+
+	q := url.Values{"name": {"www.example.com."}, "type": {"A"}}
+	endpoint := base + "/dns/domains/examplecom/records?" + q.Encode()
+
+	req, _ := http.NewRequest("DELETE", endpoint, nil)
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	var env struct {
+		Message string `json:"message"`
+	}
+	json.NewDecoder(resp.Body).Decode(&env)
+	fmt.Println(env.Message)
+}
+```
+
+</TabItem>
+</Tabs>
+
+Response:
+
+```json
+{ "status": "Success", "message": "Domain record deleted successfully." }
+```
+
+## Full API Reference
+
+The complete interactive reference is the Swagger UI:
+[Open the Cloud Platform API](https://api.zcp.zsoftly.ca/api/docs/nimbo).
+
+See also: [DNS Overview](/public-cloud/dns/overview), [Domains](/public-cloud/dns/domains),
+[DNS Records](/public-cloud/dns/records), [Worked examples](/public-cloud/dns/examples),
+[Manage DNS with the CLI](/public-cloud/dns/cli),
+[Troubleshooting](/public-cloud/dns/troubleshooting), [API Quickstart](/public-cloud/api/quickstart)

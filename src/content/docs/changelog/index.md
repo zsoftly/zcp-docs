@@ -38,6 +38,30 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v0.0.25: July 18, 2026
+
+**`MX` records now work from the CLI.** `zcp dns record-create` never sent a record's priority, so
+every `MX` create failed with an API error. It now takes a `--priority` flag (0-65535, required for
+`MX`): put the mail server in `--content` and the preference number in `--priority`. The CLI sends a
+`0` preference correctly and rejects `--priority` on every other type with a clear message. See
+[Manage DNS with the CLI](/public-cloud/dns/cli).
+
+```bash
+zcp dns record-create --domain examplecom --name @ --type MX --content mail.example.com. --priority 10
+```
+
+### v0.0.24: July 16, 2026
+
+**Deleting a VM now releases its auto-assigned public IP.** `instance delete` uses the same
+service-cancellation workflow as the console, so the address is no longer left allocated and
+billable. `loadbalancer delete` also uses service cancellation, but keeps its separate, reusable
+public IP by default. Add `--release-ip` to release the address.
+
+- **`instance list` and `instance get` now show the public IP**, and `get` shows the billing cycle.
+- **`ip list` and `loadbalancer list` return every result** instead of stopping at the first page.
+- **The CLI and its SDK are now Apache 2.0 licensed**, allowing the Terraform / OpenTofu provider to
+  embed the SDK.
+
 ### v0.0.23: July 8, 2026
 
 **`--wait` now reports the real instance state.** The platform's cached state sometimes lags minutes
@@ -277,6 +301,24 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [OpenTofu registry](https://search.opentofu.org/provider/zsoftly/zcp) and the
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v0.1.2: July 18, 2026
+
+**`MX` records in `zcp_dns_record`.** A new `priority` argument (0-65535) sets the preference
+number. Put the mail server in `content`. The provider requires priority for `MX` and rejects it for
+every other type during planning, so invalid configurations fail before apply. Built on the `zcp`
+CLI SDK v0.0.25 and verified against the live DNS API.
+
+- **Dropped `SRV` from the documented `type` values.** The DNS API rejects `SRV` and `LOC` records,
+  so advertising `SRV` was misleading. `type` stays a free-form string.
+
+### v0.1.1: July 18, 2026
+
+**Destroy operations release auto-assigned public IPs.** `zcp_instance` and `zcp_load_balancer`
+release auto-assigned public IPs through the service-cancellation workflow, preventing billable
+addresses from remaining after destroy. Set `assign_public_ip = false` to create an instance without
+one. This release also upgrades the `zcp` CLI SDK to v0.0.24, which pages through every result in
+public IP and load balancer listings.
 
 ### v0.1.0: July 8, 2026
 

@@ -183,5 +183,11 @@ verrouillé ou expiré chez le registraire.
 
 ## Prochaines étapes
 
+- [Vue d'ensemble du DNS](/fr/public-cloud/dns/overview) : comprenez le rôle des zones, des serveurs
+  de noms et des enregistrements.
 - [Gérer les enregistrements DNS](/fr/public-cloud/dns/records) : ajoutez et modifiez des
-  enregistrements A, CNAME, MX, TXT et autres une fois que ZSoftly est faisant autorité.
+  enregistrements A, AAAA, CNAME, MX, TXT, CAA et NS lorsque ZSoftly fait autorité.
+- [Exemples pratiques](/fr/public-cloud/dns/examples) : hébergez un site Web, acheminez les
+  courriels, vérifiez la propriété, limitez l'émission de certificats ou déléguez un sous-domaine.
+- [Dépannage](/fr/public-cloud/dns/troubleshooting) : vérifiez la propagation et corrigez les
+  problèmes courants.
