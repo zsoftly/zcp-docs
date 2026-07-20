@@ -6,118 +6,93 @@ Nginx is a high-performance web server, reverse proxy, and load balancer that po
 of the busiest sites on the internet. It serves static content efficiently, proxies requests to
 application backends, and terminates TLS with a small memory footprint.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Nginx image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Nginx yourself.
+| Component | Version   |
+| --------- | --------- |
+| Nginx     | 1.30.3    |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 1 GB    | 2 GB        |
-| Storage  | 10 GB   | 20 GB       |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Verify Nginx is running
+
+There is no first-boot configuration. Nginx starts immediately after the VM boots.
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+systemctl status nginx
 ```
 
-## Install Nginx
+### 3. Access the default site
 
-Install the latest stable Nginx from the official nginx.org apt repository. First add the
-prerequisites and the signing key:
+Open a browser and navigate to:
 
-```bash
-sudo apt install -y curl gnupg2 ca-certificates lsb-release ubuntu-keyring
+```text
+http://<your-vm-ip>
 ```
 
-```bash
-curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
-  | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
-```
-
-Add the stable repository for your Ubuntu release:
-
-```bash
-echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
-https://nginx.org/packages/ubuntu $(lsb_release -cs) nginx" \
-  | sudo tee /etc/apt/sources.list.d/nginx.list
-```
-
-Install and start Nginx:
-
-```bash
-sudo apt update && sudo apt install -y nginx
-sudo systemctl enable --now nginx
-```
-
-Verify it is serving:
+You can also verify the response from the VM:
 
 ```bash
 curl -I http://localhost
 ```
 
-## Configure Nginx
-
-The main config lives at `/etc/nginx/nginx.conf`, and site config files go in `/etc/nginx/conf.d/`.
-Create a simple reverse proxy that forwards to a backend on port 3000:
+## Managing Nginx
 
 ```bash
-sudo tee /etc/nginx/conf.d/app.conf >/dev/null <<'EOF'
-server {
-    listen 80;
-    server_name example.com;
+# Check service status
+systemctl status nginx
 
-    location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-EOF
+# Validate the configuration
+sudo nginx -t
+
+# Restart
+sudo systemctl restart nginx
+
+# View logs
+sudo journalctl -u nginx -f
 ```
 
-Test the configuration and reload:
+| Path                     | Purpose                        |
+| ------------------------ | ------------------------------ |
+| `/etc/nginx/nginx.conf`  | Main configuration             |
+| `/etc/nginx/conf.d/`     | Server and proxy configuration |
+| `/usr/share/nginx/html/` | Default web root               |
+
+## Security
+
+Ports 80 and 443 are open on the VM's network interface. UFW is enabled and allows HTTP (port 80),
+HTTPS (port 443), and SSH (port 22). Nginx serves HTTP on port 80 by default. Port 443 has no TLS
+listener until you configure a certificate and HTTPS server block.
+
+**To restrict HTTP and HTTPS to a specific IP:**
 
 ```bash
-sudo nginx -t && sudo systemctl reload nginx
+sudo ufw delete allow 80/tcp
+sudo ufw delete allow 443/tcp
+sudo ufw allow from <trusted-ip> to any port 80
+sudo ufw allow from <trusted-ip> to any port 443
 ```
 
-For HTTPS, install Certbot and request a Let's Encrypt certificate:
+**To access the default site without leaving port 80 open, use an SSH tunnel:**
 
 ```bash
-sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d example.com
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:8080
 ```
 
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Nginx needs and add
-them to the instance's network/security rules in the portal:
-
-```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-```
+**For production use**, configure Nginx with a trusted TLS certificate and serve public sites on
+port 443. Nginx does not add authentication to proxied services, so protect each upstream
+application separately.
 
 ## Next steps
 

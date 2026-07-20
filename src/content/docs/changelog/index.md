@@ -38,6 +38,18 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v0.0.26: July 19, 2026
+
+**Port forwarding and SSH key fixes.**
+
+- **`portforward list` shows the ports again.** The public and private port columns were blank
+  because the response was read from the wrong field names. They display correctly now.
+- **`portforward create` and `firewall create` stop printing an empty table.** Both create the rule
+  asynchronously and return no object, so they now report that the request was accepted and point
+  you to the matching `list` command.
+- **`ssh-key delete` accepts the key's ID, name, or slug.** It previously took only the slug and
+  rejected the ID that `ssh-key list` shows. Deleting an unknown key is now a no-op.
+
 ### v0.0.25: July 18, 2026
 
 **`MX` records now work from the CLI.** `zcp dns record-create` never sent a record's priority, so

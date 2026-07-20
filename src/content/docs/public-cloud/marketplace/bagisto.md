@@ -6,111 +6,116 @@ Bagisto is an open-source e-commerce platform built on the Laravel PHP framework
 ships a full storefront, multi-channel admin, inventory, and order management out of the box. The
 official Docker setup bundles every dependency, so it is the fastest way to stand it up.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Bagisto image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Bagisto yourself.
+| Component | Version   |
+| --------- | --------- |
+| Bagisto   | 2.4.8     |
+| PHP       | 8.3       |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 2       | 4           |
-| RAM      | 4 GB    | 8 GB        |
-| Storage  | 25 GB   | 50 GB       |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab. It opens on
-   **Featured** by default, so select **Marketplace** next to it. Pick your region (YOW-1 or YUL-1),
-   search for **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from
-   **Instances → Create**. Either way you get a clean Ubuntu 24.04 VM.
-
-   ![The Marketplace tab in the ZSoftly Cloud portal, showing the region selector, category list, search box, and Deploy buttons](../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Searching the Marketplace for an app, with the search box filtering the catalog down to a matching Deploy card](../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choose a plan that meets the requirements above.
-
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script configures MySQL and Redis, creates the Bagisto environment, runs
+database migrations and seeders, generates the administrator password, and starts the queue worker.
+This can take a few minutes. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u bagisto-first-boot.service -f
 ```
 
-## Install Bagisto
+The login message (MOTD) confirms when Bagisto is ready.
 
-The official Docker setup is the recommended path: it provides PHP-FPM, Nginx, MySQL, and Redis as
-containers, so you do not install PHP or a database on the host. Bagisto's own requirements target
-PHP 8.2+ and MySQL 8.0 / MariaDB. The Docker images satisfy these automatically.
-
-Install Docker Engine and the Compose plugin:
+### 3. Verify Bagisto is running
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo usermod -aG docker ubuntu
+systemctl status nginx php8.3-fpm mysql redis-server bagisto-queue.service
+curl -fsS http://127.0.0.1/ > /dev/null
 ```
 
-Log out and back in so the `docker` group applies, then clone the official Docker repository and run
-the setup:
+### 4. Access the storefront and admin UI
 
-```bash
-git clone https://github.com/bagisto/bagisto-docker.git
-cd bagisto-docker
-sh setup.sh
-```
-
-`setup.sh` builds the images and brings the stack up. If you prefer to run it manually:
-
-```bash
-docker compose build
-docker compose up -d
-```
-
-## Configure Bagisto
-
-The Docker stack provisions the database and installs Bagisto on first run. The application is
-served on **port 80** by default. Edit `docker-compose.yml` to change the published port before
-bringing the stack up.
-
-Once the containers are healthy, open the admin panel:
+Open the storefront:
 
 ```text
-http://<your-vm-ip>/admin/login
+http://<your-vm-ip>
 ```
 
-Sign in with the default credentials and change them immediately:
+Open the administration panel:
 
-- Email: `admin@example.com`
-- Password: `admin123`
+```text
+http://<your-vm-ip>/admin
+```
 
-For production, point a domain at the VM and terminate TLS with nginx or a reverse proxy in front of
-the stack. Application settings live in the `src/.env` file inside the project.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Bagisto needs and add
-them to the instance's network/security rules in the portal:
+Retrieve the generated credentials:
 
 ```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+sudo cat /root/.credentials/bagisto.txt
 ```
+
+| Field    | Value                                                      |
+| -------- | ---------------------------------------------------------- |
+| Email    | Generated on first boot and stored in the credentials file |
+| Password | From `/root/.credentials/bagisto.txt`                      |
+
+## Managing Bagisto
+
+```bash
+# Check service status
+systemctl status nginx php8.3-fpm mysql redis-server bagisto-queue.service
+
+# Restart the web and queue services
+sudo systemctl restart nginx php8.3-fpm bagisto-queue.service
+
+# View queue-worker logs
+sudo journalctl -u bagisto-queue.service -f
+```
+
+| Path                                      | Purpose                   |
+| ----------------------------------------- | ------------------------- |
+| `/var/www/bagisto/.env`                   | Application configuration |
+| `/etc/nginx/sites-available/bagisto.conf` | Nginx virtual host        |
+| `/var/www/bagisto/storage/`               | Application storage       |
+
+## Security
+
+Port 80 is accessible on the VM's network interface. UFW is enabled and allows SSH (port 22) and
+Bagisto HTTP (port 80) by default.
+
+**To restrict the storefront to a specific IP:**
+
+```bash
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
+```
+
+**To access Bagisto without exposing port 80, use an SSH tunnel:**
+
+```bash
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
+```
+
+**For production use**, place Bagisto behind a reverse proxy so you can serve it on port 443 with a
+TLS certificate, and update the application URL in `/var/www/bagisto/.env` to your domain.
+
+:::caution
+
+The credentials file also contains database, MySQL root, and Redis passwords. Keep it restricted to
+administrators and limit access to the administration panel.
+
+:::
 
 ## Next steps
 

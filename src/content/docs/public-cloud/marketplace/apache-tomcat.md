@@ -6,135 +6,107 @@ Apache Tomcat is an open-source servlet container that runs Java web application
 Jakarta Servlet, JSP, and WebSocket specifications and serves WAR files over HTTP, making it a
 standard choice for hosting Java backends.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Apache Tomcat image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance
-from the marketplace and follow the steps below to install Apache Tomcat yourself.
+| Component     | Version   |
+| ------------- | --------- |
+| Apache Tomcat | 11.0.24   |
+| OpenJDK       | 21 (JRE)  |
+| Ubuntu        | 24.04 LTS |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 2 GB    | 4 GB        |
-| Storage  | 10 GB   | 20 GB       |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script creates the Manager and Host Manager administrator, starts Tomcat,
+and writes the credentials to disk. This takes about a minute. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u tomcat-first-boot.service -f
 ```
 
-## Install Apache Tomcat
+The login message (MOTD) confirms when Tomcat is ready.
 
-Tomcat 11 requires Java 17 or later. Install OpenJDK 21 first:
-
-```bash
-sudo apt install -y openjdk-21-jdk
-```
-
-Create a dedicated `tomcat` user and download Tomcat 11 from the official mirror:
+### 3. Verify Apache Tomcat is running
 
 ```bash
-sudo useradd -r -m -U -d /opt/tomcat -s /bin/false tomcat
-```
-
-```bash
-cd /tmp
-curl -fSLO https://dlcdn.apache.org/tomcat/tomcat-11/v11.0.22/bin/apache-tomcat-11.0.22.tar.gz
-sudo tar -xzf apache-tomcat-11.0.22.tar.gz -C /opt/tomcat --strip-components=1
-```
-
-Set ownership and make the scripts executable:
-
-```bash
-sudo chown -R tomcat:tomcat /opt/tomcat
-sudo chmod +x /opt/tomcat/bin/*.sh
-```
-
-Create a systemd service so Tomcat starts on boot:
-
-```bash
-sudo tee /etc/systemd/system/tomcat.service >/dev/null <<'EOF'
-[Unit]
-Description=Apache Tomcat 11
-After=network.target
-
-[Service]
-Type=forking
-User=tomcat
-Group=tomcat
-Environment="JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64"
-Environment="CATALINA_HOME=/opt/tomcat"
-Environment="CATALINA_BASE=/opt/tomcat"
-Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
-ExecStart=/opt/tomcat/bin/startup.sh
-ExecStop=/opt/tomcat/bin/shutdown.sh
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-EOF
-```
-
-Reload systemd and start Tomcat:
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now tomcat
-```
-
-Tomcat now listens on port 8080. Verify it:
-
-```bash
+systemctl status tomcat
 curl -I http://localhost:8080
 ```
 
-## Configure Apache Tomcat
+### 4. Access Apache Tomcat
 
-To use the Manager and Host Manager apps, add an admin user in `/opt/tomcat/conf/tomcat-users.xml`,
-inside the `<tomcat-users>` element:
+Open a browser and navigate to:
 
-```xml
-<role rolename="manager-gui"/>
-<role rolename="admin-gui"/>
-<user username="admin" password="ChangeMeNow" roles="manager-gui,admin-gui"/>
+```text
+http://<your-vm-ip>:8080
 ```
 
-By default the Manager app only accepts connections from localhost. To reach it from your browser,
-comment out the `RemoteAddrValve` in `/opt/tomcat/webapps/manager/META-INF/context.xml` (and the
-Host Manager equivalent). Restrict access by IP or a reverse proxy in production rather than
-removing the valve outright. Restart to apply the changes:
+Retrieve the Manager credentials:
 
 ```bash
+sudo cat /root/.credentials/tomcat.txt
+```
+
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Username | `admin`                              |
+| Password | From `/root/.credentials/tomcat.txt` |
+
+The Manager and Host Manager apps accept localhost connections only. Use the SSH tunnel shown in the
+credentials file to access them.
+
+## Managing Apache Tomcat
+
+```bash
+# Check service status
+systemctl status tomcat
+
+# Restart
 sudo systemctl restart tomcat
+
+# View logs
+sudo journalctl -u tomcat -f
 ```
 
-## Open the firewall
+| Path                                | Purpose                             |
+| ----------------------------------- | ----------------------------------- |
+| `/opt/tomcat/conf/tomcat-users.xml` | Manager users and roles             |
+| `/opt/tomcat/webapps/`              | Deployed applications and WAR files |
+| `/opt/tomcat/logs/`                 | Tomcat logs                         |
 
-The instance allows only SSH (port 22) externally by default. Open the port(s) Apache Tomcat needs
-and add them to the instance's network/security rules in the portal:
+## Security
+
+Port 8080 is accessible on the VM's network interface. UFW is enabled and allows SSH (port 22) and
+Tomcat (port 8080) by default. The Manager and Host Manager apps remain restricted to localhost by
+Tomcat.
+
+**To restrict Tomcat to a specific IP:**
 
 ```bash
-sudo ufw allow 8080/tcp
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
 ```
 
-For production, run Tomcat behind a reverse proxy such as Nginx or HAProxy on ports 80/443 instead
-of exposing 8080 directly.
+**To access Tomcat without exposing port 8080, use an SSH tunnel:**
+
+```bash
+# Run this on your local machine
+ssh -L 8080:localhost:8080 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
+http://localhost:8080/manager/html
+```
+
+**For production use**, place Tomcat behind a reverse proxy such as Nginx or HAProxy so you can
+serve it on port 443 with a TLS certificate.
 
 ## Next steps
 

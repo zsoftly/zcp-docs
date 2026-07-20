@@ -7,105 +7,110 @@ consolidates email, chat, social, and phone channels into a shared inbox with ti
 knowledge base, and reporting. It runs as a self-hosted web application backed by PostgreSQL and
 Elasticsearch.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Zammad image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Zammad yourself.
+| Component     | Version       |
+| ------------- | ------------- |
+| Zammad        | 7.1.1         |
+| PostgreSQL    | 17-alpine     |
+| Redis         | 7.2-alpine    |
+| Elasticsearch | 9.4.3         |
+| Docker        | Latest stable |
+| Ubuntu        | 24.04 LTS     |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 2       | 4           |
-| RAM      | 4 GB    | 8 GB        |
-| Storage  | 40 GB   | 80 GB       |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab. It opens on
-   **Featured** by default, so select **Marketplace** next to it. Pick your region (YOW-1 or YUL-1),
-   search for **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from
-   **Instances → Create**. Either way you get a clean Ubuntu 24.04 VM.
-
-   ![The Marketplace tab in the ZSoftly Cloud portal, showing the region selector, category list, search box, and Deploy buttons](../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Searching the Marketplace for an app, with the search box filtering the catalog down to a matching Deploy card](../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choose a plan that meets the requirements above.
-
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script generates the database password and starts the Zammad, PostgreSQL,
+Redis, and Elasticsearch containers. This can take 5 to 10 minutes. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u zammad-first-boot.service -f
 ```
 
-## Install Zammad
-
-Zammad recommends a dedicated host with at least **4 GB of RAM** and depends on **Elasticsearch**
-for search, reporting, and attachment indexing. Install Elasticsearch first, then Zammad from the
-official packager.io apt repository.
-
-Install Elasticsearch (8.x or 9.x):
+The login message (MOTD) confirms when Zammad is ready. You can also verify the stack directly:
 
 ```bash
-curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch \
-  | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/9.x/apt stable main" \
-  | sudo tee /etc/apt/sources.list.d/elastic-9.x.list
-sudo apt update
-sudo apt install -y elasticsearch
-sudo systemctl enable --now elasticsearch
+cd /opt/zammad && docker compose ps
 ```
 
-Add the official Zammad repository and install Zammad from the Ubuntu 24.04 list:
+### 3. Access the Zammad UI
+
+Open a browser and navigate to:
+
+```text
+http://<your-vm-ip>:8080
+```
+
+### 4. Create the administrator account
+
+Complete the first-run setup wizard to create your administrator email address and password. The
+image does not create shared default administrator credentials.
+
+## Managing Zammad
+
+Zammad runs as a Docker Compose stack in `/opt/zammad`.
 
 ```bash
-sudo curl -fsSL "https://dl.packager.io/srv/zammad/zammad/key" \
-  | gpg --dearmor | sudo tee /etc/apt/keyrings/pkgr-zammad.gpg > /dev/null
-sudo curl -fsSL "https://dl.packager.io/srv/zammad/zammad/stable/installer/ubuntu/24.04.list" \
-  -o /etc/apt/sources.list.d/zammad.list
-sudo apt update
-sudo apt install -y zammad
+# Check status
+cd /opt/zammad && docker compose ps
+
+# Restart
+cd /opt/zammad && docker compose restart
+
+# View logs
+cd /opt/zammad && docker compose logs -f
 ```
 
-The package installs Zammad, its PostgreSQL database, an nginx site, and all services, then starts
-them automatically.
+| Path                              | Purpose                                   |
+| --------------------------------- | ----------------------------------------- |
+| `/opt/zammad/docker-compose.yml`  | Docker Compose configuration              |
+| `/opt/zammad/.env`                | Internal database password and hostname   |
+| `/opt/zammad/data/postgresql/`    | PostgreSQL data                           |
+| `/opt/zammad/data/elasticsearch/` | Elasticsearch data                        |
+| `/opt/zammad/data/redis/`         | Redis data                                |
+| `/opt/zammad/data/zammad/`        | Zammad attachments and persistent storage |
+| `/root/.credentials/zammad.txt`   | Database credentials and access details   |
 
-## Configure Zammad
+## Security
 
-1. Point Zammad at Elasticsearch and build the search index:
+Zammad uses port 8080. UFW is enabled and allows SSH (port 22) plus port 8080 by default.
+PostgreSQL, Redis, and Elasticsearch remain on the internal Docker network and are not published on
+the VM's network interface.
 
-   ```bash
-   sudo zammad run rails r "Setting.set('es_url', 'http://localhost:9200')"
-   sudo zammad run rake zammad:searchindex:rebuild
-   ```
-
-2. Open `http://<your-vm-ip>/` in your browser and complete the web-based setup wizard. The first
-   account you create becomes the system administrator.
-3. The package ships an nginx vhost on port 80. For production, edit
-   `/etc/nginx/sites-enabled/zammad.conf` to add your domain and a TLS certificate (Let's Encrypt
-   via certbot is supported) so the UI is served over HTTPS on 443.
-4. Configure your email channel under **Admin → Channels** to start receiving and sending tickets.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the ports Zammad needs and add
-them to the instance's network/security rules in the portal:
+**To restrict Zammad to a specific IP:**
 
 ```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
 ```
 
-Keep Elasticsearch (port 9200) bound to localhost and do not expose it externally.
+**To access the UI without leaving port 8080 open, use an SSH tunnel:**
+
+```bash
+# Run this on your local machine
+ssh -L 8080:localhost:8080 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
+```
+
+**For production use**, place Zammad behind a reverse proxy so you can serve it over HTTPS with a
+trusted TLS certificate.
+
+:::caution
+
+Complete the setup wizard promptly and restrict the helpdesk to trusted users and networks. The
+first account created through the wizard becomes the administrator.
+
+:::
 
 ## Next steps
 
