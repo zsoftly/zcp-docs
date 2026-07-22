@@ -5,6 +5,13 @@
 node_modules
 dist
 .astro
-.git
 tmp
 *.log
+
+# Exclude the git object store but keep the tiny ref files the footer commit
+# stamp reads (build-info.mjs), so the build context stays lean.
+.git
+!.git/HEAD
+!.git/packed-refs
+!.git/refs
+!.git/refs/**

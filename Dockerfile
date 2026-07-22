@@ -18,6 +18,12 @@ COPY . .
 # without this arg and falls back to the canonical host in astro.config.mjs.
 ARG PUBLIC_SITE_URL=https://dev-docs.apps.zcp.zsoftly.ca
 ENV PUBLIC_SITE_URL=$PUBLIC_SITE_URL
+
+# Commit stamp shown in the footer. Optional override for build paths that know
+# the commit (e.g. the iaas prod play passes --build-arg COMMIT_SHA=...). When
+# empty, build-info.mjs reads it from the .git ref files copied into the context.
+ARG COMMIT_SHA=
+ENV COMMIT_SHA=$COMMIT_SHA
 RUN pnpm build
 
 FROM caddy:2-alpine
