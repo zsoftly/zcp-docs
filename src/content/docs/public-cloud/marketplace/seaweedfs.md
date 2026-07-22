@@ -6,114 +6,114 @@ SeaweedFS is an open-source distributed file and object storage system built for
 and fast access. A single `weed` binary runs the master, volume, filer, and S3 components, and the
 S3 gateway exposes an S3-compatible API for application workloads.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built SeaweedFS image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance
-from the marketplace and follow the steps below to install SeaweedFS yourself.
+| Component | Version   |
+| --------- | --------- |
+| SeaweedFS | 4.39      |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 4           |
-| RAM      | 1 GB    | 4 GB        |
-| Storage  | 20 GB   | 200 GB      |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script generates the S3-compatible API credentials and starts the
+all-in-one `weed mini` service. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u seaweedfs-first-boot.service -f
 ```
 
-## Install SeaweedFS
-
-SeaweedFS ships as a single static binary on its GitHub releases page. Download the latest
-`linux_amd64` build, extract the `weed` executable, and install it into your `PATH`:
+The login message (MOTD) confirms when SeaweedFS is ready. You can also verify the service directly:
 
 ```bash
-curl -fsSL https://github.com/seaweedfs/seaweedfs/releases/latest/download/linux_amd64.tar.gz \
-  -o /tmp/seaweedfs.tar.gz
-sudo tar -xzf /tmp/seaweedfs.tar.gz -C /usr/local/bin weed
-sudo chmod +x /usr/local/bin/weed
-weed version
+systemctl status seaweedfs
 ```
 
-Create a dedicated user and a data directory:
+### 3. Retrieve the S3-compatible API credentials
+
+The generated credentials and endpoints are stored in a root-only file:
 
 ```bash
-sudo useradd --system --home /var/lib/seaweedfs --shell /usr/sbin/nologin seaweedfs
-sudo mkdir -p /var/lib/seaweedfs
-sudo chown -R seaweedfs:seaweedfs /var/lib/seaweedfs
+sudo cat /etc/seaweedfs/credentials.txt
 ```
 
-## Configure SeaweedFS
+| Field      | Value                            |
+| ---------- | -------------------------------- |
+| Access key | Generated securely on first boot |
+| Secret key | Generated securely on first boot |
 
-`weed server` runs the master, volume, and filer in one process. Adding `-s3` also starts the S3
-gateway. Run it as a systemd service so it starts on boot. Create the unit file:
+### 4. Access SeaweedFS
+
+The image starts these endpoints:
+
+| Component         | Endpoint                    |
+| ----------------- | --------------------------- |
+| S3-compatible API | `http://<your-vm-ip>:8333`  |
+| Filer UI          | `http://<your-vm-ip>:8888`  |
+| Master UI         | `http://<your-vm-ip>:9333`  |
+| Volume            | `http://<your-vm-ip>:9340`  |
+| WebDAV            | `http://<your-vm-ip>:7333`  |
+| Admin UI          | `http://<your-vm-ip>:23646` |
+
+## Managing SeaweedFS
 
 ```bash
-sudo tee /etc/systemd/system/seaweedfs.service > /dev/null <<'EOF'
-[Unit]
-Description=SeaweedFS
-After=network.target
+# Check service status
+systemctl status seaweedfs
 
-[Service]
-Type=simple
-User=seaweedfs
-Group=seaweedfs
-ExecStart=/usr/local/bin/weed server -dir=/var/lib/seaweedfs -filer -s3
-Restart=on-failure
+# Restart
+sudo systemctl restart seaweedfs
 
-[Install]
-WantedBy=multi-user.target
-EOF
+# View logs
+sudo journalctl -u seaweedfs -f
 ```
 
-Enable and start the service:
+| Path                             | Purpose                             |
+| -------------------------------- | ----------------------------------- |
+| `/etc/seaweedfs/seaweedfs.env`   | S3-compatible API credentials       |
+| `/var/lib/seaweedfs/`            | Persistent SeaweedFS data           |
+| `/etc/seaweedfs/credentials.txt` | Generated credentials and endpoints |
+
+## Security
+
+SeaweedFS uses ports 8333, 8888, 9333, 9340, 7333, and 23646 for its S3, filer, master, volume,
+WebDAV, and admin endpoints. UFW is enabled and allows SSH (port 22) only by default. All SeaweedFS
+ports remain blocked until you allow trusted sources.
+
+**To allow the S3-compatible API and Filer UI from a specific IP:**
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now seaweedfs
-sudo systemctl status seaweedfs
+sudo ufw allow from <trusted-ip> to any port 8333
+sudo ufw allow from <trusted-ip> to any port 8888
 ```
 
-The components listen on these default ports:
-
-| Component  | Port |
-| ---------- | ---- |
-| Master     | 9333 |
-| Volume     | 8080 |
-| Filer      | 8888 |
-| S3 gateway | 8333 |
-
-Point any S3 client at `http://<your-vm-ip>:8333`. Browse the master dashboard at
-`http://<your-vm-ip>:9333` and the filer at `http://<your-vm-ip>:8888`.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) SeaweedFS needs and
-add them to the instance's network/security rules in the portal:
+**To access those endpoints without opening the firewall, use an SSH tunnel:**
 
 ```bash
-sudo ufw allow 9333/tcp
-sudo ufw allow 8080/tcp
-sudo ufw allow 8888/tcp
-sudo ufw allow 8333/tcp
+# Run this on your local machine
+ssh -L 8333:localhost:8333 -L 8888:localhost:8888 ubuntu@<your-vm-ip>
+
+# Then use these local endpoints
+http://localhost:8333
+http://localhost:8888
 ```
+
+**For production use**, keep SeaweedFS on a private network or place the required HTTP endpoints
+behind a reverse proxy so you can serve them over HTTPS with a trusted TLS certificate.
+
+:::caution
+
+Treat the S3-compatible API credentials as secrets. Open only the endpoints your workloads require
+and restrict them to trusted application and administrator networks.
+
+:::
 
 ## Next steps
 

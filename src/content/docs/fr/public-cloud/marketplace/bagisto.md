@@ -3,121 +3,125 @@ title: Bagisto
 ---
 
 Bagisto est une plateforme d'e-commerce open source bâtie sur le framework PHP Laravel et Vue.js.
-Elle propose une vitrine complète, une administration multicanal, la gestion des stocks et des
-commandes prêtes à l'emploi. La configuration Docker officielle regroupe toutes les dépendances,
-c'est donc le moyen le plus rapide de la mettre en place.
+Elle fournit une vitrine complète, une administration multicanal ainsi que la gestion des stocks et
+des commandes dès l'installation. La configuration Docker officielle regroupe toutes les dépendances
+et constitue donc le moyen le plus rapide de la mettre en service.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Bagisto préconfigurée arrive bientôt. Pour l'instant, déployez une nouvelle instance
-**Ubuntu 24.04 LTS** depuis la marketplace et suivez les étapes ci-dessous pour installer Bagisto
-vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| Bagisto   | 2.4.8     |
+| PHP       | 8.3       |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 2       | 4          |
-| RAM       | 4 Go    | 8 Go       |
-| Stockage  | 25 Go   | 50 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration règle MySQL et Redis, crée l'environnement Bagisto,
+exécute les migrations et l'amorçage de la base de données, génère le mot de passe administrateur et
+démarre le processus de file d'attente. Cette opération peut prendre quelques minutes. Suivez la
+progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u bagisto-first-boot.service -f
 ```
 
-## Installer Bagisto
+Le message de connexion (MOTD) confirme que Bagisto est prêt.
 
-La configuration Docker officielle est la méthode recommandée : elle fournit PHP-FPM, Nginx, MySQL
-et Redis sous forme de conteneurs, vous n'installez donc ni PHP ni base de données sur l'hôte. Les
-propres exigences de Bagisto visent PHP 8.2+ et MySQL 8.0 / MariaDB. Les images Docker les satisfont
-automatiquement.
-
-Installez Docker Engine et le plugin Compose :
+### 3. Vérifier que Bagisto fonctionne
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo usermod -aG docker ubuntu
+systemctl status nginx php8.3-fpm mysql redis-server bagisto-queue.service
+curl -fsS http://127.0.0.1/ > /dev/null
 ```
 
-Déconnectez-vous puis reconnectez-vous pour que le groupe `docker` s'applique, puis clonez le dépôt
-Docker officiel et lancez la configuration :
+### 4. Accéder à la vitrine et à l'interface d'administration
 
-```bash
-git clone https://github.com/bagisto/bagisto-docker.git
-cd bagisto-docker
-sh setup.sh
-```
-
-`setup.sh` construit les images et démarre la pile. Si vous préférez l'exécuter manuellement :
-
-```bash
-docker compose build
-docker compose up -d
-```
-
-## Configurer Bagisto
-
-La pile Docker provisionne la base de données et installe Bagisto au premier démarrage.
-L'application est servie sur le **port 80** par défaut. Modifiez `docker-compose.yml` pour changer
-le port publié avant de démarrer la pile.
-
-Une fois les conteneurs sains, ouvrez le panneau d'administration :
+Ouvrez la vitrine :
 
 ```text
-http://<your-vm-ip>/admin/login
+http://<your-vm-ip>
 ```
 
-Connectez-vous avec les identifiants par défaut et changez-les immédiatement :
+Ouvrez le panneau d'administration :
 
-- E-mail : `admin@example.com`
-- Mot de passe : `admin123`
+```text
+http://<your-vm-ip>/admin
+```
 
-Pour la production, pointez un domaine vers la VM et terminez le TLS avec nginx ou un proxy inverse
-devant la pile. Les paramètres de l'application se trouvent dans le fichier `src/.env` à l'intérieur
-du projet.
-
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que le SSH (port 22) en externe. Ouvrez le ou les ports dont
-Bagisto a besoin et ajoutez-les aux règles réseau/de sécurité de l'instance dans le portail :
+Récupérez les identifiants générés :
 
 ```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+sudo cat /root/.credentials/bagisto.txt
 ```
+
+| Champ            | Valeur                                                                 |
+| ---------------- | ---------------------------------------------------------------------- |
+| Adresse courriel | Générée au premier démarrage et stockée dans le fichier d'identifiants |
+| Mot de passe     | Dans `/root/.credentials/bagisto.txt`                                  |
+
+## Gérer Bagisto
+
+```bash
+# Check service status
+systemctl status nginx php8.3-fpm mysql redis-server bagisto-queue.service
+
+# Restart the web and queue services
+sudo systemctl restart nginx php8.3-fpm bagisto-queue.service
+
+# View queue-worker logs
+sudo journalctl -u bagisto-queue.service -f
+```
+
+| Chemin                                    | Fonction                       |
+| ----------------------------------------- | ------------------------------ |
+| `/var/www/bagisto/.env`                   | Configuration de l'application |
+| `/etc/nginx/sites-available/bagisto.conf` | Hôte virtuel Nginx             |
+| `/var/www/bagisto/storage/`               | Stockage de l'application      |
+
+## Sécurité
+
+Le port 80 est accessible sur l'interface réseau de la VM. UFW est activé et autorise par défaut SSH
+(port 22) et le HTTP de Bagisto (port 80).
+
+**Pour limiter la vitrine à une adresse IP précise :**
+
+```bash
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
+```
+
+**Pour accéder à Bagisto sans exposer le port 80, utilisez un tunnel SSH :**
+
+```bash
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
+```
+
+**Pour une utilisation en production**, placez Bagisto derrière un proxy inverse afin de le servir
+sur le port 443 avec un certificat TLS, et remplacez l'URL de l'application dans
+`/var/www/bagisto/.env` par celle de votre domaine.
+
+:::caution
+
+Le fichier d'identifiants contient également les mots de passe de la base de données, du compte
+racine MySQL et de Redis. Réservez-le aux administrateurs et limitez l'accès au panneau
+d'administration.
+
+:::
 
 ## Étapes suivantes
 
-- [Documentation Bagisto](https://devdocs.bagisto.com/)
-- [Guide d'installation Bagisto](https://github.com/bagisto/bagisto-docker)
+- [Documentation de Bagisto](https://devdocs.bagisto.com/)
+- [Guide d'installation de Bagisto](https://github.com/bagisto/bagisto-docker)

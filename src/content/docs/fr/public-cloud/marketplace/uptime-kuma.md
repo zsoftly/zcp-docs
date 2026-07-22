@@ -2,120 +2,110 @@
 title: Uptime Kuma
 ---
 
-Uptime Kuma est un outil de surveillance auto-hébergé qui suit la disponibilité de sites web, d'API,
-de ports TCP et plus encore. Il envoie des notifications lorsqu'un service tombe en panne et publie
-des pages de statut publiques. Il s'exécute comme un unique conteneur Docker et s'administre
-entièrement via une interface web sur le port 3001.
+Uptime Kuma est un outil de surveillance auto-hébergé qui suit la disponibilité des sites web, des
+API, des ports TCP et plus encore. Il envoie des notifications lorsqu'un service tombe en panne et
+publie des pages d'état publiques. Il s'exécute dans un seul conteneur Docker et s'administre
+entièrement par une interface web sur le port 3001.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Uptime Kuma préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu
-24.04 LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer Uptime Kuma
-vous-même.
+| Composant   | Version       |
+| ----------- | ------------- |
+| Uptime Kuma | 2.4.0         |
+| Docker      | Latest stable |
+| Ubuntu      | 24.04 LTS     |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 1 Go    | 2 Go       |
-| Stockage  | 10 Go   | 20 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration lance Uptime Kuma avec Docker Compose. Cette
+opération prend moins d'une minute. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u uptime-kuma-first-boot.service -f
 ```
 
-## Installer Uptime Kuma
-
-Uptime Kuma est distribué sous forme d'image Docker officielle. Installez d'abord Docker à l'aide du
-script d'installation officiel :
+Le message de connexion (MOTD) confirme qu'Uptime Kuma est prêt. Vous pouvez également vérifier le
+conteneur :
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
+cd /opt/uptime-kuma && docker compose ps
 ```
 
-Ajoutez l'utilisateur `ubuntu` au groupe `docker` afin de pouvoir exécuter Docker sans `sudo`, puis
-réappliquez votre appartenance au groupe :
+### 3. Ouvrir un tunnel SSH
+
+Uptime Kuma est lié à localhost afin de protéger son assistant non authentifié de premier démarrage.
+Depuis votre machine locale, ouvrez un tunnel :
 
 ```bash
-sudo usermod -aG docker ubuntu
-newgrp docker
+ssh -L 3001:127.0.0.1:3001 ubuntu@<your-vm-ip>
 ```
 
-Démarrez le conteneur Uptime Kuma. Il lie le port 3001 et stocke ses données dans un volume nommé
-afin de survivre aux redémarrages et aux mises à jour du conteneur :
+### 4. Créer le compte administrateur
+
+Pendant que le tunnel fonctionne, ouvrez un navigateur et accédez à :
+
+```text
+http://127.0.0.1:3001
+```
+
+Terminez l'assistant de premier démarrage pour créer votre nom d'utilisateur et votre mot de passe
+d'administrateur. L'image ne crée pas de compte administrateur partagé par défaut.
+
+## Gérer Uptime Kuma
+
+Uptime Kuma fonctionne comme une pile Docker Compose dans `/opt/uptime-kuma`.
 
 ```bash
-docker run -d \
-  --restart=unless-stopped \
-  -p 3001:3001 \
-  -v uptime-kuma:/app/data \
-  --name uptime-kuma \
-  louislam/uptime-kuma:1
+# Check status
+cd /opt/uptime-kuma && docker compose ps
+
+# Restart
+cd /opt/uptime-kuma && docker compose restart
+
+# View logs
+cd /opt/uptime-kuma && docker compose logs -f
 ```
 
-Vérifiez que le conteneur est en cours d'exécution :
+| Chemin                                | Fonction                           |
+| ------------------------------------- | ---------------------------------- |
+| `/opt/uptime-kuma/docker-compose.yml` | Configuration Docker Compose       |
+| `/var/lib/uptime-kuma/`               | Moniteurs et données persistantes  |
+| `/etc/uptime-kuma/info.txt`           | Informations d'accès et de gestion |
 
-```bash
-docker ps
-```
+## Sécurité
 
-## Configurer Uptime Kuma
+Uptime Kuma écoute sur le port 3001, mais le conteneur ne le publie que sur `127.0.0.1`. UFW est
+activé et n'autorise par défaut que SSH (port 22). Utilisez le tunnel SSH ci-dessus pour terminer la
+configuration de l'administrateur avant d'exposer l'interface.
 
-1. Ouvrez `http://<your-vm-ip>:3001` dans un navigateur.
-2. Sur l'écran de premier démarrage, créez votre compte administrateur (nom d'utilisateur et mot de
-   passe). Ce compte a le contrôle total de l'instance.
-3. Cliquez sur **Add New Monitor** pour commencer à surveiller un service. Choisissez un type de
-   moniteur (HTTP(s), TCP Port, Ping, etc.), saisissez la cible et enregistrez.
-4. Configurez les notifications sous **Settings → Notifications** (e-mail, Slack, Telegram, webhooks
-   et plus encore).
+Conservez la liaison `127.0.0.1:3001:3001` dans `/opt/uptime-kuma/docker-compose.yml`. Les ports
+publiés par Docker contournent UFW parce que Docker gère ses propres règles iptables. Une liaison à
+`3001:3001` expose donc l'interface à tout le monde, quelle que soit la règle UFW. Accédez à
+l'interface par le tunnel SSH ci-dessus ou placez-la derrière un proxy inverse. Si vous devez
+publier le port, ajoutez une règle dans la chaîne `DOCKER-USER` ou utilisez nftables pour le
+limiter.
 
-Pour mettre à jour plus tard, récupérez la dernière image et recréez le conteneur. Vos données
-persistent dans le volume :
+**Pour une utilisation en production**, placez Uptime Kuma derrière un proxy inverse afin de le
+servir en HTTPS avec un certificat TLS de confiance. N'exposez pas publiquement l'assistant de
+premier démarrage.
 
-```bash
-docker pull louislam/uptime-kuma:1
-docker stop uptime-kuma && docker rm uptime-kuma
-docker run -d --restart=unless-stopped -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:1
-```
+:::caution
 
-En production, placez Uptime Kuma derrière un reverse proxy tel que Nginx ou Caddy pour le servir
-sur le port 443 avec un certificat TLS, et restreignez l'accès direct au port 3001.
+Créez le premier administrateur par le tunnel SSH avant de modifier la liaison limitée à localhost.
+Tant que vous n'avez pas terminé l'assistant, toute personne qui accède à l'interface peut
+s'attribuer le compte administrateur.
 
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que le SSH (port 22) en externe. Ouvrez le port dont Uptime Kuma a
-besoin et ajoutez-le aux règles réseau/sécurité de l'instance dans le portail :
-
-```bash
-sudo ufw allow 3001/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation Uptime Kuma](https://github.com/louislam/uptime-kuma/wiki)
-- [Guide d'installation Uptime Kuma](https://github.com/louislam/uptime-kuma/wiki/%F0%9F%94%A7-How-to-Install)
+- [Documentation d'Uptime Kuma](https://github.com/louislam/uptime-kuma/wiki)
+- [Guide d'installation d'Uptime Kuma](https://github.com/louislam/uptime-kuma/wiki/%F0%9F%94%A7-How-to-Install)

@@ -6,126 +6,121 @@ Qdrant is an open-source vector database and similarity-search engine built for 
 high-dimensional embeddings. It powers semantic search, recommendations, and retrieval-augmented
 generation (RAG) workloads, exposing both a REST and a gRPC API plus a built-in web dashboard.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Qdrant image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Qdrant yourself.
+| Component | Version       |
+| --------- | ------------- |
+| Qdrant    | 1.18.2        |
+| Docker    | Latest stable |
+| Ubuntu    | 24.04 LTS     |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 2       | 4           |
-| RAM      | 4 GB    | 8 GB        |
-| Storage  | 20 GB   | 50 GB       |
-
-Storage and RAM scale with the number and dimensionality of vectors you index. Size them to fit your
-expected collection.
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab. It opens on
-   **Featured** by default, so select **Marketplace** next to it. Pick your region (YOW-1 or YUL-1),
-   search for **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from
-   **Instances → Create**. Either way you get a clean Ubuntu 24.04 VM.
-
-   ![The Marketplace tab in the ZSoftly Cloud portal, showing the region selector, category list, search box, and Deploy buttons](../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Searching the Marketplace for an app, with the search box filtering the catalog down to a matching Deploy card](../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choose a plan that meets the requirements above.
-
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script generates the API key and starts Qdrant with Docker Compose. Track
+progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u qdrant-first-boot.service -f
 ```
 
-## Install Qdrant
-
-Qdrant is distributed as an official Docker image, so install Docker Engine and the Compose plugin
-first.
-
-Set up Docker's official APT repository for Ubuntu 24.04 LTS (`noble`):
+The login message (MOTD) confirms when Qdrant is ready. You can also verify the container directly:
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null <<EOF
-Types: deb
-URIs: https://download.docker.com/linux/ubuntu
-Suites: noble
-Components: stable
-Architectures: $(dpkg --print-architecture)
-Signed-By: /etc/apt/keyrings/docker.asc
-EOF
+cd /opt/qdrant && docker compose ps
 ```
 
-Install Docker Engine and the Compose plugin:
+### 3. Retrieve the API key
+
+The generated connection details and API key are stored in a root-only file:
 
 ```bash
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo cat /etc/qdrant/credentials.txt
 ```
 
-Pull and run Qdrant, mapping the REST (6333) and gRPC (6334) ports and persisting data to the host:
+| Field   | Value                            |
+| ------- | -------------------------------- |
+| API key | Generated securely on first boot |
 
-```bash
-docker pull qdrant/qdrant
-docker run -d --name qdrant --restart unless-stopped \
-  -p 6333:6333 -p 6334:6334 \
-  -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
-  qdrant/qdrant
-```
+### 4. Access Qdrant
 
-Verify it is responding:
-
-```bash
-curl http://localhost:6333/healthz
-```
-
-## Configure Qdrant
-
-The web dashboard is available at:
+The REST API and dashboard are available at:
 
 ```text
+http://<your-vm-ip>:6333
 http://<your-vm-ip>:6333/dashboard
 ```
 
-Qdrant ships with no authentication. Before exposing it, set an API key so only authorized clients
-can read or write your collections. Restart the container with the key set:
+The gRPC API is available at `<your-vm-ip>:6334`. Verify the REST API locally with the API key from
+the credentials file:
 
 ```bash
-docker rm -f qdrant
-docker run -d --name qdrant --restart unless-stopped \
-  -p 6333:6333 -p 6334:6334 \
-  -e QDRANT__SERVICE__API_KEY="<generate-a-strong-key>" \
-  -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
-  qdrant/qdrant
+curl -H "api-key: <your-api-key>" http://127.0.0.1:6333/healthz
 ```
 
-Clients then send the key in the `api-key` header. For production, place Qdrant behind a reverse
-proxy with TLS so traffic and the API key are encrypted in transit.
+## Managing Qdrant
 
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the ports Qdrant needs and add
-them to the instance's network/security rules in the portal:
+Qdrant runs as a Docker Compose stack in `/opt/qdrant`.
 
 ```bash
-sudo ufw allow 6333/tcp
-sudo ufw allow 6334/tcp
+# Check status
+cd /opt/qdrant && docker compose ps
+
+# Restart
+cd /opt/qdrant && docker compose restart
+
+# View logs
+cd /opt/qdrant && docker compose logs -f
 ```
+
+| Path                             | Purpose                         |
+| -------------------------------- | ------------------------------- |
+| `/opt/qdrant/docker-compose.yml` | Docker Compose configuration    |
+| `/opt/qdrant/.env`               | Qdrant API key environment      |
+| `/var/lib/qdrant/storage/`       | Collections and persistent data |
+| `/etc/qdrant/credentials.txt`    | API key and connection details  |
+
+## Security
+
+The REST API and dashboard use port 6333, and the gRPC API uses port 6334. UFW is enabled and allows
+SSH (port 22) plus ports 6333 and 6334 by default. Qdrant requires the generated API key for access.
+
+**To restrict API access to a specific IP:**
+
+```bash
+sudo ufw delete allow 6333/tcp
+sudo ufw delete allow 6334/tcp
+sudo ufw allow from <trusted-ip> to any port 6333
+sudo ufw allow from <trusted-ip> to any port 6334
+```
+
+**To access the dashboard without leaving port 6333 open, use an SSH tunnel:**
+
+```bash
+# Run this on your local machine
+ssh -L 6333:localhost:6333 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:6333/dashboard
+```
+
+**For production use**, place Qdrant behind a reverse proxy so you can serve the REST API and
+dashboard over HTTPS with a trusted TLS certificate. Keep the gRPC API on a trusted private network
+or configure a TLS-capable proxy for it.
+
+:::caution
+
+Treat the API key as a secret. Restrict both Qdrant ports to trusted application and administrator
+networks rather than exposing them broadly to the internet.
+
+:::
 
 ## Next steps
 

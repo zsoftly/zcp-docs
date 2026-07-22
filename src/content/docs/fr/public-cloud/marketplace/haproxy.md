@@ -2,129 +2,117 @@
 title: HAProxy
 ---
 
-HAProxy est un répartiteur de charge et proxy rapide et fiable pour les applications TCP et HTTP. Il
-distribue le trafic entre des serveurs backend, effectue des contrôles de santé et termine le TLS,
-ce qui en fait une porte d'entrée courante pour les services web à haute disponibilité.
+HAProxy est un répartiteur de charge et un proxy rapide et fiable pour les applications TCP et HTTP.
+Il distribue le trafic entre les serveurs backend, effectue des contrôles de santé et termine TLS,
+ce qui en fait un point d'entrée courant pour les services web hautement disponibles.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image HAProxy préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** neuve depuis la marketplace et suivez les étapes ci-dessous pour installer HAProxy vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| HAProxy   | 3.2       |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 1 Go    | 2 Go       |
-| Stockage  | 10 Go   | 20 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **HAProxy** et cliquez sur
-   **Deploy**, ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Dans les
-   deux cas, vous obtenez une VM Ubuntu 24.04 propre.
-2. Choisissez un plan qui répond aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH:
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour:
+### 2. Vérifier que HAProxy fonctionne
+
+Il n'y a aucune configuration au premier démarrage. HAProxy démarre immédiatement après le démarrage
+de la VM.
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+systemctl status haproxy
 ```
 
-## Installer HAProxy
+### 3. Tester le frontend HTTP
 
-Ubuntu 24.04 fournit une version LTS de HAProxy dans ses dépôts par défaut:
+Ouvrez le frontend par défaut dans un navigateur :
+
+```text
+http://<your-vm-ip>
+```
+
+Il renvoie :
+
+```text
+HAProxy is running
+```
+
+La page locale de statistiques écoute sur `127.0.0.1:8404`. Vous pouvez la vérifier depuis la VM :
 
 ```bash
-sudo apt install -y haproxy
+curl http://127.0.0.1:8404/
 ```
 
-Pour installer une version plus récente, utilisez plutôt le dépôt de paquets officiel HAProxy (PPA).
-Pour la série stable actuelle:
+## Gérer HAProxy
 
 ```bash
-sudo apt install -y software-properties-common
-sudo add-apt-repository -y ppa:vbernat/haproxy-3.0
-sudo apt update && sudo apt install -y haproxy
+# Check service status
+systemctl status haproxy
+
+# Validate the configuration
+sudo haproxy -c -f /etc/haproxy/haproxy.cfg
+
+# Restart
+sudo systemctl restart haproxy
+
+# View logs
+sudo journalctl -u haproxy -f
 ```
 
-Activez et démarrez le service:
+| Chemin                     | Fonction                                     |
+| -------------------------- | -------------------------------------------- |
+| `/etc/haproxy/haproxy.cfg` | Configuration principale                     |
+| `/run/haproxy/admin.sock`  | Socket local de statistiques administratives |
+
+## Sécurité
+
+Le port 80 est ouvert sur l'interface réseau de la VM. UFW est activé et autorise le HTTP de HAProxy
+(port 80) et SSH (port 22). La page de statistiques sur le port 8404 est liée uniquement à
+localhost. Le port 443 n'est pas ouvert par défaut, car l'image ne fournit pas de certificat TLS.
+
+**Pour limiter le frontend HTTP à une adresse IP précise :**
 
 ```bash
-sudo systemctl enable --now haproxy
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
 ```
 
-Vérifiez la version installée:
+**Pour accéder au frontend sans laisser le port 80 ouvert, utilisez un tunnel SSH :**
+
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
 
 ```bash
-haproxy -v
+sudo ufw delete allow 80/tcp
 ```
-
-## Configurer HAProxy
-
-La configuration se trouve dans `/etc/haproxy/haproxy.cfg`. L'exemple ci-dessous termine le HTTP sur
-le port 80 et répartit les requêtes entre deux serveurs web backend:
 
 ```bash
-sudo tee /etc/haproxy/haproxy.cfg >/dev/null <<'EOF'
-global
-    log /dev/log local0
-    maxconn 4096
-    user haproxy
-    group haproxy
-    daemon
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
 
-defaults
-    log     global
-    mode    http
-    option  httplog
-    option  dontlognull
-    timeout connect 5s
-    timeout client  50s
-    timeout server  50s
-
-frontend http_in
-    bind *:80
-    default_backend web_servers
-
-backend web_servers
-    balance roundrobin
-    option httpchk GET /
-    server web1 10.0.0.11:8080 check
-    server web2 10.0.0.12:8080 check
-EOF
+# Then open in a browser
+http://localhost:8080
 ```
 
-Validez la configuration avant de recharger:
+**Pour une utilisation en production**, configurez la terminaison TLS dans HAProxy avec un
+certificat de confiance ou placez-le derrière un proxy compatible TLS avant d'accepter du trafic
+sensible.
 
-```bash
-haproxy -c -f /etc/haproxy/haproxy.cfg
-sudo systemctl reload haproxy
-```
+:::caution
 
-Les ports sur lesquels HAProxy écoute dépendent entièrement des directives `bind` de vos sections
-`frontend`, ouvrez donc les ports correspondants à l'étape suivante.
+Le frontend par défaut est une page de vérification de disponibilité, pas une configuration de
+répartiteur de charge destinée à la production. Remplacez-le par vos propres sections frontend et
+backend avant de diriger le trafic de l'application vers la VM.
 
-## Ouvrir le pare-feu
-
-Par défaut, l'instance n'autorise que le SSH (port 22) depuis l'extérieur. Ouvrez les ports dont
-HAProxy a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail:
-
-```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation HAProxy](https://www.haproxy.org/#docs)
-- [Manuel de configuration HAProxy](https://docs.haproxy.org/)
+- [Documentation de HAProxy](https://www.haproxy.org/#docs)
+- [Manuel de configuration de HAProxy](https://docs.haproxy.org/)

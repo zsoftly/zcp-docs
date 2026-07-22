@@ -2,125 +2,126 @@
 title: SeaweedFS
 ---
 
-SeaweedFS est un système open source de stockage de fichiers et d'objets distribué, conçu pour des
-milliards de fichiers et un accès rapide. Un seul binaire `weed` exécute les composants master,
+SeaweedFS est un système open source distribué de stockage de fichiers et d'objets, conçu pour des
+milliards de fichiers et un accès rapide. Un seul binaire `weed` exécute les composants maître,
 volume, filer et S3, et la passerelle S3 expose une API compatible S3 pour les charges de travail
-applicatives.
+d'applications.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image SeaweedFS préconfigurée arrive bientôt. Pour l'instant, déployez une nouvelle instance
-**Ubuntu 24.04 LTS** depuis la marketplace et suivez les étapes ci-dessous pour installer SeaweedFS
-vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| SeaweedFS | 4.39      |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 4          |
-| RAM       | 1 Go    | 4 Go       |
-| Stockage  | 20 Go   | 200 Go     |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **SeaweedFS** et cliquez sur
-   **Deploy**, ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Dans les
-   deux cas, vous obtenez une VM Ubuntu 24.04 propre.
-2. Choisissez un plan qui répond aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration génère les identifiants de l'API compatible S3 et
+lance le service tout-en-un `weed mini`. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u seaweedfs-first-boot.service -f
 ```
 
-## Installer SeaweedFS
-
-SeaweedFS est distribué sous la forme d'un binaire statique unique sur sa page de versions GitHub.
-Téléchargez la dernière version `linux_amd64`, extrayez l'exécutable `weed` et installez-le dans
-votre `PATH` :
+Le message de connexion (MOTD) confirme que SeaweedFS est prêt. Vous pouvez également vérifier
+directement le service :
 
 ```bash
-curl -fsSL https://github.com/seaweedfs/seaweedfs/releases/latest/download/linux_amd64.tar.gz \
-  -o /tmp/seaweedfs.tar.gz
-sudo tar -xzf /tmp/seaweedfs.tar.gz -C /usr/local/bin weed
-sudo chmod +x /usr/local/bin/weed
-weed version
+systemctl status seaweedfs
 ```
 
-Créez un utilisateur dédié et un répertoire de données :
+### 3. Récupérer les identifiants de l'API compatible S3
+
+Les identifiants et les points de terminaison générés sont stockés dans un fichier réservé à
+l'utilisateur racine :
 
 ```bash
-sudo useradd --system --home /var/lib/seaweedfs --shell /usr/sbin/nologin seaweedfs
-sudo mkdir -p /var/lib/seaweedfs
-sudo chown -R seaweedfs:seaweedfs /var/lib/seaweedfs
+sudo cat /etc/seaweedfs/credentials.txt
 ```
 
-## Configurer SeaweedFS
+| Champ       | Valeur                                            |
+| ----------- | ------------------------------------------------- |
+| Clé d'accès | Générée de manière sécurisée au premier démarrage |
+| Clé secrète | Générée de manière sécurisée au premier démarrage |
 
-`weed server` exécute les composants master, volume et filer dans un seul processus. L'ajout de
-`-s3` démarre également la passerelle S3. Exécutez-le en tant que service systemd afin qu'il démarre
-au démarrage du système. Créez le fichier d'unité :
+### 4. Accéder à SeaweedFS
+
+L'image démarre les points de terminaison suivants :
+
+| Composant         | Point de terminaison        |
+| ----------------- | --------------------------- |
+| API compatible S3 | `http://<your-vm-ip>:8333`  |
+| Interface Filer   | `http://<your-vm-ip>:8888`  |
+| Interface Master  | `http://<your-vm-ip>:9333`  |
+| Volume            | `http://<your-vm-ip>:9340`  |
+| WebDAV            | `http://<your-vm-ip>:7333`  |
+| Interface Admin   | `http://<your-vm-ip>:23646` |
+
+## Gérer SeaweedFS
 
 ```bash
-sudo tee /etc/systemd/system/seaweedfs.service > /dev/null <<'EOF'
-[Unit]
-Description=SeaweedFS
-After=network.target
+# Check service status
+systemctl status seaweedfs
 
-[Service]
-Type=simple
-User=seaweedfs
-Group=seaweedfs
-ExecStart=/usr/local/bin/weed server -dir=/var/lib/seaweedfs -filer -s3
-Restart=on-failure
+# Restart
+sudo systemctl restart seaweedfs
 
-[Install]
-WantedBy=multi-user.target
-EOF
+# View logs
+sudo journalctl -u seaweedfs -f
 ```
 
-Activez et démarrez le service :
+| Chemin                           | Fonction                                      |
+| -------------------------------- | --------------------------------------------- |
+| `/etc/seaweedfs/seaweedfs.env`   | Identifiants de l'API compatible S3           |
+| `/var/lib/seaweedfs/`            | Données persistantes de SeaweedFS             |
+| `/etc/seaweedfs/credentials.txt` | Identifiants et points de terminaison générés |
+
+## Sécurité
+
+SeaweedFS utilise les ports 8333, 8888, 9333, 9340, 7333 et 23646 pour ses points de terminaison S3,
+filer, maître, volume, WebDAV et administrateur. UFW est activé et n'autorise par défaut que SSH
+(port 22). Tous les ports SeaweedFS restent bloqués jusqu'à ce que vous autorisiez des sources de
+confiance.
+
+**Pour autoriser l'API compatible S3 et l'interface Filer depuis une adresse IP précise :**
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now seaweedfs
-sudo systemctl status seaweedfs
+sudo ufw allow from <trusted-ip> to any port 8333
+sudo ufw allow from <trusted-ip> to any port 8888
 ```
 
-Les composants écoutent sur ces ports par défaut :
-
-| Composant     | Port |
-| ------------- | ---- |
-| Master        | 9333 |
-| Volume        | 8080 |
-| Filer         | 8888 |
-| Passerelle S3 | 8333 |
-
-Pointez n'importe quel client S3 vers `http://<your-vm-ip>:8333`. Consultez le tableau de bord
-master à l'adresse `http://<your-vm-ip>:9333` et le filer à l'adresse `http://<your-vm-ip>:8888`.
-
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que le SSH (port 22) en externe. Ouvrez le ou les ports dont
-SeaweedFS a besoin et ajoutez-les aux règles réseau/de sécurité de l'instance dans le portail :
+**Pour accéder à ces points de terminaison sans ouvrir le pare-feu, utilisez un tunnel SSH :**
 
 ```bash
-sudo ufw allow 9333/tcp
-sudo ufw allow 8080/tcp
-sudo ufw allow 8888/tcp
-sudo ufw allow 8333/tcp
+# Run this on your local machine
+ssh -L 8333:localhost:8333 -L 8888:localhost:8888 ubuntu@<your-vm-ip>
+
+# Then use these local endpoints
+http://localhost:8333
+http://localhost:8888
 ```
+
+**Pour une utilisation en production**, gardez SeaweedFS sur un réseau privé ou placez les points de
+terminaison HTTP requis derrière un proxy inverse afin de les servir en HTTPS avec un certificat TLS
+de confiance.
+
+:::caution
+
+Traitez les identifiants de l'API compatible S3 comme des secrets. N'ouvrez que les points de
+terminaison requis par vos charges de travail et limitez-les aux réseaux d'applications et
+d'administrateurs de confiance.
+
+:::
 
 ## Étapes suivantes
 
-- [Documentation SeaweedFS](https://github.com/seaweedfs/seaweedfs/wiki)
-- [Guide d'installation SeaweedFS](https://github.com/seaweedfs/seaweedfs/wiki/Getting-Started)
+- [Documentation de SeaweedFS](https://github.com/seaweedfs/seaweedfs/wiki)
+- [Guide d'installation de SeaweedFS](https://github.com/seaweedfs/seaweedfs/wiki/Getting-Started)

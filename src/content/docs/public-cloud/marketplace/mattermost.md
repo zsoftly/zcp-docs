@@ -7,150 +7,125 @@ provides channels, direct messages, file sharing, search, and integrations as a 
 to hosted chat services, with your data staying on your own infrastructure. The server listens on
 port 8065.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Mattermost image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance
-from the marketplace and follow the steps below to install Mattermost yourself.
+| Component               | Version   |
+| ----------------------- | --------- |
+| Mattermost Team Edition | 11.8.3    |
+| PostgreSQL              | 18 Alpine |
+| Ubuntu                  | 24.04 LTS |
 
-:::
+## Environment variables
 
-## Requirements
+Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
+value generated.
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 2 GB    | 4 GB        |
-| Storage  | 20 GB   | 50 GB       |
+| Variable                     | Description                    |
+| ---------------------------- | ------------------------------ |
+| `DOMAIN`                     | Public domain for Mattermost   |
+| `POSTGRES_PASSWORD`          | PostgreSQL password            |
+| `MM_SERVICESETTINGS_SITEURL` | Public site URL for Mattermost |
 
-## Deploy the base instance
+## Getting started
 
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On first boot, Mattermost generates a database password and starts PostgreSQL, Mattermost, and Nginx
+as a Docker Compose stack. Track progress with:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u mattermost-first-boot.service -f
 ```
 
-## Install Mattermost
-
-Install Docker Engine and the Docker Compose plugin from Docker's official repository:
+Then verify the stack:
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+cd /opt/mattermost && docker compose ps
 ```
 
-Add the `ubuntu` user to the `docker` group so you can run Docker without `sudo`, then reconnect:
+### 3. Access the Mattermost UI
+
+If you set `DOMAIN` or `MM_SERVICESETTINGS_SITEURL` at deploy time, point a DNS record for that
+hostname at the VM and open it over HTTPS through a reverse proxy that terminates TLS:
+
+```text
+https://<your-domain>
+```
+
+If you left those unset, reach the VM directly by IP:
+
+```text
+http://<your-vm-ip>
+```
+
+Complete the setup wizard to create your administrator account. The first account you create becomes
+the System Administrator. The image does not create shared default login credentials.
+
+## Managing Mattermost
+
+Mattermost runs as a Docker Compose stack in `/opt/mattermost`.
 
 ```bash
-sudo usermod -aG docker ubuntu
-exit
+# Check status
+cd /opt/mattermost && docker compose ps
+
+# Restart
+cd /opt/mattermost && docker compose restart
+
+# View logs
+cd /opt/mattermost && docker compose logs -f
 ```
 
-Reconnect over SSH, create a project directory, and add a `compose.yaml`. This stack, based on the
-official `mattermost-docker` project, runs Mattermost Team Edition against a PostgreSQL 17 database:
+| Path                                      | Purpose                                  |
+| ----------------------------------------- | ---------------------------------------- |
+| `/opt/mattermost/docker-compose.yml`      | Compose stack                            |
+| `/opt/mattermost/.env`                    | Database and Mattermost environment      |
+| `/opt/mattermost/volumes/db/`             | PostgreSQL data                          |
+| `/opt/mattermost/volumes/app/mattermost/` | Mattermost config, files, logs, and data |
+
+## Security
+
+Mattermost is exposed through Nginx on port 80. The application port 8065 stays inside the Docker
+network. UFW is enabled and allows HTTP (port 80) and SSH (port 22).
+
+**To restrict the UI to a specific IP:**
 
 ```bash
-mkdir ~/mattermost && cd ~/mattermost
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
 ```
 
-```yaml
-services:
-  postgres:
-    image: postgres:17
-    restart: unless-stopped
-    environment:
-      - TZ=${TZ}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+**To access the UI without leaving port 80 open, use an SSH tunnel:**
 
-  mattermost:
-    image: mattermost/mattermost-team-edition:10.6.1
-    restart: unless-stopped
-    depends_on:
-      - postgres
-    environment:
-      - TZ=${TZ}
-      - MM_SQLSETTINGS_DRIVERNAME=postgres
-      - MM_SQLSETTINGS_DATASOURCE=${MM_SQLSETTINGS_DATASOURCE}
-      - MM_SERVICESETTINGS_SITEURL=${MM_SERVICESETTINGS_SITEURL}
-    ports:
-      - '${APP_PORT}:8065'
-    volumes:
-      - mattermost-data:/mattermost/data
-      - mattermost-logs:/mattermost/logs
-      - mattermost-config:/mattermost/config
-      - mattermost-plugins:/mattermost/plugins
-      - mattermost-client-plugins:/mattermost/client/plugins
-
-volumes:
-  postgres-data:
-  mattermost-data:
-  mattermost-logs:
-  mattermost-config:
-  mattermost-plugins:
-  mattermost-client-plugins:
-```
-
-Create a `.env` file in the same directory. Replace the domain and passwords with your own values:
+First close the public port on the VM, since it is open by default:
 
 ```bash
-cat > .env <<'EOF'
-DOMAIN=mattermost.example.com
-TZ=America/Toronto
-POSTGRES_USER=mmuser
-POSTGRES_PASSWORD=change-me-to-a-strong-password
-POSTGRES_DB=mattermost
-APP_PORT=8065
-MM_SQLSETTINGS_DRIVERNAME=postgres
-MM_SQLSETTINGS_DATASOURCE=postgres://mmuser:change-me-to-a-strong-password@postgres:5432/mattermost?sslmode=disable&connect_timeout=10
-MM_SERVICESETTINGS_SITEURL=https://mattermost.example.com
-EOF
+sudo ufw delete allow 80/tcp
 ```
-
-Make sure the `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` values match the credentials
-embedded in `MM_SQLSETTINGS_DATASOURCE`. Start the stack:
 
 ```bash
-docker compose up -d
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:8080
 ```
 
-## Configure Mattermost
+**For production use**, place Mattermost behind a reverse proxy with a trusted TLS certificate and
+set its site URL to your public HTTPS domain.
 
-Open `http://<your-vm-ip>:8065` in a browser. The first account you create becomes the system
-administrator. From there, create your first team and invite members. For a production setup, put
-Mattermost behind a reverse proxy such as nginx with a TLS certificate, set
-`MM_SERVICESETTINGS_SITEURL` to your public `https://` domain, and serve the UI over HTTPS instead
-of exposing port 8065 directly.
+:::caution
 
-## Open the firewall
+Create the first administrator promptly and restrict access to trusted users while you complete
+setup. The first account created receives System Administrator privileges.
 
-The instance allows only SSH (port 22) externally by default. Open the port(s) Mattermost needs and
-add them to the instance's network/security rules in the portal:
-
-```bash
-sudo ufw allow 8065/tcp
-```
+:::
 
 ## Next steps
 

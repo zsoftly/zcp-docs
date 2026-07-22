@@ -2,124 +2,136 @@
 title: Gitea
 ---
 
-Gitea est un service Git léger et auto-hébergé écrit en Go. Il regroupe l'hébergement de dépôts, la
-revue de code, le suivi des tickets et un exécuteur CI intégré dans un seul binaire qui tourne
-confortablement sur une petite VM. L'interface web s'exécute sur le port 3000 et Git via SSH sur le
-port 22.
+Gitea est un service Git léger et auto-hébergé, écrit en Go. Son binaire serveur comprend
+l'hébergement de dépôts, la revue de code, le suivi des tickets et Gitea Actions pour le CI/CD côté
+serveur. Le serveur s'exécute sans peine sur une petite VM. L'exécution des flux de travail
+nécessite un `act_runner` (Gitea Runner) distinct, que vous devez installer et enregistrer.
+L'interface web fonctionne sur le port 3000 et Git via SSH sur le port 22.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Gitea préconfigurée arrive bientôt. Pour l'instant, déployez une nouvelle instance
-**Ubuntu 24.04 LTS** depuis la marketplace et suivez les étapes ci-dessous pour installer Gitea
-vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| Gitea     | 1.27.0    |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Variables d'environnement
 
-## Prérequis
+Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
+qu'une valeur sécurisée soit générée.
 
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 1 Go    | 2 Go       |
-| Stockage  | 20 Go   | 40 Go      |
+| Variable               | Description                            |
+| ---------------------- | -------------------------------------- |
+| `GITEA_DOMAIN`         | Domaine public de Gitea                |
+| `GITEA_ADMIN_USER`     | Nom d'utilisateur administrateur Gitea |
+| `GITEA_ADMIN_PASSWORD` | Mot de passe administrateur Gitea      |
 
-## Déployer l'instance de base
+## Démarrage
 
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **Gitea** et cliquez sur **Deploy**
-   ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Dans les deux cas, vous
-   obtenez une VM Ubuntu 24.04 propre.
-2. Choisissez un plan qui répond aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration génère les secrets de l'application, configure
+Gitea avec SQLite, démarre le service et crée le compte administrateur. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u gitea-first-boot.service -f
 ```
 
-## Installer Gitea
+Le message de connexion (MOTD) confirme que Gitea est prêt.
 
-Installez d'abord Git et quelques dépendances :
+### 3. Vérifier que Gitea fonctionne
 
 ```bash
-sudo apt install -y git git-lfs
+systemctl status gitea
+curl -fsS http://127.0.0.1:3000/api/healthz
 ```
 
-Téléchargez le dernier binaire Gitea et installez-le dans `/usr/local/bin`. Consultez
-[dl.gitea.com](https://dl.gitea.com/gitea/) pour la version actuelle et remplacez `1.26.2`
-ci-dessous si une version plus récente est disponible :
+### 4. Accéder à l'interface Gitea
+
+Ouvrez un navigateur et accédez à :
+
+```text
+http://<your-vm-ip>:3000
+```
+
+Récupérez les identifiants générés :
 
 ```bash
-wget -O gitea https://dl.gitea.com/gitea/1.26.2/gitea-1.26.2-linux-amd64
-sudo cp gitea /usr/local/bin/gitea
-sudo chmod 755 /usr/local/bin/gitea
+sudo cat /etc/gitea/credentials.txt
 ```
 
-Créez un utilisateur système `git` dédié sous lequel Gitea s'exécute :
+| Champ             | Valeur                                                                                          |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| Nom d'utilisateur | `zadmin` par défaut, ou la valeur `GITEA_ADMIN_USER` définie. Voir `/etc/gitea/credentials.txt` |
+| Mot de passe      | Dans `/etc/gitea/credentials.txt`                                                               |
+
+Git via SSH utilise le service SSH de la VM sur le port 22.
+
+## Gérer Gitea
 
 ```bash
-sudo adduser --system --shell /bin/bash --gecos 'Git Version Control' \
-  --group --disabled-password --home /home/git git
+# Check service status
+systemctl status gitea
+
+# Restart
+sudo systemctl restart gitea
+
+# View logs
+sudo journalctl -u gitea -f
 ```
 
-Créez les répertoires de données et de configuration :
+| Chemin                 | Fonction                                         |
+| ---------------------- | ------------------------------------------------ |
+| `/etc/gitea/app.ini`   | Configuration principale                         |
+| `/var/lib/gitea/data/` | Dépôts, base de données SQLite et téléversements |
+| `/var/lib/gitea/log/`  | Fichiers journaux de Gitea                       |
+
+## Sécurité
+
+Le port 3000 est accessible sur l'interface réseau de la VM. UFW est activé et autorise par défaut
+SSH (port 22) et Gitea (port 3000).
+
+**Pour limiter l'interface à une adresse IP précise :**
 
 ```bash
-sudo mkdir -p /var/lib/gitea/{custom,data,log}
-sudo chown -R git:git /var/lib/gitea/
-sudo chmod -R 750 /var/lib/gitea/
-sudo mkdir /etc/gitea
-sudo chown root:git /etc/gitea
-sudo chmod 770 /etc/gitea
+sudo ufw delete allow 3000/tcp
+sudo ufw allow from <trusted-ip> to any port 3000
 ```
 
-Installez le service systemd fourni avec Gitea, puis activez-le et démarrez-le :
+**Pour accéder à l'interface sans exposer le port 3000, utilisez un tunnel SSH :**
+
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
 
 ```bash
-sudo wget -O /etc/systemd/system/gitea.service \
-  https://raw.githubusercontent.com/go-gitea/gitea/release/v1.26/contrib/systemd/gitea.service
-sudo systemctl daemon-reload
-sudo systemctl enable --now gitea
-sudo systemctl status gitea
+sudo ufw delete allow 3000/tcp
 ```
-
-## Configurer Gitea
-
-Gitea écoute sur le port 3000. Ouvrez `http://<your-vm-ip>:3000` dans un navigateur pour exécuter
-l'assistant d'installation initial. Acceptez la base de données SQLite par défaut pour une petite
-instance, ou orientez Gitea vers PostgreSQL/MySQL pour des déploiements plus importants.
-
-Avant de terminer, définissez l'**Application URL** sur l'adresse de votre serveur et créez le
-premier compte administrateur en bas du formulaire. Le premier utilisateur enregistré devient
-l'administrateur. L'assistant écrit ses paramètres dans `/etc/gitea/app.ini`. Renforcez donc les
-permissions des fichiers ensuite :
 
 ```bash
-sudo chmod 750 /etc/gitea
-sudo chmod 640 /etc/gitea/app.ini
+# Run this on your local machine
+ssh -L 3000:localhost:3000 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:3000
 ```
 
-Pour une configuration de production, placez Gitea derrière un reverse proxy tel que nginx avec un
-certificat TLS, puis servez l'interface en HTTPS au lieu d'exposer directement le port 3000.
+**Pour une utilisation en production**, placez Gitea derrière un proxy inverse afin de le servir sur
+le port 443 avec un certificat TLS. Limitez l'accès SSH sur le port 22 aux utilisateurs et aux
+réseaux autorisés.
 
-## Ouvrir le pare-feu
+:::caution
 
-L'instance n'autorise par défaut que le SSH (port 22) en externe. Ouvrez le ou les ports dont Gitea
-a besoin et ajoutez-les aux règles réseau/de sécurité de l'instance dans le portail :
+Gardez `/etc/gitea/credentials.txt` confidentiel et modifiez le mot de passe administrateur initial
+après votre première connexion.
 
-```bash
-sudo ufw allow 3000/tcp
-```
-
-Git via SSH utilise le port 22 existant. Pour exécuter plutôt le serveur SSH intégré de Gitea sur un
-port distinct, ouvrez également ce port (par exemple `sudo ufw allow 2222/tcp`).
+:::
 
 ## Étapes suivantes
 
-- [Documentation Gitea](https://docs.gitea.com/)
-- [Guide d'installation Gitea](https://docs.gitea.com/installation/install-from-binary)
+- [Documentation de Gitea](https://docs.gitea.com/)
+- [Guide d'installation de Gitea](https://docs.gitea.com/installation/install-from-binary)

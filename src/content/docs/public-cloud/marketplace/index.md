@@ -9,15 +9,15 @@ automatically. Credentials are generated, services are configured, and the image
 
 <div class="mp-stats">
   <div class="mp-stat">
-    <span class="mp-num">35</span>
+    <span class="mp-num">64</span>
     <span class="mp-label">live images</span>
   </div>
   <div class="mp-stat">
-    <span class="mp-num">29</span>
+    <span class="mp-num">0</span>
     <span class="mp-label">coming soon</span>
   </div>
   <div class="mp-stat">
-    <span class="mp-num">11</span>
+    <span class="mp-num">9</span>
     <span class="mp-label">categories</span>
   </div>
   <div class="mp-stat">
@@ -189,6 +189,46 @@ automatically. Credentials are generated, services are configured, and the image
     </div>
   </a>
 
+  <a href="/public-cloud/marketplace/nginx-proxy-manager" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/nginx-proxy-manager.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Nginx Proxy Manager</p>
+      <p class="service-desc">Reverse proxy and SSL management with a simple web UI.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/nginx" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/nginx.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Nginx</p>
+      <p class="service-desc">High-performance web server and reverse proxy.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/haproxy" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/haproxy.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">HAProxy</p>
+      <p class="service-desc">Reliable, high-performance TCP and HTTP load balancer.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/apache-tomcat" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/apache-tomcat.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Apache Tomcat</p>
+      <p class="service-desc">Java servlet container for running web applications.</p>
+    </div>
+  </a>
+
 </div>
 </div>
 
@@ -313,6 +353,106 @@ automatically. Credentials are generated, services are configured, and the image
     </div>
   </a>
 
+  <a href="/public-cloud/marketplace/rancher" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/rancher.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Rancher</p>
+      <p class="service-desc">Manage Kubernetes clusters from a single web console.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/rabbitmq" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/rabbitmq.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">RabbitMQ</p>
+      <p class="service-desc">Reliable message broker for queues and event-driven apps.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/apache-kafka" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/apache-kafka.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Apache Kafka</p>
+      <p class="service-desc">Distributed event streaming platform for real-time data.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/nexus" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/nexus.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Nexus</p>
+      <p class="service-desc">Universal artifact repository for builds and dependencies.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/artifactory" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/artifactory.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Artifactory</p>
+      <p class="service-desc">JFrog artifact repository for binaries and packages.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/harbor" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/harbor.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Harbor</p>
+      <p class="service-desc">Secure container registry with vulnerability scanning.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/gitea" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/gitea.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Gitea</p>
+      <p class="service-desc">Lightweight self-hosted Git service.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/directus" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/directus.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Directus</p>
+      <p class="service-desc">Headless CMS and data platform on top of SQL databases.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/pterodactyl" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/pterodactyl.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Pterodactyl</p>
+      <p class="service-desc">Manage game servers in isolated containers via a web panel.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/pelican-panel" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/pelican-panel.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Pelican Panel</p>
+      <p class="service-desc">Modern, fast open-source control panel for game servers.</p>
+    </div>
+  </a>
+
 </div>
 </div>
 
@@ -405,6 +545,56 @@ automatically. Credentials are generated, services are configured, and the image
     </div>
   </a>
 
+  <a href="/public-cloud/marketplace/qdrant" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/qdrant.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Qdrant</p>
+      <p class="service-desc">Vector database for semantic search and AI retrieval pipelines.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/nocodb" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/nocodb.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">NocoDB</p>
+      <p class="service-desc">Open-source Airtable alternative that turns databases into tables.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/seaweedfs" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/seaweedfs.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">SeaweedFS</p>
+      <p class="service-desc">Fast distributed file store with S3-compatible object storage.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/neo4j" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/neo4j.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Neo4j</p>
+      <p class="service-desc">Graph database for connected data and relationship queries.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/clickhouse" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/clickhouse.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">ClickHouse</p>
+      <p class="service-desc">Fast column-oriented database for real-time analytics (OLAP).</p>
+    </div>
+  </a>
+
 </div>
 </div>
 
@@ -415,7 +605,7 @@ automatically. Credentials are generated, services are configured, and the image
   </div>
   <h2 class="mp-cat-title">Business Apps</h2>
 </div>
-<div class="service-grid mp-solo">
+<div class="service-grid">
 
   <a href="/public-cloud/marketplace/n8n" class="service-card">
     <div class="mp-brand-icon">
@@ -424,6 +614,66 @@ automatically. Credentials are generated, services are configured, and the image
     <div>
       <p class="service-name">n8n</p>
       <p class="service-desc">Workflow automation platform with a visual node-based editor</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/medusa" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/medusa.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Medusa</p>
+      <p class="service-desc">Headless, API-first commerce engine for custom online stores.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/bagisto" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/bagisto.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Bagisto</p>
+      <p class="service-desc">Open-source Laravel e-commerce platform for online stores.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/erpnext" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/erpnext.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">ERPNext</p>
+      <p class="service-desc">CRM, accounting, HR, and inventory in one open-source suite.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/zammad" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/zammad.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Zammad</p>
+      <p class="service-desc">Self-hosted helpdesk and ticketing for customer support.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/mattermost" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/mattermost.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Mattermost</p>
+      <p class="service-desc">Self-hosted team messaging and collaboration platform.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/wikijs" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/wikijs.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Wiki.js</p>
+      <p class="service-desc">Modern self-hosted wiki and documentation platform.</p>
     </div>
   </a>
 
@@ -510,6 +760,16 @@ automatically. Credentials are generated, services are configured, and the image
     </div>
   </a>
 
+  <a href="/public-cloud/marketplace/wg-easy" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/wg-easy.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">WG-Easy</p>
+      <p class="service-desc">The easiest way to run WireGuard VPN with a web UI.</p>
+    </div>
+  </a>
+
 </div>
 </div>
 
@@ -552,6 +812,36 @@ automatically. Credentials are generated, services are configured, and the image
     </div>
   </a>
 
+  <a href="/public-cloud/marketplace/uptime-kuma" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/uptime-kuma.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Uptime Kuma</p>
+      <p class="service-desc">Monitor sites and services with sleek dashboards and alerts.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/beszel" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/beszel.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Beszel</p>
+      <p class="service-desc">Lightweight real-time server monitoring with a tiny agent.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/gatus" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/gatus.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Gatus</p>
+      <p class="service-desc">Automated status page and health dashboard for services.</p>
+    </div>
+  </a>
+
 </div>
 </div>
 
@@ -591,308 +881,6 @@ automatically. Credentials are generated, services are configured, and the image
     <div>
       <p class="service-name">Dify</p>
       <p class="service-desc">Build LLM apps and AI agents with workflows, RAG, and model providers.</p>
-    </div>
-  </a>
-
-</div>
-</div>
-
-<div class="mp-section">
-<div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #64748b; --cat-dim: rgba(100,116,139,0.12);">
-    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>
-  </div>
-  <h2 class="mp-cat-title">Coming soon</h2>
-</div>
-<div class="service-grid">
-
-  <a href="/public-cloud/marketplace/qdrant" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/qdrant.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Qdrant <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Vector database for semantic search and AI retrieval pipelines.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/medusa" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/medusa.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Medusa <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Headless, API-first commerce engine for custom online stores.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/bagisto" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/bagisto.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Bagisto <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Open-source Laravel e-commerce platform for online stores.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/pterodactyl" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/pterodactyl.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Pterodactyl <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Manage game servers in isolated containers via a web panel.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/pelican-panel" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/pelican-panel.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Pelican Panel <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Modern, fast open-source control panel for game servers.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/erpnext" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/erpnext.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">ERPNext <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">CRM, accounting, HR, and inventory in one open-source suite.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/nocodb" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/nocodb.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">NocoDB <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Open-source Airtable alternative that turns databases into tables.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/directus" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/directus.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Directus <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Headless CMS and data platform on top of SQL databases.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/uptime-kuma" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/uptime-kuma.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Uptime Kuma <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Monitor sites and services with sleek dashboards and alerts.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/beszel" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/beszel.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Beszel <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Lightweight real-time server monitoring with a tiny agent.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/gatus" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/gatus.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Gatus <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Automated status page and health dashboard for services.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/zammad" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/zammad.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Zammad <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Self-hosted helpdesk and ticketing for customer support.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/rancher" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/rancher.png" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Rancher <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Manage Kubernetes clusters from a single web console.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/nginx-proxy-manager" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/nginx-proxy-manager.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Nginx Proxy Manager <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Reverse proxy and SSL management with a simple web UI.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/nginx" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/nginx.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Nginx <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">High-performance web server and reverse proxy.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/haproxy" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/haproxy.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">HAProxy <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Reliable, high-performance TCP and HTTP load balancer.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/apache-tomcat" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/apache-tomcat.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Apache Tomcat <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Java servlet container for running web applications.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/rabbitmq" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/rabbitmq.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">RabbitMQ <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Reliable message broker for queues and event-driven apps.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/apache-kafka" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/apache-kafka.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Apache Kafka <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Distributed event streaming platform for real-time data.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/seaweedfs" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/seaweedfs.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">SeaweedFS <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Fast distributed file store with S3-compatible object storage.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/nexus" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/nexus.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Nexus <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Universal artifact repository for builds and dependencies.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/artifactory" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/artifactory.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Artifactory <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">JFrog artifact repository for binaries and packages.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/harbor" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/harbor.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Harbor <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Secure container registry with vulnerability scanning.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/gitea" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/gitea.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Gitea <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Lightweight self-hosted Git service.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/neo4j" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/neo4j.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Neo4j <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Graph database for connected data and relationship queries.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/clickhouse" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/clickhouse.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">ClickHouse <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Fast column-oriented database for real-time analytics (OLAP).</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/mattermost" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/mattermost.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Mattermost <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Self-hosted team messaging and collaboration platform.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/wikijs" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/wikijs.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">Wiki.js <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">Modern self-hosted wiki and documentation platform.</p>
-    </div>
-  </a>
-
-  <a href="/public-cloud/marketplace/wg-easy" class="service-card">
-    <div class="mp-brand-icon">
-      <img src="/icons/marketplace/wg-easy.svg" alt="" width="26" height="26" aria-hidden="true">
-    </div>
-    <div>
-      <p class="service-name">WG-Easy <span class="mp-status">Coming soon</span></p>
-      <p class="service-desc">The easiest way to run WireGuard VPN with a web UI.</p>
     </div>
   </a>
 

@@ -2,130 +2,117 @@
 title: Gatus
 ---
 
-Gatus est un tableau de bord de santé et une page de statut automatisés, orientés développeurs, avec
-alertes intégrées et prise en charge des incidents. Il surveille des points de terminaison HTTP,
-TCP, DNS, ICMP et autres selon des conditions que vous définissez, et publie les résultats sur une
-page de statut épurée servie sur le port 8080. Il se configure entièrement via un unique fichier
+Gatus est un tableau de santé et une page d'état automatisés conçus pour les développeurs, avec
+alertes intégrées et gestion des incidents. Il surveille les points de terminaison HTTP, TCP, DNS,
+ICMP et autres selon les conditions que vous définissez, puis publie les résultats sur une page
+d'état épurée servie sur le port 8080. Toute sa configuration réside dans un seul fichier
 `config.yaml`.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Gatus préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer Gatus vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| Gatus     | 5.36.0    |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 1          |
-| RAM       | 256 Mo  | 512 Mo     |
-| Stockage  | 5 Go    | 10 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration lance la pile Docker Compose de Gatus. Cette
+opération prend moins d'une minute. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u gatus-first-boot.service -f
 ```
 
-## Installer Gatus
+Le message de connexion (MOTD) confirme que Gatus est prêt.
 
-Gatus est distribué sous forme d'image Docker officielle. Installez d'abord Docker à l'aide du
-script d'installation officiel :
+### 3. Vérifier que Gatus fonctionne
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
+cd /opt/gatus
+docker compose ps
+curl -fsS http://127.0.0.1:8080/ > /dev/null
 ```
 
-Ajoutez l'utilisateur `ubuntu` au groupe `docker`, puis réappliquez votre appartenance au groupe :
+### 4. Accéder au tableau de bord Gatus
+
+Ouvrez un navigateur et accédez à :
+
+```text
+http://<your-vm-ip>:8080
+```
+
+La configuration incluse surveille `https://example.com` toutes les 30 secondes et enregistre les
+résultats dans SQLite.
+
+## Gérer Gatus
 
 ```bash
-sudo usermod -aG docker ubuntu
-newgrp docker
+# Check container status
+cd /opt/gatus && docker compose ps
+
+# Restart
+cd /opt/gatus && docker compose restart
+
+# View logs
+cd /opt/gatus && docker compose logs -f
 ```
 
-Créez un fichier de configuration. La configuration minimale ci-dessous surveille un site web et
-expose le tableau de bord sur le port 8080 :
+| Chemin                          | Fonction                         |
+| ------------------------------- | -------------------------------- |
+| `/opt/gatus/config.yaml`        | Moniteurs, conditions et alertes |
+| `/opt/gatus/docker-compose.yml` | Configuration Docker Compose     |
+| `/var/lib/gatus/gatus.db`       | Données SQLite persistantes      |
+
+Après avoir modifié `/opt/gatus/config.yaml`, redémarrez Gatus pour appliquer les changements.
+
+## Sécurité
+
+Le port 8080 est accessible sur l'interface réseau de la VM. UFW est activé et autorise par défaut
+SSH (port 22) et Gatus (port 8080).
+
+**Pour limiter le tableau de bord à une adresse IP précise :**
 
 ```bash
-mkdir -p ~/gatus
-cat > ~/gatus/config.yaml <<'EOF'
-web:
-  port: 8080
-
-endpoints:
-  - name: example-website
-    url: https://example.com
-    interval: 30s
-    conditions:
-      - "[STATUS] == 200"
-      - "[RESPONSE_TIME] < 300"
-EOF
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
 ```
 
-Démarrez le conteneur Gatus en montant le fichier de configuration et en liant le port 8080 :
+**Pour accéder à Gatus sans exposer le port 8080, utilisez un tunnel SSH :**
+
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
 
 ```bash
-docker run -d \
-  --restart=unless-stopped \
-  -p 8080:8080 \
-  --mount type=bind,source="$HOME/gatus/config.yaml",target=/config/config.yaml \
-  --name gatus \
-  ghcr.io/twin/gatus:stable
+sudo ufw delete allow 8080/tcp
 ```
-
-Vérifiez que le conteneur est en cours d'exécution :
 
 ```bash
-docker ps
+# Run this on your local machine
+ssh -L 8080:localhost:8080 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
 ```
 
-## Configurer Gatus
+**Pour une utilisation en production**, placez Gatus derrière un proxy inverse afin de le servir sur
+le port 443 avec un certificat TLS, puis limitez l'accès direct au port 8080.
 
-1. Ouvrez `http://<your-vm-ip>:8080` dans un navigateur pour voir la page de statut.
-2. Modifiez `~/gatus/config.yaml` pour ajouter des points de terminaison, des conditions, des
-   fournisseurs d'alertes (Slack, e-mail, PagerDuty, webhooks et plus encore) et des paramètres de
-   groupe. Consultez la référence de configuration pour toutes les clés disponibles.
-3. Appliquez les modifications en redémarrant le conteneur :
+:::caution
 
-```bash
-docker restart gatus
-```
+La page d'état peut révéler les noms des services, les points de terminaison et les détails des
+incidents. Limitez-la au public prévu.
 
-En production, placez Gatus derrière un reverse proxy tel que Nginx ou Caddy pour le servir sur le
-port 443 avec un certificat TLS, et restreignez l'accès direct au port 8080.
-
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que le SSH (port 22) en externe. Ouvrez le port dont Gatus a besoin
-et ajoutez-le aux règles réseau/sécurité de l'instance dans le portail :
-
-```bash
-sudo ufw allow 8080/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation Gatus](https://github.com/TwiN/gatus)
-- [Guide de configuration Gatus](https://github.com/TwiN/gatus#configuration)
+- [Documentation de Gatus](https://github.com/TwiN/gatus)
+- [Guide de configuration de Gatus](https://github.com/TwiN/gatus#configuration)

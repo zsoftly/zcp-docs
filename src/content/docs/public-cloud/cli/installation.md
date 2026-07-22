@@ -8,8 +8,10 @@ sidebar_position: 1
 The ZCP CLI (`zcp`) is the official command-line interface for ZSoftly Public Cloud. It lets you
 manage VMs, networks, storage, Kubernetes, and more from your terminal.
 
-**Current version:** v0.0.15  
-**GitHub:** https://github.com/zsoftly/zcp-cli  
+**Current version:**
+<a href="https://github.com/zsoftly/zcp-cli/releases/latest"><img src="https://img.shields.io/github/v/release/zsoftly/zcp-cli?style=flat&label=&color=3b82f6" alt="Latest zcp CLI release" style="vertical-align: middle;" /></a>  
+**GitHub:**
+https://github.com/zsoftly/zcp-cli  
 **Releases:** https://github.com/zsoftly/zcp-cli/releases
 
 :::note

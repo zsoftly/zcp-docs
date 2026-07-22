@@ -7,137 +7,122 @@ and GraphQL API plus a no-code admin app. You point it at a database and instant
 management, asset storage, and granular access control. The official Docker image is the recommended
 way to self-host it.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Directus image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Directus yourself.
+| Component               | Version   |
+| ----------------------- | --------- |
+| Directus                | 12.1.1    |
+| PostgreSQL with PostGIS | 16 / 3.5  |
+| Ubuntu                  | 24.04 LTS |
 
-:::
+## Environment variables
 
-## Requirements
+Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
+value generated.
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 2 GB    | 4 GB        |
-| Storage  | 20 GB   | 40 GB       |
+| Variable         | Description                  |
+| ---------------- | ---------------------------- |
+| `ADMIN_EMAIL`    | Directus admin email address |
+| `ADMIN_PASSWORD` | Directus admin password      |
 
-## Deploy the base instance
+## Getting started
 
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab. It opens on
-   **Featured** by default, so select **Marketplace** next to it. Pick your region (YOW-1 or YUL-1),
-   search for **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from
-   **Instances → Create**. Either way you get a clean Ubuntu 24.04 VM.
-
-   ![The Marketplace tab in the ZSoftly Cloud portal, showing the region selector, category list, search box, and Deploy buttons](../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Searching the Marketplace for an app, with the search box filtering the catalog down to a matching Deploy card](../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choose a plan that meets the requirements above.
-
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script generates unique application and database secrets, starts
+PostgreSQL/PostGIS and Directus, and creates the administrator account. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u directus-first-boot.service -f
 ```
 
-## Install Directus
+The login message (MOTD) confirms when Directus is ready.
 
-The official Docker image (`directus/directus`) ships the application and all runtime dependencies.
-Running it alongside a PostgreSQL container with Docker Compose is the recommended setup.
-
-Install Docker Engine and the Compose plugin:
+### 3. Verify Directus is running
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo usermod -aG docker ubuntu
+cd /opt/directus
+docker compose ps
+curl -fsS http://127.0.0.1:8055/server/ping
 ```
 
-Log out and back in so the `docker` group applies. Create a project directory and a `compose.yml`
-file:
+### 4. Access the Directus UI
 
-```bash
-mkdir ~/directus && cd ~/directus
-```
-
-```yaml
-services:
-  database:
-    image: postgis/postgis:16-master
-    volumes:
-      - ./data/database:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: directus
-      POSTGRES_PASSWORD: change-me
-      POSTGRES_DB: directus
-    healthcheck:
-      test: ['CMD', 'pg_isready', '-U', 'directus']
-      interval: 10s
-      retries: 5
-
-  directus:
-    image: directus/directus:latest
-    ports:
-      - '8055:8055'
-    volumes:
-      - ./uploads:/directus/uploads
-    depends_on:
-      database:
-        condition: service_healthy
-    environment:
-      SECRET: 'replace-with-a-long-random-string'
-      DB_CLIENT: 'pg'
-      DB_HOST: 'database'
-      DB_PORT: '5432'
-      DB_DATABASE: 'directus'
-      DB_USER: 'directus'
-      DB_PASSWORD: 'change-me'
-      ADMIN_EMAIL: 'admin@example.com'
-      ADMIN_PASSWORD: 'change-me-too'
-      PUBLIC_URL: 'http://<your-vm-ip>:8055'
-```
-
-Start the stack:
-
-```bash
-docker compose up -d
-```
-
-## Configure Directus
-
-On first boot Directus runs migrations against the PostgreSQL container and creates the admin
-account from `ADMIN_EMAIL` / `ADMIN_PASSWORD`. The app listens on **port 8055**.
-
-Open the admin app and sign in:
+Open a browser and navigate to:
 
 ```text
 http://<your-vm-ip>:8055
 ```
 
-For production, pin the image to a specific version (for example `directus/directus:11`), set a
-strong unique `SECRET`, set `PUBLIC_URL` to your domain, and place Directus behind nginx with TLS.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Directus needs and
-add them to the instance's network/security rules in the portal:
+Retrieve the administrator credentials:
 
 ```bash
-sudo ufw allow 8055/tcp
+sudo cat /etc/directus/credentials.txt
 ```
+
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Email    | From `/etc/directus/credentials.txt` |
+| Password | From `/etc/directus/credentials.txt` |
+
+## Managing Directus
+
+```bash
+# Check container status
+cd /opt/directus && docker compose ps
+
+# Restart
+cd /opt/directus && docker compose restart
+
+# View logs
+cd /opt/directus && docker compose logs -f
+```
+
+| Path                               | Purpose                           |
+| ---------------------------------- | --------------------------------- |
+| `/opt/directus/docker-compose.yml` | Docker Compose configuration      |
+| `/opt/directus/.env`               | Application and database settings |
+| `/var/lib/directus/database/`      | PostgreSQL/PostGIS data           |
+| `/var/lib/directus/uploads/`       | Uploaded files                    |
+| `/var/lib/directus/extensions/`    | Directus extensions               |
+
+## Security
+
+Port 8055 is accessible on the VM's network interface. UFW is enabled and allows SSH (port 22) and
+Directus (port 8055) by default.
+
+**To restrict the UI and API to a specific IP:**
+
+```bash
+sudo ufw delete allow 8055/tcp
+sudo ufw allow from <trusted-ip> to any port 8055
+```
+
+**To access Directus without exposing port 8055, use an SSH tunnel:**
+
+```bash
+# Run this on your local machine
+ssh -L 8055:localhost:8055 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8055
+```
+
+**For production use**, place Directus behind a reverse proxy so you can serve it on port 443 with a
+TLS certificate, and update the public URL in Directus to the HTTPS URL.
+
+:::caution
+
+Keep `/opt/directus/.env` and `/etc/directus/credentials.txt` restricted to administrators. Both
+files contain passwords and application secrets.
+
+:::
 
 ## Next steps
 

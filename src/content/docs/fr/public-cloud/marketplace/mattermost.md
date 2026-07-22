@@ -2,162 +2,133 @@
 title: Mattermost
 ---
 
-Mattermost est une plateforme de messagerie et de collaboration libre et auto-hébergée pour les
-équipes. Elle offre des canaux, des messages directs, le partage de fichiers, la recherche et des
-intégrations, comme alternative privée aux services de messagerie hébergés, vos données restant sur
-votre propre infrastructure. Le serveur écoute sur le port 8065.
+Mattermost est une plateforme open source, auto-hébergée, de messagerie et de collaboration pour les
+équipes. Elle fournit des canaux, des messages directs, le partage de fichiers, la recherche et des
+intégrations comme solution privée de remplacement des services de clavardage hébergés, tout en
+conservant vos données sur votre propre infrastructure. Le serveur écoute sur le port 8065.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Mattermost préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu
-24.04 LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer Mattermost
-vous-même.
+| Composant               | Version   |
+| ----------------------- | --------- |
+| Mattermost Team Edition | 11.8.3    |
+| PostgreSQL              | 18 Alpine |
+| Ubuntu                  | 24.04 LTS |
 
-:::
+## Variables d'environnement
 
-## Prérequis
+Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
+qu'une valeur sécurisée soit générée.
 
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 2 Go    | 4 Go       |
-| Stockage  | 20 Go   | 50 Go      |
+| Variable                     | Description                     |
+| ---------------------------- | ------------------------------- |
+| `DOMAIN`                     | Domaine public de Mattermost    |
+| `POSTGRES_PASSWORD`          | Mot de passe PostgreSQL         |
+| `MM_SERVICESETTINGS_SITEURL` | URL publique du site Mattermost |
 
-## Déployer l'instance de base
+## Démarrage
 
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **Mattermost**, puis cliquez sur
-   **Deploy**, ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Les deux
-   vous donnent une VM Ubuntu 24.04 vierge.
-2. Choisissez un forfait qui répond aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, Mattermost génère un mot de passe de base de données et lance PostgreSQL,
+Mattermost et Nginx dans une pile Docker Compose. Suivez la progression avec :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u mattermost-first-boot.service -f
 ```
 
-## Installer Mattermost
-
-Installez Docker Engine et le plugin Docker Compose depuis le dépôt officiel de Docker :
+Vérifiez ensuite la pile :
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+cd /opt/mattermost && docker compose ps
 ```
 
-Ajoutez l'utilisateur `ubuntu` au groupe `docker` afin de pouvoir exécuter Docker sans `sudo`, puis
-reconnectez-vous :
+### 3. Accéder à l'interface Mattermost
+
+Si vous avez défini `DOMAIN` ou `MM_SERVICESETTINGS_SITEURL` lors du déploiement, faites pointer un
+enregistrement DNS pour ce nom d'hôte vers la VM et ouvrez-le en HTTPS par un proxy inverse qui
+termine TLS :
+
+```text
+https://<your-domain>
+```
+
+Si vous ne les avez pas définis, accédez directement à la VM par son adresse IP :
+
+```text
+http://<your-vm-ip>
+```
+
+Terminez l'assistant de configuration pour créer votre compte administrateur. Le premier compte créé
+devient administrateur système. L'image ne crée pas d'identifiants de connexion partagés par défaut.
+
+## Gérer Mattermost
+
+Mattermost fonctionne comme une pile Docker Compose dans `/opt/mattermost`.
 
 ```bash
-sudo usermod -aG docker ubuntu
-exit
+# Check status
+cd /opt/mattermost && docker compose ps
+
+# Restart
+cd /opt/mattermost && docker compose restart
+
+# View logs
+cd /opt/mattermost && docker compose logs -f
 ```
 
-Reconnectez-vous en SSH, créez un répertoire de projet et ajoutez un fichier `compose.yaml`. Cette
-pile, basée sur le projet officiel `mattermost-docker`, exécute Mattermost Team Edition avec une
-base de données PostgreSQL 17 :
+| Chemin                                    | Fonction                                                   |
+| ----------------------------------------- | ---------------------------------------------------------- |
+| `/opt/mattermost/docker-compose.yml`      | Pile Compose                                               |
+| `/opt/mattermost/.env`                    | Environnement de la base et de Mattermost                  |
+| `/opt/mattermost/volumes/db/`             | Données PostgreSQL                                         |
+| `/opt/mattermost/volumes/app/mattermost/` | Configuration, fichiers, journaux et données de Mattermost |
+
+## Sécurité
+
+Mattermost est exposé par Nginx sur le port 80. Le port 8065 de l'application reste dans le réseau
+Docker. UFW est activé et autorise HTTP (port 80) et SSH (port 22).
+
+**Pour limiter l'interface à une adresse IP précise :**
 
 ```bash
-mkdir ~/mattermost && cd ~/mattermost
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
 ```
 
-```yaml
-services:
-  postgres:
-    image: postgres:17
-    restart: unless-stopped
-    environment:
-      - TZ=${TZ}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+**Pour accéder à l'interface sans laisser le port 80 ouvert, utilisez un tunnel SSH :**
 
-  mattermost:
-    image: mattermost/mattermost-team-edition:10.6.1
-    restart: unless-stopped
-    depends_on:
-      - postgres
-    environment:
-      - TZ=${TZ}
-      - MM_SQLSETTINGS_DRIVERNAME=postgres
-      - MM_SQLSETTINGS_DATASOURCE=${MM_SQLSETTINGS_DATASOURCE}
-      - MM_SERVICESETTINGS_SITEURL=${MM_SERVICESETTINGS_SITEURL}
-    ports:
-      - '${APP_PORT}:8065'
-    volumes:
-      - mattermost-data:/mattermost/data
-      - mattermost-logs:/mattermost/logs
-      - mattermost-config:/mattermost/config
-      - mattermost-plugins:/mattermost/plugins
-      - mattermost-client-plugins:/mattermost/client/plugins
-
-volumes:
-  postgres-data:
-  mattermost-data:
-  mattermost-logs:
-  mattermost-config:
-  mattermost-plugins:
-  mattermost-client-plugins:
-```
-
-Créez un fichier `.env` dans le même répertoire. Remplacez le domaine et les mots de passe par vos
-propres valeurs :
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
 
 ```bash
-cat > .env <<'EOF'
-DOMAIN=mattermost.example.com
-TZ=America/Toronto
-POSTGRES_USER=mmuser
-POSTGRES_PASSWORD=change-me-to-a-strong-password
-POSTGRES_DB=mattermost
-APP_PORT=8065
-MM_SQLSETTINGS_DRIVERNAME=postgres
-MM_SQLSETTINGS_DATASOURCE=postgres://mmuser:change-me-to-a-strong-password@postgres:5432/mattermost?sslmode=disable&connect_timeout=10
-MM_SERVICESETTINGS_SITEURL=https://mattermost.example.com
-EOF
+sudo ufw delete allow 80/tcp
 ```
-
-Assurez-vous que les valeurs `POSTGRES_USER`, `POSTGRES_PASSWORD` et `POSTGRES_DB` correspondent aux
-identifiants intégrés dans `MM_SQLSETTINGS_DATASOURCE`. Démarrez la pile :
 
 ```bash
-docker compose up -d
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:8080
 ```
 
-## Configurer Mattermost
+**Pour une utilisation en production**, placez Mattermost derrière un proxy inverse avec un
+certificat TLS de confiance et définissez l'URL de son site sur votre domaine HTTPS public.
 
-Ouvrez `http://<your-vm-ip>:8065` dans un navigateur. Le premier compte que vous créez devient
-l'administrateur système. Vous pouvez ensuite créer votre première équipe et inviter des membres.
-Pour un déploiement en production, placez Mattermost derrière un proxy inverse tel que nginx avec un
-certificat TLS, définissez `MM_SERVICESETTINGS_SITEURL` sur votre domaine public `https://` et
-exposez l'interface via HTTPS plutôt que d'exposer le port 8065 directement.
+:::caution
 
-## Ouvrir le pare-feu
+Créez rapidement le premier administrateur et limitez l'accès aux utilisateurs de confiance pendant
+la configuration. Le premier compte créé reçoit les privilèges d'administrateur système.
 
-Par défaut, l'instance n'autorise que SSH (port 22) depuis l'extérieur. Ouvrez le ou les ports dont
-Mattermost a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail :
-
-```bash
-sudo ufw allow 8065/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation Mattermost](https://docs.mattermost.com/)
-- [Guide d'installation Mattermost](https://docs.mattermost.com/deployment-guide/server/deploy-containers.html)
+- [Documentation de Mattermost](https://docs.mattermost.com/)
+- [Guide d'installation de Mattermost](https://docs.mattermost.com/deployment-guide/server/deploy-containers.html)

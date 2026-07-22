@@ -6,109 +6,116 @@ Nginx Proxy Manager is a self-hosted reverse proxy with a clean web UI for routi
 services and issuing free Let's Encrypt TLS certificates. It wraps Nginx so you can manage proxy
 hosts, redirects, and SSL without editing config files by hand.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Nginx Proxy Manager image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS**
-instance from the marketplace and follow the steps below to install Nginx Proxy Manager yourself.
+| Component           | Version   |
+| ------------------- | --------- |
+| Nginx Proxy Manager | 2.15.1    |
+| Ubuntu              | 24.04 LTS |
 
-:::
+## Environment variables
 
-## Requirements
+Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
+value generated.
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 1 GB    | 2 GB        |
-| Storage  | 10 GB   | 20 GB       |
+| Variable             | Description                             |
+| -------------------- | --------------------------------------- |
+| `NPM_ADMIN_EMAIL`    | Nginx Proxy Manager admin email address |
+| `NPM_ADMIN_PASSWORD` | Nginx Proxy Manager admin password      |
 
-## Deploy the base instance
+## Getting started
 
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+Nginx Proxy Manager starts automatically as a Docker Compose stack. This usually takes under a
+minute. Track progress with:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u nginx-proxy-manager-first-boot.service -f
 ```
 
-## Install Nginx Proxy Manager
-
-Nginx Proxy Manager runs in Docker, so install Docker Engine and the Compose plugin first using the
-official convenience script:
+Then verify the container:
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
-sudo usermod -aG docker ubuntu
+cd /opt/nginx-proxy-manager && docker compose ps
 ```
 
-Log out and back in so the new group membership takes effect, then create a project directory and a
-`docker-compose.yml` file:
+### 3. Access the admin UI
 
-```bash
-mkdir -p ~/npm && cd ~/npm
-```
-
-```bash
-cat > docker-compose.yml <<'EOF'
-services:
-  app:
-    image: 'jc21/nginx-proxy-manager:latest'
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '81:81'
-      - '443:443'
-    volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
-EOF
-```
-
-Start the stack:
-
-```bash
-docker compose up -d
-```
-
-## Configure Nginx Proxy Manager
-
-1. Open the admin UI in your browser at `http://<your-vm-ip>:81`.
-2. Sign in with the default credentials:
+Open a browser and navigate to:
 
 ```text
-Email:    admin@example.com
-Password: changeme
+http://<your-vm-ip>:81
 ```
 
-3. You are prompted to set your real name, email, and a new password immediately. Do this before
-   anything else, as the default account is publicly known.
-4. Go to **Hosts → Proxy Hosts → Add Proxy Host**, enter the domain that points at this VM and the
-   internal address of the service you want to publish (for example `http://127.0.0.1:3000`).
-5. On the **SSL** tab, choose **Request a new SSL Certificate** to have Let's Encrypt issue a
-   certificate automatically. Ports 80 and 443 must be reachable from the internet for the challenge
-   to succeed.
+Log in with the default credentials:
 
-## Open the firewall
+| Field    | Value               |
+| -------- | ------------------- |
+| Email    | `admin@example.com` |
+| Password | `changeme`          |
 
-The instance allows only SSH (port 22) externally by default. Open the port(s) Nginx Proxy Manager
-needs and add them to the instance's network/security rules in the portal:
+You will be prompted to change the account details after first login.
+
+## Managing Nginx Proxy Manager
+
+Nginx Proxy Manager runs as a Docker Compose stack in `/opt/nginx-proxy-manager`.
 
 ```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 81/tcp
-sudo ufw allow 443/tcp
+# Check status
+cd /opt/nginx-proxy-manager && docker compose ps
+
+# Restart
+cd /opt/nginx-proxy-manager && docker compose restart
+
+# View logs
+cd /opt/nginx-proxy-manager && docker compose logs -f
 ```
 
-Port 81 is the admin UI, while 80 and 443 carry proxied HTTP and HTTPS traffic. Once setup is done,
-consider restricting port 81 to a trusted IP range.
+| Path                                          | Purpose                    |
+| --------------------------------------------- | -------------------------- |
+| `/opt/nginx-proxy-manager/docker-compose.yml` | Compose stack              |
+| `/var/lib/nginx-proxy-manager/data/`          | Application data           |
+| `/var/lib/nginx-proxy-manager/letsencrypt/`   | Let's Encrypt certificates |
+
+## Security
+
+Ports 80, 81, and 443 are open on the VM's network interface. UFW is enabled and allows HTTP proxy
+traffic (port 80), the admin UI (port 81), HTTPS proxy traffic (port 443), and SSH (port 22).
+
+**To restrict the admin UI to a specific IP:**
+
+```bash
+sudo ufw delete allow 81/tcp
+sudo ufw allow from <trusted-ip> to any port 81
+```
+
+**To access the admin UI without leaving port 81 open, use an SSH tunnel:**
+
+```bash
+# Run this on your local machine
+ssh -L 8181:localhost:81 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:8181
+```
+
+Keep ports 80 and 443 reachable for public proxy hosts and Let's Encrypt HTTP-01 validation. For
+production use, restrict the admin UI to a trusted network or publish it through a protected TLS
+endpoint.
+
+:::caution
+
+Change the default email and password immediately after first login. Port 81 provides administrative
+control over every proxy host and certificate on the VM.
+
+:::
 
 ## Next steps
 

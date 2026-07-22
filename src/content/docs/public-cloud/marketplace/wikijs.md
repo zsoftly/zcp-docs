@@ -7,132 +7,115 @@ fine-grained access control, full-text search, and authentication integrations, 
 relational database. It is a strong fit for internal knowledge bases, product documentation, and
 team wikis. The web interface runs on port 3000.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Wiki.js image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Wiki.js yourself.
+| Component  | Version       |
+| ---------- | ------------- |
+| Wiki.js    | 2.5.312       |
+| PostgreSQL | 18            |
+| Docker     | Latest stable |
+| Ubuntu     | 24.04 LTS     |
 
-:::
+## Environment variables
 
-## Requirements
+Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
+value generated.
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 1 GB    | 2 GB        |
-| Storage  | 20 GB   | 40 GB       |
+| Variable  | Description              |
+| --------- | ------------------------ |
+| `DB_USER` | PostgreSQL username      |
+| `DB_PASS` | PostgreSQL password      |
+| `DB_NAME` | PostgreSQL database name |
 
-## Deploy the base instance
+## Getting started
 
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script generates the database password and starts Wiki.js and PostgreSQL
+with Docker Compose. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u wikijs-first-boot.service -f
 ```
 
-## Install Wiki.js
-
-Install Docker Engine and the Docker Compose plugin from Docker's official repository:
+The login message (MOTD) confirms when Wiki.js is ready. You can also verify both containers:
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+cd /opt/wikijs && docker compose ps
 ```
 
-Add the `ubuntu` user to the `docker` group so you can run Docker without `sudo`, then reconnect:
+### 3. Access the Wiki.js UI
+
+Open a browser and navigate to:
+
+```text
+http://<your-vm-ip>:3000
+```
+
+### 4. Create the administrator account
+
+Complete the first-run setup wizard to create the administrator and configure the site. The image
+does not create a shared default administrator account.
+
+## Managing Wiki.js
+
+Wiki.js runs as a Docker Compose stack in `/opt/wikijs`.
 
 ```bash
-sudo usermod -aG docker ubuntu
-exit
+# Check status
+cd /opt/wikijs && docker compose ps
+
+# Restart
+cd /opt/wikijs && docker compose restart
+
+# View logs
+cd /opt/wikijs && docker compose logs -f
 ```
 
-Reconnect over SSH, create a project directory, and add a `compose.yaml`. Wiki.js does not ship with
-a database, so this stack pairs it with PostgreSQL 14:
+| Path                             | Purpose                                 |
+| -------------------------------- | --------------------------------------- |
+| `/opt/wikijs/docker-compose.yml` | Docker Compose configuration            |
+| `/opt/wikijs/.env`               | Internal database password              |
+| `/opt/wikijs/data/postgres/`     | PostgreSQL data                         |
+| `/etc/wikijs/credentials.txt`    | Database credentials and access details |
+
+## Security
+
+Wiki.js uses port 3000. UFW is enabled and allows SSH (port 22) plus port 3000 by default. The
+PostgreSQL container is available only on the internal Docker network.
+
+**To restrict Wiki.js to a specific IP:**
 
 ```bash
-mkdir ~/wikijs && cd ~/wikijs
+sudo ufw delete allow 3000/tcp
+sudo ufw allow from <trusted-ip> to any port 3000
 ```
 
-```yaml
-services:
-  db:
-    image: postgres:14
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-      - POSTGRES_DB=${DB_NAME}
-    volumes:
-      - db-data:/var/lib/postgresql/data
-
-  wiki:
-    image: ghcr.io/requarks/wiki:2.5
-    restart: unless-stopped
-    depends_on:
-      - db
-    environment:
-      - DB_TYPE=postgres
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - DB_NAME=${DB_NAME}
-    ports:
-      - '3000:3000'
-
-volumes:
-  db-data:
-```
-
-Create a `.env` file in the same directory with the database credentials shared by both services:
+**To access the UI without leaving port 3000 open, use an SSH tunnel:**
 
 ```bash
-cat > .env <<'EOF'
-DB_USER=wikijs
-DB_PASS=change-me-to-a-strong-password
-DB_NAME=wiki
-EOF
+# Run this on your local machine
+ssh -L 3000:localhost:3000 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:3000
 ```
 
-Start the stack:
+**For production use**, place Wiki.js behind a reverse proxy so you can serve it over HTTPS with a
+trusted TLS certificate.
 
-```bash
-docker compose up -d
-```
+:::caution
 
-## Configure Wiki.js
+Complete the first-run wizard promptly and restrict the UI to trusted users and networks. The first
+account created through the wizard becomes the administrator.
 
-Open `http://<your-vm-ip>:3000` in a browser. The first run shows a setup wizard where you create
-the administrator account and set the site URL. After that you can configure authentication,
-storage, and content. For a production setup, put Wiki.js behind a reverse proxy such as nginx with
-a TLS certificate and serve the UI over HTTPS instead of exposing port 3000 directly.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Wiki.js needs and add
-them to the instance's network/security rules in the portal:
-
-```bash
-sudo ufw allow 3000/tcp
-```
+:::
 
 ## Next steps
 

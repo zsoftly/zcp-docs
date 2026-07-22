@@ -7,116 +7,128 @@ tables. It uses the Cypher query language to traverse highly connected data effi
 it a strong fit for recommendation engines, fraud detection, knowledge graphs, and network analysis.
 The HTTP browser runs on port 7474 and the Bolt protocol on port 7687.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Neo4j image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Neo4j yourself.
+| Component | Version   |
+| --------- | --------- |
+| Neo4j     | 2026.06.0 |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Environment variables
 
-## Requirements
+Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
+value generated.
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 2 GB    | 4 GB        |
-| Storage  | 20 GB   | 40 GB       |
+| Variable         | Description    |
+| ---------------- | -------------- |
+| `NEO4J_PASSWORD` | Neo4j password |
 
-## Deploy the base instance
+## Getting started
 
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+Neo4j generates a unique initial password, configures its advertised address, and starts the native
+systemd service. This takes about two to three minutes. Track progress with:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u neo4j-first-boot.service -f
 ```
 
-## Install Neo4j
-
-Install Docker Engine and the Docker Compose plugin from Docker's official repository:
+Then verify the service:
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl status neo4j
 ```
 
-Add the `ubuntu` user to the `docker` group so you can run Docker without `sudo`, then reconnect:
+### 3. Access the Neo4j Browser
+
+Open a browser and navigate to:
+
+```text
+http://<your-vm-ip>:7474
+```
+
+Read the generated connection details:
 
 ```bash
-sudo usermod -aG docker ubuntu
-exit
+sudo cat /root/.credentials/neo4j.txt
 ```
 
-Reconnect over SSH, create a project directory, and add a `compose.yaml`:
+| Field    | Value                               |
+| -------- | ----------------------------------- |
+| Username | `neo4j`                             |
+| Password | From `/root/.credentials/neo4j.txt` |
+
+You will be prompted to set a new password on first login. Applications connect over Bolt at
+`bolt://<your-vm-ip>:7687`.
+
+## Managing Neo4j
 
 ```bash
-mkdir ~/neo4j && cd ~/neo4j
+# Check service status
+systemctl status neo4j
+
+# Restart Neo4j
+sudo systemctl restart neo4j
+
+# View logs
+sudo journalctl -u neo4j -f
 ```
 
-```yaml
-services:
-  neo4j:
-    image: neo4j:5
-    restart: unless-stopped
-    environment:
-      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
-    ports:
-      - '7474:7474'
-      - '7687:7687'
-    volumes:
-      - neo4j-data:/data
-volumes:
-  neo4j-data:
-```
+| Path                           | Purpose                       |
+| ------------------------------ | ----------------------------- |
+| `/etc/neo4j/neo4j.conf`        | Main configuration            |
+| `/var/lib/neo4j/data/`         | Databases and graph data      |
+| `/var/log/neo4j/`              | Neo4j logs                    |
+| `/root/.credentials/neo4j.txt` | Generated initial credentials |
 
-Create a `.env` file in the same directory with a strong password:
+## Security
+
+Ports 7474 and 7687 are open on the VM's network interface. UFW is enabled and allows the Browser
+(port 7474), Bolt (port 7687), and SSH (port 22).
+
+**To restrict both endpoints to a specific IP:**
 
 ```bash
-cat > .env <<'EOF'
-NEO4J_PASSWORD=change-me-to-a-strong-password
-EOF
+sudo ufw delete allow 7474/tcp
+sudo ufw delete allow 7687/tcp
+sudo ufw allow from <trusted-ip> to any port 7474
+sudo ufw allow from <trusted-ip> to any port 7687
 ```
 
-Start the stack:
+**To access Neo4j without leaving those ports open, use an SSH tunnel:**
+
+First close the public port on the VM, since it is open by default:
 
 ```bash
-docker compose up -d
+sudo ufw delete allow 7474/tcp
+sudo ufw delete allow 7687/tcp
 ```
-
-## Configure Neo4j
-
-Open `http://<your-vm-ip>:7474` in a browser to reach the Neo4j Browser. Sign in with the username
-`neo4j` and the password you set in `.env`. From there you can run Cypher queries, inspect the
-graph, and manage users. Applications connect over Bolt at `bolt://<your-vm-ip>:7687`. For a
-production setup, put Neo4j behind a reverse proxy such as nginx with a TLS certificate and serve
-the browser and Bolt endpoints over encrypted connections instead of exposing the ports directly.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Neo4j needs and add
-them to the instance's network/security rules in the portal:
 
 ```bash
-sudo ufw allow 7474/tcp
-sudo ufw allow 7687/tcp
+# Run this on your local machine
+ssh -L 7474:localhost:7474 -L 7687:localhost:7687 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:7474
 ```
+
+**For production use**, restrict Neo4j to private application and administrator networks. Put the
+Browser behind a TLS reverse proxy and configure encrypted Bolt connections before sending
+credentials or graph data over an untrusted network.
+
+:::caution
+
+Change the generated initial password when Neo4j prompts you on first login. Do not expose the
+Browser or Bolt endpoints broadly to the internet.
+
+:::
 
 ## Next steps
 

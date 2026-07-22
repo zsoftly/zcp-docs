@@ -3,111 +3,126 @@ title: Artifactory
 ---
 
 JFrog Artifactory est un gestionnaire universel de dépôts de binaires et d'artefacts. L'édition open
-source stocke et relaie des paquets dans de nombreux formats, notamment Maven, Gradle, Debian et
-binaires génériques, et agit comme source unique de vérité pour vos artefacts de build. L'interface
-web s'exécute sur le port 8082.
+source stocke et relaie des paquets dans de nombreux formats, notamment Maven, Gradle, Debian et les
+binaires génériques, et constitue la source de référence unique pour vos artefacts de build.
+L'interface web fonctionne sur le port 8082.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Artifactory préinstallée arrive bientôt. Pour l'instant, déployez une nouvelle instance
-**Ubuntu 24.04 LTS** depuis la marketplace et suivez les étapes ci-dessous pour installer
-Artifactory vous-même.
+| Composant       | Version   |
+| --------------- | --------- |
+| Artifactory OSS | 7.146.27  |
+| PostgreSQL      | 16        |
+| Ubuntu          | 24.04 LTS |
 
-:::
+## Variables d'environnement
 
-## Prérequis
+Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
+qu'une valeur sécurisée soit générée.
 
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 2       | 4          |
-| RAM       | 4 Go    | 8 Go       |
-| Stockage  | 40 Go   | 100 Go     |
+| Variable                     | Description                             |
+| ---------------------------- | --------------------------------------- |
+| `ARTIFACTORY_ADMIN_PASSWORD` | Mot de passe administrateur Artifactory |
 
-## Déployer l'instance de base
+## Démarrage
 
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **Artifactory** et cliquez sur
-   **Deploy**, ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Les deux
-   vous donnent une VM Ubuntu 24.04 propre.
-2. Choisissez un plan répondant aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH:
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour:
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration prépare le stockage persistant, génère le mot de
+passe PostgreSQL et démarre les conteneurs Artifactory et PostgreSQL. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u artifactory-first-boot.service -f
 ```
 
-## Installer Artifactory
+Si vous attachez un disque de données vierge supplémentaire avant le premier démarrage, le script le
+formate et le monte sur `/data`. Sinon, les données sont stockées sous `/data` sur le système de
+fichiers racine.
 
-La méthode prise en charge la plus simple est l'image Docker officielle. Installez d'abord Docker
-Engine à l'aide du script d'installation officiel:
+### 3. Vérifier qu'Artifactory fonctionne
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
+cd /opt/artifactory
+docker compose ps
+curl -fsS http://127.0.0.1:8082/ui/ > /dev/null
 ```
 
-Vérifiez que Docker fonctionne:
+### 4. Accéder à l'interface d'Artifactory
+
+Artifactory est lié à localhost jusqu'à ce que vous ayez terminé l'assistant de configuration.
+Depuis votre machine locale, démarrez un tunnel SSH :
 
 ```bash
-docker version
+ssh -L 8082:127.0.0.1:8082 -L 8081:127.0.0.1:8081 ubuntu@<your-vm-ip>
 ```
 
-Créez un répertoire hôte pour les données persistantes d'Artifactory et attribuez les droits
-attendus par le conteneur (uid/gid `1030`):
+Ouvrez ensuite :
+
+```text
+http://127.0.0.1:8082/ui/
+```
+
+Connectez-vous avec les identifiants par défaut du projet amont :
+
+| Champ             | Valeur     |
+| ----------------- | ---------- |
+| Nom d'utilisateur | `admin`    |
+| Mot de passe      | `password` |
+
+Modifiez le mot de passe dans l'assistant de configuration avant de rendre le service accessible
+depuis un réseau.
+
+## Gérer Artifactory
 
 ```bash
-sudo mkdir -p /opt/artifactory/var
-sudo chown -R 1030:1030 /opt/artifactory/var
+# Check container status
+cd /opt/artifactory && docker compose ps
+
+# Restart
+cd /opt/artifactory && docker compose restart
+
+# View logs
+cd /opt/artifactory && docker compose logs -f
 ```
 
-Exécutez le conteneur Artifactory OSS depuis le registre officiel JFrog:
+| Chemin                                | Fonction                     |
+| ------------------------------------- | ---------------------------- |
+| `/opt/artifactory/docker-compose.yml` | Configuration Docker Compose |
+| `/opt/artifactory/.env`               | Mot de passe PostgreSQL      |
+| `/data/artifactory/var/`              | Données Artifactory          |
+| `/data/artifactory/postgresql/`       | Données PostgreSQL           |
+
+## Sécurité
+
+Les ports 8081 et 8082 sont liés à localhost. UFW est activé et n'autorise par défaut que SSH (port
+22). Utilisez le tunnel SSH ci-dessus pour la configuration initiale.
+
+Après avoir modifié le mot de passe administrateur, exposez Artifactory uniquement par un chemin
+réseau de confiance. Pour publier directement le port 8082, vous devez d'abord remplacer la liaison
+de port Docker Compose `127.0.0.1:8082:8082` par `8082:8082`, puis autoriser une adresse IP de
+confiance :
 
 ```bash
-sudo docker run -d \
-  --name artifactory \
-  --restart=always \
-  -p 8081:8081 \
-  -p 8082:8082 \
-  -v /opt/artifactory/var:/var/opt/jfrog/artifactory \
-  releases-docker.jfrog.io/jfrog/artifactory-oss:latest
+sudo ufw allow from <trusted-ip> to any port 8082
 ```
 
-Vérifiez que le conteneur est en cours d'exécution:
+**Pour une utilisation en production**, gardez Artifactory lié à localhost et placez-le derrière un
+proxy inverse afin de le servir sur le port 443 avec un certificat TLS.
 
-```bash
-docker ps
-```
+:::caution
 
-## Configurer Artifactory
+Le mot de passe `admin` du projet amont est public. Modifiez-le immédiatement par le tunnel SSH et
+limitez l'accès aux adresses IP connues.
 
-Artifactory prend une minute ou deux pour s'initialiser au premier démarrage. Le port 8082 sert
-l'interface de la plateforme JFrog et les endpoints unifiés des dépôts, tandis que le port 8081 sert
-l'API héritée. Ouvrez `http://<your-vm-ip>:8082/ui/` dans un navigateur et connectez-vous avec les
-identifiants par défaut:
-
-- Nom d'utilisateur: `admin`
-- Mot de passe: `password`
-
-Vous êtes invité à changer immédiatement le mot de passe administrateur et à définir l'URL de base.
-Terminez l'assistant de configuration pour configurer vos dépôts. Pour un déploiement de production,
-placez Artifactory derrière un reverse proxy tel que nginx avec un certificat TLS et servez
-l'interface en HTTPS au lieu d'exposer directement le port 8082.
-
-## Ouvrir le pare-feu
-
-L'instance n'autorise que le SSH (port 22) en externe par défaut. Ouvrez le ou les ports dont
-Artifactory a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail:
-
-```bash
-sudo ufw allow 8082/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation Artifactory](https://jfrog.com/help/r/jfrog-artifactory-documentation)
-- [Guide d'installation Artifactory](https://jfrog.com/help/r/jfrog-installation-setup-documentation/install-artifactory-single-node-with-docker)
+- [Documentation d'Artifactory](https://jfrog.com/help/r/jfrog-artifactory-documentation)
+- [Guide d'installation d'Artifactory](https://jfrog.com/help/r/jfrog-installation-setup-documentation/install-artifactory-single-node-with-docker)

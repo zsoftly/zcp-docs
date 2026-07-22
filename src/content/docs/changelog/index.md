@@ -38,6 +38,18 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v0.0.26: July 19, 2026
+
+**Port forwarding and SSH key fixes.**
+
+- **`portforward list` shows the ports again.** The public and private port columns were blank
+  because the response was read from the wrong field names. They display correctly now.
+- **`portforward create` and `firewall create` stop printing an empty table.** Both create the rule
+  asynchronously and return no object, so they now report that the request was accepted and point
+  you to the matching `list` command.
+- **`ssh-key delete` accepts the key's ID, name, or slug.** It previously took only the slug and
+  rejected the ID that `ssh-key list` shows. Deleting an unknown key is now a no-op.
+
 ### v0.0.25: July 18, 2026
 
 **`MX` records now work from the CLI.** `zcp dns record-create` never sent a record's priority, so
@@ -301,6 +313,17 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [OpenTofu registry](https://search.opentofu.org/provider/zsoftly/zcp) and the
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v0.1.3: July 20, 2026
+
+**Port forwarding and firewall rules now record their real ID.** `zcp_port_forward` and
+`zcp_firewall_rule` stored an empty ID because the create endpoint returns no rule object, so
+Terraform recreated them on every apply. Both now look up the rule after create, match it on
+protocol and ports, and record the real ID, so plans stay stable.
+
+- Upgraded the `zcp` CLI SDK to v0.0.26, which corrects how port-forwarding rule ports decode.
+- **Security**: upgraded `golang.org/x/text` to fix GO-2026-5970, an infinite loop reachable through
+  the load balancer resource.
 
 ### v0.1.2: July 18, 2026
 

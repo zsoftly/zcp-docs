@@ -2,9 +2,9 @@
 title: MongoDB 8.0
 ---
 
-MongoDB est une base de données NoSQL généraliste orientée documents qui stocke les données sous
-forme de documents flexibles semblables à JSON. Elle convient bien aux applications qui exigent des
-requêtes riches, une mise à l'échelle horizontale ou des schémas qui évoluent dans le temps.
+MongoDB est une base de données NoSQL polyvalente orientée documents qui stocke les données sous
+forme de documents flexibles semblables à JSON. Elle convient bien aux applications qui ont besoin
+de requêtes riches, d'une mise à l'échelle horizontale ou de schémas qui évoluent au fil du temps.
 
 ## Logiciels inclus
 
@@ -15,104 +15,107 @@ requêtes riches, une mise à l'échelle horizontale ou des schémas qui évolue
 
 ## Variables d'environnement
 
-Vous pouvez définir ces valeurs lors du déploiement de MongoDB depuis la marketplace. Laissez un
-champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+Vous pouvez les définir facultativement lors du déploiement de MongoDB depuis la marketplace.
+Laissez un champ vide pour qu'une valeur aléatoire sécurisée soit générée automatiquement.
 
-| Variable                     | Description                       |
-| ---------------------------- | --------------------------------- |
-| `MONGO_INITDB_ROOT_USERNAME` | Nom d'utilisateur root de MongoDB |
-| `MONGO_INITDB_ROOT_PASSWORD` | Mot de passe root de MongoDB      |
+| Variable                     | Description                                  |
+| ---------------------------- | -------------------------------------------- |
+| `MONGO_INITDB_ROOT_USERNAME` | Nom d'utilisateur racine MongoDB             |
+| `MONGO_INITDB_ROOT_PASSWORD` | Mot de passe de l'utilisateur racine MongoDB |
 
-## Bien démarrer
+## Démarrage
 
-### 1. Connectez-vous à votre VM
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-### 2. Attendez la configuration au premier démarrage
+### 2. Attendre la configuration du premier démarrage
 
-Au premier démarrage, un script de configuration s'exécute automatiquement. Il crée un
-superutilisateur `admin` avec un mot de passe généré aléatoirement et active l'authentification.
-Cela prend moins de 60 secondes.
+Au premier démarrage, un script de configuration s'exécute automatiquement. Il crée le
+superutilisateur défini par `MONGO_INITDB_ROOT_USERNAME`, dont la valeur par défaut est `admin`,
+avec le mot de passe configuré ou généré, puis active l'authentification. Cette opération prend
+moins de 60 secondes.
 
-Suivez la progression:
+Suivez la progression :
 
 ```bash
 journalctl -u mongodb-first-boot.service -f
 ```
 
-Attendez que le service se termine, puis déconnectez-vous et reconnectez-vous. Le MOTD affiché à la
-connexion indique `MONGODB 8.0.x — READY` lorsque la configuration est terminée.
+Attendez que le service se termine, puis déconnectez-vous et reconnectez-vous. À la connexion, le
+MOTD indique la version de MongoDB avec l'état `READY` lorsque la configuration est terminée.
 
-### 3. Récupérez les identifiants
+### 3. Récupérer les identifiants
 
 ```bash
 sudo cat /etc/mongodb/credentials.txt
 ```
 
 Ce fichier contient le nom d'utilisateur administrateur, le mot de passe et les instructions de
-connexion. Il est lisible uniquement par `root`.
+connexion. Seul l'utilisateur racine peut le lire. La commande suivante lit le nom d'utilisateur
+configuré dans le fichier. `mongosh` demande ensuite le mot de passe afin qu'il n'apparaisse pas
+dans la liste des processus.
 
-### 4. Connectez-vous à MongoDB
+### 4. Se connecter à MongoDB
 
 ```bash
-MONGO_PASS=$(sudo awk '/^Password:/{print $NF}' /etc/mongodb/credentials.txt)
-mongosh -u admin -p "$MONGO_PASS" --authenticationDatabase admin
+MONGO_USER=$(sudo awk '/^Username:/{print $NF}' /etc/mongodb/credentials.txt)
+mongosh -u "$MONGO_USER" --authenticationDatabase admin
 ```
 
-Sortie attendue:
+Sortie attendue :
 
-```
+```text
 test>
 ```
 
 ## Gérer MongoDB
 
 ```bash
-# Vérifier l'état du service
+# Check service status
 systemctl status mongod
 
-# Redémarrer
+# Restart
 sudo systemctl restart mongod
 
-# Consulter les journaux
+# View logs
 sudo journalctl -u mongod -f
 ```
 
-Fichier de configuration: `/etc/mongod.conf`
+Fichier de configuration : `/etc/mongod.conf`
 
 ## Sécurité
 
 Le port 27017 n'est **pas** ouvert vers l'extérieur par défaut. UFW est activé et n'autorise que SSH
 (port 22).
 
-**Pour autoriser l'accès depuis une adresse IP précise:**
+**Pour autoriser l'accès depuis une adresse IP précise :**
 
 ```bash
 sudo ufw allow from <trusted-ip> to any port 27017
 ```
 
-**Pour vous connecter sans ouvrir le pare-feu (recommandé), utilisez un tunnel SSH:**
+**Pour vous connecter sans ouvrir le pare-feu, ce qui est recommandé, utilisez un tunnel SSH :**
 
 ```bash
-# Exécutez ceci sur votre poste local
+# Run this on your local machine
 ssh -L 27017:localhost:27017 ubuntu@<your-vm-ip>
 
-# Connectez-vous ensuite localement
-mongosh -u admin -p "<password>" --authenticationDatabase admin
+# Then connect locally using the username from /etc/mongodb/credentials.txt
+mongosh -u <username> --authenticationDatabase admin
 ```
 
 :::caution
 
-Évitez d'exposer le port 27017 à `0.0.0.0`. Limitez l'accès à des adresses IP connues ou utilisez un
+Évitez d'exposer le port 27017 à `0.0.0.0`. Limitez l'accès aux adresses IP connues ou utilisez un
 tunnel SSH.
 
 :::
 
-## Prochaines étapes
+## Étapes suivantes
 
-- [Documentation MongoDB](https://www.mongodb.com/docs/)
-- [Référence mongosh](https://www.mongodb.com/docs/mongodb-shell/)
+- [Documentation de MongoDB](https://www.mongodb.com/docs/)
+- [Référence de mongosh](https://www.mongodb.com/docs/mongodb-shell/)
 - [Liste de vérification de sécurité](https://www.mongodb.com/docs/manual/administration/security-checklist/)

@@ -6,102 +6,117 @@ JFrog Artifactory is a universal binary and artifact repository manager. The ope
 stores and proxies packages for many formats, including Maven, Gradle, Debian, and generic binaries,
 and acts as the single source of truth for your build artifacts. The web UI runs on port 8082.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Artifactory image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance
-from the marketplace and follow the steps below to install Artifactory yourself.
+| Component       | Version   |
+| --------------- | --------- |
+| Artifactory OSS | 7.146.27  |
+| PostgreSQL      | 16        |
+| Ubuntu          | 24.04 LTS |
 
-:::
+## Environment variables
 
-## Requirements
+Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
+value generated.
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 2       | 4           |
-| RAM      | 4 GB    | 8 GB        |
-| Storage  | 40 GB   | 100 GB      |
+| Variable                     | Description                |
+| ---------------------------- | -------------------------- |
+| `ARTIFACTORY_ADMIN_PASSWORD` | Artifactory admin password |
 
-## Deploy the base instance
+## Getting started
 
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script prepares persistent storage, generates the PostgreSQL password,
+and starts the Artifactory and PostgreSQL containers. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u artifactory-first-boot.service -f
 ```
 
-## Install Artifactory
+If you attach an extra blank data disk before first boot, the script formats and mounts it at
+`/data`. Otherwise, it stores data under `/data` on the root filesystem.
 
-The simplest supported path is the official Docker image. Install Docker Engine first using the
-official convenience script:
+### 3. Verify Artifactory is running
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
+cd /opt/artifactory
+docker compose ps
+curl -fsS http://127.0.0.1:8082/ui/ > /dev/null
 ```
 
-Confirm Docker is running:
+### 4. Access the Artifactory UI
+
+Artifactory is bound to localhost until you complete the setup wizard. From your local machine,
+start an SSH tunnel:
 
 ```bash
-docker version
+ssh -L 8082:127.0.0.1:8082 -L 8081:127.0.0.1:8081 ubuntu@<your-vm-ip>
 ```
 
-Create a host directory for Artifactory's persistent data and set the ownership the container
-expects (uid/gid `1030`):
+Then open:
+
+```text
+http://127.0.0.1:8082/ui/
+```
+
+Log in with the upstream default credentials:
+
+| Field    | Value      |
+| -------- | ---------- |
+| Username | `admin`    |
+| Password | `password` |
+
+Change the password in the setup wizard before making the service reachable from a network.
+
+## Managing Artifactory
 
 ```bash
-sudo mkdir -p /opt/artifactory/var
-sudo chown -R 1030:1030 /opt/artifactory/var
+# Check container status
+cd /opt/artifactory && docker compose ps
+
+# Restart
+cd /opt/artifactory && docker compose restart
+
+# View logs
+cd /opt/artifactory && docker compose logs -f
 ```
 
-Run the Artifactory OSS container from the official JFrog registry:
+| Path                                  | Purpose                      |
+| ------------------------------------- | ---------------------------- |
+| `/opt/artifactory/docker-compose.yml` | Docker Compose configuration |
+| `/opt/artifactory/.env`               | PostgreSQL password          |
+| `/data/artifactory/var/`              | Artifactory data             |
+| `/data/artifactory/postgresql/`       | PostgreSQL data              |
+
+## Security
+
+Ports 8081 and 8082 are bound to localhost. UFW is enabled and allows SSH (port 22) only by default.
+Use the SSH tunnel above for initial setup.
+
+After changing the administrator password, expose Artifactory only through a trusted network path.
+To publish port 8082 directly, you must first change its Docker Compose port binding from
+`127.0.0.1:8082:8082` to `8082:8082`, then allow a trusted IP:
 
 ```bash
-sudo docker run -d \
-  --name artifactory \
-  --restart=always \
-  -p 8081:8081 \
-  -p 8082:8082 \
-  -v /opt/artifactory/var:/var/opt/jfrog/artifactory \
-  releases-docker.jfrog.io/jfrog/artifactory-oss:latest
+sudo ufw allow from <trusted-ip> to any port 8082
 ```
 
-Confirm the container is running:
+**For production use**, keep Artifactory bound to localhost and place it behind a reverse proxy so
+you can serve it on port 443 with a TLS certificate.
 
-```bash
-docker ps
-```
+:::caution
 
-## Configure Artifactory
+The upstream `admin` password is public. Change it immediately through the SSH tunnel and restrict
+access to known IPs.
 
-Artifactory takes a minute or two to initialize on first start. Port 8082 serves the JFrog Platform
-UI and unified repository endpoints, while port 8081 serves the legacy API. Open
-`http://<your-vm-ip>:8082/ui/` in a browser and sign in with the default credentials:
-
-- Username: `admin`
-- Password: `password`
-
-You are prompted to change the admin password immediately and to set the base URL. Complete the
-setup wizard to configure your repositories. For a production setup, put Artifactory behind a
-reverse proxy such as nginx with a TLS certificate and serve the UI over HTTPS instead of exposing
-port 8082 directly.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Artifactory needs and
-add them to the instance's network/security rules in the portal:
-
-```bash
-sudo ufw allow 8082/tcp
-```
+:::
 
 ## Next steps
 

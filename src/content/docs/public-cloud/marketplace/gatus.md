@@ -7,121 +7,109 @@ and incident support. It monitors HTTP, TCP, DNS, ICMP, and other endpoints agai
 define, and publishes the results on a clean status page served on port 8080. It is configured
 entirely through a single `config.yaml` file.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Gatus image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Gatus yourself.
+| Component | Version   |
+| --------- | --------- |
+| Gatus     | 5.36.0    |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 1           |
-| RAM      | 256 MB  | 512 MB      |
-| Storage  | 5 GB    | 10 GB       |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab. It opens on
-   **Featured** by default, so select **Marketplace** next to it. Pick your region (YOW-1 or YUL-1),
-   search for **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from
-   **Instances → Create**. Either way you get a clean Ubuntu 24.04 VM.
-
-   ![The Marketplace tab in the ZSoftly Cloud portal, showing the region selector, category list, search box, and Deploy buttons](../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Searching the Marketplace for an app, with the search box filtering the catalog down to a matching Deploy card](../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choose a plan that meets the requirements above.
-
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script starts the Gatus Docker Compose stack. This takes under a minute.
+Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u gatus-first-boot.service -f
 ```
 
-## Install Gatus
+The login message (MOTD) confirms when Gatus is ready.
 
-Gatus is distributed as an official Docker image. Install Docker first using the official
-convenience script:
+### 3. Verify Gatus is running
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
+cd /opt/gatus
+docker compose ps
+curl -fsS http://127.0.0.1:8080/ > /dev/null
 ```
 
-Add the `ubuntu` user to the `docker` group, then re-apply your group membership:
+### 4. Access the Gatus dashboard
+
+Open a browser and navigate to:
+
+```text
+http://<your-vm-ip>:8080
+```
+
+The included configuration monitors `https://example.com` every 30 seconds and records results in
+SQLite.
+
+## Managing Gatus
 
 ```bash
-sudo usermod -aG docker ubuntu
-newgrp docker
+# Check container status
+cd /opt/gatus && docker compose ps
+
+# Restart
+cd /opt/gatus && docker compose restart
+
+# View logs
+cd /opt/gatus && docker compose logs -f
 ```
 
-Create a configuration file. The minimal config below monitors one website and exposes the dashboard
-on port 8080:
+| Path                            | Purpose                            |
+| ------------------------------- | ---------------------------------- |
+| `/opt/gatus/config.yaml`        | Monitors, conditions, and alerting |
+| `/opt/gatus/docker-compose.yml` | Docker Compose configuration       |
+| `/var/lib/gatus/gatus.db`       | Persistent SQLite data             |
+
+After editing `/opt/gatus/config.yaml`, restart Gatus to apply the changes.
+
+## Security
+
+Port 8080 is accessible on the VM's network interface. UFW is enabled and allows SSH (port 22) and
+Gatus (port 8080) by default.
+
+**To restrict the dashboard to a specific IP:**
 
 ```bash
-mkdir -p ~/gatus
-cat > ~/gatus/config.yaml <<'EOF'
-web:
-  port: 8080
-
-endpoints:
-  - name: example-website
-    url: https://example.com
-    interval: 30s
-    conditions:
-      - "[STATUS] == 200"
-      - "[RESPONSE_TIME] < 300"
-EOF
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
 ```
 
-Start the Gatus container, mounting the config file and binding port 8080:
+**To access Gatus without exposing port 8080, use an SSH tunnel:**
+
+First close the public port on the VM, since it is open by default:
 
 ```bash
-docker run -d \
-  --restart=unless-stopped \
-  -p 8080:8080 \
-  --mount type=bind,source="$HOME/gatus/config.yaml",target=/config/config.yaml \
-  --name gatus \
-  ghcr.io/twin/gatus:stable
+sudo ufw delete allow 8080/tcp
 ```
-
-Confirm the container is running:
 
 ```bash
-docker ps
+# Run this on your local machine
+ssh -L 8080:localhost:8080 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
 ```
 
-## Configure Gatus
+**For production use**, place Gatus behind a reverse proxy so you can serve it on port 443 with a
+TLS certificate, and restrict direct access to port 8080.
 
-1. Open `http://<your-vm-ip>:8080` in a browser to see the status page.
-2. Edit `~/gatus/config.yaml` to add endpoints, conditions, alerting providers (Slack, email,
-   PagerDuty, webhooks, and more), and group settings. See the configuration reference for all
-   available keys.
-3. Apply changes by restarting the container:
+:::caution
 
-```bash
-docker restart gatus
-```
+The status page can reveal service names, endpoints, and incident details. Restrict it to the
+intended audience.
 
-For production, place Gatus behind a reverse proxy such as Nginx or Caddy to serve it on port 443
-with a TLS certificate, and restrict direct access to port 8080.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port Gatus needs and add it
-to the instance's network/security rules in the portal:
-
-```bash
-sudo ufw allow 8080/tcp
-```
+:::
 
 ## Next steps
 

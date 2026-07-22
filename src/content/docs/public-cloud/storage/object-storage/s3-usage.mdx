@@ -257,5 +257,40 @@ aws s3 ls s3://my-bucket/ --endpoint-url https://objects.yul.zcp.zsoftly.ca
 aws s3 rm s3://my-bucket/file.txt --endpoint-url https://objects.yul.zcp.zsoftly.ca
 ```
 
+### s3cmd
+
+[s3cmd](https://s3tools.org/s3cmd) is a standalone command-line client for S3-compatible storage.
+Install it, then create `~/.s3cfg`:
+
+```ini
+[default]
+access_key = <access-key>
+secret_key = <secret-key>
+host_base = objects.yul.zcp.zsoftly.ca
+host_bucket = objects.yul.zcp.zsoftly.ca
+use_https = True
+```
+
+This file holds your secret key, so restrict its permissions:
+
+```bash
+chmod 600 ~/.s3cfg
+```
+
+Setting `host_bucket` to the same value as `host_base`, with no bucket placeholder, forces the
+path-style addressing the service requires. For a bucket in Ottawa, use
+`objects.yow.zcp.zsoftly.ca`.
+
+Run the common commands:
+
+```bash
+s3cmd ls                                    # list your buckets
+s3cmd mb s3://my-bucket                      # create a bucket
+s3cmd put ./file.txt s3://my-bucket/         # upload a file
+s3cmd get s3://my-bucket/file.txt .          # download a file
+s3cmd sync ./local-dir/ s3://my-bucket/dir/  # sync a folder
+s3cmd rm s3://my-bucket/file.txt             # delete an object
+```
+
 See also: [Access Keys](/public-cloud/storage/object-storage/access-keys),
 [Create Bucket](/public-cloud/storage/object-storage/create-bucket)

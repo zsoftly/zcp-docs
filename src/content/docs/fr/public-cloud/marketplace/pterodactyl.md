@@ -2,141 +2,144 @@
 title: Pterodactyl
 ---
 
-Pterodactyl est un panneau de gestion de serveurs de jeu libre et open source, construit sur PHP,
-Nginx et Docker. Il vous permet de déployer et de gérer des serveurs de jeu via une interface web
-épurée, avec une isolation par serveur assurée par le démon Wings. Il propulse l'hébergement de jeu
+Pterodactyl est un panneau libre et open source de gestion de serveurs de jeu, bâti sur PHP, Nginx
+et Docker. Il vous permet de déployer et de gérer des serveurs de jeu au moyen d'une interface web
+épurée, avec une isolation par serveur assurée par le démon Wings. Il alimente l'hébergement de jeux
 de milliers de fournisseurs et d'auto-hébergeurs.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Pterodactyl préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu
-24.04 LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer Pterodactyl
-vous-même.
+| Composant         | Version       |
+| ----------------- | ------------- |
+| Pterodactyl Panel | v1.12.4       |
+| Wings             | v1.12.3       |
+| PHP               | 8.3           |
+| Docker            | Latest stable |
+| Ubuntu            | 24.04 LTS     |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 2 Go    | 4 Go       |
-| Stockage  | 20 Go   | 40 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration règle MariaDB et Redis, crée l'administrateur,
+exécute les migrations du panneau et relie Wings à un nœud par défaut. Cette opération prend
+quelques minutes. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u pterodactyl-first-boot.service -f
 ```
 
-## Installer Pterodactyl
-
-Le panneau Pterodactyl et le démon Wings s'installent séparément. Les étapes ci-dessous installent
-le **panneau**. Voir la note sur Wings à la fin pour le démon.
-
-Installez les dépendances (PHP 8.3, MariaDB, Nginx, Redis, Composer) :
+Le message de connexion (MOTD) confirme que le panneau et Wings sont prêts. Vous pouvez également
+vérifier directement les principaux services :
 
 ```bash
-sudo apt install -y software-properties-common ca-certificates lsb-release apt-transport-https
-sudo add-apt-repository -y ppa:ondrej/php
-sudo apt update
-sudo apt install -y php8.3 php8.3-{common,cli,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip} \
-  mariadb-server nginx tar unzip git redis-server
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+systemctl status nginx php8.3-fpm mariadb redis-server pteroq wings
 ```
 
-Téléchargez le panneau et installez les dépendances PHP :
+### 3. Récupérer les identifiants de l'administrateur
+
+Les identifiants générés sont stockés dans un fichier réservé à l'utilisateur racine :
 
 ```bash
-sudo mkdir -p /var/www/pterodactyl
-cd /var/www/pterodactyl
-sudo curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
-sudo tar -xzvf panel.tar.gz
-sudo chmod -R 755 storage/* bootstrap/cache/
-sudo cp .env.example .env
-sudo COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+sudo cat /root/.credentials/pterodactyl.txt
 ```
 
-## Configurer Pterodactyl
+| Champ            | Valeur                                                                           |
+| ---------------- | -------------------------------------------------------------------------------- |
+| Adresse courriel | Générée au premier démarrage et stockée dans le fichier d'identifiants ci-dessus |
+| Mot de passe     | Généré au premier démarrage et stocké dans le fichier d'identifiants ci-dessus   |
 
-Créez la base de données et l'utilisateur dans MariaDB :
+### 4. Accéder au panneau Pterodactyl
+
+Ouvrez un navigateur et accédez à :
+
+```text
+http://<your-vm-ip>
+```
+
+Un emplacement par défaut nommé `zmi` et un nœud par défaut nommé `default` sont créés et reliés à
+Wings sur la même VM. Le nœud commence avec une allocation sur le port 25565. Ajoutez des
+allocations sous **Admin > Nodes > default > Allocations** avant de créer des serveurs qui ont
+besoin d'autres ports.
+
+## Gérer Pterodactyl
 
 ```bash
-sudo mysql -u root
+# Check service status
+systemctl status nginx php8.3-fpm mariadb redis-server pteroq wings
+
+# Restart the Panel web services, queue worker, and Wings
+sudo systemctl restart nginx php8.3-fpm pteroq wings
+
+# View Panel queue logs
+sudo journalctl -u pteroq -f
+
+# View Wings logs
+sudo journalctl -u wings -f
 ```
 
-```sql
-CREATE USER 'pterodactyl'@'127.0.0.1' IDENTIFIED BY 'use-a-strong-password';
-CREATE DATABASE panel;
-GRANT ALL PRIVILEGES ON panel.* TO 'pterodactyl'@'127.0.0.1' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-EXIT;
-```
+| Chemin                               | Fonction                                              |
+| ------------------------------------ | ----------------------------------------------------- |
+| `/var/www/pterodactyl/.env`          | Configuration d'environnement du panneau              |
+| `/etc/pterodactyl/config.yml`        | Configuration de Wings                                |
+| `/var/lib/pterodactyl/volumes/`      | Données des serveurs de jeu                           |
+| `/root/.credentials/pterodactyl.txt` | Identifiants et informations de configuration générés |
 
-Générez la clé d'application, lancez les assistants de configuration interactifs, migrez la base de
-données et créez votre utilisateur administrateur :
+## Sécurité
+
+Le panneau utilise le port 80, l'API Wings le port 8080 et le SFTP Wings le port 2022. UFW est
+activé et autorise par défaut SSH (port 22) ainsi que les ports 80, 8080 et 2022. Les ports des
+serveurs de jeu, y compris l'allocation initiale sur le port 25565, ne sont pas ouverts
+automatiquement.
+
+**Pour limiter l'accès au panneau à une adresse IP précise :**
 
 ```bash
-cd /var/www/pterodactyl
-sudo php artisan key:generate --force
-sudo php artisan p:environment:setup
-sudo php artisan p:environment:database
-sudo php artisan migrate --seed --force
-sudo php artisan p:user:make
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
 ```
 
-Définissez les permissions, ajoutez la tâche cron du planificateur et le worker de file d'attente,
-puis configurez Nginx :
+**Pour limiter les ports de l'API et du SFTP Wings à une adresse IP précise :**
 
 ```bash
-sudo chown -R www-data:www-data /var/www/pterodactyl/*
-( sudo crontab -l 2>/dev/null; echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1" ) | sudo crontab -
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
+sudo ufw delete allow 2022/tcp
+sudo ufw allow from <trusted-ip> to any port 2022
 ```
 
-Créez un service systemd pour le worker de file d'attente et un bloc serveur Nginx (avec un
-certificat TLS Let's Encrypt en production) en suivant les
-[étapes serveur web et worker de file d'attente](https://pterodactyl.io/panel/1.0/webserver_configuration.html)
-du guide officiel. Le panneau doit être servi derrière Nginx en HTTPS en production.
-
-Pour exécuter des serveurs de jeu, vous avez aussi besoin du démon **Wings**, qui requiert Docker.
-Installez-le sur cette VM (ou sur un nœud séparé) en suivant le
-[guide d'installation de Wings](https://pterodactyl.io/wings/1.0/installing.html), puis ajoutez le
-nœud dans le panneau.
-
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que le SSH (port 22) depuis l'extérieur. Ouvrez le ou les ports
-dont Pterodactyl a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail :
+**Pour accéder au panneau sans laisser le port 80 ouvert, utilisez un tunnel SSH :**
 
 ```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
 ```
 
-Wings écoute en plus sur les ports 8080 (API) et 2022 (SFTP). Ouvrez-les si Wings s'exécute sur
-cette VM, ainsi que toutes les plages de ports de serveur de jeu que vous allouez.
+Limitez les ports de l'API et du SFTP Wings aux réseaux de confiance. N'ouvrez que les ports de
+serveurs de jeu requis par vos allocations.
+
+**Pour une utilisation en production**, placez le panneau derrière un proxy inverse afin de le
+servir en HTTPS avec un certificat TLS de confiance, puis remplacez l'URL de l'application dans
+`/var/www/pterodactyl/.env` par l'URL publique.
+
+:::caution
+
+Connectez-vous avec le mot de passe administrateur généré, puis remplacez-le par un mot de passe que
+vous contrôlez. Réservez le fichier d'identifiants à l'utilisateur racine et limitez les interfaces
+du panneau et de Wings aux adresses IP de confiance.
+
+:::
 
 ## Étapes suivantes
 
-- [Documentation Pterodactyl](https://pterodactyl.io/)
-- [Guide d'installation du panneau Pterodactyl](https://pterodactyl.io/panel/1.0/getting_started.html)
+- [Documentation de Pterodactyl](https://pterodactyl.io/)
+- [Guide d'installation de Pterodactyl Panel](https://pterodactyl.io/panel/1.0/getting_started.html)

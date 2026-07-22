@@ -3,128 +3,130 @@ title: Medusa
 ---
 
 Medusa est une plateforme de commerce headless open source bâtie sur Node.js. Elle fournit un
-backend modulaire doté d'un tableau de bord d'administration intégré et d'API REST/Store qui
-alimentent des vitrines personnalisées. Vous êtes propriétaire des données et du code, et vous
+backend modulaire avec un tableau de bord d'administration intégré ainsi que des API REST/Store qui
+alimentent des vitrines personnalisées. Vous restez propriétaire des données et du code, et vous
 l'étendez avec des modules TypeScript.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Medusa préconfigurée arrive bientôt. Pour l'instant, déployez une nouvelle instance
-**Ubuntu 24.04 LTS** depuis la marketplace et suivez les étapes ci-dessous pour installer Medusa
-vous-même.
+| Composant  | Version   |
+| ---------- | --------- |
+| Medusa     | 2.17.2    |
+| Node.js    | 22        |
+| PostgreSQL | 17 Alpine |
+| Redis      | 7 Alpine  |
+| Ubuntu     | 24.04 LTS |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 2       | 4          |
-| RAM       | 4 Go    | 8 Go       |
-| Stockage  | 20 Go   | 40 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Medusa génère les secrets, démarre PostgreSQL et Redis, exécute les migrations de la base de
+données, crée l'utilisateur administrateur et démarre le service Medusa. Cette opération prend
+environ trois à cinq minutes. Suivez la progression avec :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u medusa-first-boot.service -f
 ```
 
-## Installer Medusa
-
-Medusa nécessite **Node.js v20+ (LTS)** et un serveur **PostgreSQL** en cours d'exécution. Redis est
-facultatif mais recommandé pour la gestion des événements en production.
-
-Installez Node.js 20 LTS depuis NodeSource :
+Vérifiez ensuite le service :
 
 ```bash
-sudo apt-get install -y ca-certificates curl gnupg
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
-  | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" \
-  | sudo tee /etc/apt/sources.list.d/nodesource.list
-sudo apt-get update && sudo apt-get install -y nodejs
-node -v
+systemctl status medusa.service
 ```
 
-Installez PostgreSQL et Redis :
+### 3. Accéder au tableau de bord d'administration Medusa
+
+Ouvrez un navigateur et accédez à :
+
+```text
+http://<your-vm-ip>/app
+```
+
+Consultez les informations de connexion générées :
 
 ```bash
-sudo apt install -y postgresql postgresql-contrib redis-server
-sudo systemctl enable --now postgresql redis-server
+sudo cat /root/.credentials/medusa.txt
 ```
 
-Créez un rôle de base de données pour Medusa (remplacez le mot de passe) :
+| Champ            | Valeur                                 |
+| ---------------- | -------------------------------------- |
+| Adresse courriel | `admin@example.com`, sauf remplacement |
+| Mot de passe     | Dans `/root/.credentials/medusa.txt`   |
+
+L'API Storefront est accessible à `http://<your-vm-ip>`.
+
+## Gérer Medusa
 
 ```bash
-sudo -u postgres psql -c "CREATE USER medusa WITH PASSWORD 'change-me' CREATEDB;"
+# Check service status
+systemctl status medusa.service
+
+# Restart Medusa
+sudo systemctl restart medusa.service
+
+# View Medusa logs
+sudo journalctl -u medusa.service -f
+
+# Check the PostgreSQL, Redis, and Nginx containers
+cd /opt/medusa && docker compose ps
 ```
 
-Générez une nouvelle application Medusa. L'installateur crée le projet, exécute les migrations et
-vous demande une adresse e-mail et un mot de passe d'administrateur :
+| Chemin                               | Fonction                                         |
+| ------------------------------------ | ------------------------------------------------ |
+| `/opt/medusa/store/medusa-config.ts` | Configuration de l'application Medusa            |
+| `/opt/medusa/store/.env`             | Environnement et secrets générés                 |
+| `/opt/medusa/docker-compose.yml`     | Pile PostgreSQL, Redis et Nginx                  |
+| `/opt/medusa/volumes/db/`            | Données PostgreSQL                               |
+| `/opt/medusa/volumes/redis/`         | Données Redis                                    |
+| `/root/.credentials/medusa.txt`      | Identifiants d'administration et de base générés |
+
+## Sécurité
+
+Medusa est exposé par Nginx sur le port 80. Son port d'application 9000 n'est autorisé que depuis
+les réseaux de pont Docker. UFW est activé et autorise HTTP (port 80) et SSH (port 22).
+
+**Pour limiter l'interface et les API à une adresse IP précise :**
 
 ```bash
-npx create-medusa-app@latest my-medusa-store \
-  --db-url "postgres://medusa:change-me@localhost:5432/medusa-store"
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
 ```
 
-À l'invite, refusez la vitrine Next.js Starter Storefront sauf si vous la voulez sur la même VM
-(elle nécessite un second processus et Node v24 LTS ou inférieur).
+**Pour accéder à Medusa sans laisser le port 80 ouvert, utilisez un tunnel SSH :**
 
-## Configurer Medusa
-
-L'installateur écrit la configuration dans `my-medusa-store/.env`. Confirmez les URL de la base de
-données et de Redis :
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
 
 ```bash
-cd my-medusa-store
-grep -E "DATABASE_URL|REDIS_URL|STORE_CORS|ADMIN_CORS" .env
+sudo ufw delete allow 80/tcp
 ```
-
-Définissez `REDIS_URL=redis://localhost:6379` et mettez à jour les valeurs CORS avec vos domaines de
-vitrine et d'administration pour la production.
-
-Démarrez le serveur (administration et API sur le port 9000) :
 
 ```bash
-npm run dev
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:8080/app
 ```
 
-Le tableau de bord d'administration est servi à l'adresse `http://<your-vm-ip>:9000/app` et les API
-Store/Admin à `http://<your-vm-ip>:9000`. Pour la production, compilez l'application
-(`npm run build`), exécutez-la avec un gestionnaire de processus tel que PM2 et placez-la derrière
-nginx avec TLS.
+**Pour une utilisation en production**, placez Medusa derrière un proxy inverse avec un certificat
+TLS de confiance et mettez à jour le nom d'hôte public afin que les paramètres CORS de
+l'administration et de l'API utilisent la bonne origine.
 
-## Ouvrir le pare-feu
+:::caution
 
-L'instance n'autorise par défaut que le SSH (port 22) en externe. Ouvrez le ou les ports dont Medusa
-a besoin et ajoutez-les aux règles réseau/de sécurité de l'instance dans le portail :
+Traitez `/root/.credentials/medusa.txt` comme un fichier sensible. Modifiez le mot de passe
+administrateur initial et limitez le tableau de bord d'administration aux utilisateurs de confiance.
 
-```bash
-sudo ufw allow 9000/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation Medusa](https://docs.medusajs.com/)
-- [Guide d'installation Medusa](https://docs.medusajs.com/learn/installation)
+- [Documentation de Medusa](https://docs.medusajs.com/)
+- [Guide d'installation de Medusa](https://docs.medusajs.com/learn/installation)

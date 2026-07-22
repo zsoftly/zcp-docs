@@ -261,5 +261,40 @@ aws s3 ls s3://my-bucket/ --endpoint-url https://objects.yul.zcp.zsoftly.ca
 aws s3 rm s3://my-bucket/file.txt --endpoint-url https://objects.yul.zcp.zsoftly.ca
 ```
 
+### s3cmd
+
+[s3cmd](https://s3tools.org/s3cmd) est un client en ligne de commande autonome pour le stockage
+compatible S3. Installez-le, puis créez `~/.s3cfg` :
+
+```ini
+[default]
+access_key = <access-key>
+secret_key = <secret-key>
+host_base = objects.yul.zcp.zsoftly.ca
+host_bucket = objects.yul.zcp.zsoftly.ca
+use_https = True
+```
+
+Ce fichier contient votre clé secrète. Limitez donc ses autorisations :
+
+```bash
+chmod 600 ~/.s3cfg
+```
+
+Définir `host_bucket` sur la même valeur que `host_base`, sans espace réservé pour le compartiment,
+force l'adressage path-style requis par le service. Pour un compartiment à Ottawa, utilisez
+`objects.yow.zcp.zsoftly.ca`.
+
+Exécutez les commandes courantes :
+
+```bash
+s3cmd ls                                    # list your buckets
+s3cmd mb s3://my-bucket                      # create a bucket
+s3cmd put ./file.txt s3://my-bucket/         # upload a file
+s3cmd get s3://my-bucket/file.txt .          # download a file
+s3cmd sync ./local-dir/ s3://my-bucket/dir/  # sync a folder
+s3cmd rm s3://my-bucket/file.txt             # delete an object
+```
+
 Voir aussi : [Clés d'accès](/fr/public-cloud/storage/object-storage/access-keys),
 [Créer un compartiment](/fr/public-cloud/storage/object-storage/create-bucket)

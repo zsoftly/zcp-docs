@@ -37,6 +37,37 @@ the default username above.
 
 ![Virtual Machine Overview with the Provisioning Password field highlighted](../../../../assets/compute/provisioning-password.webp)
 
+## Generate an SSH Key Pair
+
+An SSH key pair has a private key you keep secret and a public key you add to your account or
+instance. Create one in your terminal.
+
+On macOS and Linux:
+
+```bash
+ssh-keygen -t ed25519 -C "you@example.com"
+```
+
+Press Enter to accept the default path (`~/.ssh/id_ed25519`), then set a passphrase when prompted.
+On older systems without Ed25519 support, use RSA:
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "you@example.com"
+```
+
+On Windows 10 and later, the same `ssh-keygen` command works in PowerShell. The keys land in
+`%USERPROFILE%\.ssh\`.
+
+Print the public key to copy it:
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Add the public key to your account or instance under
+[SSH Keys](/public-cloud/compute/settings/ssh-keys). Keep the private key (`~/.ssh/id_ed25519`)
+private and never share it.
+
 ## Connecting
 
 Open a terminal (Command Prompt/PowerShell on Windows, built-in terminal on macOS/Linux).

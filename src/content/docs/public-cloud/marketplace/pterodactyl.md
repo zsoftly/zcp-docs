@@ -6,131 +6,133 @@ Pterodactyl is a free, open-source game server management panel built on PHP, Ng
 lets you deploy and manage game servers through a clean web interface, with per-server isolation
 handled by the Wings daemon. It powers game hosting for thousands of providers and self-hosters.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Pterodactyl image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance
-from the marketplace and follow the steps below to install Pterodactyl yourself.
+| Component         | Version       |
+| ----------------- | ------------- |
+| Pterodactyl Panel | v1.12.4       |
+| Wings             | v1.12.3       |
+| PHP               | 8.3           |
+| Docker            | Latest stable |
+| Ubuntu            | 24.04 LTS     |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 2 GB    | 4 GB        |
-| Storage  | 20 GB   | 40 GB       |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab. It opens on
-   **Featured** by default, so select **Marketplace** next to it. Pick your region (YOW-1 or YUL-1),
-   search for **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from
-   **Instances → Create**. Either way you get a clean Ubuntu 24.04 VM.
-
-   ![The Marketplace tab in the ZSoftly Cloud portal, showing the region selector, category list, search box, and Deploy buttons](../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Searching the Marketplace for an app, with the search box filtering the catalog down to a matching Deploy card](../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choose a plan that meets the requirements above.
-
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script configures MariaDB and Redis, creates the administrator, runs the
+Panel migrations, and links Wings to a default node. This takes a few minutes. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u pterodactyl-first-boot.service -f
 ```
 
-## Install Pterodactyl
-
-The Pterodactyl Panel and the Wings daemon are installed separately. The steps below install the
-**Panel**. See the Wings note at the end for the daemon.
-
-Install the dependencies (PHP 8.3, MariaDB, Nginx, Redis, Composer):
+The login message (MOTD) confirms when the Panel and Wings are ready. You can also verify the main
+services directly:
 
 ```bash
-sudo apt install -y software-properties-common ca-certificates lsb-release apt-transport-https
-sudo add-apt-repository -y ppa:ondrej/php
-sudo apt update
-sudo apt install -y php8.3 php8.3-{common,cli,gd,mysql,mbstring,bcmath,xml,fpm,curl,zip} \
-  mariadb-server nginx tar unzip git redis-server
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+systemctl status nginx php8.3-fpm mariadb redis-server pteroq wings
 ```
 
-Download the Panel and install PHP dependencies:
+### 3. Retrieve the administrator credentials
+
+The generated credentials are stored in a root-only file:
 
 ```bash
-sudo mkdir -p /var/www/pterodactyl
-cd /var/www/pterodactyl
-sudo curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
-sudo tar -xzvf panel.tar.gz
-sudo chmod -R 755 storage/* bootstrap/cache/
-sudo cp .env.example .env
-sudo COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+sudo cat /root/.credentials/pterodactyl.txt
 ```
 
-## Configure Pterodactyl
+| Field    | Value                                                            |
+| -------- | ---------------------------------------------------------------- |
+| Email    | Generated on first boot and stored in the credentials file above |
+| Password | Generated on first boot and stored in the credentials file above |
 
-Create the database and user in MariaDB:
+### 4. Access the Pterodactyl Panel
+
+Open a browser and navigate to:
+
+```text
+http://<your-vm-ip>
+```
+
+A default location named `zmi` and a default node named `default` are created and linked to Wings on
+the same VM. The node starts with one allocation on port 25565. Add allocations under **Admin >
+Nodes > default > Allocations** before creating servers that need other ports.
+
+## Managing Pterodactyl
 
 ```bash
-sudo mysql -u root
+# Check service status
+systemctl status nginx php8.3-fpm mariadb redis-server pteroq wings
+
+# Restart the Panel web services, queue worker, and Wings
+sudo systemctl restart nginx php8.3-fpm pteroq wings
+
+# View Panel queue logs
+sudo journalctl -u pteroq -f
+
+# View Wings logs
+sudo journalctl -u wings -f
 ```
 
-```sql
-CREATE USER 'pterodactyl'@'127.0.0.1' IDENTIFIED BY 'use-a-strong-password';
-CREATE DATABASE panel;
-GRANT ALL PRIVILEGES ON panel.* TO 'pterodactyl'@'127.0.0.1' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-EXIT;
-```
+| Path                                 | Purpose                                 |
+| ------------------------------------ | --------------------------------------- |
+| `/var/www/pterodactyl/.env`          | Panel environment configuration         |
+| `/etc/pterodactyl/config.yml`        | Wings configuration                     |
+| `/var/lib/pterodactyl/volumes/`      | Game server data                        |
+| `/root/.credentials/pterodactyl.txt` | Generated credentials and setup details |
 
-Generate the app key, run the interactive setup wizards, migrate the database, and create your admin
-user:
+## Security
+
+The Panel uses port 80, the Wings API uses port 8080, and Wings SFTP uses port 2022. UFW is enabled
+and allows SSH (port 22) plus ports 80, 8080, and 2022 by default. Game server ports, including the
+initial allocation on port 25565, are not opened automatically.
+
+**To restrict Panel access to a specific IP:**
 
 ```bash
-cd /var/www/pterodactyl
-sudo php artisan key:generate --force
-sudo php artisan p:environment:setup
-sudo php artisan p:environment:database
-sudo php artisan migrate --seed --force
-sudo php artisan p:user:make
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
 ```
 
-Set ownership, add the scheduler cron and queue worker, then configure Nginx:
+**To restrict the Wings API and SFTP ports to a specific IP:**
 
 ```bash
-sudo chown -R www-data:www-data /var/www/pterodactyl/*
-( sudo crontab -l 2>/dev/null; echo "* * * * * php /var/www/pterodactyl/artisan schedule:run >> /dev/null 2>&1" ) | sudo crontab -
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
+sudo ufw delete allow 2022/tcp
+sudo ufw allow from <trusted-ip> to any port 2022
 ```
 
-Create a systemd service for the queue worker and an Nginx server block (with a TLS certificate from
-Let's Encrypt for production) by following the
-[webserver and queue worker steps](https://pterodactyl.io/panel/1.0/webserver_configuration.html) in
-the official guide. The Panel must be served behind Nginx over HTTPS for production use.
-
-To run game servers you also need the **Wings** daemon, which requires Docker. Install it on this VM
-(or a separate node) per the
-[Wings installation guide](https://pterodactyl.io/wings/1.0/installing.html), then add the node in
-the Panel.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Pterodactyl needs and
-add them to the instance's network/security rules in the portal:
+**To access the Panel without leaving port 80 open, use an SSH tunnel:**
 
 ```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
 ```
 
-Wings additionally listens on port 8080 (API) and 2022 (SFTP). Open those if Wings runs on this VM,
-along with any game-server port ranges you allocate.
+Restrict the Wings API and SFTP ports to trusted networks. Open only the game server ports your
+allocations require.
+
+**For production use**, place the Panel behind a reverse proxy so you can serve it over HTTPS with a
+trusted TLS certificate, then update the application URL in `/var/www/pterodactyl/.env` to the
+public URL.
+
+:::caution
+
+Sign in with the generated administrator password, then replace it with a password you control. Keep
+the credentials file root-only and restrict the Panel and Wings interfaces to trusted IPs.
+
+:::
 
 ## Next steps
 

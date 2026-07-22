@@ -2,111 +2,117 @@
 title: NocoDB
 ---
 
-NocoDB est une plateforme de base de données no-code open source et une alternative à Airtable. Elle
-transforme n'importe quelle base de données en un tableur intelligent avec des vues grille, galerie,
-kanban et formulaire, ainsi que des API REST et GraphQL. Vous pouvez l'exécuter avec une seule
-commande Docker.
+NocoDB est une plateforme de base de données open source sans code et une solution de remplacement
+d'Airtable. Elle transforme toute base de données en feuille de calcul intelligente avec des vues en
+grille, galerie, kanban et formulaire, ainsi que des API REST et GraphQL. Vous pouvez l'exécuter
+avec une seule commande Docker.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image NocoDB préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer NocoDB vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| NocoDB    | 2026.07.0 |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Variables d'environnement
 
-## Prérequis
+Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
+qu'une valeur sécurisée soit générée.
 
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 1 Go    | 2 Go       |
-| Stockage  | 10 Go   | 20 Go      |
+| Variable            | Description                                 |
+| ------------------- | ------------------------------------------- |
+| `NC_ADMIN_EMAIL`    | Adresse courriel de l'administrateur NocoDB |
+| `NC_ADMIN_PASSWORD` | Mot de passe de l'administrateur NocoDB     |
 
-## Déployer l'instance de base
+## Démarrage
 
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+NocoDB démarre automatiquement depuis son image Docker préinstallée et conserve les données sous
+`/var/lib/nocodb`. Suivez la progression avec :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u nocodb-first-boot.service -f
 ```
 
-## Installer NocoDB
-
-Installez Docker :
+Vérifiez ensuite le conteneur :
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+cd /opt/nocodb && docker compose ps
 ```
 
-Exécutez NocoDB avec un volume de données persistant :
+### 3. Créer le premier compte de superadministrateur
+
+NocoDB est lié à localhost, car le premier écran de configuration n'est pas authentifié. Depuis
+votre machine locale, ouvrez un tunnel SSH :
 
 ```bash
-sudo docker run -d --name nocodb \
-  --restart unless-stopped \
-  -v "$(pwd)"/nocodb:/usr/app/data/ \
-  -p 8080:8080 \
-  nocodb/nocodb:latest
+ssh -L 8080:127.0.0.1:8080 ubuntu@<your-vm-ip>
 ```
 
-:::tip[Astuce]
+Ouvrez ensuite :
 
-Pour une pile de qualité production avec Postgres et Redis, le script d'installation rapide officiel
-génère pour vous un déploiement Docker Compose complet :
+```text
+http://127.0.0.1:8080
+```
+
+Créez le premier compte de superadministrateur dans le navigateur. L'image ne crée pas
+d'identifiants de connexion partagés par défaut.
+
+## Gérer NocoDB
+
+NocoDB fonctionne comme un service Docker Compose dans `/opt/nocodb`.
 
 ```bash
-sudo curl -fsSL https://install.nocodb.com/noco.sh | sudo bash -s -- --quick
+# Check status
+cd /opt/nocodb && docker compose ps
+
+# Restart
+cd /opt/nocodb && docker compose restart
+
+# View logs
+cd /opt/nocodb && docker compose logs -f
 ```
+
+| Chemin                           | Fonction                                     |
+| -------------------------------- | -------------------------------------------- |
+| `/opt/nocodb/docker-compose.yml` | Pile Compose                                 |
+| `/var/lib/nocodb/`               | Données SQLite persistantes de l'application |
+| `/etc/nocodb/info.txt`           | Notes du premier démarrage                   |
+
+## Sécurité
+
+NocoDB écoute sur `127.0.0.1:8080`, pas sur l'interface réseau publique de la VM. UFW est activé et
+n'autorise que SSH (port 22). Cela protège le premier écran non authentifié de configuration du
+superadministrateur.
+
+Utilisez le tunnel SSH des étapes de démarrage pour terminer la configuration. Pour autoriser
+l'accès depuis une adresse IP de confiance après la configuration, remplacez d'abord le mappage de
+port dans `/opt/nocodb/docker-compose.yml`, de `127.0.0.1:8080:8080` à `8080:8080`, redémarrez la
+pile et ajoutez une règle UFW limitée :
+
+```bash
+cd /opt/nocodb && docker compose up -d
+sudo ufw allow from <trusted-ip> to any port 8080
+```
+
+**Pour une utilisation en production**, gardez NocoDB derrière un proxy inverse avec un certificat
+TLS de confiance au lieu d'exposer directement le port 8080.
+
+:::caution
+
+N'exposez pas le port 8080 avant d'avoir créé le premier compte de superadministrateur. L'écran de
+configuration initial ne nécessite aucune authentification.
 
 :::
 
-## Configurer NocoDB
-
-Ouvrez `http://<your-vm-ip>:8080` dans un navigateur. À la première visite, NocoDB vous invite à
-créer le compte super-administrateur (e-mail et mot de passe). La configuration à conteneur unique
-ci-dessus stocke ses données dans SQLite sous le volume monté `./nocodb`.
-
-En production, connectez une base de données externe avec la variable d'environnement `NC_DB` et
-placez NocoDB derrière un proxy inverse (Nginx ou Caddy) avec un certificat TLS et un vrai nom de
-domaine plutôt que de servir le port 8080 directement.
-
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que le SSH (port 22) depuis l'extérieur. Ouvrez le ou les ports
-dont NocoDB a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail :
-
-```bash
-sudo ufw allow 8080/tcp
-```
-
-Si vous placez NocoDB derrière un proxy inverse en HTTPS, ouvrez `80` et `443` à la place et gardez
-`8080` interne.
-
 ## Étapes suivantes
 
-- [Documentation NocoDB](https://docs.nocodb.com/)
+- [Documentation de NocoDB](https://docs.nocodb.com/)
 - [Guide d'installation de NocoDB](https://nocodb.com/docs/self-hosting/installation/quickstart)

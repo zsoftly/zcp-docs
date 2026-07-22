@@ -2,127 +2,137 @@
 title: Neo4j
 ---
 
-Neo4j est une base de données orientée graphe native qui stocke les données sous forme de nœuds et
-de relations plutôt que de lignes et de tables. Elle utilise le langage de requête Cypher pour
-parcourir efficacement des données fortement connectées, ce qui en fait un excellent choix pour les
-moteurs de recommandation, la détection de fraude, les graphes de connaissances et l'analyse de
-réseaux. Le navigateur HTTP s'exécute sur le port 7474 et le protocole Bolt sur le port 7687.
+Neo4j est une base de données graphe native qui stocke les données sous forme de nœuds et de
+relations plutôt que de lignes et de tables. Elle utilise le langage de requête Cypher pour
+parcourir efficacement les données fortement connectées, ce qui convient bien aux moteurs de
+recommandation, à la détection de fraudes, aux graphes de connaissances et à l'analyse de réseaux.
+Le navigateur HTTP fonctionne sur le port 7474 et le protocole Bolt sur le port 7687.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Neo4j préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer Neo4j vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| Neo4j     | 2026.06.0 |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Variables d'environnement
 
-## Prérequis
+Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
+qu'une valeur sécurisée soit générée.
 
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 2 Go    | 4 Go       |
-| Stockage  | 20 Go   | 40 Go      |
+| Variable         | Description        |
+| ---------------- | ------------------ |
+| `NEO4J_PASSWORD` | Mot de passe Neo4j |
 
-## Déployer l'instance de base
+## Démarrage
 
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **Neo4j**, puis cliquez sur
-   **Deploy**, ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Les deux
-   vous donnent une VM Ubuntu 24.04 vierge.
-2. Choisissez un forfait qui répond aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Neo4j génère un mot de passe initial unique, configure son adresse annoncée et démarre le service
+systemd natif. Cette opération prend environ deux à trois minutes. Suivez la progression avec :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u neo4j-first-boot.service -f
 ```
 
-## Installer Neo4j
-
-Installez Docker Engine et le plugin Docker Compose depuis le dépôt officiel de Docker :
+Vérifiez ensuite le service :
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl status neo4j
 ```
 
-Ajoutez l'utilisateur `ubuntu` au groupe `docker` afin de pouvoir exécuter Docker sans `sudo`, puis
-reconnectez-vous :
+### 3. Accéder au navigateur Neo4j
+
+Ouvrez un navigateur et accédez à :
+
+```text
+http://<your-vm-ip>:7474
+```
+
+Consultez les informations de connexion générées :
 
 ```bash
-sudo usermod -aG docker ubuntu
-exit
+sudo cat /root/.credentials/neo4j.txt
 ```
 
-Reconnectez-vous en SSH, créez un répertoire de projet et ajoutez un fichier `compose.yaml` :
+| Champ             | Valeur                              |
+| ----------------- | ----------------------------------- |
+| Nom d'utilisateur | `neo4j`                             |
+| Mot de passe      | Dans `/root/.credentials/neo4j.txt` |
+
+Vous serez invité à définir un nouveau mot de passe lors de la première connexion. Les applications
+se connectent par Bolt à `bolt://<your-vm-ip>:7687`.
+
+## Gérer Neo4j
 
 ```bash
-mkdir ~/neo4j && cd ~/neo4j
+# Check service status
+systemctl status neo4j
+
+# Restart Neo4j
+sudo systemctl restart neo4j
+
+# View logs
+sudo journalctl -u neo4j -f
 ```
 
-```yaml
-services:
-  neo4j:
-    image: neo4j:5
-    restart: unless-stopped
-    environment:
-      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
-    ports:
-      - '7474:7474'
-      - '7687:7687'
-    volumes:
-      - neo4j-data:/data
-volumes:
-  neo4j-data:
-```
+| Chemin                         | Fonction                      |
+| ------------------------------ | ----------------------------- |
+| `/etc/neo4j/neo4j.conf`        | Configuration principale      |
+| `/var/lib/neo4j/data/`         | Bases de données et graphes   |
+| `/var/log/neo4j/`              | Journaux Neo4j                |
+| `/root/.credentials/neo4j.txt` | Identifiants initiaux générés |
 
-Créez un fichier `.env` dans le même répertoire avec un mot de passe robuste :
+## Sécurité
+
+Les ports 7474 et 7687 sont ouverts sur l'interface réseau de la VM. UFW est activé et autorise le
+navigateur (port 7474), Bolt (port 7687) et SSH (port 22).
+
+**Pour limiter les deux points de terminaison à une adresse IP précise :**
 
 ```bash
-cat > .env <<'EOF'
-NEO4J_PASSWORD=change-me-to-a-strong-password
-EOF
+sudo ufw delete allow 7474/tcp
+sudo ufw delete allow 7687/tcp
+sudo ufw allow from <trusted-ip> to any port 7474
+sudo ufw allow from <trusted-ip> to any port 7687
 ```
 
-Démarrez la pile :
+**Pour accéder à Neo4j sans laisser ces ports ouverts, utilisez un tunnel SSH :**
+
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
 
 ```bash
-docker compose up -d
+sudo ufw delete allow 7474/tcp
+sudo ufw delete allow 7687/tcp
 ```
-
-## Configurer Neo4j
-
-Ouvrez `http://<your-vm-ip>:7474` dans un navigateur pour accéder au navigateur Neo4j.
-Connectez-vous avec le nom d'utilisateur `neo4j` et le mot de passe défini dans `.env`. Vous pouvez
-ensuite exécuter des requêtes Cypher, inspecter le graphe et gérer les utilisateurs. Les
-applications se connectent via Bolt à `bolt://<your-vm-ip>:7687`. Pour un déploiement en production,
-placez Neo4j derrière un proxy inverse tel que nginx avec un certificat TLS et exposez le navigateur
-et le point d'accès Bolt via des connexions chiffrées plutôt que d'exposer les ports directement.
-
-## Ouvrir le pare-feu
-
-Par défaut, l'instance n'autorise que SSH (port 22) depuis l'extérieur. Ouvrez le ou les ports dont
-Neo4j a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail :
 
 ```bash
-sudo ufw allow 7474/tcp
-sudo ufw allow 7687/tcp
+# Run this on your local machine
+ssh -L 7474:localhost:7474 -L 7687:localhost:7687 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:7474
 ```
+
+**Pour une utilisation en production**, limitez Neo4j aux réseaux privés d'applications et
+d'administrateurs. Placez le navigateur derrière un proxy inverse TLS et configurez des connexions
+Bolt chiffrées avant de transmettre des identifiants ou des données de graphe sur un réseau non
+fiable.
+
+:::caution
+
+Modifiez le mot de passe initial généré lorsque Neo4j vous le demande à la première connexion.
+N'exposez pas largement le navigateur ou les points de terminaison Bolt à Internet.
+
+:::
 
 ## Étapes suivantes
 
-- [Documentation Neo4j](https://neo4j.com/docs/)
-- [Guide d'installation Neo4j](https://neo4j.com/docs/operations-manual/current/docker/docker-compose-standalone/)
+- [Documentation de Neo4j](https://neo4j.com/docs/)
+- [Guide d'installation de Neo4j](https://neo4j.com/docs/operations-manual/current/docker/docker-compose-standalone/)

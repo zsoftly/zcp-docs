@@ -6,118 +6,122 @@ Medusa is an open-source headless commerce platform built on Node.js. It provide
 with a built-in admin dashboard and REST/Store APIs that power custom storefronts. You own the data
 and the code, and extend it with TypeScript modules.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Medusa image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Medusa yourself.
+| Component  | Version   |
+| ---------- | --------- |
+| Medusa     | 2.17.2    |
+| Node.js    | 22        |
+| PostgreSQL | 17 Alpine |
+| Redis      | 7 Alpine  |
+| Ubuntu     | 24.04 LTS |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 2       | 4           |
-| RAM      | 4 GB    | 8 GB        |
-| Storage  | 20 GB   | 40 GB       |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab. It opens on
-   **Featured** by default, so select **Marketplace** next to it. Pick your region (YOW-1 or YUL-1),
-   search for **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from
-   **Instances → Create**. Either way you get a clean Ubuntu 24.04 VM.
-
-   ![The Marketplace tab in the ZSoftly Cloud portal, showing the region selector, category list, search box, and Deploy buttons](../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Searching the Marketplace for an app, with the search box filtering the catalog down to a matching Deploy card](../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choose a plan that meets the requirements above.
-
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+Medusa generates secrets, starts PostgreSQL and Redis, runs database migrations, creates the admin
+user, and starts the Medusa service. This takes about three to five minutes. Track progress with:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u medusa-first-boot.service -f
 ```
 
-## Install Medusa
-
-Medusa requires **Node.js v20+ (LTS)** and a running **PostgreSQL** server. Redis is optional but
-recommended for production event handling.
-
-Install Node.js 20 LTS from NodeSource:
+Then verify the service:
 
 ```bash
-sudo apt-get install -y ca-certificates curl gnupg
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
-  | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" \
-  | sudo tee /etc/apt/sources.list.d/nodesource.list
-sudo apt-get update && sudo apt-get install -y nodejs
-node -v
+systemctl status medusa.service
 ```
 
-Install PostgreSQL and Redis:
+### 3. Access the Medusa admin dashboard
+
+Open a browser and navigate to:
+
+```text
+http://<your-vm-ip>/app
+```
+
+Read the generated login details:
 
 ```bash
-sudo apt install -y postgresql postgresql-contrib redis-server
-sudo systemctl enable --now postgresql redis-server
+sudo cat /root/.credentials/medusa.txt
 ```
 
-Create a database role for Medusa (replace the password):
+| Field    | Value                                  |
+| -------- | -------------------------------------- |
+| Email    | `admin@example.com`, unless overridden |
+| Password | From `/root/.credentials/medusa.txt`   |
+
+The Storefront API is available at `http://<your-vm-ip>`.
+
+## Managing Medusa
 
 ```bash
-sudo -u postgres psql -c "CREATE USER medusa WITH PASSWORD 'change-me' CREATEDB;"
+# Check service status
+systemctl status medusa.service
+
+# Restart Medusa
+sudo systemctl restart medusa.service
+
+# View Medusa logs
+sudo journalctl -u medusa.service -f
+
+# Check the PostgreSQL, Redis, and Nginx containers
+cd /opt/medusa && docker compose ps
 ```
 
-Scaffold a new Medusa application. The installer creates the project, runs migrations, and prompts
-you for an admin email and password:
+| Path                                 | Purpose                                  |
+| ------------------------------------ | ---------------------------------------- |
+| `/opt/medusa/store/medusa-config.ts` | Medusa application configuration         |
+| `/opt/medusa/store/.env`             | Generated environment and secrets        |
+| `/opt/medusa/docker-compose.yml`     | PostgreSQL, Redis, and Nginx stack       |
+| `/opt/medusa/volumes/db/`            | PostgreSQL data                          |
+| `/opt/medusa/volumes/redis/`         | Redis data                               |
+| `/root/.credentials/medusa.txt`      | Generated admin and database credentials |
+
+## Security
+
+Medusa is exposed through Nginx on port 80. Its application port 9000 is allowed only from Docker
+bridge networks. UFW is enabled and allows HTTP (port 80) and SSH (port 22).
+
+**To restrict the UI and APIs to a specific IP:**
 
 ```bash
-npx create-medusa-app@latest my-medusa-store \
-  --db-url "postgres://medusa:change-me@localhost:5432/medusa-store"
+sudo ufw delete allow 80/tcp
+sudo ufw allow from <trusted-ip> to any port 80
 ```
 
-When prompted, decline the Next.js Starter Storefront unless you want it on the same VM (it needs a
-second process and Node v24 LTS or lower).
+**To access Medusa without leaving port 80 open, use an SSH tunnel:**
 
-## Configure Medusa
-
-The installer writes configuration to `my-medusa-store/.env`. Confirm the database and Redis URLs:
+First close the public port on the VM, since it is open by default:
 
 ```bash
-cd my-medusa-store
-grep -E "DATABASE_URL|REDIS_URL|STORE_CORS|ADMIN_CORS" .env
+sudo ufw delete allow 80/tcp
 ```
-
-Set `REDIS_URL=redis://localhost:6379` and update the CORS values to your storefront and admin
-domains for production.
-
-Start the server (admin and API on port 9000):
 
 ```bash
-npm run dev
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:8080/app
 ```
 
-The admin dashboard is served at `http://<your-vm-ip>:9000/app` and the Store/Admin APIs at
-`http://<your-vm-ip>:9000`. For production, build the app (`npm run build`), run it with a process
-manager such as PM2, and place it behind nginx with TLS.
+**For production use**, place Medusa behind a reverse proxy with a trusted TLS certificate and
+update the public hostname so the admin and API CORS settings use the correct origin.
 
-## Open the firewall
+:::caution
 
-The instance allows only SSH (port 22) externally by default. Open the port(s) Medusa needs and add
-them to the instance's network/security rules in the portal:
+Treat `/root/.credentials/medusa.txt` as sensitive. Change the initial admin password and restrict
+the admin dashboard to trusted users.
 
-```bash
-sudo ufw allow 9000/tcp
-```
+:::
 
 ## Next steps
 

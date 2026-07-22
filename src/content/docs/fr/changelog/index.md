@@ -40,6 +40,20 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
+### v0.0.26 : 19 juillet 2026
+
+**Correctifs pour la redirection de ports et les clés SSH.**
+
+- **`portforward list` affiche de nouveau les ports.** Les colonnes des ports publics et privés
+  étaient vides, car la réponse était lue à partir de noms de champs incorrects. Elles s'affichent
+  maintenant correctement.
+- **`portforward create` et `firewall create` n'affichent plus de tableau vide.** Les deux commandes
+  créent la règle de manière asynchrone et ne renvoient aucun objet. Elles indiquent donc désormais
+  que la demande a été acceptée et vous dirigent vers la commande `list` correspondante.
+- **`ssh-key delete` accepte l'identifiant, le nom ou le slug de la clé.** La commande n'acceptait
+  auparavant que le slug et rejetait l'identifiant affiché par `ssh-key list`. La suppression d'une
+  clé inconnue est maintenant une opération sans effet.
+
 ### v0.0.25 : 18 juillet 2026
 
 **Les enregistrements `MX` fonctionnent désormais depuis le CLI.** `zcp dns record-create`
@@ -337,6 +351,19 @@ Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié 
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v0.1.3 : 20 juillet 2026
+
+**La redirection de port et les règles de pare-feu enregistrent maintenant leur véritable ID.**
+`zcp_port_forward` et `zcp_firewall_rule` stockaient un ID vide parce que le point de terminaison de
+création ne renvoie aucun objet de règle. Terraform les recréait donc à chaque application. Les deux
+ressources recherchent maintenant la règle après sa création, la font correspondre selon le
+protocole et les ports, puis enregistrent le véritable ID. Les plans restent ainsi stables.
+
+- Passage du SDK du CLI `zcp` à la v0.0.26, qui corrige le décodage des ports des règles de
+  redirection de port.
+- **Sécurité** : mise à niveau de `golang.org/x/text` pour corriger GO-2026-5970, une boucle infinie
+  accessible par la ressource de répartiteur de charge.
 
 ### v0.1.2 : 18 juillet 2026
 

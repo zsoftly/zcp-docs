@@ -7,130 +7,114 @@ processes high-throughput streams of records across topics, powering messaging, 
 real-time data pipelines. Modern Kafka runs in KRaft mode, so it no longer needs a separate
 ZooKeeper cluster.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Apache Kafka image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance
-from the marketplace and follow the steps below to install Apache Kafka yourself.
+| Component    | Version   |
+| ------------ | --------- |
+| Apache Kafka | 4.3.1     |
+| OpenJDK      | 21 (JRE)  |
+| Ubuntu       | 24.04 LTS |
 
-:::
+## Getting started
 
-## Requirements
-
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 2       | 4           |
-| RAM      | 4 GB    | 8 GB        |
-| Storage  | 20 GB   | 100 GB      |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script configures `advertised.listeners`, formats the KRaft storage, and
+starts Kafka. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u kafka-first-boot.service -f
 ```
 
-## Install Apache Kafka
+The login message (MOTD) confirms when Kafka is ready.
 
-Kafka runs on the JVM. Install a supported OpenJDK first:
+### 3. Verify Apache Kafka is running
 
 ```bash
-sudo apt install -y openjdk-21-jre-headless
-java -version
+systemctl status kafka
 ```
 
-Download and extract the latest Kafka release from kafka.apache.org. The `2.13` prefix is the Scala
-build. Check the [downloads page](https://kafka.apache.org/downloads) for the current version and
-adjust the URL accordingly:
+List the available topics to verify the broker:
 
 ```bash
-KAFKA_VERSION=4.3.0
-curl -fsSL "https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_2.13-${KAFKA_VERSION}.tgz" \
-  -o /tmp/kafka.tgz
-sudo tar -xzf /tmp/kafka.tgz -C /opt
-sudo mv /opt/kafka_2.13-${KAFKA_VERSION} /opt/kafka
+sudo -u kafka /opt/kafka/bin/kafka-topics.sh \
+  --bootstrap-server localhost:9092 --list
 ```
 
-Create a dedicated `kafka` system user and give it ownership of the install and data directories:
+### 4. Connect to the broker
+
+The bootstrap server listens on:
+
+```text
+<your-vm-ip>:9092
+```
+
+You can review the connection guidance written at first boot:
 
 ```bash
-sudo useradd --system --home /opt/kafka --shell /usr/sbin/nologin kafka
-sudo mkdir -p /var/lib/kafka
-sudo chown -R kafka:kafka /opt/kafka /var/lib/kafka
+sudo cat /root/.credentials/kafka.txt
 ```
 
-Point the broker at the data directory, generate a cluster ID, and format storage for KRaft mode:
+## Managing Apache Kafka
 
 ```bash
-sudo sed -i 's|^log.dirs=.*|log.dirs=/var/lib/kafka|' /opt/kafka/config/server.properties
+# Check service status
+systemctl status kafka
 
-KAFKA_CLUSTER_ID=$(/opt/kafka/bin/kafka-storage.sh random-uuid)
-sudo -u kafka /opt/kafka/bin/kafka-storage.sh format \
-  --standalone -t "$KAFKA_CLUSTER_ID" -c /opt/kafka/config/server.properties
+# Restart
+sudo systemctl restart kafka
+
+# View logs
+sudo journalctl -u kafka -f
 ```
 
-## Configure Apache Kafka
+| Path                                  | Purpose                        |
+| ------------------------------------- | ------------------------------ |
+| `/opt/kafka/config/server.properties` | Broker and KRaft configuration |
+| `/opt/kafka/data/`                    | Kafka data                     |
 
-Run Kafka as a systemd service so it starts on boot and restarts on failure. Create the unit file:
+## Security
+
+Port 9092 is accessible on the VM's network interface. UFW is enabled and allows SSH (port 22) only
+by default.
+
+**To allow broker access from a specific IP:**
 
 ```bash
-sudo tee /etc/systemd/system/kafka.service > /dev/null <<'EOF'
-[Unit]
-Description=Apache Kafka (KRaft)
-After=network.target
-
-[Service]
-Type=simple
-User=kafka
-Group=kafka
-Environment=JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-ExecStart=/opt/kafka/bin/kafka-server-start.sh /opt/kafka/config/server.properties
-ExecStop=/opt/kafka/bin/kafka-server-stop.sh
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-EOF
+sudo ufw allow from <trusted-ip> to any port 9092
 ```
 
-Enable and start the service:
+The advertised listener address is generated from the VM's local IP on first boot. To connect
+without opening the firewall, point the advertised listener at `localhost` on the VM, restart Kafka,
+then open an SSH tunnel:
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now kafka
-sudo systemctl status kafka
+# On the VM: advertise localhost instead of the VM's IP, then restart Kafka
+sudo sed -i 's|^advertised.listeners=.*|advertised.listeners=PLAINTEXT://localhost:9092|' /opt/kafka/config/server.properties
+sudo systemctl restart kafka
 ```
-
-Kafka listens on port 9092. Verify the broker by creating a test topic:
 
 ```bash
-/opt/kafka/bin/kafka-topics.sh --create --topic test \
-  --bootstrap-server localhost:9092
-/opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+# Run this on your local machine
+ssh -L 9092:localhost:9092 ubuntu@<your-vm-ip>
 ```
 
-To accept connections from other hosts, set `advertised.listeners` in
-`/opt/kafka/config/server.properties` to a reachable address (for example
-`PLAINTEXT://<your-vm-ip>:9092`) and restart the service.
+Kafka uses plaintext transport and has no authentication in this single-node image. Configure
+authentication and encrypted listeners before using it for production workloads, and restrict port
+9092 to trusted clients.
 
-## Open the firewall
+:::caution
 
-The instance allows only SSH (port 22) externally by default. Open the port(s) Apache Kafka needs
-and add them to the instance's network/security rules in the portal:
+Do not expose port 9092 broadly to the internet. Update the advertised listener to an address your
+approved clients can reach, then limit access with UFW and network security rules.
 
-```bash
-sudo ufw allow 9092/tcp
-```
+:::
 
 ## Next steps
 

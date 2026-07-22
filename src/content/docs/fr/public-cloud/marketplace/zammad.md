@@ -2,116 +2,120 @@
 title: Zammad
 ---
 
-Zammad est un système open source de helpdesk et de gestion de tickets destiné aux équipes de
-support client et de service informatique. Il regroupe les canaux e-mail, chat, réseaux sociaux et
-téléphone dans une boîte de réception partagée, avec gestion des tickets, SLA, base de connaissances
-et reporting. Il s'exécute comme une application web auto-hébergée s'appuyant sur PostgreSQL et
-Elasticsearch.
+Zammad est un système open source de centre d'assistance et de billetterie destiné aux équipes de
+soutien à la clientèle et de services informatiques. Il regroupe les canaux de courriel, de
+clavardage, de réseaux sociaux et de téléphone dans une boîte de réception partagée avec
+billetterie, SLA, base de connaissances et rapports. Il fonctionne comme une application web
+auto-hébergée reposant sur PostgreSQL et Elasticsearch.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Zammad préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** neuve depuis la marketplace et suivez les étapes ci-dessous pour installer Zammad vous-même.
+| Composant     | Version       |
+| ------------- | ------------- |
+| Zammad        | 7.1.1         |
+| PostgreSQL    | 17-alpine     |
+| Redis         | 7.2-alpine    |
+| Elasticsearch | 9.4.3         |
+| Docker        | Latest stable |
+| Ubuntu        | 24.04 LTS     |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 2       | 4          |
-| RAM       | 4 Go    | 8 Go       |
-| Stockage  | 40 Go   | 80 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH:
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour:
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration génère le mot de passe de la base de données et
+lance les conteneurs Zammad, PostgreSQL, Redis et Elasticsearch. Cette opération peut prendre de 5 à
+10 minutes. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u zammad-first-boot.service -f
 ```
 
-## Installer Zammad
-
-Zammad recommande un hôte dédié disposant d'au moins **4 Go de RAM** et dépend d'**Elasticsearch**
-pour la recherche, le reporting et l'indexation des pièces jointes. Installez d'abord Elasticsearch,
-puis Zammad depuis le dépôt apt officiel packager.io.
-
-Installez Elasticsearch (8.x ou 9.x):
+Le message de connexion (MOTD) confirme que Zammad est prêt. Vous pouvez également vérifier
+directement la pile :
 
 ```bash
-curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch \
-  | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/9.x/apt stable main" \
-  | sudo tee /etc/apt/sources.list.d/elastic-9.x.list
-sudo apt update
-sudo apt install -y elasticsearch
-sudo systemctl enable --now elasticsearch
+cd /opt/zammad && docker compose ps
 ```
 
-Ajoutez le dépôt officiel Zammad et installez Zammad depuis la liste Ubuntu 24.04:
+### 3. Accéder à l'interface Zammad
+
+Ouvrez un navigateur et accédez à :
+
+```text
+http://<your-vm-ip>:8080
+```
+
+### 4. Créer le compte administrateur
+
+Terminez l'assistant de premier démarrage pour créer votre adresse courriel et votre mot de passe
+d'administrateur. L'image ne crée pas d'identifiants d'administrateur partagés par défaut.
+
+## Gérer Zammad
+
+Zammad fonctionne comme une pile Docker Compose dans `/opt/zammad`.
 
 ```bash
-sudo curl -fsSL "https://dl.packager.io/srv/zammad/zammad/key" \
-  | gpg --dearmor | sudo tee /etc/apt/keyrings/pkgr-zammad.gpg > /dev/null
-sudo curl -fsSL "https://dl.packager.io/srv/zammad/zammad/stable/installer/ubuntu/24.04.list" \
-  -o /etc/apt/sources.list.d/zammad.list
-sudo apt update
-sudo apt install -y zammad
+# Check status
+cd /opt/zammad && docker compose ps
+
+# Restart
+cd /opt/zammad && docker compose restart
+
+# View logs
+cd /opt/zammad && docker compose logs -f
 ```
 
-Le paquet installe Zammad, sa base de données PostgreSQL, un site nginx et tous les services, puis
-les démarre automatiquement.
+| Chemin                            | Fonction                                        |
+| --------------------------------- | ----------------------------------------------- |
+| `/opt/zammad/docker-compose.yml`  | Configuration Docker Compose                    |
+| `/opt/zammad/.env`                | Mot de passe interne de la base et nom d'hôte   |
+| `/opt/zammad/data/postgresql/`    | Données PostgreSQL                              |
+| `/opt/zammad/data/elasticsearch/` | Données Elasticsearch                           |
+| `/opt/zammad/data/redis/`         | Données Redis                                   |
+| `/opt/zammad/data/zammad/`        | Pièces jointes et stockage persistant Zammad    |
+| `/root/.credentials/zammad.txt`   | Identifiants de la base et informations d'accès |
 
-## Configurer Zammad
+## Sécurité
 
-1. Pointez Zammad vers Elasticsearch et construisez l'index de recherche:
+Zammad utilise le port 8080. UFW est activé et autorise par défaut SSH (port 22) ainsi que le
+port 8080. PostgreSQL, Redis et Elasticsearch restent sur le réseau Docker interne et ne sont pas
+publiés sur l'interface réseau de la VM.
 
-   ```bash
-   sudo zammad run rails r "Setting.set('es_url', 'http://localhost:9200')"
-   sudo zammad run rake zammad:searchindex:rebuild
-   ```
-
-2. Ouvrez `http://<your-vm-ip>/` dans votre navigateur et complétez l'assistant de configuration
-   web. Le premier compte que vous créez devient l'administrateur système.
-3. Le paquet fournit un vhost nginx sur le port 80. Pour la production, modifiez
-   `/etc/nginx/sites-enabled/zammad.conf` afin d'ajouter votre domaine et un certificat TLS (Let's
-   Encrypt via certbot est pris en charge) pour que l'interface soit servie en HTTPS sur le
-   port 443.
-4. Configurez votre canal e-mail sous **Admin → Channels** pour commencer à recevoir et envoyer des
-   tickets.
-
-## Ouvrir le pare-feu
-
-Par défaut, l'instance n'autorise que le SSH (port 22) depuis l'extérieur. Ouvrez les ports dont
-Zammad a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail:
+**Pour limiter Zammad à une adresse IP précise :**
 
 ```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
 ```
 
-Gardez Elasticsearch (port 9200) lié à localhost et ne l'exposez pas vers l'extérieur.
+**Pour accéder à l'interface sans laisser le port 8080 ouvert, utilisez un tunnel SSH :**
+
+```bash
+# Run this on your local machine
+ssh -L 8080:localhost:8080 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
+```
+
+**Pour une utilisation en production**, placez Zammad derrière un proxy inverse afin de le servir en
+HTTPS avec un certificat TLS de confiance.
+
+:::caution
+
+Terminez rapidement l'assistant de configuration et limitez le centre d'assistance aux utilisateurs
+et aux réseaux de confiance. Le premier compte créé par l'assistant devient l'administrateur.
+
+:::
 
 ## Étapes suivantes
 
-- [Documentation Zammad](https://docs.zammad.org/)
+- [Documentation de Zammad](https://docs.zammad.org/)
 - [Guide d'installation de Zammad](https://docs.zammad.org/en/latest/install/package.html)

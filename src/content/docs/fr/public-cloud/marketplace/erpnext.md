@@ -2,122 +2,140 @@
 title: ERPNext
 ---
 
-ERPNext est une suite ERP libre et open source construite sur le framework Frappe. Elle couvre la
-comptabilité, l'inventaire, la fabrication, le CRM, les RH, les projets et bien plus dans une seule
-application web. La façon la plus simple de l'exécuter est avec les images officielles
-`frappe_docker` via Docker Compose.
+ERPNext est une suite ERP libre et open source bâtie sur le framework Frappe. Elle couvre la
+comptabilité, les stocks, la fabrication, le CRM, les ressources humaines, les projets et plus
+encore dans une seule application web. Le moyen le plus simple de l'exécuter consiste à utiliser les
+images officielles `frappe_docker` avec Docker Compose.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image ERPNext préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer ERPNext vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| ERPNext   | 16.28.0   |
+| MariaDB   | 11.8      |
+| Redis     | 6.2       |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Variables d'environnement
 
-## Prérequis
+Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
+qu'une valeur sécurisée soit générée.
 
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 2       | 4          |
-| RAM       | 4 Go    | 8 Go       |
-| Stockage  | 40 Go   | 80 Go      |
+| Variable         | Description                         |
+| ---------------- | ----------------------------------- |
+| `SITE_NAME`      | Nom du site ERPNext                 |
+| `ADMIN_PASSWORD` | Mot de passe administrateur ERPNext |
 
-## Déployer l'instance de base
+## Démarrage
 
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration génère des mots de passe uniques pour ERPNext et
+MariaDB, démarre la pile Docker Compose et crée le site initial. Cette opération peut prendre
+plusieurs minutes. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u erpnext-first-boot.service -f
 ```
 
-## Installer ERPNext
+Le message de connexion (MOTD) confirme qu'ERPNext est prêt.
 
-Installez Docker et le plugin Compose :
+### 3. Vérifier qu'ERPNext fonctionne
 
 ```bash
-sudo apt install -y ca-certificates curl git
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo usermod -aG docker ubuntu
+cd /opt/erpnext
+docker compose ps
+curl -fsS http://127.0.0.1:8080/login > /dev/null
 ```
 
-Déconnectez-vous puis reconnectez-vous (ou exécutez `newgrp docker`) pour que le changement de
-groupe prenne effet.
+### 4. Accéder à l'interface ERPNext
 
-Clonez `frappe_docker` et démarrez la pile :
+Ouvrez un navigateur et accédez à :
+
+```text
+http://<your-vm-ip>:8080
+```
+
+Récupérez les identifiants générés :
 
 ```bash
-git clone https://github.com/frappe/frappe_docker
-cd frappe_docker
-docker compose -f pwd.yml up -d
+sudo cat /etc/erpnext/credentials.txt
 ```
 
-La pile `pwd.yml` télécharge les images ERPNext et exécute une tâche `create-site` qui construit le
-site par défaut. Cela prend quelques minutes. Suivez la progression avec :
+| Champ             | Valeur                              |
+| ----------------- | ----------------------------------- |
+| Nom d'utilisateur | `Administrator`                     |
+| Mot de passe      | Dans `/etc/erpnext/credentials.txt` |
+
+Terminez l'assistant de configuration après vous être connecté.
+
+## Gérer ERPNext
 
 ```bash
-docker compose -f pwd.yml logs -f create-site
+# Check container status
+cd /opt/erpnext && docker compose ps
+
+# Restart
+cd /opt/erpnext && docker compose restart
+
+# View logs
+cd /opt/erpnext && docker compose logs -f
 ```
 
-:::caution[Attention]
+| Chemin                            | Fonction                                   |
+| --------------------------------- | ------------------------------------------ |
+| `/opt/erpnext/docker-compose.yml` | Configuration Docker Compose               |
+| `/opt/erpnext/.env`               | Version, ports et mots de passe de la pile |
+| `/etc/erpnext/credentials.txt`    | Identifiants de connexion générés          |
 
-`pwd.yml` est le démarrage rapide officiel pour l'évaluation. Pour un déploiement en production avec
-votre propre base de données, des applications personnalisées et un proxy inverse, suivez la
-[configuration de production](https://github.com/frappe/frappe_docker/blob/main/docs/setup_production.md)
-en utilisant `compose.yaml` et les fichiers de surcharge. L'interface en ligne de commande `bench`
-est l'alternative sans Docker. Voir le
-[guide d'installation de bench](https://docs.frappe.io/framework/user/en/installation).
+Les données de la base, du site, des journaux et de Redis persistent dans les volumes Docker
+`db-data`, `sites`, `logs` et `redis-queue-data`.
+
+## Sécurité
+
+Le port 8080 est accessible sur l'interface réseau de la VM. UFW est activé et autorise par défaut
+SSH (port 22) et ERPNext (port 8080).
+
+**Pour limiter l'interface à une adresse IP précise :**
+
+```bash
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
+```
+
+**Pour accéder à ERPNext sans exposer le port 8080, utilisez un tunnel SSH :**
+
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
+
+```bash
+sudo ufw delete allow 8080/tcp
+```
+
+```bash
+# Run this on your local machine
+ssh -L 8080:localhost:8080 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:8080
+```
+
+**Pour une utilisation en production**, placez ERPNext derrière un proxy inverse afin de le servir
+sur le port 443 avec un certificat TLS, puis limitez l'accès direct au port 8080.
+
+:::caution
+
+Le fichier d'identifiants contient les mots de passe de l'administrateur ERPNext et du compte racine
+MariaDB. Réservez-le aux administrateurs.
 
 :::
 
-## Configurer ERPNext
-
-Une fois la tâche `create-site` terminée, ouvrez `http://<your-vm-ip>:8080` et connectez-vous :
-
-- Nom d'utilisateur : `Administrator`
-- Mot de passe : `admin`
-
-Changez immédiatement le mot de passe de l'administrateur, puis complétez l'assistant de
-configuration (entreprise, devise, exercice fiscal). En production, placez ERPNext derrière un proxy
-inverse (Traefik ou Nginx) avec un certificat TLS et un vrai nom de domaine plutôt que de servir le
-port 8080 directement.
-
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que le SSH (port 22) depuis l'extérieur. Ouvrez le ou les ports
-dont ERPNext a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail :
-
-```bash
-sudo ufw allow 8080/tcp
-```
-
-Si vous placez ERPNext derrière un proxy inverse en HTTPS, ouvrez `80` et `443` à la place et gardez
-`8080` interne.
-
 ## Étapes suivantes
 
-- [Documentation ERPNext](https://docs.frappe.io/erpnext)
+- [Documentation d'ERPNext](https://docs.frappe.io/erpnext)
 - [Guide d'installation de frappe_docker](https://github.com/frappe/frappe_docker/blob/main/docs/getting-started.md)

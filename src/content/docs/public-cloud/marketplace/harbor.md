@@ -6,118 +6,129 @@ Harbor is an open-source container registry that stores, signs, and scans contai
 artifacts. It adds role-based access control, vulnerability scanning, and image replication on top
 of the standard registry API. The web UI runs on ports 80 and 443.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Harbor image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Harbor yourself.
+| Component | Version   |
+| --------- | --------- |
+| Harbor    | 2.15.0    |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Environment variables
 
-## Requirements
+Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
+value generated.
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 2       | 4           |
-| RAM      | 4 GB    | 8 GB        |
-| Storage  | 40 GB   | 100 GB      |
+| Variable                | Description                |
+| ----------------------- | -------------------------- |
+| `HARBOR_HOSTNAME`       | Public hostname for Harbor |
+| `HARBOR_ADMIN_PASSWORD` | Harbor admin password      |
 
-## Deploy the base instance
+## Getting started
 
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+Harbor generates unique credentials, prepares its Docker Compose stack, and starts automatically.
+This can take several minutes. Track progress with:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u harbor-first-boot.service -f
 ```
 
-## Install Harbor
-
-Harbor runs as a set of containers orchestrated by Docker Compose, so install Docker Engine (which
-includes the Compose plugin) first using the official convenience script:
+Then verify the stack:
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
+cd /opt/harbor/harbor && docker compose ps
 ```
 
-Confirm Docker and Compose are available:
+### 3. Access the Harbor UI
+
+Open a browser and navigate to:
+
+```text
+http://<your-vm-ip>
+```
+
+Read the generated login details:
 
 ```bash
-docker version
-docker compose version
+sudo cat /root/.credentials/harbor.txt
 ```
 
-Download the latest Harbor online installer from the official releases page (check
-[github.com/goharbor/harbor/releases](https://github.com/goharbor/harbor/releases) for the current
-version and update the URL accordingly):
+| Field    | Value                                |
+| -------- | ------------------------------------ |
+| Username | `admin`                              |
+| Password | From `/root/.credentials/harbor.txt` |
+
+## Managing Harbor
+
+Harbor runs as a Docker Compose stack in `/opt/harbor/harbor`.
 
 ```bash
-cd /opt
-sudo curl -L -O https://github.com/goharbor/harbor/releases/download/v2.14.0/harbor-online-installer-v2.14.0.tgz
-sudo tar -xzf harbor-online-installer-v2.14.0.tgz
-cd harbor
+# Check status
+cd /opt/harbor/harbor && docker compose ps
+
+# Restart
+cd /opt/harbor/harbor && docker compose restart
+
+# View logs
+cd /opt/harbor/harbor && docker compose logs -f
 ```
 
-Copy the configuration template:
+| Path                            | Purpose                              |
+| ------------------------------- | ------------------------------------ |
+| `/opt/harbor/harbor/harbor.yml` | Main Harbor configuration            |
+| `/data/harbor/`                 | Registry and application data        |
+| `/root/.credentials/harbor.txt` | Generated login and database details |
+
+If you attach an extra blank data disk before first boot, the image formats and mounts it at
+`/data`. Without an extra disk, `/data/harbor` uses the root filesystem.
+
+## Security
+
+Harbor listens on port 80 by default. UFW is enabled and allows HTTP (port 80), HTTPS (port 443),
+and SSH (port 22). Port 443 is reserved for Harbor HTTPS and has no TLS service until you enable it.
+
+**To restrict Harbor to a specific IP:**
 
 ```bash
-sudo cp harbor.yml.tmpl harbor.yml
+sudo ufw delete allow 80/tcp
+sudo ufw delete allow 443/tcp
+sudo ufw allow from <trusted-ip> to any port 80
+sudo ufw allow from <trusted-ip> to any port 443
 ```
 
-## Configure Harbor
+**To access the UI without leaving port 80 open, use an SSH tunnel:**
 
-Edit `harbor.yml` before running the installer:
+First close the public port on the VM, since it is open by default:
 
 ```bash
-sudo nano harbor.yml
+sudo ufw delete allow 80/tcp
+sudo ufw delete allow 443/tcp
 ```
-
-Set at least these values:
-
-- `hostname`: your VM's public IP address or DNS name (clients use this to reach the registry).
-- `harbor_admin_password`: change it from the default `Harbor12345`.
-- TLS: for a quick start, comment out the entire `https:` block to serve over HTTP on port 80. For
-  production, keep `https:` enabled and point `certificate` and `private_key` at a valid TLS
-  certificate. Container clients require HTTPS unless the registry is explicitly trusted as
-  insecure.
-
-Run the installer:
 
 ```bash
-sudo ./install.sh
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:8080
 ```
 
-The installer pulls the Harbor images and starts the stack with Docker Compose. When it finishes,
-open `http://<your-vm-ip>` (or `https://` if TLS is enabled) in a browser and sign in:
+**For production use**, configure Harbor with a DNS name and trusted TLS certificate, or place it
+behind a reverse proxy that terminates TLS before clients push images or artifacts.
 
-- Username: `admin`
-- Password: the `harbor_admin_password` you set in `harbor.yml`
+:::caution
 
-Manage the running stack with Docker Compose from the `/opt/harbor` directory:
+Treat `/root/.credentials/harbor.txt` as sensitive. Restrict registry access to approved users and
+networks, and use TLS before sending registry credentials over the network.
 
-```bash
-sudo docker compose ps
-sudo docker compose down
-sudo docker compose up -d
-```
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Harbor needs and add
-them to the instance's network/security rules in the portal:
-
-```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-```
+:::
 
 ## Next steps
 

@@ -2,124 +2,113 @@
 title: Beszel
 ---
 
-Beszel est une plateforme de surveillance de serveurs légère, avec données historiques, statistiques
-Docker et alertes configurables. Elle comporte deux parties : un **hub** qui sert le tableau de bord
-web sur le port 8090, et un **agent** qui s'exécute sur chaque machine surveillée et rapporte les
-métriques système au hub. Ce guide installe le hub sur cette VM et y ajoute un agent pour surveiller
-la même machine.
+Beszel est une plateforme légère de surveillance de serveurs avec historique des données,
+statistiques Docker et alertes configurables. Elle comporte deux parties, un **hub** qui fournit le
+tableau de bord web sur le port 8090 et un **agent** qui s'exécute sur chaque machine surveillée et
+transmet les métriques système au hub. Ce guide installe le hub sur cette VM et ajoute un agent pour
+surveiller la même machine.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Beszel préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer Beszel vous-même.
+| Composant    | Version   |
+| ------------ | --------- |
+| Beszel Hub   | 0.18.7    |
+| Beszel Agent | 0.18.7    |
+| Ubuntu       | 24.04 LTS |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 512 Mo  | 1 Go       |
-| Stockage  | 10 Go   | 20 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration lance le hub Beszel. Cette opération prend moins
+d'une minute. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u beszel-first-boot.service -f
 ```
 
-## Installer Beszel
+Le message de connexion (MOTD) confirme que Beszel est prêt.
 
-Le hub s'exécute comme un conteneur Docker officiel. Installez d'abord Docker à l'aide du script
-d'installation officiel :
+### 3. Vérifier que Beszel fonctionne
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh
+cd /opt/beszel
+docker compose ps
+curl -fsS http://127.0.0.1:8090/ > /dev/null
 ```
 
-Ajoutez l'utilisateur `ubuntu` au groupe `docker`, puis réappliquez votre appartenance au groupe :
+### 4. Créer le premier administrateur
+
+Beszel est lié à localhost afin de protéger son assistant non authentifié de création du premier
+administrateur. Depuis votre machine locale, démarrez un tunnel SSH :
 
 ```bash
-sudo usermod -aG docker ubuntu
-newgrp docker
+ssh -L 8090:127.0.0.1:8090 ubuntu@<your-vm-ip>
 ```
 
-Démarrez le hub Beszel. Il lie le port 8090 et conserve ses données dans un volume nommé :
+Ouvrez ensuite `http://127.0.0.1:8090` et créez le premier compte administrateur. L'image ne crée
+pas de mot de passe administrateur partagé par défaut.
+
+### 5. Ajouter l'agent local
+
+L'image de l'agent est incluse, mais l'agent ne démarre pas par défaut. Dans l'interface Beszel,
+ajoutez cette VM comme système et copiez le jeton et la clé publique générés. Ajoutez ces valeurs à
+`/opt/beszel/docker-compose.yml`, puis démarrez le profil de l'agent.
 
 ```bash
-docker run -d \
-  --restart=unless-stopped \
-  -p 8090:8090 \
-  -v beszel_data:/beszel_data \
-  --name beszel \
-  henrygd/beszel:latest
+cd /opt/beszel
+docker compose --profile agent up -d beszel-agent
 ```
 
-Vérifiez que le conteneur est en cours d'exécution :
+## Gérer Beszel
 
 ```bash
-docker ps
+# Check container status
+cd /opt/beszel && docker compose ps
+
+# Restart
+cd /opt/beszel && docker compose restart
+
+# View logs
+cd /opt/beszel && docker compose logs -f
 ```
 
-## Configurer Beszel
+| Chemin                           | Fonction                     |
+| -------------------------------- | ---------------------------- |
+| `/opt/beszel/docker-compose.yml` | Configuration Docker Compose |
+| `/var/lib/beszel/`               | Données du hub               |
+| `/var/lib/beszel-agent/`         | Données de l'agent local     |
 
-1. Ouvrez `http://<your-vm-ip>:8090` dans un navigateur et créez votre compte administrateur sur
-   l'écran de premier démarrage.
-2. Cliquez sur **Add System**. Saisissez un nom et l'hôte sur lequel l'agent s'exécutera (utilisez
-   `localhost` pour surveiller cette même VM). Beszel génère une **clé publique** et un **jeton**.
-   Conservez-les, l'agent en a besoin.
+## Sécurité
 
-### Ajouter l'agent
+Le port 8090 est lié à localhost. UFW est activé et n'autorise par défaut que SSH (port 22).
+Utilisez le tunnel SSH ci-dessus pour créer le premier administrateur en toute sécurité.
 
-Pour surveiller cette VM, installez l'agent Beszel sur celle-ci. L'installateur officiel enregistre
-l'agent comme service systemd et écoute sur le port 45876 :
+Pour rendre le hub accessible depuis un réseau de confiance après la configuration, remplacez sa
+liaison de port Docker Compose `127.0.0.1:8090:8090` par `8090:8090`, puis autorisez une adresse IP
+de confiance :
 
 ```bash
-curl -sL https://get.beszel.dev -o /tmp/install-agent.sh && chmod +x /tmp/install-agent.sh && sudo /tmp/install-agent.sh
+sudo ufw allow from <trusted-ip> to any port 8090
 ```
 
-Lorsque vous y êtes invité, collez la **clé publique** et le **jeton** affichés par le hub lors de
-l'ajout du système. L'agent se connecte alors au hub et le tableau de bord commence à afficher les
-métriques en moins d'une minute.
+**Pour une utilisation en production**, gardez Beszel lié à localhost et placez-le derrière un proxy
+inverse afin de le servir sur le port 443 avec un certificat TLS.
 
-Pour surveiller des serveurs supplémentaires, exécutez le même installateur d'agent sur chacun et
-ajoutez-le comme nouveau système dans le hub, en ouvrant le port 45876 entre le hub et ce serveur.
+:::caution
 
-En production, placez le hub derrière un reverse proxy tel que Nginx ou Caddy pour le servir sur le
-port 443 avec un certificat TLS, et définissez `APP_URL` sur votre URL publique.
+L'assistant de création du premier administrateur n'est pas authentifié tant que vous n'avez pas
+créé le premier compte. Terminez la configuration par le tunnel SSH avant d'exposer le hub.
 
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que le SSH (port 22) en externe. Ouvrez le port du hub (et le port
-de l'agent uniquement si des serveurs distants doivent joindre cet agent) et ajoutez-les aux règles
-réseau/sécurité de l'instance dans le portail :
-
-```bash
-sudo ufw allow 8090/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation Beszel](https://beszel.dev/guide/getting-started)
+- [Documentation de Beszel](https://beszel.dev/guide/getting-started)
 - [Guide d'installation du hub Beszel](https://beszel.dev/guide/hub-installation)

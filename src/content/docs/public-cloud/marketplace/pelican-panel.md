@@ -7,115 +7,134 @@ Pterodactyl. It provides a fast web interface for deploying and managing game se
 per-server isolation handled by the Wings daemon. Pelican uses PHP and Laravel and ships a guided
 web installer.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Pelican Panel image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance
-from the marketplace and follow the steps below to install Pelican Panel yourself.
+| Component     | Version      |
+| ------------- | ------------ |
+| Pelican Panel | 1.0.0_beta35 |
+| Pelican Wings | 1.0.0_beta26 |
+| PHP           | 8.5          |
+| Ubuntu        | 24.04 LTS    |
 
-:::
+Wings and Docker are installed, but Wings does not start until you create a node in the Panel and
+save its generated configuration on the VM.
 
-## Requirements
+## Getting started
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
-| RAM      | 2 GB    | 4 GB        |
-| Storage  | 20 GB   | 40 GB       |
-
-## Deploy the base instance
-
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab. It opens on
-   **Featured** by default, so select **Marketplace** next to it. Pick your region (YOW-1 or YUL-1),
-   search for **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from
-   **Instances → Create**. Either way you get a clean Ubuntu 24.04 VM.
-
-   ![The Marketplace tab in the ZSoftly Cloud portal, showing the region selector, category list, search box, and Deploy buttons](../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Searching the Marketplace for an app, with the search box filtering the catalog down to a matching Deploy card](../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choose a plan that meets the requirements above.
-
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+Pelican configures MariaDB, writes its environment file, generates the Laravel application key,
+starts Nginx and PHP-FPM, and prepares Wings. Track progress with:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u pelican-first-boot.service -f
 ```
 
-## Install Pelican Panel
-
-Install PHP 8.4 and the required extensions, a web server, and Composer:
+Then verify the Panel services:
 
 ```bash
-sudo apt install -y software-properties-common ca-certificates lsb-release apt-transport-https curl tar unzip git
-sudo add-apt-repository -y ppa:ondrej/php
-sudo apt update
-sudo apt install -y php8.4 php8.4-{gd,mysql,mbstring,bcmath,xml,curl,zip,intl,sqlite3,fpm} \
-  mariadb-server nginx
-curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+systemctl status nginx php8.5-fpm mariadb
 ```
 
-Download the Panel and install PHP dependencies:
+### 3. Access the installer
+
+The installer is available through an SSH tunnel because HTTP is not open publicly by default. From
+your local machine, run:
 
 ```bash
-sudo mkdir -p /var/www/pelican
-cd /var/www/pelican
-sudo curl -L https://github.com/pelican-dev/panel/releases/latest/download/panel.tar.gz | sudo tar -xzv
-sudo COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
+ssh -L 8080:127.0.0.1:80 ubuntu@<your-vm-ip>
 ```
 
-:::tip
+Then open:
 
-Pelican also ships an official `compose.yml` for a Docker-based install with an integrated web
-server and automatic SSL. If you prefer containers, see the
-[Docker guide](https://pelican.dev/docs/panel/advanced/docker) instead of the steps above.
+```text
+http://127.0.0.1:8080/installer
+```
+
+Complete the installer and create your first administrator account. The image does not create shared
+default login credentials.
+
+### 4. Enable scheduled tasks and the queue worker
+
+After the installer completes, enable Pelican's scheduler and queue worker:
+
+```bash
+CRON="* * * * * php /var/www/pelican/artisan schedule:run >> /dev/null 2>&1"
+sudo crontab -u www-data -l 2>/dev/null | grep -qF "$CRON" \
+  || ( sudo crontab -u www-data -l 2>/dev/null; echo "$CRON" ) | sudo crontab -u www-data -
+sudo systemctl enable --now pelican-queue
+```
+
+### 5. Configure Wings
+
+Create a node in the Pelican admin UI and save its generated Wings configuration as:
+
+```text
+/etc/pelican/config.yml
+```
+
+Then start Wings:
+
+```bash
+sudo systemctl start wings
+systemctl status wings
+```
+
+## Managing Pelican Panel
+
+```bash
+# Check Panel services and the queue worker
+systemctl status nginx php8.5-fpm mariadb pelican-queue
+
+# Restart the web services
+sudo systemctl restart nginx php8.5-fpm
+
+# View first-boot logs
+sudo journalctl -u pelican-first-boot.service -f
+
+# View Wings logs after configuring a node
+sudo journalctl -u wings.service -f
+```
+
+| Path                                 | Purpose                                   |
+| ------------------------------------ | ----------------------------------------- |
+| `/var/www/pelican/`                  | Pelican application                       |
+| `/var/www/pelican/.env`              | Panel environment configuration           |
+| `/etc/pelican-panel/credentials.txt` | Generated MariaDB details and Wings notes |
+| `/etc/pelican/config.yml`            | Wings node configuration                  |
+
+## Security
+
+Pelican listens behind Nginx on port 80, but UFW allows SSH (port 22) only by default. Ports 80,
+443, 2022, and 8080 remain closed until you decide how to expose the Panel, Wings, and game-server
+allocations.
+
+Use the SSH tunnel from the getting-started steps to complete the installer. To allow Panel access
+from a trusted IP after setup:
+
+```bash
+sudo ufw allow from <trusted-ip> to any port 80
+```
+
+**For production use**, point DNS at the VM, put the Panel behind a reverse proxy with a trusted TLS
+certificate, and update the application URL in `/var/www/pelican/.env` to the public HTTPS URL. Open
+Wings and game allocation ports only after you configure the node.
+
+:::caution
+
+The web installer creates sensitive administrator state. Complete it through the SSH tunnel before
+opening HTTP or HTTPS access.
 
 :::
-
-## Configure Pelican Panel
-
-Generate the environment file and application key:
-
-```bash
-cd /var/www/pelican
-sudo php artisan p:environment:setup
-```
-
-Set ownership so the web server can write to the app, then add the scheduler cron and queue worker:
-
-```bash
-sudo chown -R www-data:www-data /var/www/pelican
-( sudo crontab -u www-data -l 2>/dev/null; echo "* * * * * php /var/www/pelican/artisan schedule:run >> /dev/null 2>&1" ) | sudo crontab -u www-data -
-```
-
-Configure your web server (Nginx, Caddy, or Apache) with a TLS certificate following the
-[webserver configuration guide](https://pelican.dev/docs/panel/webserver-config), then finish setup
-(including the database, admin user, and queue worker) through the **web installer** at
-`https://<your-domain>/installer`.
-
-To run game servers you also need the **Wings** daemon, which requires Docker. Install it on this VM
-(or a separate node) per the [Wings guide](https://pelican.dev/docs/wings/install), then link the
-node in the Panel.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the port(s) Pelican Panel needs
-and add them to the instance's network/security rules in the portal:
-
-```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-```
-
-Wings additionally listens on port 8080 (API) and 2022 (SFTP). Open those if Wings runs on this VM,
-along with any game-server port ranges you allocate.
 
 ## Next steps
 
 - [Pelican documentation](https://pelican.dev/docs/)
 - [Pelican Panel installation guide](https://pelican.dev/docs/panel/getting-started)
+- [Pelican Wings installation](https://pelican.dev/docs/wings/install/)

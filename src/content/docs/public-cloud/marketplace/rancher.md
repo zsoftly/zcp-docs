@@ -7,102 +7,137 @@ you a single web console to provision, import, monitor, and operate clusters acr
 centres, and the edge, with centralised authentication, RBAC, and app catalogues. This guide runs
 the official single-node Rancher server in Docker.
 
-:::note[Coming soon]
+## Software included
 
-A pre-built Rancher image is on its way. For now, deploy a fresh **Ubuntu 24.04 LTS** instance from
-the marketplace and follow the steps below to install Rancher yourself.
+| Component | Version       |
+| --------- | ------------- |
+| Rancher   | 2.14.3        |
+| Docker    | Latest stable |
+| Ubuntu    | 24.04 LTS     |
 
-:::
+## Environment variables
 
-## Requirements
+Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
+value generated.
 
-| Resource | Minimum | Recommended |
-| -------- | ------- | ----------- |
-| vCPU     | 2       | 4           |
-| RAM      | 4 GB    | 8 GB        |
-| Storage  | 40 GB   | 80 GB       |
+| Variable             | Description                |
+| -------------------- | -------------------------- |
+| `RANCHER_HOSTNAME`   | Public Rancher hostname    |
+| `BOOTSTRAP_PASSWORD` | Rancher bootstrap password |
 
-## Deploy the base instance
+## Getting started
 
-1. In the ZSoftly Cloud portal, open **Apps** and switch to the **Marketplace** tab, search for
-   **Ubuntu 24.04 LTS**, and click **Deploy**. You can also create the instance from **Instances →
-   Create**. Either way you get a clean Ubuntu 24.04 VM.
-2. Choose a plan that meets the requirements above and pick your region (YOW-1 or YUL-1).
-3. When the instance is **Running**, connect over SSH:
+### 1. Connect to your VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Update the system:
+### 2. Wait for first-boot configuration
+
+On the first boot, a setup script prepares persistent storage, starts Rancher with Docker Compose,
+imports the cached K3s system images, and waits for the API and dashboard. This can take several
+minutes. Track progress:
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u rancher-first-boot.service -f
 ```
 
-## Install Rancher
-
-Rancher is distributed as an official Docker image, so install Docker Engine first.
-
-Set up Docker's official APT repository for Ubuntu 24.04 LTS (`noble`):
+The login message (MOTD) confirms when Rancher is ready. You can also verify the container directly:
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null <<EOF
-Types: deb
-URIs: https://download.docker.com/linux/ubuntu
-Suites: noble
-Components: stable
-Architectures: $(dpkg --print-architecture)
-Signed-By: /etc/apt/keyrings/docker.asc
-EOF
+cd /opt/rancher && docker compose ps
 ```
 
-Install Docker Engine:
+### 3. Retrieve the bootstrap credentials
+
+The generated bootstrap password and setup details are stored in a root-only file:
 
 ```bash
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo cat /etc/rancher/credentials.txt
 ```
 
-Run the Rancher server, publishing the web UI on ports 80 and 443 and persisting data to the host:
+| Field    | Value                                                              |
+| -------- | ------------------------------------------------------------------ |
+| Username | `admin`                                                            |
+| Password | Value of `BOOTSTRAP_PASSWORD`, or generated securely on first boot |
+
+### 4. Access the Rancher UI
+
+Open a browser and navigate to your Rancher URL. If you set `RANCHER_HOSTNAME` at deploy time, use
+it and make sure a DNS record for that hostname resolves to the VM first:
+
+```text
+https://<RANCHER_HOSTNAME>
+```
+
+If you left `RANCHER_HOSTNAME` unset, reach the VM directly by IP:
+
+```text
+https://<your-vm-ip>
+```
+
+Rancher starts with a self-signed certificate, so your browser displays a warning. Accept the
+exception, sign in with the bootstrap password, then set a permanent administrator password.
+
+## Managing Rancher
+
+Rancher runs as a Docker Compose stack in `/opt/rancher`.
 
 ```bash
-sudo docker run -d --name rancher --restart=unless-stopped \
-  -p 80:80 -p 443:443 \
-  -v /opt/rancher:/var/lib/rancher \
-  --privileged \
-  rancher/rancher:latest
+# Check status
+cd /opt/rancher && docker compose ps
+
+# Restart
+cd /opt/rancher && docker compose restart
+
+# View logs
+cd /opt/rancher && docker compose logs -f
 ```
 
-## Configure Rancher
+| Path                              | Purpose                                   |
+| --------------------------------- | ----------------------------------------- |
+| `/opt/rancher/docker-compose.yml` | Docker Compose configuration              |
+| `/opt/rancher/.env`               | Bootstrap password and server URL         |
+| `/data/rancher/`                  | Persistent Rancher data                   |
+| `/etc/rancher/credentials.txt`    | Bootstrap credentials and storage details |
 
-Rancher generates a one-time bootstrap password on first start. Wait a minute for the container to
-initialise, then read it from the logs:
+If the VM has an extra blank data disk at first boot, the image formats it as ext4, mounts it at
+`/data`, and stores Rancher data there. Otherwise, `/data/rancher` remains on the root filesystem.
+
+## Security
+
+Rancher uses port 80 for HTTP and port 443 for HTTPS. UFW is enabled and allows SSH (port 22) plus
+ports 80 and 443 by default.
+
+**To restrict web access to a specific IP:**
 
 ```bash
-sudo docker logs rancher 2>&1 | grep "Bootstrap Password:"
+sudo ufw delete allow 80/tcp
+sudo ufw delete allow 443/tcp
+sudo ufw allow from <trusted-ip> to any port 443
 ```
 
-Open `https://<your-vm-ip>` in a browser. Rancher serves a self-signed certificate by default, so
-your browser will warn about it on first visit. Sign in with the bootstrap password, then set a
-permanent admin password and confirm the **Server URL** when prompted.
-
-For a trusted certificate, point a DNS record at the VM and put Rancher behind a reverse proxy that
-terminates TLS, or supply your own certificate following the Rancher documentation.
-
-## Open the firewall
-
-The instance allows only SSH (port 22) externally by default. Open the ports Rancher serves and add
-them to the instance's network/security rules in the portal:
+**To access Rancher through an SSH tunnel:**
 
 ```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+# Run this on your local machine
+ssh -L 8443:localhost:443 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+https://localhost:8443
 ```
+
+**For production use**, place Rancher behind a reverse proxy with a trusted TLS certificate. The
+single-node Docker installation is intended for development and testing. Rancher recommends a
+high-availability Kubernetes installation for production.
+
+:::caution
+
+Change the bootstrap password during your first login. Rancher controls connected Kubernetes
+clusters, so restrict its UI to trusted administrator networks.
+
+:::
 
 ## Next steps
 
