@@ -88,6 +88,12 @@ sudo ufw allow from <trusted-ip> to any port 8080
 
 **Pour accéder à Gatus sans exposer le port 8080, utilisez un tunnel SSH :**
 
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
+
+```bash
+sudo ufw delete allow 8080/tcp
+```
+
 ```bash
 # Run this on your local machine
 ssh -L 8080:localhost:8080 ubuntu@<your-vm-ip>

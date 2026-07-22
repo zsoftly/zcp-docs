@@ -109,6 +109,12 @@ sudo ufw allow from <trusted-ip> to any port 8080
 
 **To access ERPNext without exposing port 8080, use an SSH tunnel:**
 
+First close the public port on the VM, since it is open by default:
+
+```bash
+sudo ufw delete allow 8080/tcp
+```
+
 ```bash
 # Run this on your local machine
 ssh -L 8080:localhost:8080 ubuntu@<your-vm-ip>

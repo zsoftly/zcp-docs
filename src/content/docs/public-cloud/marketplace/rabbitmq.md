@@ -19,10 +19,10 @@ connections.
 Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
 value generated.
 
-| Variable                | Description                    |
-| ----------------------- | ------------------------------ |
-| `RABBITMQ_DEFAULT_USER` | RabbitMQ default username      |
-| `RABBITMQ_DEFAULT_PASS` | RabbitMQ default user password |
+| Variable                | Description                                                                                                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RABBITMQ_DEFAULT_USER` | Administrator username. Cannot be `guest`; on first boot, the image removes the default `guest` user and creates this administrator so a usable configured administrator remains |
+| `RABBITMQ_DEFAULT_PASS` | RabbitMQ default user password                                                                                                                                                   |
 
 ## Getting started
 

@@ -104,6 +104,13 @@ sudo ufw allow from <trusted-ip> to any port 7687
 
 **To access Neo4j without leaving those ports open, use an SSH tunnel:**
 
+First close the public port on the VM, since it is open by default:
+
+```bash
+sudo ufw delete allow 7474/tcp
+sudo ufw delete allow 7687/tcp
+```
+
 ```bash
 # Run this on your local machine
 ssh -L 7474:localhost:7474 -L 7687:localhost:7687 ubuntu@<your-vm-ip>

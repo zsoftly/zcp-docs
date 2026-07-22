@@ -275,6 +275,12 @@ host_bucket = objects.yul.zcp.zsoftly.ca
 use_https = True
 ```
 
+Ce fichier contient votre clé secrète. Limitez donc ses autorisations :
+
+```bash
+chmod 600 ~/.s3cfg
+```
+
 Définir `host_bucket` sur la même valeur que `host_base`, sans espace réservé pour le compartiment,
 force l'adressage path-style requis par le service. Pour un compartiment à Ottawa, utilisez
 `objects.yow.zcp.zsoftly.ca`.

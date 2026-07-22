@@ -19,10 +19,10 @@ HTTP pour surveiller les files d'attente, les échanges et les connexions.
 Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
 qu'une valeur sécurisée soit générée.
 
-| Variable                | Description                                       |
-| ----------------------- | ------------------------------------------------- |
-| `RABBITMQ_DEFAULT_USER` | Nom d'utilisateur RabbitMQ par défaut             |
-| `RABBITMQ_DEFAULT_PASS` | Mot de passe de l'utilisateur RabbitMQ par défaut |
+| Variable                | Description                                                                                                                                                                                                                        |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RABBITMQ_DEFAULT_USER` | Nom d'utilisateur administrateur. Ne peut pas être `guest` ; au premier démarrage, l'image supprime l'utilisateur `guest` par défaut et crée cet administrateur afin qu'un administrateur configuré et utilisable reste disponible |
+| `RABBITMQ_DEFAULT_PASS` | Mot de passe de l'utilisateur RabbitMQ par défaut                                                                                                                                                                                  |
 
 ## Démarrage
 

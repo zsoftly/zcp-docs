@@ -108,6 +108,13 @@ sudo ufw allow from <trusted-ip> to any port 443
 
 **Pour accéder à l'interface sans laisser le port 80 ouvert, utilisez un tunnel SSH :**
 
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
+
+```bash
+sudo ufw delete allow 80/tcp
+sudo ufw delete allow 443/tcp
+```
+
 ```bash
 # Run this on your local machine
 ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>

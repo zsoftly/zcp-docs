@@ -86,11 +86,12 @@ Uptime Kuma écoute sur le port 3001, mais le conteneur ne le publie que sur `12
 activé et n'autorise par défaut que SSH (port 22). Utilisez le tunnel SSH ci-dessus pour terminer la
 configuration de l'administrateur avant d'exposer l'interface.
 
-Conservez la liaison `127.0.0.1:3001:3001` dans `/opt/uptime-kuma/docker-compose.yml`. Docker publie
-les ports par sa propre chaîne iptables `DOCKER-USER`, qui contourne UFW. Une liaison à `3001:3001`
-expose donc l'interface à tout le monde, quelle que soit la règle UFW. Accédez à l'interface par le
-tunnel SSH ci-dessus ou placez-la derrière un proxy inverse. Si vous devez publier le port,
-limitez-le dans la chaîne `DOCKER-USER` plutôt qu'avec UFW.
+Conservez la liaison `127.0.0.1:3001:3001` dans `/opt/uptime-kuma/docker-compose.yml`. Les ports
+publiés par Docker contournent UFW parce que Docker gère ses propres règles iptables. Une liaison à
+`3001:3001` expose donc l'interface à tout le monde, quelle que soit la règle UFW. Accédez à
+l'interface par le tunnel SSH ci-dessus ou placez-la derrière un proxy inverse. Si vous devez
+publier le port, ajoutez une règle dans la chaîne `DOCKER-USER` ou utilisez nftables pour le
+limiter.
 
 **Pour une utilisation en production**, placez Uptime Kuma derrière un proxy inverse afin de le
 servir en HTTPS avec un certificat TLS de confiance. N'exposez pas publiquement l'assistant de

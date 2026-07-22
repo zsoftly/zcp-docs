@@ -101,6 +101,15 @@ sudo ufw delete allow 80/tcp
 sudo ufw allow from <trusted-ip> to any port 80
 ```
 
+**To restrict the Wings API and SFTP ports to a specific IP:**
+
+```bash
+sudo ufw delete allow 8080/tcp
+sudo ufw allow from <trusted-ip> to any port 8080
+sudo ufw delete allow 2022/tcp
+sudo ufw allow from <trusted-ip> to any port 2022
+```
+
 **To access the Panel without leaving port 80 open, use an SSH tunnel:**
 
 ```bash

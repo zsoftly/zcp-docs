@@ -2,9 +2,11 @@
 title: Gitea
 ---
 
-Gitea est un service Git léger et auto-hébergé, écrit en Go. Il réunit l'hébergement de dépôts, la
-revue de code, le suivi des tickets et un agent CI intégré dans un seul binaire qui s'exécute sans
-peine sur une petite VM. L'interface web fonctionne sur le port 3000 et Git via SSH sur le port 22.
+Gitea est un service Git léger et auto-hébergé, écrit en Go. Son binaire serveur comprend
+l'hébergement de dépôts, la revue de code, le suivi des tickets et Gitea Actions pour le CI/CD côté
+serveur. Le serveur s'exécute sans peine sur une petite VM. L'exécution des flux de travail
+nécessite un `act_runner` (Gitea Runner) distinct, que vous devez installer et enregistrer.
+L'interface web fonctionne sur le port 3000 et Git via SSH sur le port 22.
 
 ## Logiciels inclus
 
@@ -103,6 +105,12 @@ sudo ufw allow from <trusted-ip> to any port 3000
 ```
 
 **Pour accéder à l'interface sans exposer le port 3000, utilisez un tunnel SSH :**
+
+Fermez d'abord le port public sur la VM, puisqu'il est ouvert par défaut :
+
+```bash
+sudo ufw delete allow 3000/tcp
+```
 
 ```bash
 # Run this on your local machine

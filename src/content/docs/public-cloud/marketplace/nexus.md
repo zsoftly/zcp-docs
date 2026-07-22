@@ -102,6 +102,12 @@ sudo ufw allow from <trusted-ip> to any port 8081
 
 **To access Nexus without leaving port 8081 open, use an SSH tunnel:**
 
+First close the public port on the VM, since it is open by default:
+
+```bash
+sudo ufw delete allow 8081/tcp
+```
+
 ```bash
 # Run this on your local machine
 ssh -L 8081:localhost:8081 ubuntu@<your-vm-ip>

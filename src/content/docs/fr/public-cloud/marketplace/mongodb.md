@@ -33,9 +33,10 @@ ssh ubuntu@<your-vm-ip>
 
 ### 2. Attendre la configuration du premier démarrage
 
-Au premier démarrage, un script de configuration s'exécute automatiquement. Il crée un
-superutilisateur `admin` avec un mot de passe généré aléatoirement et active l'authentification.
-Cette opération prend moins de 60 secondes.
+Au premier démarrage, un script de configuration s'exécute automatiquement. Il crée le
+superutilisateur défini par `MONGO_INITDB_ROOT_USERNAME`, dont la valeur par défaut est `admin`,
+avec le mot de passe configuré ou généré, puis active l'authentification. Cette opération prend
+moins de 60 secondes.
 
 Suivez la progression :
 
@@ -53,13 +54,15 @@ sudo cat /etc/mongodb/credentials.txt
 ```
 
 Ce fichier contient le nom d'utilisateur administrateur, le mot de passe et les instructions de
-connexion. Seul l'utilisateur racine peut le lire.
+connexion. Seul l'utilisateur racine peut le lire. La commande suivante lit le nom d'utilisateur
+configuré dans le fichier. `mongosh` demande ensuite le mot de passe afin qu'il n'apparaisse pas
+dans la liste des processus.
 
 ### 4. Se connecter à MongoDB
 
 ```bash
-MONGO_PASS=$(sudo awk '/^Password:/{print $NF}' /etc/mongodb/credentials.txt)
-mongosh -u admin -p "$MONGO_PASS" --authenticationDatabase admin
+MONGO_USER=$(sudo awk '/^Username:/{print $NF}' /etc/mongodb/credentials.txt)
+mongosh -u "$MONGO_USER" --authenticationDatabase admin
 ```
 
 Sortie attendue :
@@ -100,8 +103,8 @@ sudo ufw allow from <trusted-ip> to any port 27017
 # Run this on your local machine
 ssh -L 27017:localhost:27017 ubuntu@<your-vm-ip>
 
-# Then connect locally
-mongosh -u admin -p "<password>" --authenticationDatabase admin
+# Then connect locally using the username from /etc/mongodb/credentials.txt
+mongosh -u <username> --authenticationDatabase admin
 ```
 
 :::caution
