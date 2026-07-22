@@ -49,7 +49,7 @@ The login message (MOTD) confirms when Directus is ready.
 ```bash
 cd /opt/directus
 docker compose ps
-curl http://127.0.0.1:8055/server/ping
+curl -fsS http://127.0.0.1:8055/server/ping
 ```
 
 ### 4. Access the Directus UI

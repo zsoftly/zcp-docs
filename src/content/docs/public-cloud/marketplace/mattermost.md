@@ -51,7 +51,14 @@ cd /opt/mattermost && docker compose ps
 
 ### 3. Access the Mattermost UI
 
-Open a browser and navigate to:
+If you set `DOMAIN` or `MM_SERVICESETTINGS_SITEURL` at deploy time, point a DNS record for that
+hostname at the VM and open it over HTTPS through a reverse proxy that terminates TLS:
+
+```text
+https://<your-domain>
+```
+
+If you left those unset, reach the VM directly by IP:
 
 ```text
 http://<your-vm-ip>

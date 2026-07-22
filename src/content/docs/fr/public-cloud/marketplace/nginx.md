@@ -2,127 +2,101 @@
 title: Nginx
 ---
 
-Nginx est un serveur web, reverse proxy et répartiteur de charge à hautes performances qui propulse
-une grande part des sites les plus fréquentés d'Internet. Il sert du contenu statique efficacement,
-proxifie les requêtes vers des backends applicatifs et termine le TLS avec une faible empreinte
-mémoire.
+Nginx est un serveur web, un proxy inverse et un répartiteur de charge haute performance qui
+alimente une grande partie des sites les plus fréquentés sur Internet. Il sert efficacement le
+contenu statique, relaie les requêtes vers les backends d'applications et termine TLS avec une
+faible empreinte mémoire.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Nginx préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** neuve depuis la marketplace et suivez les étapes ci-dessous pour installer Nginx vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| Nginx     | 1.30.3    |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
-| RAM       | 1 Go    | 2 Go       |
-| Stockage  | 10 Go   | 20 Go      |
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **Nginx** et cliquez sur **Deploy**
-   ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Dans les deux cas, vous
-   obtenez une VM Ubuntu 24.04 propre.
-2. Choisissez un plan qui répond aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH:
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour:
+### 2. Vérifier que Nginx fonctionne
+
+Il n'y a aucune configuration au premier démarrage. Nginx démarre immédiatement après le démarrage
+de la VM.
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+systemctl status nginx
 ```
 
-## Installer Nginx
+### 3. Accéder au site par défaut
 
-Installez la dernière version stable de Nginx depuis le dépôt apt officiel nginx.org. Ajoutez
-d'abord les prérequis et la clé de signature:
+Ouvrez un navigateur et accédez à :
 
-```bash
-sudo apt install -y curl gnupg2 ca-certificates lsb-release ubuntu-keyring
+```text
+http://<your-vm-ip>
 ```
 
-```bash
-curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
-  | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
-```
-
-Ajoutez le dépôt stable pour votre version d'Ubuntu:
-
-```bash
-echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
-https://nginx.org/packages/ubuntu $(lsb_release -cs) nginx" \
-  | sudo tee /etc/apt/sources.list.d/nginx.list
-```
-
-Installez et démarrez Nginx:
-
-```bash
-sudo apt update && sudo apt install -y nginx
-sudo systemctl enable --now nginx
-```
-
-Vérifiez qu'il répond:
+Vous pouvez également vérifier la réponse depuis la VM :
 
 ```bash
 curl -I http://localhost
 ```
 
-## Configurer Nginx
-
-La configuration principale se trouve dans `/etc/nginx/nginx.conf`, et les fichiers de configuration
-de sites vont dans `/etc/nginx/conf.d/`. Créez un reverse proxy simple qui transmet vers un backend
-sur le port 3000:
+## Gérer Nginx
 
 ```bash
-sudo tee /etc/nginx/conf.d/app.conf >/dev/null <<'EOF'
-server {
-    listen 80;
-    server_name example.com;
+# Check service status
+systemctl status nginx
 
-    location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-EOF
+# Validate the configuration
+sudo nginx -t
+
+# Restart
+sudo systemctl restart nginx
+
+# View logs
+sudo journalctl -u nginx -f
 ```
 
-Testez la configuration et rechargez:
+| Chemin                   | Fonction                            |
+| ------------------------ | ----------------------------------- |
+| `/etc/nginx/nginx.conf`  | Configuration principale            |
+| `/etc/nginx/conf.d/`     | Configuration des serveurs et proxy |
+| `/usr/share/nginx/html/` | Racine web par défaut               |
+
+## Sécurité
+
+Les ports 80 et 443 sont ouverts sur l'interface réseau de la VM. UFW est activé et autorise HTTP
+(port 80), HTTPS (port 443) et SSH (port 22). Nginx sert HTTP sur le port 80 par défaut. Le port 443
+n'a aucun écouteur TLS tant que vous n'avez pas configuré un certificat et un bloc serveur HTTPS.
+
+**Pour limiter HTTP et HTTPS à une adresse IP précise :**
 
 ```bash
-sudo nginx -t && sudo systemctl reload nginx
+sudo ufw delete allow 80/tcp
+sudo ufw delete allow 443/tcp
+sudo ufw allow from <trusted-ip> to any port 80
+sudo ufw allow from <trusted-ip> to any port 443
 ```
 
-Pour le HTTPS, installez Certbot et demandez un certificat Let's Encrypt:
+**Pour accéder au site par défaut sans laisser le port 80 ouvert, utilisez un tunnel SSH :**
 
 ```bash
-sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d example.com
+# Run this on your local machine
+ssh -L 8080:localhost:80 ubuntu@<your-vm-ip>
+
+# Then open in a browser
+http://localhost:8080
 ```
 
-## Ouvrir le pare-feu
-
-Par défaut, l'instance n'autorise que le SSH (port 22) depuis l'extérieur. Ouvrez les ports dont
-Nginx a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail:
-
-```bash
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-```
+**Pour une utilisation en production**, configurez Nginx avec un certificat TLS de confiance et
+servez les sites publics sur le port 443. Nginx n'ajoute aucune authentification aux services
+relayés, protégez donc chaque application en amont séparément.
 
 ## Étapes suivantes
 
-- [Documentation Nginx](https://nginx.org/en/docs/)
+- [Documentation de Nginx](https://nginx.org/en/docs/)
 - [Guide d'installation de Nginx](https://nginx.org/en/linux_packages.html)

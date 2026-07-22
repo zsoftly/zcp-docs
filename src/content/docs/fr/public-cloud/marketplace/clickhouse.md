@@ -2,140 +2,133 @@
 title: ClickHouse
 ---
 
-ClickHouse est un système de gestion de base de données libre, orienté colonnes, conçu pour le
+ClickHouse est un système de gestion de base de données open source orienté colonnes, conçu pour le
 traitement analytique en ligne (OLAP). Il ingère et interroge de grands volumes de données avec une
-très faible latence, ce qui en fait un excellent choix pour l'analyse en temps réel, les tableaux de
-bord, l'observabilité et le stockage de journaux. L'interface HTTP s'exécute sur le port 8123 et le
+très faible latence, ce qui convient bien aux analyses en temps réel, aux tableaux de bord, à
+l'observabilité et au stockage de journaux. L'interface HTTP fonctionne sur le port 8123 et le
 protocole natif sur le port 9000.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image ClickHouse préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu
-24.04 LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer ClickHouse
-vous-même.
+| Composant         | Version     |
+| ----------------- | ----------- |
+| ClickHouse Server | 26.6.1.1193 |
+| ClickHouse Client | 26.6.1.1193 |
+| Ubuntu            | 24.04 LTS   |
 
-:::
+## Variables d'environnement
 
-## Prérequis
+Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
+qu'une valeur sécurisée soit générée.
 
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 2       | 4          |
-| RAM       | 2 Go    | 4 Go       |
-| Stockage  | 20 Go   | 80 Go      |
+| Variable              | Description                  |
+| --------------------- | ---------------------------- |
+| `CLICKHOUSE_USER`     | Nom d'utilisateur ClickHouse |
+| `CLICKHOUSE_PASSWORD` | Mot de passe ClickHouse      |
 
-## Déployer l'instance de base
+## Démarrage
 
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **ClickHouse**, puis cliquez sur
-   **Deploy**, ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Les deux
-   vous donnent une VM Ubuntu 24.04 vierge.
-2. Choisissez un forfait qui répond aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration génère le mot de passe, configure l'utilisateur
+intégré `default` et démarre ClickHouse. Cette opération prend une ou deux minutes. Suivez la
+progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+journalctl -u clickhouse-first-boot.service -f
 ```
 
-## Installer ClickHouse
+Le message de connexion (MOTD) confirme que ClickHouse est prêt.
 
-Installez Docker Engine et le plugin Docker Compose depuis le dépôt officiel de Docker :
+### 3. Vérifier que ClickHouse fonctionne
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl status clickhouse-server
 ```
 
-Ajoutez l'utilisateur `ubuntu` au groupe `docker` afin de pouvoir exécuter Docker sans `sudo`, puis
-reconnectez-vous :
+### 4. Se connecter à ClickHouse
+
+Récupérez les identifiants générés :
 
 ```bash
-sudo usermod -aG docker ubuntu
-exit
+sudo cat /etc/clickhouse/credentials.txt
 ```
 
-Reconnectez-vous en SSH, créez un répertoire de projet et ajoutez un fichier `compose.yaml` :
+| Champ             | Valeur                                 |
+| ----------------- | -------------------------------------- |
+| Nom d'utilisateur | `default`                              |
+| Mot de passe      | Dans `/etc/clickhouse/credentials.txt` |
+
+Connectez-vous avec le client natif :
 
 ```bash
-mkdir ~/clickhouse && cd ~/clickhouse
+clickhouse-client --user default --password
 ```
 
-```yaml
-services:
-  clickhouse:
-    image: clickhouse/clickhouse-server:latest
-    restart: unless-stopped
-    environment:
-      - CLICKHOUSE_USER=${CLICKHOUSE_USER}
-      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
-    volumes:
-      - clickhouse-data:/var/lib/clickhouse
-      - clickhouse-logs:/var/log/clickhouse-server
-volumes:
-  clickhouse-data:
-  clickhouse-logs:
+Les points de terminaison HTTP et natif sont :
+
+```text
+http://<your-vm-ip>:8123
+<your-vm-ip>:9000
 ```
 
-Créez un fichier `.env` dans le même répertoire avec votre utilisateur administrateur et son mot de
-passe :
+## Gérer ClickHouse
 
 ```bash
-cat > .env <<'EOF'
-CLICKHOUSE_USER=admin
-CLICKHOUSE_PASSWORD=change-me-to-a-strong-password
-EOF
+# Check service status
+systemctl status clickhouse-server
+
+# Restart
+sudo systemctl restart clickhouse-server
+
+# View logs
+sudo journalctl -u clickhouse-server -f
 ```
 
-Démarrez la pile :
+| Chemin                            | Fonction                          |
+| --------------------------------- | --------------------------------- |
+| `/etc/clickhouse-server/`         | Configuration du serveur          |
+| `/etc/clickhouse/credentials.txt` | Identifiants de connexion générés |
+| `/var/lib/clickhouse/`            | Données de la base de données     |
+| `/var/log/clickhouse-server/`     | Fichiers journaux du serveur      |
+
+## Sécurité
+
+Les ports 8123 et 9000 sont accessibles sur l'interface réseau de la VM. UFW est activé et
+n'autorise par défaut que SSH (port 22).
+
+**Pour autoriser l'accès depuis une adresse IP précise :**
 
 ```bash
-docker compose up -d
+sudo ufw allow from <trusted-ip> to any port 8123
+sudo ufw allow from <trusted-ip> to any port 9000
 ```
 
-## Configurer ClickHouse
-
-L'utilisateur et le mot de passe du fichier `.env` sont créés au premier démarrage. Vérifiez que le
-serveur répond via l'interface HTTP :
+**Pour accéder à ClickHouse sans ouvrir le pare-feu, utilisez un tunnel SSH :**
 
 ```bash
-curl http://localhost:8123/ping
+# Run this on your local machine
+ssh -L 8123:localhost:8123 -L 9000:localhost:9000 ubuntu@<your-vm-ip>
 ```
 
-Ouvrez une session SQL interactive avec le client intégré :
+**Pour une utilisation en production**, placez l'interface HTTP derrière un proxy inverse afin de la
+servir avec un certificat TLS. Configurez séparément les connexions natives chiffrées et limitez les
+deux ports aux réseaux d'applications et d'administrateurs de confiance.
 
-```bash
-docker compose exec clickhouse clickhouse-client --user admin --password
-```
+:::caution
 
-L'interface HTTP écoute sur le port 8123 et le protocole natif sur le port 9000. Pour un déploiement
-en production, placez ClickHouse derrière un proxy inverse tel que nginx avec un certificat TLS et
-exposez les requêtes via une connexion chiffrée plutôt que d'exposer les ports directement.
+N'exposez pas largement ClickHouse à Internet. Gardez ses identifiants générés confidentiels et
+limitez les deux interfaces aux clients de confiance.
 
-## Ouvrir le pare-feu
-
-Par défaut, l'instance n'autorise que SSH (port 22) depuis l'extérieur. Ouvrez le ou les ports dont
-ClickHouse a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail :
-
-```bash
-sudo ufw allow 8123/tcp
-sudo ufw allow 9000/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation ClickHouse](https://clickhouse.com/docs)
-- [Guide d'installation ClickHouse](https://clickhouse.com/docs/install/docker)
+- [Documentation de ClickHouse](https://clickhouse.com/docs)
+- [Guide d'installation de ClickHouse](https://clickhouse.com/docs/install/docker)

@@ -84,14 +84,11 @@ Uptime Kuma listens on port 3001, but the container publishes it on `127.0.0.1` 
 and allows SSH (port 22) only by default. Use the SSH tunnel above to complete the administrator
 setup before exposing the UI.
 
-If you need direct access from a trusted IP, change the port mapping in
-`/opt/uptime-kuma/docker-compose.yml` from `127.0.0.1:3001:3001` to `3001:3001`, restart the stack,
-then add a restricted UFW rule:
-
-```bash
-cd /opt/uptime-kuma && docker compose up -d
-sudo ufw allow from <trusted-ip> to any port 3001
-```
+Keep the `127.0.0.1:3001:3001` binding in `/opt/uptime-kuma/docker-compose.yml`. Docker publishes
+ports through its own `DOCKER-USER` iptables chain, which bypasses UFW, so binding to `3001:3001`
+exposes the UI to everyone regardless of any UFW rule. Reach the UI through the SSH tunnel above, or
+put it behind a reverse proxy. If you must publish the port, restrict it in the `DOCKER-USER` chain
+rather than with UFW.
 
 **For production use**, place Uptime Kuma behind a reverse proxy so you can serve it over HTTPS with
 a trusted TLS certificate. Do not expose the first-run wizard publicly.

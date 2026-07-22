@@ -91,7 +91,14 @@ sudo ufw allow from <trusted-ip> to any port 9092
 ```
 
 The advertised listener address is generated from the VM's local IP on first boot. To connect
-without opening the firewall, update the advertised listener to `localhost`, then use an SSH tunnel:
+without opening the firewall, point the advertised listener at `localhost` on the VM, restart Kafka,
+then open an SSH tunnel:
+
+```bash
+# On the VM: advertise localhost instead of the VM's IP, then restart Kafka
+sudo sed -i 's|^advertised.listeners=.*|advertised.listeners=PLAINTEXT://localhost:9092|' /opt/kafka/config/server.properties
+sudo systemctl restart kafka
+```
 
 ```bash
 # Run this on your local machine

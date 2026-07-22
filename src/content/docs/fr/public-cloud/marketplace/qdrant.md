@@ -2,137 +2,131 @@
 title: Qdrant
 ---
 
-Qdrant est une base de données vectorielle libre et un moteur de recherche par similarité conçu pour
-stocker et interroger des plongements (embeddings) en haute dimension. Il alimente la recherche
+Qdrant est une base de données vectorielle et un moteur de recherche par similarité open source
+conçus pour stocker et interroger des plongements de grande dimension. Il alimente la recherche
 sémantique, les recommandations et les charges de travail de génération augmentée par récupération
-(RAG), en exposant à la fois une API REST et une API gRPC ainsi qu'un tableau de bord web intégré.
+(RAG), et expose une API REST, une API gRPC et un tableau de bord web intégré.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image Qdrant préconstruite arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** neuve depuis la place de marché et suivez les étapes ci-dessous pour installer Qdrant
-vous-même.
+| Composant | Version       |
+| --------- | ------------- |
+| Qdrant    | 1.18.2        |
+| Docker    | Latest stable |
+| Ubuntu    | 24.04 LTS     |
 
-:::
+## Démarrage
 
-## Prérequis
-
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 2       | 4          |
-| RAM       | 4 Go    | 8 Go       |
-| Stockage  | 20 Go   | 50 Go      |
-
-Le stockage et la RAM évoluent avec le nombre et la dimensionnalité des vecteurs que vous indexez.
-Dimensionnez-les en fonction de la collection que vous prévoyez.
-
-## Déployer l'instance de base
-
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps** et passez à l'onglet **Marketplace**. Il s'ouvre
-   sur **Featured** par défaut, sélectionnez donc **Marketplace** à côté. Choisissez votre région
-   (YOW-1 ou YUL-1), recherchez **Ubuntu 24.04 LTS** et cliquez sur **Deploy**. Vous pouvez aussi
-   créer l'instance depuis **Instances → Create**. Dans les deux cas, vous obtenez une VM Ubuntu
-   24.04 propre.
-
-   ![L'onglet Marketplace du portail ZSoftly Cloud, avec le sélecteur de région, la liste des catégories, la barre de recherche et les boutons Deploy](../../../../../assets/marketplace/deploy-marketplace-tab.webp)
-
-   ![Recherche d'une application dans le Marketplace, la barre de recherche filtrant le catalogue jusqu'à une carte Deploy correspondante](../../../../../assets/marketplace/deploy-marketplace-search.webp)
-
-2. Choisissez un plan qui répond aux prérequis ci-dessus.
-
-3. Lorsque l'instance est **Running**, connectez-vous en SSH:
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour:
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration génère la clé d'API et lance Qdrant avec Docker
+Compose. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u qdrant-first-boot.service -f
 ```
 
-## Installer Qdrant
-
-Qdrant est distribué sous forme d'image Docker officielle, installez donc d'abord Docker Engine et
-le plugin Compose.
-
-Configurez le dépôt APT officiel de Docker pour Ubuntu 24.04 LTS (`noble`):
+Le message de connexion (MOTD) confirme que Qdrant est prêt. Vous pouvez également vérifier
+directement le conteneur :
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null <<EOF
-Types: deb
-URIs: https://download.docker.com/linux/ubuntu
-Suites: noble
-Components: stable
-Architectures: $(dpkg --print-architecture)
-Signed-By: /etc/apt/keyrings/docker.asc
-EOF
+cd /opt/qdrant && docker compose ps
 ```
 
-Installez Docker Engine et le plugin Compose:
+### 3. Récupérer la clé d'API
+
+Les informations de connexion et la clé d'API générées sont stockées dans un fichier réservé à
+l'utilisateur racine :
 
 ```bash
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo cat /etc/qdrant/credentials.txt
 ```
 
-Téléchargez et exécutez Qdrant en mappant les ports REST (6333) et gRPC (6334) et en persistant les
-données sur l'hôte:
+| Champ     | Valeur                                            |
+| --------- | ------------------------------------------------- |
+| Clé d'API | Générée de manière sécurisée au premier démarrage |
 
-```bash
-docker pull qdrant/qdrant
-docker run -d --name qdrant --restart unless-stopped \
-  -p 6333:6333 -p 6334:6334 \
-  -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
-  qdrant/qdrant
-```
+### 4. Accéder à Qdrant
 
-Vérifiez qu'il répond:
-
-```bash
-curl http://localhost:6333/healthz
-```
-
-## Configurer Qdrant
-
-Le tableau de bord web est disponible à:
+L'API REST et le tableau de bord sont accessibles à :
 
 ```text
+http://<your-vm-ip>:6333
 http://<your-vm-ip>:6333/dashboard
 ```
 
-Qdrant est livré sans authentification. Avant de l'exposer, définissez une clé d'API afin que seuls
-les clients autorisés puissent lire ou écrire dans vos collections. Redémarrez le conteneur avec la
-clé définie:
+L'API gRPC est accessible à `<your-vm-ip>:6334`. Vérifiez localement l'API REST avec la clé d'API du
+fichier d'identifiants :
 
 ```bash
-docker rm -f qdrant
-docker run -d --name qdrant --restart unless-stopped \
-  -p 6333:6333 -p 6334:6334 \
-  -e QDRANT__SERVICE__API_KEY="<generate-a-strong-key>" \
-  -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
-  qdrant/qdrant
+curl -H "api-key: <your-api-key>" http://127.0.0.1:6333/healthz
 ```
 
-Les clients envoient ensuite la clé dans l'en-tête `api-key`. Pour la production, placez Qdrant
-derrière un proxy inverse avec TLS afin que le trafic et la clé d'API soient chiffrés en transit.
+## Gérer Qdrant
 
-## Ouvrir le pare-feu
-
-L'instance n'autorise par défaut que SSH (port 22) en externe. Ouvrez les ports dont Qdrant a besoin
-et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail:
+Qdrant fonctionne comme une pile Docker Compose dans `/opt/qdrant`.
 
 ```bash
-sudo ufw allow 6333/tcp
-sudo ufw allow 6334/tcp
+# Check status
+cd /opt/qdrant && docker compose ps
+
+# Restart
+cd /opt/qdrant && docker compose restart
+
+# View logs
+cd /opt/qdrant && docker compose logs -f
 ```
+
+| Chemin                           | Fonction                               |
+| -------------------------------- | -------------------------------------- |
+| `/opt/qdrant/docker-compose.yml` | Configuration Docker Compose           |
+| `/opt/qdrant/.env`               | Environnement de la clé d'API Qdrant   |
+| `/var/lib/qdrant/storage/`       | Collections et données persistantes    |
+| `/etc/qdrant/credentials.txt`    | Clé d'API et informations de connexion |
+
+## Sécurité
+
+L'API REST et le tableau de bord utilisent le port 6333, et l'API gRPC utilise le port 6334. UFW est
+activé et autorise par défaut SSH (port 22) ainsi que les ports 6333 et 6334. Qdrant exige la clé
+d'API générée pour l'accès.
+
+**Pour limiter l'accès à l'API à une adresse IP précise :**
+
+```bash
+sudo ufw delete allow 6333/tcp
+sudo ufw delete allow 6334/tcp
+sudo ufw allow from <trusted-ip> to any port 6333
+sudo ufw allow from <trusted-ip> to any port 6334
+```
+
+**Pour accéder au tableau de bord sans laisser le port 6333 ouvert, utilisez un tunnel SSH :**
+
+```bash
+# Run this on your local machine
+ssh -L 6333:localhost:6333 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+http://localhost:6333/dashboard
+```
+
+**Pour une utilisation en production**, placez Qdrant derrière un proxy inverse afin de servir l'API
+REST et le tableau de bord en HTTPS avec un certificat TLS de confiance. Gardez l'API gRPC sur un
+réseau privé de confiance ou configurez un proxy compatible TLS pour celle-ci.
+
+:::caution
+
+Traitez la clé d'API comme un secret. Limitez les deux ports de Qdrant aux réseaux d'applications et
+d'administrateurs de confiance au lieu de les exposer largement à Internet.
+
+:::
 
 ## Étapes suivantes
 
-- [Documentation Qdrant](https://qdrant.tech/documentation/)
-- [Guide d'installation Qdrant](https://qdrant.tech/documentation/guides/installation/)
+- [Documentation de Qdrant](https://qdrant.tech/documentation/)
+- [Guide d'installation de Qdrant](https://qdrant.tech/documentation/guides/installation/)

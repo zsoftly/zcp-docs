@@ -314,6 +314,17 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
+### v0.1.3: July 20, 2026
+
+**Port forwarding and firewall rules now record their real ID.** `zcp_port_forward` and
+`zcp_firewall_rule` stored an empty ID because the create endpoint returns no rule object, so
+Terraform recreated them on every apply. Both now look up the rule after create, match it on
+protocol and ports, and record the real ID, so plans stay stable.
+
+- Upgraded the `zcp` CLI SDK to v0.0.26, which corrects how port-forwarding rule ports decode.
+- **Security**: upgraded `golang.org/x/text` to fix GO-2026-5970, an infinite loop reachable through
+  the load balancer resource.
+
 ### v0.1.2: July 18, 2026
 
 **`MX` records in `zcp_dns_record`.** A new `priority` argument (0-65535) sets the preference

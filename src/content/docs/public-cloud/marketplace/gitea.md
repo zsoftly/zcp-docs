@@ -47,7 +47,7 @@ The login message (MOTD) confirms when Gitea is ready.
 
 ```bash
 systemctl status gitea
-curl http://127.0.0.1:3000/api/healthz
+curl -fsS http://127.0.0.1:3000/api/healthz
 ```
 
 ### 4. Access the Gitea UI
@@ -64,10 +64,10 @@ Retrieve the generated credentials:
 sudo cat /etc/gitea/credentials.txt
 ```
 
-| Field    | Value                             |
-| -------- | --------------------------------- |
-| Username | `zadmin`                          |
-| Password | From `/etc/gitea/credentials.txt` |
+| Field    | Value                                                                                    |
+| -------- | ---------------------------------------------------------------------------------------- |
+| Username | `zadmin` by default, or the `GITEA_ADMIN_USER` you set. See `/etc/gitea/credentials.txt` |
+| Password | From `/etc/gitea/credentials.txt`                                                        |
 
 Git over SSH uses the VM's SSH service on port 22.
 

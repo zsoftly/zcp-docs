@@ -352,6 +352,19 @@ le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
+### v0.1.3 : 20 juillet 2026
+
+**La redirection de port et les règles de pare-feu enregistrent maintenant leur véritable ID.**
+`zcp_port_forward` et `zcp_firewall_rule` stockaient un ID vide parce que le point de terminaison de
+création ne renvoie aucun objet de règle. Terraform les recréait donc à chaque application. Les deux
+ressources recherchent maintenant la règle après sa création, la font correspondre selon le
+protocole et les ports, puis enregistrent le véritable ID. Les plans restent ainsi stables.
+
+- Passage du SDK du CLI `zcp` à la v0.0.26, qui corrige le décodage des ports des règles de
+  redirection de port.
+- **Sécurité** : mise à niveau de `golang.org/x/text` pour corriger GO-2026-5970, une boucle infinie
+  accessible par la ressource de répartiteur de charge.
+
 ### v0.1.2 : 18 juillet 2026
 
 **Les enregistrements `MX` dans `zcp_dns_record`.** Un nouvel argument `priority`, de 0 à 65535,

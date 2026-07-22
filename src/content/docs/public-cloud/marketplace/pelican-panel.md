@@ -65,7 +65,9 @@ default login credentials.
 After the installer completes, enable Pelican's scheduler and queue worker:
 
 ```bash
-( sudo crontab -u www-data -l 2>/dev/null; echo "* * * * * php /var/www/pelican/artisan schedule:run >> /dev/null 2>&1" ) | sudo crontab -u www-data -
+CRON="* * * * * php /var/www/pelican/artisan schedule:run >> /dev/null 2>&1"
+sudo crontab -u www-data -l 2>/dev/null | grep -qF "$CRON" \
+  || ( sudo crontab -u www-data -l 2>/dev/null; echo "$CRON" ) | sudo crontab -u www-data -
 sudo systemctl enable --now pelican-queue
 ```
 

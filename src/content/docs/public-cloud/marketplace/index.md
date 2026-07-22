@@ -17,7 +17,7 @@ automatically. Credentials are generated, services are configured, and the image
     <span class="mp-label">coming soon</span>
   </div>
   <div class="mp-stat">
-    <span class="mp-num">11</span>
+    <span class="mp-num">9</span>
     <span class="mp-label">categories</span>
   </div>
   <div class="mp-stat">

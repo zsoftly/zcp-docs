@@ -2,145 +2,136 @@
 title: WG-Easy
 ---
 
-WG-Easy est la façon la plus simple d'exécuter un VPN WireGuard accompagné d'une interface
-d'administration web. Il vous permet de créer et gérer des clients VPN, de consulter les
-statistiques de connexion et de télécharger ou scanner les configurations clientes depuis un
-navigateur, le tout reposant sur le protocole WireGuard, rapide et moderne. L'interface web
-s'exécute sur le port 51821/tcp et le VPN lui-même sur le port 51820/udp.
+WG-Easy est le moyen le plus simple d'exécuter un VPN WireGuard avec une interface d'administration
+web. Il vous permet de créer et de gérer des clients VPN, de consulter les statistiques de
+connexion, ainsi que de télécharger ou de scanner les configurations clientes depuis un navigateur,
+le tout reposant sur le protocole WireGuard rapide et moderne. L'interface web fonctionne sur le
+port 51821/tcp et le VPN lui-même sur le port 51820/udp.
 
-:::note[Bientôt disponible]
+## Logiciels inclus
 
-Une image WG-Easy préconfigurée arrive bientôt. Pour l'instant, déployez une instance **Ubuntu 24.04
-LTS** vierge depuis la marketplace et suivez les étapes ci-dessous pour installer WG-Easy vous-même.
+| Composant | Version   |
+| --------- | --------- |
+| WG-Easy   | 15        |
+| Ubuntu    | 24.04 LTS |
 
-:::
+## Variables d'environnement
 
-## Prérequis
+Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
+qu'une valeur sécurisée soit générée.
 
-| Ressource | Minimum | Recommandé |
-| --------- | ------- | ---------- |
-| vCPU      | 1       | 1          |
-| RAM       | 512 Mo  | 1 Go       |
-| Stockage  | 10 Go   | 20 Go      |
+| Variable             | Description                           |
+| -------------------- | ------------------------------------- |
+| `WIREGUARD_HOST`     | Hôte public WireGuard                 |
+| `WIREGUARD_PASSWORD` | Mot de passe administrateur WireGuard |
 
-## Déployer l'instance de base
+## Démarrage
 
-1. Dans le portail ZSoftly Cloud, ouvrez **Apps**, sélectionnez **WG-Easy**, puis cliquez sur
-   **Deploy**, ou créez une instance **Ubuntu 24.04 LTS** depuis **Instances → Create**. Les deux
-   vous donnent une VM Ubuntu 24.04 vierge.
-2. Choisissez un forfait qui répond aux prérequis ci-dessus et sélectionnez votre région (YOW-1 ou
-   YUL-1).
-3. Lorsque l'instance est **Running**, connectez-vous en SSH :
+### 1. Se connecter à votre VM
 
 ```bash
 ssh ubuntu@<your-vm-ip>
 ```
 
-4. Mettez le système à jour :
+### 2. Attendre la configuration du premier démarrage
+
+Au premier démarrage, un script de configuration génère un certificat TLS autosigné, recharge Nginx
+et lance WG-Easy avec Docker Compose. Suivez la progression :
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo journalctl -u wg-easy-first-boot.service -f
 ```
 
-## Installer WG-Easy
-
-Installez Docker Engine et le plugin Docker Compose depuis le dépôt officiel de Docker :
+Le message de connexion (MOTD) confirme que WG-Easy est prêt. Vous pouvez également vérifier le
+conteneur et Nginx :
 
 ```bash
-sudo apt install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+cd /data/wg-easy && docker compose ps
+systemctl status nginx
 ```
 
-Ajoutez l'utilisateur `ubuntu` au groupe `docker` afin de pouvoir exécuter Docker sans `sudo`, puis
-reconnectez-vous :
+### 3. Accéder à l'interface WG-Easy
+
+Ouvrez un navigateur et accédez à :
+
+```text
+https://<your-vm-ip>:51821
+```
+
+Le certificat autosigné déclenche un avertissement du navigateur. Acceptez l'exception pour
+continuer.
+
+### 4. Terminer l'assistant de configuration
+
+Lors de la première visite, créez votre compte administrateur et définissez le point de terminaison
+WireGuard sur l'adresse IP publique ou le domaine que les clients VPN peuvent joindre. L'image ne
+crée pas d'identifiants partagés par défaut.
+
+## Gérer WG-Easy
+
+WG-Easy fonctionne comme une pile Docker Compose dans `/data/wg-easy`, et Nginx termine TLS.
 
 ```bash
-sudo usermod -aG docker ubuntu
-exit
+# Check status
+cd /data/wg-easy && docker compose ps
+systemctl status nginx
+
+# Restart
+cd /data/wg-easy && docker compose restart
+sudo systemctl restart nginx
+
+# View application logs
+cd /data/wg-easy && docker compose logs -f
+
+# View Nginx logs
+sudo journalctl -u nginx -f
 ```
 
-Reconnectez-vous en SSH, créez un répertoire de projet et ajoutez un fichier `compose.yaml`. WG-Easy
-a besoin de capacités réseau élevées et du transfert IP pour router le trafic VPN :
+| Chemin                             | Fonction                           |
+| ---------------------------------- | ---------------------------------- |
+| `/data/wg-easy/docker-compose.yml` | Configuration Docker Compose       |
+| `/data/wg-easy/wireguard/`         | Configuration et données WireGuard |
+| `/data/wg-easy/ssl/cert.pem`       | Certificat TLS autosigné           |
+| `/data/wg-easy/ssl/key.pem`        | Clé privée TLS                     |
+| `/data/wg-easy/info.txt`           | Informations d'accès et de gestion |
+
+## Sécurité
+
+Le VPN WireGuard utilise le port 51820/udp et l'interface web relayée par Nginx utilise le port
+51821/tcp. UFW est activé et autorise par défaut SSH (port 22) ainsi que les deux ports WG-Easy. Le
+port web non chiffré du conteneur est lié à `127.0.0.1:51822` et n'est pas exposé à l'extérieur.
+
+**Pour limiter l'interface web à une adresse IP précise :**
 
 ```bash
-mkdir ~/wg-easy && cd ~/wg-easy
+sudo ufw delete allow 51821/tcp
+sudo ufw allow from <trusted-ip> to any port 51821
 ```
 
-```yaml
-services:
-  wg-easy:
-    image: ghcr.io/wg-easy/wg-easy:15
-    restart: unless-stopped
-    environment:
-      - INIT_ENABLED=1
-      - INIT_HOST=${WIREGUARD_HOST}
-      - INIT_PORT=51820
-      - INIT_USERNAME=admin
-      - INIT_PASSWORD=${WIREGUARD_PASSWORD}
-      - INIT_DNS=1.1.1.1,8.8.8.8
-      - PORT=51821
-    ports:
-      - '51820:51820/udp'
-      - '51821:51821/tcp'
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-      - NET_RAW
-    sysctls:
-      - net.ipv4.ip_forward=1
-      - net.ipv4.conf.all.src_valid_mark=1
-    volumes:
-      - wg-easy-data:/etc/wireguard
-
-volumes:
-  wg-easy-data:
-```
-
-Créez un fichier `.env` dans le même répertoire. Définissez `WIREGUARD_HOST` sur l'IP publique ou le
-nom DNS de l'instance auquel les clients se connecteront :
+**Pour accéder à l'interface web par un tunnel SSH :**
 
 ```bash
-cat > .env <<'EOF'
-WIREGUARD_HOST=<your-vm-ip>
-WIREGUARD_PASSWORD=change-me-to-a-strong-password
-EOF
+# Run this on your local machine
+ssh -L 51821:localhost:51821 ubuntu@<your-vm-ip>
+
+# Then open in your browser
+https://localhost:51821
 ```
 
-Démarrez la pile :
+Gardez le port 51820/udp ouvert afin que les clients VPN puissent se connecter. Nginx agit déjà
+comme proxy inverse TLS pour l'interface. **Pour une utilisation en production**, remplacez
+`/data/wg-easy/ssl/cert.pem` et `/data/wg-easy/ssl/key.pem` par un certificat et une clé de
+confiance.
 
-```bash
-docker compose up -d
-```
+:::caution
 
-## Configurer WG-Easy
+Terminez immédiatement l'assistant de configuration et limitez l'interface web aux adresses IP
+d'administrateurs de confiance. Traitez les configurations clientes WireGuard téléchargées comme des
+identifiants.
 
-Ouvrez `http://<your-vm-ip>:51821` dans un navigateur et connectez-vous avec le nom d'utilisateur
-`admin` et le mot de passe du fichier `.env`. Depuis le tableau de bord, vous pouvez ajouter des
-clients, puis télécharger ou scanner la configuration WireGuard de chaque client. `INIT_HOST` doit
-être l'adresse publique que les clients peuvent atteindre, sinon les configurations clientes
-générées pointeront vers le mauvais point d'accès. Pour un déploiement en production, placez
-l'interface web derrière un proxy inverse tel que nginx avec un certificat TLS et exposez-la via
-HTTPS plutôt que d'exposer le port 51821 directement. Le port VPN 51820/udp reste exposé.
-
-## Ouvrir le pare-feu
-
-Par défaut, l'instance n'autorise que SSH (port 22) depuis l'extérieur. Ouvrez le ou les ports dont
-WG-Easy a besoin et ajoutez-les aux règles réseau/sécurité de l'instance dans le portail :
-
-```bash
-sudo ufw allow 51820/udp
-sudo ufw allow 51821/tcp
-```
+:::
 
 ## Étapes suivantes
 
-- [Documentation WG-Easy](https://wg-easy.github.io/wg-easy/)
-- [Guide d'installation WG-Easy](https://wg-easy.github.io/wg-easy/v15.2/getting-started/)
+- [Documentation de WG-Easy](https://wg-easy.github.io/wg-easy/)
+- [Guide d'installation de WG-Easy](https://wg-easy.github.io/wg-easy/v15.2/getting-started/)

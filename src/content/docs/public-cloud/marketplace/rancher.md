@@ -64,7 +64,14 @@ sudo cat /etc/rancher/credentials.txt
 
 ### 4. Access the Rancher UI
 
-Open a browser and navigate to:
+Open a browser and navigate to your Rancher URL. If you set `RANCHER_HOSTNAME` at deploy time, use
+it and make sure a DNS record for that hostname resolves to the VM first:
+
+```text
+https://<RANCHER_HOSTNAME>
+```
+
+If you left `RANCHER_HOSTNAME` unset, reach the VM directly by IP:
 
 ```text
 https://<your-vm-ip>

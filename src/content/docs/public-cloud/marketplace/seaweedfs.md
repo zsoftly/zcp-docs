@@ -23,8 +23,8 @@ ssh ubuntu@<your-vm-ip>
 
 ### 2. Wait for first-boot configuration
 
-On the first boot, a setup script generates the S3 credentials and starts the all-in-one `weed mini`
-service. Track progress:
+On the first boot, a setup script generates the S3-compatible API credentials and starts the
+all-in-one `weed mini` service. Track progress:
 
 ```bash
 sudo journalctl -u seaweedfs-first-boot.service -f
@@ -36,7 +36,7 @@ The login message (MOTD) confirms when SeaweedFS is ready. You can also verify t
 systemctl status seaweedfs
 ```
 
-### 3. Retrieve the S3 credentials
+### 3. Retrieve the S3-compatible API credentials
 
 The generated credentials and endpoints are stored in a root-only file:
 
@@ -53,14 +53,14 @@ sudo cat /etc/seaweedfs/credentials.txt
 
 The image starts these endpoints:
 
-| Component | Endpoint                    |
-| --------- | --------------------------- |
-| S3 API    | `http://<your-vm-ip>:8333`  |
-| Filer UI  | `http://<your-vm-ip>:8888`  |
-| Master UI | `http://<your-vm-ip>:9333`  |
-| Volume    | `http://<your-vm-ip>:9340`  |
-| WebDAV    | `http://<your-vm-ip>:7333`  |
-| Admin UI  | `http://<your-vm-ip>:23646` |
+| Component         | Endpoint                    |
+| ----------------- | --------------------------- |
+| S3-compatible API | `http://<your-vm-ip>:8333`  |
+| Filer UI          | `http://<your-vm-ip>:8888`  |
+| Master UI         | `http://<your-vm-ip>:9333`  |
+| Volume            | `http://<your-vm-ip>:9340`  |
+| WebDAV            | `http://<your-vm-ip>:7333`  |
+| Admin UI          | `http://<your-vm-ip>:23646` |
 
 ## Managing SeaweedFS
 
@@ -77,7 +77,7 @@ sudo journalctl -u seaweedfs -f
 
 | Path                             | Purpose                             |
 | -------------------------------- | ----------------------------------- |
-| `/etc/seaweedfs/seaweedfs.env`   | S3 credential environment           |
+| `/etc/seaweedfs/seaweedfs.env`   | S3-compatible API credentials       |
 | `/var/lib/seaweedfs/`            | Persistent SeaweedFS data           |
 | `/etc/seaweedfs/credentials.txt` | Generated credentials and endpoints |
 
@@ -87,7 +87,7 @@ SeaweedFS uses ports 8333, 8888, 9333, 9340, 7333, and 23646 for its S3, filer, 
 WebDAV, and admin endpoints. UFW is enabled and allows SSH (port 22) only by default. All SeaweedFS
 ports remain blocked until you allow trusted sources.
 
-**To allow the S3 API and Filer UI from a specific IP:**
+**To allow the S3-compatible API and Filer UI from a specific IP:**
 
 ```bash
 sudo ufw allow from <trusted-ip> to any port 8333
@@ -110,8 +110,8 @@ behind a reverse proxy so you can serve them over HTTPS with a trusted TLS certi
 
 :::caution
 
-Treat the S3 credentials as secrets. Open only the endpoints your workloads require and restrict
-them to trusted application and administrator networks.
+Treat the S3-compatible API credentials as secrets. Open only the endpoints your workloads require
+and restrict them to trusted application and administrator networks.
 
 :::
 
