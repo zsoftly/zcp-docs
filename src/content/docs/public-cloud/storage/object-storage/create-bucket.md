@@ -3,7 +3,7 @@ title: Create Bucket
 sidebar_position: 1
 ---
 
-## Object Storage
+## Object Storage (Object Store)
 
 ZSoftly Public Cloud object storage is S3-compatible. Use it for files, backups, static assets, or
 any unstructured data.
