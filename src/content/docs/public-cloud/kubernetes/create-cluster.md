@@ -45,15 +45,17 @@ cluster's minor version. See [kubectl Access](/public-cloud/kubernetes/kubectl-a
 
 1. **Project**: assign to a project.
 2. **Location**: select the data center.
-3. **Cluster Capacity**:
+3. **Select Version**: choose the Kubernetes version for the cluster.
+4. **Storage Type**: select the storage type for the cluster nodes.
+5. **Cluster Capacity**:
    - Select a predefined **Node Plan** (fixed CPU/memory/storage)
    - Or use a **Custom Plan** (specify CPU, memory, storage, and node count)
-4. **Advanced Settings** (optional):
+6. **Advanced Settings** (optional):
    - Enable **High Availability** for redundancy
    - Add **Control Nodes** for additional stability
    - Add an **SSH Key** for node access
-5. **Cluster Name**: provide a unique name.
-6. **Create**:
+7. **Cluster Name**: provide a unique name.
+8. **Create**:
    - Billing cycles: Hourly, Monthly, Quarterly, Semiannually, Yearly, Bi-annually, Tri-annually
    - Billing rules: Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed Prorata,
      Unfixed Prorata
