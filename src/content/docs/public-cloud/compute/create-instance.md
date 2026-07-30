@@ -126,10 +126,7 @@ Provide a unique Server Name and valid Server Hostname.
 
 ## Review and Deploy
 
-- Choose the desired **Billing Cycle**: Hourly, Monthly, Quarterly, Semiannually, Yearly,
-  Bi-annually, Tri-annually.
-- Supported billing rules: Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed
-  Prorata, Unfixed Prorata.
+- Choose the desired **Billing Cycle**: Hourly, Monthly, or Yearly.
 - Verify all configuration details and click **Review & Deploy**.
 
 ## Connect to your instance

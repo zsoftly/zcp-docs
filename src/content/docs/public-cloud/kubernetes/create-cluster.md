@@ -56,9 +56,7 @@ cluster's minor version. See [kubectl Access](/public-cloud/kubernetes/kubectl-a
    - Add an **SSH Key** for node access
 7. **Cluster Name**: provide a unique name.
 8. **Create**:
-   - Billing cycles: Hourly, Monthly, Quarterly, Semiannually, Yearly, Bi-annually, Tri-annually
-   - Billing rules: Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed Prorata,
-     Unfixed Prorata
+   - Billing cycles: Hourly, Monthly, or Yearly.
    - Click **Create Cluster**
 
 ![Create Kubernetes Cluster form: project, location, capacity, advanced settings, name, and billing](../../../../assets/kubernetes/create-cluster-steps.webp)
