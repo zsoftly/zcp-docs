@@ -1,12 +1,12 @@
 ---
 title: Port SMTP 25
 description:
-  Le port SMTP sortant (25) est bloqué par défaut sur les instances de calcul ZCP afin de protéger
-  la réputation d'envoi. Découvrez ce qui est bloqué et comment demander une exception.
+  Le port SMTP sortant (25) est bloqué par défaut sur les instances de calcul afin de protéger la
+  réputation d'envoi. Découvrez ce qui est bloqué et comment demander une exception.
 sidebar_position: 5
 ---
 
-ZCP bloque le port TCP 25 sortant par défaut sur chaque instance de calcul afin de protéger la
+Le port TCP 25 sortant est bloqué par défaut sur chaque instance de calcul afin de protéger la
 réputation d'envoi de courriel de la plateforme. Un pourriel ou une instance compromise qui envoie
 du courriel directement sur le port 25 peut nuire à la réputation d'une plage d'adresses IP partagée
 et toucher les autres clients de cette plage. La plupart des grands fournisseurs infonuagiques
@@ -30,16 +30,16 @@ réputation d'envoi.
 
 ## Demander l'ouverture du port 25
 
-ZSoftly étudie les demandes d'ouverture du port 25 des clients vérifiés qui exploitent un serveur de
-messagerie de production. Nous évaluons chaque demande selon son usage prévu et son historique
+Nous étudions les demandes d'ouverture du port 25 des clients vérifiés qui exploitent un serveur de
+messagerie de production. Chaque demande est évaluée selon son usage prévu et son historique
 d'envoi.
 
 ### Comment faire la demande
 
-- Principal: ouvrez une demande de soutien depuis la console infonuagique.
-- Secondaire: écrivez à [support@zsoftly.ca](mailto:support@zsoftly.ca).
+- Principal : ouvrez une demande de soutien depuis la console infonuagique.
+- Secondaire : écrivez à l'[équipe de soutien](mailto:support@zsoftly.ca).
 
-Incluez les éléments suivants dans votre demande:
+Incluez les éléments suivants dans votre demande :
 
 - Le nom de votre compte.
 - Les adresses IP publiques pour lesquelles vous demandez l'ouverture.
@@ -49,7 +49,7 @@ Incluez les éléments suivants dans votre demande:
 
 :::note
 
-ZSoftly configure l'enregistrement PTR pour chaque adresse IP approuvée. La plupart des serveurs de
+Nous configurons l'enregistrement PTR pour chaque adresse IP approuvée. La plupart des serveurs de
 messagerie destinataires s'attendent à un enregistrement PTR valide qui correspond à votre domaine
 d'envoi.
 

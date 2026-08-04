@@ -1,12 +1,12 @@
 ---
 title: SMTP Port 25
 description:
-  Outbound SMTP (port 25) is blocked by default on ZCP compute instances to protect sender
-  reputation. Learn what is blocked and how to request an exception.
+  Outbound SMTP (port 25) is blocked by default on compute instances to protect sender reputation.
+  Learn what is blocked and how to request an exception.
 sidebar_position: 5
 ---
 
-ZCP blocks outbound TCP port 25 by default on every compute instance to protect platform-wide email
+Outbound TCP port 25 is blocked by default on every compute instance to protect platform-wide email
 sender reputation. Spam or a compromised instance that sends mail directly over port 25 can damage
 the reputation of a shared IP range and affect other customers on that range. Most major cloud
 providers apply the same default.
@@ -28,13 +28,13 @@ bounce management, and sender reputation.
 
 ## Request port 25 to be opened
 
-ZSoftly reviews port 25 requests from verified customers who operate a production mail server. We
-review each request for its use case and sending history.
+We review port 25 requests from verified customers who operate a production mail server. Each
+request is reviewed for its use case and sending history.
 
 ### How to request
 
 - Primary: open a support request from the cloud console.
-- Secondary: email [support@zsoftly.ca](mailto:support@zsoftly.ca).
+- Secondary: email the [support team](mailto:support@zsoftly.ca).
 
 Include the following in your request:
 
@@ -46,8 +46,8 @@ Include the following in your request:
 
 :::note
 
-ZSoftly sets the PTR record for each approved IP. Most receiving mail servers expect a valid PTR
-record that resolves to your sending domain.
+We set the PTR record for each approved IP. Most receiving mail servers expect a valid PTR record
+that resolves to your sending domain.
 
 :::
 
