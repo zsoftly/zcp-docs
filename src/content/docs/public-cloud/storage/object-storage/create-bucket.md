@@ -20,9 +20,8 @@ any unstructured data.
 3. **Object Storage Size**: choose storage type and size. Custom plans available.
 4. **Name**: provide a unique name.
 5. **Create**:
-
-- Billing cycles: Hourly, Monthly, or Yearly.
-- Click **Review and Create**.
+   - Billing cycles: Hourly, Monthly, or Yearly.
+   - Click **Review and Create**.
 
 ![Create Object Storage instance: project, location, size, name, and billing](../../../../../assets/storage/object-storage/create-bucket-steps.webp)
 

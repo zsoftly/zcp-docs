@@ -47,10 +47,7 @@ Fournissez un nom de volume unique.
 
 ### Créer
 
-- **Cycles de facturation** : Hourly, Monthly, Quarterly, Semiannually, Yearly, Bi-annually,
-  Tri-annually.
-- **Règles de facturation** : Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed
-  Prorata, Unfixed Prorata.
+- **Cycles de facturation** : horaire, mensuel ou annuel.
 - Passez en revue, puis cliquez sur **Créer un volume**.
 
 ![Créer Stockage bloc : options de facturation et Créer un volume](../../../../../../assets/storage/block-storage/create-volume-create.webp)

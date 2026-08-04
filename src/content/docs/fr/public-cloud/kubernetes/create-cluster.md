@@ -61,10 +61,7 @@ client `kubectl` à la version mineure du cluster. Voir
    - Ajoutez une **clé SSH** pour l'accès aux noeuds
 6. **Nom du cluster** : fournissez un nom unique.
 7. **Créer** :
-   - Cycles de facturation : Hourly, Monthly, Quarterly, Semiannually, Yearly, Bi-annually,
-     Tri-annually
-   - Règles de facturation : Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed
-     Prorata, Unfixed Prorata
+   - Cycles de facturation : horaire, mensuel ou annuel.
    - Cliquez sur **Créer un cluster**
 
 ![Formulaire de création de cluster Kubernetes : emplacement, projet, réseau, capacité, paramètres avancés, nom et facturation](../../../../../assets/kubernetes/create-cluster-steps.webp)

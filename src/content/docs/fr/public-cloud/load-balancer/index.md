@@ -26,8 +26,7 @@ disponibilité, la fiabilité et de meilleures performances.
    - Sélectionnez les **instances VM** qui traiteront le trafic
 6. **Nom** : caractères alphanumériques, traits d'union et points seulement.
 7. **Créer** :
-   - Cycles de facturation : Hourly, Monthly, Quarterly, Semiannually, Yearly, Bi-annually,
-     Tri-annually
+   - Cycles de facturation : horaire, mensuel ou annuel.
    - Un forfait par zone
    - Cliquez sur **Créer Équilibreur de charge**
 
