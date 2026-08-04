@@ -7,6 +7,15 @@ LAMP classique. Nginx gère le trafic HTTP plus efficacement qu'Apache sous char
 bon choix pour les applications Web de production. Cette image exécute toute la pile dans Docker
 Compose pour simplifier la gestion.
 
+:::note
+
+La fonction `mail()` de PHP et l'agent de transport de courrier local livrent le courriel
+directement sur le port 25, qui est bloqué par défaut. Utilisez une extension SMTP ou un relais
+authentifié sur le port 587, ou consultez [Port SMTP 25](../networking/public-network/smtp-port-25)
+pour demander l'accès.
+
+:::
+
 ## Logiciels inclus
 
 | Composant      | Version         |

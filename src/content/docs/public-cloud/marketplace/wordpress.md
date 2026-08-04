@@ -6,11 +6,19 @@ WordPress is the world's most popular open-source content management system, pow
 all websites. This image ships a complete LAMP stack (Apache, MariaDB, and PHP) with WordPress
 pre-installed and ready to configure.
 
+:::note
+
+PHP's `mail()` function and the local mail transfer agent deliver mail directly over port 25, which
+is blocked by default. Use an SMTP plugin or authenticated relay on port 587, or see
+[SMTP Port 25](../networking/public-network/smtp-port-25) to request access.
+
+:::
+
 ## Software included
 
 | Component | Version      |
 | --------- | ------------ |
-| WordPress | 6.x (latest) |
+| WordPress | 7.x (latest) |
 | Apache    | 2.4.x        |
 | MariaDB   | 10.x         |
 | PHP       | 8.3          |

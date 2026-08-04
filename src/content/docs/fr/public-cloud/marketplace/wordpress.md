@@ -6,11 +6,20 @@ WordPress est le système de gestion de contenu libre le plus populaire au monde
 40 % des sites Web. Cette image fournit une pile LAMP complète (Apache, MariaDB et PHP) avec
 WordPress préinstallé et prêt à configurer.
 
+:::note
+
+La fonction `mail()` de PHP et l'agent de transport de courrier local livrent le courriel
+directement sur le port 25, qui est bloqué par défaut. Utilisez une extension SMTP ou un relais
+authentifié sur le port 587, ou consultez [Port SMTP 25](../networking/public-network/smtp-port-25)
+pour demander l'accès.
+
+:::
+
 ## Logiciels inclus
 
 | Composant | Version        |
 | --------- | -------------- |
-| WordPress | 6.x (dernière) |
+| WordPress | 7.x (dernière) |
 | Apache    | 2.4.x          |
 | MariaDB   | 10.x           |
 | PHP       | 8.3            |
