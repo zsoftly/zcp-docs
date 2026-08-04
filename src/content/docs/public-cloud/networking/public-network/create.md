@@ -39,7 +39,7 @@ Provide a unique name for your Public Network.
 
 ### Create
 
-- Choose the **Billing Cycle**: Hourly or Monthly.
+- Choose the **Billing Cycle**: Hourly, Monthly or Yearly.
 - Review the price summary and click **Create**.
 
 ![Create Public Network: billing cycle and price summary](../../../../../assets/networking/create-create.webp)

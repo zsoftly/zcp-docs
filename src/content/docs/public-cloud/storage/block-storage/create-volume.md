@@ -47,9 +47,7 @@ Provide a unique Volume Name.
 
 ### Create
 
-- **Billing Cycles**: Hourly, Monthly, Quarterly, Semiannually, Yearly, Bi-annually, Tri-annually.
-- **Billing rules**: Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed Prorata,
-  Unfixed Prorata.
+- **Billing Cycles**: Hourly, Monthly, or Yearly.
 - Review and click **Create Volume**.
 
 ![Create Block Storage: billing options and Create Volume](../../../../../assets/storage/block-storage/create-volume-create.webp)
