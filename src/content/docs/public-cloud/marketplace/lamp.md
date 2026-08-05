@@ -6,6 +6,14 @@ The LAMP stack (Linux, Apache, MariaDB, and PHP) is the classic combination for 
 applications and dynamic websites. This image ships all four components pre-installed and configured
 to work together, ready for you to deploy your application.
 
+:::note
+
+PHP's `mail()` function and the local mail transfer agent deliver mail directly over port 25, which
+is blocked by default. Use an SMTP plugin or authenticated relay on port 587, or see
+[SMTP Port 25](../networking/public-network/smtp-port-25) to request access.
+
+:::
+
 ## Software included
 
 | Component      | Version                                                |

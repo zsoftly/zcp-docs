@@ -114,10 +114,7 @@ Fournissez un **Server Name** unique et un **Server Hostname** valide.
 
 ## Vérifier et déployer
 
-- Choisissez le **Cycle de facturation** souhaité : horaire, mensuel, trimestriel, semestriel,
-  annuel, biannuel ou triannuel.
-- Règles de facturation prises en charge : Date to Date, Fixed Calendar Month, Unfixed Calendar
-  Month, Fixed Prorata, Unfixed Prorata.
+- Choisissez le **cycle de facturation** souhaité : horaire, mensuel ou annuel.
 - Vérifiez tous les détails de configuration, puis cliquez sur **Review & Deploy**.
 
 ## Se connecter à votre instance

@@ -55,6 +55,7 @@ const frSidebarLabels = {
   Create: 'Créer',
   'Public IPs': 'IP publiques',
   'Egress Rules': 'Règles de sortie',
+  'SMTP Port 25': 'Port SMTP 25',
   VPC: 'VPC',
   'Create VPC': 'Créer un VPC',
   'Add Subnet': 'Ajouter un sous-réseau',
@@ -346,6 +347,10 @@ export default defineConfig({
                     {
                       label: 'Egress Rules',
                       slug: 'public-cloud/networking/public-network/egress-rules',
+                    },
+                    {
+                      label: 'SMTP Port 25',
+                      slug: 'public-cloud/networking/public-network/smtp-port-25',
                     },
                   ],
                 },

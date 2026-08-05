@@ -7,6 +7,15 @@ contenu. Son modèle d'entités, sa taxonomie et son écosystème de modules per
 créer des types de contenu personnalisés, des flux éditoriaux et des sites multilingues sans écrire
 elles-mêmes le code sous-jacent.
 
+:::note
+
+La fonction `mail()` de PHP et l'agent de transport de courrier local livrent le courriel
+directement sur le port 25, qui est bloqué par défaut. Utilisez une extension SMTP ou un relais
+authentifié sur le port 587, ou consultez [Port SMTP 25](../networking/public-network/smtp-port-25)
+pour demander l'accès.
+
+:::
+
 ## Logiciels inclus
 
 | Composant | Version   |

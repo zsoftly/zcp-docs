@@ -26,7 +26,7 @@ reliability, and improved performance.
    - Select **VM instances** to handle traffic
 6. **Name**: alphanumeric, dashes, and periods only.
 7. **Create**:
-   - Billing cycles: Hourly, Monthly, Quarterly, Semiannually, Yearly, Bi-annually, Tri-annually
+   - Billing cycles: Hourly, Monthly, or Yearly.
    - One package per zone
    - Click **Create Load Balancer**
 

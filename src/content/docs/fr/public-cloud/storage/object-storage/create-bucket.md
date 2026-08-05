@@ -20,9 +20,9 @@ sauvegardes, les ressources statiques ou toute donnée non structurée.
 3. **Taille du stockage objet** : choisissez le type et la taille de stockage. Des plans
    personnalisés sont disponibles.
 4. **Nom** : fournissez un nom unique.
-5. **Créer** : cycles de facturation : Hourly, Monthly, Quarterly, Semiannually, Yearly,
-   Bi-annually, Tri-annually. Règles de facturation : Date to Date, Fixed Calendar Month, Unfixed
-   Calendar Month, Fixed Prorata, Unfixed Prorata. Cliquez sur **Review and Create**.
+5. **Créer** :
+   - Cycles de facturation : horaire, mensuel ou annuel.
+   - Cliquez sur **Review and Create**.
 
 ![Créer une instance de stockage objet : projet, emplacement, taille, nom et facturation](../../../../../../assets/storage/object-storage/create-bucket-steps.webp)
 

@@ -21,6 +21,10 @@ complete, commit-level history.
 
 Updates to the Public Cloud platform and managed services.
 
+- **Outbound SMTP on port 25 is now blocked by default** on all compute instances to protect
+  platform-wide sender reputation. Ports 465 and 587 remain open for authenticated email. Verified
+  customers can request access through support. See
+  [SMTP Port 25](/public-cloud/networking/public-network/smtp-port-25).
 - **Kubernetes 1.36** is now supported for managed clusters.
 - **Windows Server 2025** images are available for compute instances.
 - **ZSoftly Cloud Storage**: dedicated, single-tenant storage clusters are generally available.

@@ -40,7 +40,7 @@ Fournissez un nom unique pour votre réseau public.
 
 ### Créer
 
-- Choisissez le **cycle de facturation** : Hourly ou Monthly.
+- Choisissez le **cycle de facturation** : horaire, mensuel ou annuel.
 - Passez en revue le sommaire du prix et cliquez sur **Créer**.
 
 ![Créer un réseau public : cycle de facturation et sommaire du prix](../../../../../../assets/networking/create-create.webp)
