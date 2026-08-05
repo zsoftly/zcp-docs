@@ -16,7 +16,7 @@ register a second account with an address already in use.
 **Use Projects for environment isolation.** Most teams need one account. Create separate
 **Projects** inside it for `dev`, `stg`, and `prd`. Each Project gets its own resources, quotas, and
 team membership. Resources in different Projects do not share networks or storage. See
-[Projects](../projects) for details.
+[Projects](/public-cloud/projects) for details.
 
 **Use separate accounts for hard isolation.** Some organizations need a complete boundary between
 environments or business units: separate billing, separate IAM, and no shared resources. Create one

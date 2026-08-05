@@ -13,7 +13,7 @@ cPanel.
 Le serveur de courriel intégré à cPanel livre le courriel directement sur le port 25, qui est bloqué
 par défaut. Demandez l'accès avant de dépendre du courriel sortant depuis cette instance, ou
 configurez un serveur relais (smart host) sur le port 587. Voir
-[Port SMTP 25](../networking/public-network/smtp-port-25) pour la politique complète.
+[Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25) pour la politique complète.
 
 :::
 

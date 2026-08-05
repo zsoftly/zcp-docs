@@ -11,8 +11,8 @@ elles-mêmes le code sous-jacent.
 
 La fonction `mail()` de PHP et l'agent de transport de courrier local livrent le courriel
 directement sur le port 25, qui est bloqué par défaut. Utilisez une extension SMTP ou un relais
-authentifié sur le port 587, ou consultez [Port SMTP 25](../networking/public-network/smtp-port-25)
-pour demander l'accès.
+authentifié sur le port 587, ou consultez
+[Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25) pour demander l'accès.
 
 :::
 
