@@ -10,7 +10,7 @@ workflows, and multilingual sites without writing the underlying code themselves
 
 PHP's `mail()` function and the local mail transfer agent deliver mail directly over port 25, which
 is blocked by default. Use an SMTP plugin or authenticated relay on port 587, or see
-[SMTP Port 25](../networking/public-network/smtp-port-25) to request access.
+[SMTP Port 25](/public-cloud/networking/public-network/smtp-port-25) to request access.
 
 :::
 

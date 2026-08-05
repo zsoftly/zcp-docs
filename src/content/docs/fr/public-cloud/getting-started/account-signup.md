@@ -16,7 +16,7 @@ ne pouvez pas créer un deuxième compte avec une adresse déjà utilisée.
 **Utilisez les projets pour isoler les environnements.** La plupart des équipes n'ont besoin que d
 un seul compte. Créez des **Projets** distincts pour `dev`, `stg` et `prd`. Chaque projet possède
 ses propres ressources, quotas et membres. Les ressources de projets différents ne partagent pas les
-réseaux ni le stockage. Consultez [Projets](../projects) pour en savoir plus.
+réseaux ni le stockage. Consultez [Projets](/fr/public-cloud/projects) pour en savoir plus.
 
 **Utilisez des comptes distincts pour une isolation stricte.** Certaines organisations exigent une
 séparation complète entre des environnements ou des unités d'affaires : facturation distincte, IAM

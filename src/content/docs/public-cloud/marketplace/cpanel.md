@@ -11,7 +11,8 @@ that sits above cPanel.
 
 cPanel's bundled mail server delivers email directly over port 25, which is blocked by default.
 Request access before relying on outbound email from this instance, or configure a smart host on
-port 587. See [SMTP Port 25](../networking/public-network/smtp-port-25) for the full policy.
+port 587. See [SMTP Port 25](/public-cloud/networking/public-network/smtp-port-25) for the full
+policy.
 
 :::
 
