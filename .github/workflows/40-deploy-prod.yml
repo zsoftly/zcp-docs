@@ -1,0 +1,144 @@
+name: '40: Deploy Production'
+
+# Manual production deploy for docs.zcp.zsoftly.ca.
+# This workflow is the app repo entry point. It dispatches the central iaas
+# deployment workflow, where the existing Ansible playbook runs against
+# yow-apps-01.
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: 'Release branch validated in stg (e.g. release/2026-08-05-1400)'
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-prod-docs
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  deploy:
+    name: Request prod deploy
+    runs-on: zsoftly-yow
+    permissions:
+      contents: read
+    steps:
+      - name: '00: Validate release ref'
+        env:
+          GIT_REF: ${{ github.ref }}
+          SOURCE_REF: ${{ github.event.inputs.source_ref }}
+        run: |
+          if [ "$GIT_REF" != "refs/heads/main" ]; then
+            echo "[FAIL] Production deploy workflow must be dispatched from main (got: $GIT_REF)"
+            exit 1
+          fi
+          if [[ "$SOURCE_REF" != release/* ]]; then
+            echo "[FAIL] source_ref must start with release/ (got: $SOURCE_REF)"
+            exit 1
+          fi
+          echo "[OK] workflow ref=$GIT_REF"
+          echo "[OK] source_ref=$SOURCE_REF"
+
+      - name: '01: Dispatch iaas deployment'
+        env:
+          IAAS_TOKEN: ${{ secrets.IAAS_DEPLOY_DISPATCH_TOKEN }}
+          REQUEST_ID: docs-${{ github.run_id }}-${{ github.run_attempt }}
+          SOURCE_REF: ${{ github.event.inputs.source_ref }}
+        run: |
+          set -euo pipefail
+          if [ -z "$IAAS_TOKEN" ]; then
+            echo "[FAIL] IAAS_DEPLOY_DISPATCH_TOKEN is required"
+            exit 1
+          fi
+
+          PAYLOAD=$(REQUEST_ID="$REQUEST_ID" SOURCE_REF="$SOURCE_REF" node -e '
+            process.stdout.write(JSON.stringify({
+              event_type: "zcp-websites-prod-deploy",
+              client_payload: {
+                request_id: process.env.REQUEST_ID,
+                site: "docs",
+                source_repo: "zsoftly/zcp-docs",
+                source_ref: process.env.SOURCE_REF
+              }
+            }))
+          ')
+
+          curl -fsS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $IAAS_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/zsoftly/iaas/dispatches \
+            -d "$PAYLOAD"
+
+          echo "[OK] Dispatched iaas deploy request: $REQUEST_ID"
+
+      - name: '02: Wait for iaas deployment'
+        env:
+          IAAS_TOKEN: ${{ secrets.IAAS_DEPLOY_DISPATCH_TOKEN }}
+          REQUEST_ID: docs-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+
+          DEADLINE=$((SECONDS + 7200))
+          RUN_ID=""
+          for attempt in $(seq 1 30); do
+            RESPONSE=$(curl -fsS \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $IAAS_TOKEN" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/zsoftly/iaas/actions/workflows/420-zcp-websites-prod.yml/runs?event=repository_dispatch&per_page=20")
+
+            RUN_ID=$(RESPONSE="$RESPONSE" REQUEST_ID="$REQUEST_ID" node -e '
+              const runs = JSON.parse(process.env.RESPONSE).workflow_runs || [];
+              const run = runs.find((item) => (item.display_title || "").includes(process.env.REQUEST_ID));
+              if (run) process.stdout.write(String(run.id));
+            ')
+
+            if [ -n "$RUN_ID" ]; then
+              echo "[OK] Found iaas deploy run: $RUN_ID"
+              break
+            fi
+
+            echo "[INFO] Waiting for iaas run to appear ($attempt/30)..."
+            sleep 10
+          done
+
+          if [ -z "$RUN_ID" ]; then
+            echo "[FAIL] Timed out waiting for iaas deploy run for $REQUEST_ID"
+            exit 1
+          fi
+
+          while true; do
+            if [ "$SECONDS" -ge "$DEADLINE" ]; then
+              echo "[FAIL] Timed out waiting for iaas deploy run $RUN_ID to complete"
+              exit 1
+            fi
+
+            RESPONSE=$(curl -fsS \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $IAAS_TOKEN" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/zsoftly/iaas/actions/runs/$RUN_ID")
+
+            STATUS=$(RESPONSE="$RESPONSE" node -e 'process.stdout.write(JSON.parse(process.env.RESPONSE).status || "")')
+            CONCLUSION=$(RESPONSE="$RESPONSE" node -e 'process.stdout.write(JSON.parse(process.env.RESPONSE).conclusion || "")')
+            URL=$(RESPONSE="$RESPONSE" node -e 'process.stdout.write(JSON.parse(process.env.RESPONSE).html_url || "")')
+
+            echo "[INFO] iaas run status=$STATUS conclusion=${CONCLUSION:-pending} url=$URL"
+
+            if [ "$STATUS" = "completed" ]; then
+              if [ "$CONCLUSION" = "success" ]; then
+                echo "[OK] iaas deployment succeeded"
+                exit 0
+              fi
+              echo "[FAIL] iaas deployment finished with conclusion=$CONCLUSION"
+              exit 1
+            fi
+
+            sleep 20
+          done
