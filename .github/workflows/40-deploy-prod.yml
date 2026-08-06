@@ -1,9 +1,8 @@
 name: '40: Deploy Production'
 
 # Manual production deploy for docs.zcp.zsoftly.ca.
-# This workflow is the app repo entry point. It dispatches the central iaas
-# deployment workflow, where the existing Ansible playbook runs against
-# yow-apps-01.
+# This workflow is the app repo entry point. It fetches the shared iaas
+# deployment script and runs it locally on the trusted YOW runner.
 
 on:
   workflow_dispatch:
@@ -12,22 +11,24 @@ on:
         description: 'Release branch validated in stg (e.g. release/2026-08-05-1400)'
         required: true
         type: string
-
 concurrency:
   group: deploy-prod-docs
   cancel-in-progress: false
+
+permissions:
+  contents: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  deploy:
-    name: Request prod deploy
-    runs-on: zsoftly-yow
-    permissions:
-      contents: read
+  build:
+    name: Build production artifact
+    runs-on: ubuntu-latest
+    outputs:
+      source_sha: ${{ steps.resolve_source.outputs.source_sha }}
     steps:
-      - name: '00: Validate release ref'
+      - name: '00: Validate inputs'
         env:
           GIT_REF: ${{ github.ref }}
           SOURCE_REF: ${{ github.event.inputs.source_ref }}
@@ -40,105 +41,199 @@ jobs:
             echo "[FAIL] source_ref must start with release/ (got: $SOURCE_REF)"
             exit 1
           fi
+          if ! git check-ref-format --branch "$SOURCE_REF" >/dev/null 2>&1; then
+            echo "[FAIL] source_ref must be a valid branch name (got: $SOURCE_REF)"
+            exit 1
+          fi
           echo "[OK] workflow ref=$GIT_REF"
           echo "[OK] source_ref=$SOURCE_REF"
 
-      - name: '01: Dispatch iaas deployment'
+      - name: '01: Fetch shared iaas deployment logic'
         env:
-          IAAS_TOKEN: ${{ secrets.IAAS_DEPLOY_DISPATCH_TOKEN }}
-          REQUEST_ID: docs-${{ github.run_id }}-${{ github.run_attempt }}
+          IAAS_REF: main
+          IAAS_REPO_READ_TOKEN: ${{ secrets.IAAS_REPO_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          IAAS_DIR="${RUNNER_TEMP}/zcp-prod-iaas-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          export IAAS_DIR
+          if [ -z "$IAAS_REPO_READ_TOKEN" ]; then
+            echo "[FAIL] IAAS_REPO_READ_TOKEN is required"
+            exit 1
+          fi
+
+          SECRET_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/iaas-fetch.XXXXXX")"
+          chmod 700 "$SECRET_DIR"
+          TOKEN_FILE="$SECRET_DIR/github-token"
+          ASKPASS_FILE="$SECRET_DIR/git-askpass"
+          printf '%s' "$IAAS_REPO_READ_TOKEN" > "$TOKEN_FILE"
+          chmod 600 "$TOKEN_FILE"
+          cat > "$ASKPASS_FILE" <<'ASKPASS'
+          #!/usr/bin/env bash
+          case "$1" in
+            *Username*) printf "%s\n" "x-access-token" ;;
+            *Password*) cat "$GIT_TOKEN_FILE" ;;
+            *) exit 1 ;;
+          esac
+          ASKPASS
+          chmod 700 "$ASKPASS_FILE"
+          trap 'rm -rf "$SECRET_DIR"' EXIT
+          unset IAAS_REPO_READ_TOKEN
+
+          mkdir -p "$(dirname "$IAAS_DIR")"
+          rm -rf "$IAAS_DIR"
+          GIT_TOKEN_FILE="$TOKEN_FILE" GIT_ASKPASS="$ASKPASS_FILE" GIT_TERMINAL_PROMPT=0 \
+            git clone --no-tags https://github.com/zsoftly/iaas.git "$IAAS_DIR"
+          GIT_TOKEN_FILE="$TOKEN_FILE" GIT_ASKPASS="$ASKPASS_FILE" GIT_TERMINAL_PROMPT=0 \
+          git -C "$IAAS_DIR" fetch --force --prune origin "refs/heads/${IAAS_REF}:refs/remotes/origin/${IAAS_REF}"
+          git -C "$IAAS_DIR" checkout --force --detach "refs/remotes/origin/${IAAS_REF}"
+          git -C "$IAAS_DIR" clean -ffdx
+          DEPLOY_SCRIPT="${RUNNER_TEMP}/deploy-zcp-website-prod.sh"
+          cp "$IAAS_DIR/.github/scripts/deploy-zcp-website-prod.sh" "$DEPLOY_SCRIPT"
+          chmod 700 "$DEPLOY_SCRIPT"
+          rm -rf "$IAAS_DIR"
+          echo "DEPLOY_SCRIPT=$DEPLOY_SCRIPT" >> "$GITHUB_ENV"
+
+      - name: '02: Prepare source checkout'
+        env:
+          PHASE: prepare
+          SITE: docs
+          SOURCE_REPO: zsoftly/zcp-docs
           SOURCE_REF: ${{ github.event.inputs.source_ref }}
+          SOURCE_REPO_TOKEN: ${{ github.token }}
+        run: |
+          "$DEPLOY_SCRIPT"
+
+      - name: '03: Record resolved source commit'
+        id: resolve_source
         run: |
           set -euo pipefail
-          if [ -z "$IAAS_TOKEN" ]; then
-            echo "[FAIL] IAAS_DEPLOY_DISPATCH_TOKEN is required"
-            exit 1
-          fi
+          SOURCE_SHA="$(git -C "$HOME/zsoftly/zcp-docs" rev-parse HEAD)"
+          echo "source_sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "[OK] source_sha=$SOURCE_SHA"
 
-          PAYLOAD=$(REQUEST_ID="$REQUEST_ID" SOURCE_REF="$SOURCE_REF" node -e '
-            process.stdout.write(JSON.stringify({
-              event_type: "zcp-websites-prod-deploy",
-              client_payload: {
-                request_id: process.env.REQUEST_ID,
-                site: "docs",
-                source_repo: "zsoftly/zcp-docs",
-                source_ref: process.env.SOURCE_REF
-              }
-            }))
-          ')
+      - name: '04: Setup pnpm'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
 
-          curl -fsS -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $IAAS_TOKEN" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/zsoftly/iaas/dispatches \
-            -d "$PAYLOAD"
+      - name: '05: Setup Node.js'
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
 
-          echo "[OK] Dispatched iaas deploy request: $REQUEST_ID"
-
-      - name: '02: Wait for iaas deployment'
+      - name: '06: Build selected release'
         env:
-          IAAS_TOKEN: ${{ secrets.IAAS_DEPLOY_DISPATCH_TOKEN }}
-          REQUEST_ID: docs-${{ github.run_id }}-${{ github.run_attempt }}
+          PHASE: build
+          SITE: docs
+        run: |
+          "$DEPLOY_SCRIPT"
+
+      - name: '07: Stage production artifact'
         run: |
           set -euo pipefail
+          ARTIFACT_DIR="${RUNNER_TEMP}/docs-site-dist"
+          rm -rf "$ARTIFACT_DIR"
+          mkdir -p "$ARTIFACT_DIR"
+          cp -a "$HOME/zsoftly/zcp-docs/dist/." "$ARTIFACT_DIR/"
 
-          DEADLINE=$((SECONDS + 7200))
-          RUN_ID=""
-          for attempt in $(seq 1 30); do
-            RESPONSE=$(curl -fsS \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer $IAAS_TOKEN" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              "https://api.github.com/repos/zsoftly/iaas/actions/workflows/420-zcp-websites-prod.yml/runs?event=repository_dispatch&per_page=20")
+      - name: '08: Upload production artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-site-dist
+          path: ${{ runner.temp }}/docs-site-dist
+          if-no-files-found: error
 
-            RUN_ID=$(RESPONSE="$RESPONSE" REQUEST_ID="$REQUEST_ID" node -e '
-              const runs = JSON.parse(process.env.RESPONSE).workflow_runs || [];
-              const run = runs.find((item) => (item.display_title || "").includes(process.env.REQUEST_ID));
-              if (run) process.stdout.write(String(run.id));
-            ')
-
-            if [ -n "$RUN_ID" ]; then
-              echo "[OK] Found iaas deploy run: $RUN_ID"
-              break
-            fi
-
-            echo "[INFO] Waiting for iaas run to appear ($attempt/30)..."
-            sleep 10
-          done
-
-          if [ -z "$RUN_ID" ]; then
-            echo "[FAIL] Timed out waiting for iaas deploy run for $REQUEST_ID"
+  deploy:
+    name: Deploy production
+    needs: build
+    runs-on: zsoftly-yow
+    environment:
+      name: production
+      url: https://docs.zcp.zsoftly.ca
+    steps:
+      - name: '00: Fetch trusted iaas deployment logic'
+        env:
+          IAAS_REF: main
+          IAAS_REPO_READ_TOKEN: ${{ secrets.IAAS_REPO_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          IAAS_DIR="${RUNNER_TEMP}/zcp-prod-iaas-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          export IAAS_DIR
+          if [ -z "$IAAS_REPO_READ_TOKEN" ]; then
+            echo "[FAIL] IAAS_REPO_READ_TOKEN is required"
             exit 1
           fi
 
-          while true; do
-            if [ "$SECONDS" -ge "$DEADLINE" ]; then
-              echo "[FAIL] Timed out waiting for iaas deploy run $RUN_ID to complete"
-              exit 1
-            fi
+          SECRET_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/iaas-fetch.XXXXXX")"
+          chmod 700 "$SECRET_DIR"
+          TOKEN_FILE="$SECRET_DIR/github-token"
+          ASKPASS_FILE="$SECRET_DIR/git-askpass"
+          printf '%s' "$IAAS_REPO_READ_TOKEN" > "$TOKEN_FILE"
+          chmod 600 "$TOKEN_FILE"
+          cat > "$ASKPASS_FILE" <<'ASKPASS'
+          #!/usr/bin/env bash
+          case "$1" in
+            *Username*) printf "%s\n" "x-access-token" ;;
+            *Password*) cat "$GIT_TOKEN_FILE" ;;
+            *) exit 1 ;;
+          esac
+          ASKPASS
+          chmod 700 "$ASKPASS_FILE"
+          trap 'rm -rf "$SECRET_DIR"' EXIT
+          unset IAAS_REPO_READ_TOKEN
 
-            RESPONSE=$(curl -fsS \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer $IAAS_TOKEN" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              "https://api.github.com/repos/zsoftly/iaas/actions/runs/$RUN_ID")
+          mkdir -p "$(dirname "$IAAS_DIR")"
+          rm -rf "$IAAS_DIR"
+          GIT_TOKEN_FILE="$TOKEN_FILE" GIT_ASKPASS="$ASKPASS_FILE" GIT_TERMINAL_PROMPT=0 \
+            git clone --no-tags https://github.com/zsoftly/iaas.git "$IAAS_DIR"
+          GIT_TOKEN_FILE="$TOKEN_FILE" GIT_ASKPASS="$ASKPASS_FILE" GIT_TERMINAL_PROMPT=0 \
+            git -C "$IAAS_DIR" fetch --force --prune origin "refs/heads/${IAAS_REF}:refs/remotes/origin/${IAAS_REF}"
+          git -C "$IAAS_DIR" checkout --force --detach "refs/remotes/origin/${IAAS_REF}"
+          git -C "$IAAS_DIR" clean -ffdx
 
-            STATUS=$(RESPONSE="$RESPONSE" node -e 'process.stdout.write(JSON.parse(process.env.RESPONSE).status || "")')
-            CONCLUSION=$(RESPONSE="$RESPONSE" node -e 'process.stdout.write(JSON.parse(process.env.RESPONSE).conclusion || "")')
-            URL=$(RESPONSE="$RESPONSE" node -e 'process.stdout.write(JSON.parse(process.env.RESPONSE).html_url || "")')
+      - name: '01: Prepare source checkout'
+        env:
+          PHASE: prepare
+          SITE: docs
+          SOURCE_REPO: zsoftly/zcp-docs
+          SOURCE_REF: ${{ github.event.inputs.source_ref }}
+          SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
+          SOURCE_REPO_TOKEN: ${{ github.token }}
+        run: |
+          IAAS_DIR="${RUNNER_TEMP}/zcp-prod-iaas-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          export IAAS_DIR
+          "$IAAS_DIR/.github/scripts/deploy-zcp-website-prod.sh"
 
-            echo "[INFO] iaas run status=$STATUS conclusion=${CONCLUSION:-pending} url=$URL"
+      - name: '02: Download production artifact'
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-site-dist
+          path: ${{ runner.temp }}/docs-site-dist
 
-            if [ "$STATUS" = "completed" ]; then
-              if [ "$CONCLUSION" = "success" ]; then
-                echo "[OK] iaas deployment succeeded"
-                exit 0
-              fi
-              echo "[FAIL] iaas deployment finished with conclusion=$CONCLUSION"
-              exit 1
-            fi
+      - name: '03: Install production artifact'
+        run: |
+          set -euo pipefail
+          DIST_DIR="$HOME/zsoftly/zcp-docs/dist"
+          rm -rf "$DIST_DIR"
+          mkdir -p "$DIST_DIR"
+          cp -a "${RUNNER_TEMP}/docs-site-dist/." "$DIST_DIR/"
 
-            sleep 20
-          done
+      - name: '04: Deploy production'
+        env:
+          PHASE: deploy
+          SITE: docs
+          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          ANSIBLE_SSH_KEY: ${{ secrets.ANSIBLE_SSH_KEY }}
+        run: |
+          IAAS_DIR="${RUNNER_TEMP}/zcp-prod-iaas-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          export IAAS_DIR
+          "$IAAS_DIR/.github/scripts/deploy-zcp-website-prod.sh"
+
+      - name: '05: Smoke production'
+        env:
+          PHASE: smoke
+          SITE: docs
+        run: |
+          IAAS_DIR="${RUNNER_TEMP}/zcp-prod-iaas-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          export IAAS_DIR
+          "$IAAS_DIR/.github/scripts/deploy-zcp-website-prod.sh"
