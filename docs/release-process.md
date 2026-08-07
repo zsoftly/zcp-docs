@@ -28,7 +28,11 @@ branch -> open PR -> CI passes -> merge to main -> published
    (formatting, lint, type check, dependency audit, build) must be green.
 4. After review and merge to `main`, the change is published to the documentation site through
    ZSoftly's internal deployment pipeline. Maintainers cut a `release/*` branch, deploy it to stg
-   with `20: Deploy Staging`, then deploy the same ref to prd with `40: Deploy Production`.
+   with `20: Deploy Staging`, then deploy the same ref to prd with `40: Deploy Production`. The prd
+   workflow builds the selected release, runs an automatic Ansible dry run, and deploys only if that
+   dry run succeeds.
+   If rollback is needed, maintainers rerun `40: Deploy Production` with the previous known-good
+   `release/*` ref as `source_ref`.
 
 ---
 

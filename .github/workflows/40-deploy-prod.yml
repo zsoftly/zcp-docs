@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       source_sha: ${{ steps.resolve_source.outputs.source_sha }}
+      iaas_sha: ${{ steps.fetch_iaas.outputs.iaas_sha }}
     steps:
       - name: '00: Validate inputs'
         env:
@@ -34,21 +35,22 @@ jobs:
           SOURCE_REF: ${{ github.event.inputs.source_ref }}
         run: |
           if [ "$GIT_REF" != "refs/heads/main" ]; then
-            echo "[FAIL] Production deploy workflow must be dispatched from main (got: $GIT_REF)"
+            echo "[ERROR] Production deploy workflow must be dispatched from main (got: $GIT_REF)"
             exit 1
           fi
           if [[ "$SOURCE_REF" != release/* ]]; then
-            echo "[FAIL] source_ref must start with release/ (got: $SOURCE_REF)"
+            echo "[ERROR] source_ref must start with release/ (got: $SOURCE_REF)"
             exit 1
           fi
           if ! git check-ref-format --branch "$SOURCE_REF" >/dev/null 2>&1; then
-            echo "[FAIL] source_ref must be a valid branch name (got: $SOURCE_REF)"
+            echo "[ERROR] source_ref must be a valid branch name (got: $SOURCE_REF)"
             exit 1
           fi
           echo "[OK] workflow ref=$GIT_REF"
           echo "[OK] source_ref=$SOURCE_REF"
 
       - name: '01: Fetch shared iaas deployment logic'
+        id: fetch_iaas
         env:
           IAAS_REF: main
           IAAS_REPO_READ_TOKEN: ${{ secrets.IAAS_REPO_READ_TOKEN }}
@@ -57,7 +59,7 @@ jobs:
           IAAS_DIR="${RUNNER_TEMP}/zcp-prod-iaas-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           export IAAS_DIR
           if [ -z "$IAAS_REPO_READ_TOKEN" ]; then
-            echo "[FAIL] IAAS_REPO_READ_TOKEN is required"
+            echo "[ERROR] IAAS_REPO_READ_TOKEN is required"
             exit 1
           fi
 
@@ -87,6 +89,9 @@ jobs:
           git -C "$IAAS_DIR" fetch --force --prune origin "refs/heads/${IAAS_REF}:refs/remotes/origin/${IAAS_REF}"
           git -C "$IAAS_DIR" checkout --force --detach "refs/remotes/origin/${IAAS_REF}"
           git -C "$IAAS_DIR" clean -ffdx
+          IAAS_SHA="$(git -C "$IAAS_DIR" rev-parse HEAD)"
+          echo "iaas_sha=$IAAS_SHA" >> "$GITHUB_OUTPUT"
+          echo "[OK] iaas_sha=$IAAS_SHA"
           DEPLOY_SCRIPT="${RUNNER_TEMP}/deploy-zcp-website-prod.sh"
           cp "$IAAS_DIR/.github/scripts/deploy-zcp-website-prod.sh" "$DEPLOY_SCRIPT"
           chmod 700 "$DEPLOY_SCRIPT"
@@ -153,14 +158,22 @@ jobs:
     steps:
       - name: '00: Fetch trusted iaas deployment logic'
         env:
-          IAAS_REF: main
+          IAAS_SHA: ${{ needs.build.outputs.iaas_sha }}
           IAAS_REPO_READ_TOKEN: ${{ secrets.IAAS_REPO_READ_TOKEN }}
         run: |
           set -euo pipefail
           IAAS_DIR="${RUNNER_TEMP}/zcp-prod-iaas-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           export IAAS_DIR
+          if [ -z "$IAAS_SHA" ]; then
+            echo "[ERROR] Build job did not provide iaas_sha"
+            exit 1
+          fi
+          if [[ ! "$IAAS_SHA" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "[ERROR] iaas_sha must be a 40-character commit SHA (got: $IAAS_SHA)"
+            exit 1
+          fi
           if [ -z "$IAAS_REPO_READ_TOKEN" ]; then
-            echo "[FAIL] IAAS_REPO_READ_TOKEN is required"
+            echo "[ERROR] IAAS_REPO_READ_TOKEN is required"
             exit 1
           fi
 
@@ -187,8 +200,8 @@ jobs:
           GIT_TOKEN_FILE="$TOKEN_FILE" GIT_ASKPASS="$ASKPASS_FILE" GIT_TERMINAL_PROMPT=0 \
             git clone --no-tags https://github.com/zsoftly/iaas.git "$IAAS_DIR"
           GIT_TOKEN_FILE="$TOKEN_FILE" GIT_ASKPASS="$ASKPASS_FILE" GIT_TERMINAL_PROMPT=0 \
-            git -C "$IAAS_DIR" fetch --force --prune origin "refs/heads/${IAAS_REF}:refs/remotes/origin/${IAAS_REF}"
-          git -C "$IAAS_DIR" checkout --force --detach "refs/remotes/origin/${IAAS_REF}"
+            git -C "$IAAS_DIR" fetch --force --prune origin "$IAAS_SHA"
+          git -C "$IAAS_DIR" checkout --force --detach "$IAAS_SHA"
           git -C "$IAAS_DIR" clean -ffdx
 
       - name: '01: Prepare source checkout'
@@ -218,7 +231,18 @@ jobs:
           mkdir -p "$DIST_DIR"
           cp -a "${RUNNER_TEMP}/docs-site-dist/." "$DIST_DIR/"
 
-      - name: '04: Deploy production'
+      - name: '04: Dry run production deploy'
+        env:
+          PHASE: dry_run
+          SITE: docs
+          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          ANSIBLE_SSH_KEY: ${{ secrets.ANSIBLE_SSH_KEY }}
+        run: |
+          IAAS_DIR="${RUNNER_TEMP}/zcp-prod-iaas-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          export IAAS_DIR
+          "$IAAS_DIR/.github/scripts/deploy-zcp-website-prod.sh"
+
+      - name: '05: Deploy production'
         env:
           PHASE: deploy
           SITE: docs
@@ -229,7 +253,7 @@ jobs:
           export IAAS_DIR
           "$IAAS_DIR/.github/scripts/deploy-zcp-website-prod.sh"
 
-      - name: '05: Smoke production'
+      - name: '06: Smoke production'
         env:
           PHASE: smoke
           SITE: docs
