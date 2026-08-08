@@ -22,6 +22,10 @@ pour l'historique complet au niveau des commits.
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
 
+- **Le SMTP sortant sur le port 25 est désormais bloqué par défaut** sur toutes les instances de
+  calcul afin de protéger la réputation d'envoi de la plateforme. Les ports 465 et 587 restent
+  ouverts pour le courriel authentifié. Les clients vérifiés peuvent demander l'accès auprès du
+  soutien. Voir [Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25).
 - **Kubernetes 1.36** est désormais pris en charge pour les grappes gérées.
 - Les images **Windows Server 2025** sont disponibles pour les instances de calcul.
 - **ZSoftly Cloud Storage** : les grappes de stockage dédiées à un seul locataire sont disponibles

@@ -34,10 +34,7 @@ private network.
 
 ### Create
 
-- **Billing Cycles supported**: Hourly, Monthly, Quarterly, Semiannually, Yearly, Bi-annually,
-  Tri-annually.
-- **Billing rules supported**: Date to Date, Fixed Calendar Month, Unfixed Calendar Month, Fixed
-  Prorata, Unfixed Prorata.
+- **Billing Cycles supported**: Hourly, Monthly, or Yearly.
 - Pick a **Billing Cycle**, review the **Price Summary**, and click **Create VPC**. A confirmation
   dialog shows the price breakdown (subtotal, tax, and net payable) before you confirm.
 

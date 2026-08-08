@@ -7,6 +7,14 @@ LAMP stack. Nginx handles HTTP traffic more efficiently under load than Apache, 
 choice for production web applications. This image runs the entire stack in Docker Compose for easy
 management.
 
+:::note
+
+PHP's `mail()` function and the local mail transfer agent deliver mail directly over port 25, which
+is blocked by default. Use an SMTP plugin or authenticated relay on port 587, or see
+[SMTP Port 25](/public-cloud/networking/public-network/smtp-port-25) to request access.
+
+:::
+
 ## Software included
 
 | Component      | Version       |

@@ -6,6 +6,15 @@ La pile LAMP (Linux, Apache, MariaDB et PHP) est la combinaison classique pour h
 applications Web et des sites dynamiques. Cette image fournit les quatre composants préinstallés et
 configurés pour fonctionner ensemble, prêts pour le déploiement de votre application.
 
+:::note
+
+La fonction `mail()` de PHP et l'agent de transport de courrier local livrent le courriel
+directement sur le port 25, qui est bloqué par défaut. Utilisez une extension SMTP ou un relais
+authentifié sur le port 587, ou consultez
+[Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25) pour demander l'accès.
+
+:::
+
 ## Logiciels inclus
 
 | Composant      | Version                                                |

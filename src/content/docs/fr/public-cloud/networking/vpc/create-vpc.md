@@ -35,13 +35,10 @@ la sécurité dans un réseau privé.
 
 ### Créer
 
-- **Cycles de facturation pris en charge** : Hourly, Monthly, Quarterly, Semiannually, Yearly,
-  Bi-annually, Tri-annually.
-- **Règles de facturation prises en charge** : Date to Date, Fixed Calendar Month, Unfixed Calendar
-  Month, Fixed Prorata, Unfixed Prorata.
-- Choisissez un **Billing Cycle**, passez en revue le **Price Summary**, puis cliquez sur **Create
-  VPC**. Une boîte de dialogue de confirmation affiche le détail du prix (sous-total, taxe et
-  montant net) avant de confirmer.
+- **Cycles de facturation pris en charge** : horaire, mensuel ou annuel.
+- Choisissez un **cycle de facturation**, passez en revue le **sommaire du prix**, puis cliquez sur
+  **Créer un VPC**. Une boîte de dialogue de confirmation affiche le détail du prix (sous-total,
+  taxe et montant net) avant de confirmer.
 
 ![Boîte de dialogue de confirmation de création de VPC avec le détail du prix](../../../../../../assets/networking/create-vpc-confirm.webp)
 
