@@ -5,9 +5,30 @@ description:
   the zcp CLI, and the Terraform / OpenTofu provider.
 ---
 
+import { changelogFeedEntries } from '../../../data/changelog-feed';
+
+export const formatFeedDate = (date) =>
+  new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${date}T00:00:00Z`));
+
 The single place to follow what's new across the ZSoftly Cloud Platform. Each section below is its
 own changelog: **platform & services**, the **Marketplace**, the **`zcp` CLI**, and the **Terraform
 / OpenTofu provider**, newest first.
+
+[Subscribe to the changelog RSS feed](/changelog/rss.xml)
+
+## Recent releases
+
+{changelogFeedEntries.map((entry) => (
+
+  <p>
+    <a href={`/changelog?entry=${entry.slug}`}>{entry.title}</a> ({formatFeedDate(entry.pubDate)})
+  </p>
+))}
 
 :::tip
 

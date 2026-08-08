@@ -4,6 +4,7 @@ import Default from '@astrojs/starlight/components/Footer.astro';
 
 const localePrefix = Astro.locals.starlightRoute.locale === 'fr' ? '/fr' : '';
 const buildDate = new Date().toISOString().slice(0, 10);
+const websiteUrl = import.meta.env.PUBLIC_WEBSITE_URL ?? 'https://zcp.zsoftly.ca';
 ---
 
 <Default {...Astro.props} />
@@ -15,13 +16,22 @@ const buildDate = new Date().toISOString().slice(0, 10);
       <a href={`${localePrefix}/private-cloud/overview`}>ZPCP</a>
       <a href={`${localePrefix}/public-cloud/cli/installation`}>CLI</a>
       <a href={`${localePrefix}/public-cloud/api/authentication`}>API</a>
-      <a href="https://zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer"
+      <a href={websiteUrl} target="_blank" rel="noopener noreferrer"
         >{Astro.locals.t('zs.footer.website')}</a
       >
-      <a href="https://zcp.zsoftly.ca/pricing" target="_blank" rel="noopener noreferrer"
+      <a href={`${websiteUrl}/services`} target="_blank" rel="noopener noreferrer"
+        >{Astro.locals.t('zs.footer.services')}</a
+      >
+      <a href={`${websiteUrl}/compare`} target="_blank" rel="noopener noreferrer"
+        >{Astro.locals.t('zs.footer.compare')}</a
+      >
+      <a href={`${websiteUrl}/services/private-cloud`} target="_blank" rel="noopener noreferrer"
+        >{Astro.locals.t('zs.footer.privateCloud')}</a
+      >
+      <a href={`${websiteUrl}/pricing`} target="_blank" rel="noopener noreferrer"
         >{Astro.locals.t('zs.footer.pricing')}</a
       >
-      <a href="https://zcp.zsoftly.ca/contact" target="_blank" rel="noopener noreferrer"
+      <a href={`${websiteUrl}/contact`} target="_blank" rel="noopener noreferrer"
         >{Astro.locals.t('zs.footer.contact')}</a
       >
       <a href="https://cloud.zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer"

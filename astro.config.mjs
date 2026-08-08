@@ -177,8 +177,8 @@ export default defineConfig({
       // ../section) which resolve correctly; we only want to catch real breakage.
       plugins: [starlightLinksValidator({ errorOnRelativeLinks: false })],
       logo: {
-        light: './public/logo.png',
-        dark: './public/logo-dark.png',
+        light: './public/logo.svg',
+        dark: './public/logo-dark.svg',
         replacesTitle: true,
       },
       favicon: '/favicon.svg',

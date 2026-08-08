@@ -8,6 +8,16 @@ title: Account Signup
 This guide provides a step-by-step tutorial to help you create a ZSoftly Public Cloud account, set
 up billing, and verify your account.
 
+:::tip[Start building for free]
+
+New accounts receive **CA$100 in credit** at signup, valid for **30 days**. After spending
+**CA$200**
+on eligible compute plans, you can request another **CA$200**, for up to **CA$300 total**. Account
+verification requires a **CA$1.00 payment**. We credit it back to your account as infrastructure
+credit, so you keep the full value.
+
+:::
+
 ### Account and Project Structure
 
 **One email address, one account.** Each email address maps to exactly one ZCP account. You cannot

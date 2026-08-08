@@ -88,9 +88,10 @@ pendant **30 jours**.
 Après avoir dépensé **200 $ CA** sur la plateforme, vous pouvez demander **200 $ CA de crédit**
 supplémentaire. Faites la demande depuis l'adresse courriel de votre compte au moyen de notre
 [page de contact](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), en indiquant votre
-**numéro de compte** et la mention **"$200 Credit Request"**. Nous appliquerons directement le
-crédit de **200 $ CA** à votre compte, valide pendant **60 jours**, pour un total pouvant atteindre
-**300 $ CA**.
+**numéro de compte** et la mention
+**"$200 Credit Request"**. Nous appliquerons directement le
+crédit de **200 $ CA** à votre compte,
+valide pendant **60 jours**, pour un total pouvant atteindre **300 $ CA**.
 
 Le crédit s'applique aux plans Small à XLarge. L'offre est disponible jusqu'au **31 décembre 2026**.
 
