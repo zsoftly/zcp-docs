@@ -49,7 +49,7 @@ support is planned (see the note at the end of this page). You can also enable i
 the S3 endpoint with an SDK at bucket creation.
 
 Anything marked **CLI / S3 API only** is also available through any S3-compatible SDK. See
-[S3 API Usage](/public-cloud/storage/object-storage/s3-usage) for language examples.
+[S3 API Usage](/public-cloud/storage/object-storage/s3-usage/) for language examples.
 
 ## Command reference
 

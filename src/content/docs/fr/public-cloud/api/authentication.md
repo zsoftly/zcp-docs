@@ -60,5 +60,5 @@ Chaque point de terminaison retourne une enveloppe commune :
 Les jetons émis depuis le portail restent valides jusqu'à leur révocation sous **Profile → API
 Tokens**. Révoquez et régénérez tout jeton qui aurait été exposé.
 
-Voir aussi : [Démarrage rapide de l'API](/fr/public-cloud/api/quickstart),
+Voir aussi : [Démarrage rapide de l'API](/fr/public-cloud/api/quickstart/),
 [Référence API](/fr/public-cloud/api/reference)

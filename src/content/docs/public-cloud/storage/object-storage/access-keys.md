@@ -65,4 +65,4 @@ export AWS_ENDPOINT_URL="https://objects.yul.zcp.zsoftly.ca"
 ```
 
 See also: [Create Bucket](/public-cloud/storage/object-storage/create-bucket),
-[S3 Usage](/public-cloud/storage/object-storage/s3-usage)
+[S3 Usage](/public-cloud/storage/object-storage/s3-usage/)

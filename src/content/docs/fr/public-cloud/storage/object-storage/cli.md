@@ -51,7 +51,7 @@ Vous pouvez aussi l'activer directement contre le point de terminaison S3 avec u
 création du compartiment.
 
 Tout ce qui est marqué **CLI / API S3 seulement** est aussi accessible via n'importe quel SDK
-compatible S3 — voir [Utilisation de l'API S3](/fr/public-cloud/storage/object-storage/s3-usage)
+compatible S3 — voir [Utilisation de l'API S3](/fr/public-cloud/storage/object-storage/s3-usage/)
 pour des exemples par langage.
 
 ## Référence des commandes

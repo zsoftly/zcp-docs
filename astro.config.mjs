@@ -1,8 +1,10 @@
 // @ts-check
 import { defineConfig, passthroughImageService } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import rehypeMermaid from 'rehype-mermaid';
+import { mdxLinkTargetIndexIntegration } from './src/plugins/rehype-mdx-link-target-index.mjs';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
 /** @type {Record<string, string>} */
@@ -157,10 +159,12 @@ export default defineConfig({
   // renders static inline SVG via Playwright/Chromium — no client JS, no CSP
   // change. Diagrams are single-theme (build-time SVG can't follow the toggle).
   markdown: {
-    remarkPlugins: [remarkMermaid],
-    rehypePlugins: [
-      [rehypeMermaid, { strategy: 'inline-svg', mermaidConfig: { theme: 'neutral' } }],
-    ],
+    processor: unified({
+      remarkPlugins: [remarkMermaid],
+      rehypePlugins: [
+        [rehypeMermaid, { strategy: 'inline-svg', mermaidConfig: { theme: 'neutral' } }],
+      ],
+    }),
   },
   integrations: [
     starlight({
@@ -612,6 +616,12 @@ export default defineConfig({
       //   apiKey: 'REPLACE_WITH_SEARCH_API_KEY',
       //   indexName: 'REPLACE_WITH_INDEX_NAME',
       // },
+    }),
+    // Astro 6 does not pass `markdown.processor` plugins to MDX content.
+    // Remove this compatibility bridge once the validator supports that path.
+    mdxLinkTargetIndexIntegration({
+      docsDirectory: new URL('./src/content/docs/', import.meta.url),
+      base: '/',
     }),
   ],
 
