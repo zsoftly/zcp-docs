@@ -93,10 +93,10 @@ After you spend **CA$200 on eligible compute plans**, you can claim an extra **C
 request it from your account email address through our
 [contact page](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), including your **account
 number** and referencing **"$200 Credit Request"**. We'll apply the **CA$200** credit to your
-account directly, valid for **60 days**, for up to **CA$300 total**.
+account directly, with no expiration, for up to **CA$300 total**.
 
-The credit applies to eligible Small through XLarge compute plans. The offer is available until
-**December 31, 2026**.
+The extra **CA$200** credit does not expire and applies to eligible Small through XLarge compute
+plans. The offer is available until **December 31, 2026**.
 
 ### Payment Methods
 

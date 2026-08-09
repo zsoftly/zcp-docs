@@ -14,10 +14,9 @@ Les nouveaux comptes reçoivent **100
 $ CA de crédit** à l'inscription, valide pendant **30 jours**.
 Après avoir dépensé **200 $ CA sur des
 plans de calcul admissibles**, vous pouvez demander **200
-$
-CA** de crédit supplémentaire, pour un total pouvant atteindre **300 $ CA**. La vérification du
-compte exige un paiement de **1,00 $ CA**. Nous le recréditons à votre compte sous forme de crédit
-d'infrastructure, vous en conservez donc la pleine valeur.
+$ CA** de crédit supplémentaire, sans date d'expiration, pour un total pouvant atteindre **300 $
+CA**. La vérification du compte exige un paiement de **1,00 $ CA**. Nous le recréditons à votre
+compte sous forme de crédit d'infrastructure, vous en conservez donc la pleine valeur.
 
 :::
 
@@ -104,10 +103,10 @@ de notre [page de contact](https://zcp.zsoftly.ca/contact?source=docs&topic=bill
 votre **numéro de compte** et la mention
 **"$200 Credit Request"**. Nous appliquerons directement le
 crédit de **200 $ CA** à votre compte,
-valide pendant **60 jours**, pour un total pouvant atteindre **300 $ CA**.
+sans date d'expiration, pour un total pouvant atteindre **300 $ CA**.
 
-Le crédit s'applique aux plans de calcul admissibles Small à XLarge. L'offre est disponible jusqu'au
-**31 décembre 2026**.
+Le crédit supplémentaire de **200 $ CA** s'applique aux plans de calcul admissibles allant de Small
+à XLarge. L'offre est disponible jusqu'au **31 décembre 2026**.
 
 ### Modes de paiement
 
