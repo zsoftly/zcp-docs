@@ -175,6 +175,6 @@ To watch global propagation, use an online checker such as
 ## Next Steps
 
 - [Manage DNS with the CLI](/public-cloud/dns/cli): the full record command reference.
-- [Manage DNS with the API](/public-cloud/dns/api): do the same over REST.
+- [Manage DNS with the API](/public-cloud/dns/api/): do the same over REST.
 - [Domains](/public-cloud/dns/domains): per-registrar name server steps and the Cloudflare
   exception.

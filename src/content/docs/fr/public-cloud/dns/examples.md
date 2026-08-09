@@ -9,7 +9,7 @@ description:
 Voici des exemples pratiques pour les tâches DNS courantes. Chacun utilise le CLI `zcp` avec une
 zone dont le slug est `examplecom`, puis vérifie le résultat avec `dig`. Obtenez votre slug avec
 `zcp dns list`. Les mêmes enregistrements fonctionnent depuis la
-[console](/fr/public-cloud/dns/records) et l'[API](/fr/public-cloud/dns/api).
+[console](/fr/public-cloud/dns/records) et l'[API](/fr/public-cloud/dns/api/).
 
 :::note
 

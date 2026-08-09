@@ -132,7 +132,7 @@ Règles relatives aux enregistrements :
 :::note
 
 Vous pouvez aussi créer des enregistrements `MX` dans le [portail](/fr/public-cloud/dns/records) ou
-avec l'[API](/fr/public-cloud/dns/api#enregistrements-mx).
+avec l'[API](/fr/public-cloud/dns/api/#enregistrements-mx).
 
 :::
 
@@ -212,6 +212,6 @@ dig A www.example.com @1.1.1.1 +short
 Voir aussi : [Vue d'ensemble du DNS](/fr/public-cloud/dns/overview),
 [Domaines](/fr/public-cloud/dns/domains), [Enregistrements DNS](/fr/public-cloud/dns/records),
 [Exemples pratiques](/fr/public-cloud/dns/examples),
-[Gérer le DNS avec l'API](/fr/public-cloud/dns/api),
+[Gérer le DNS avec l'API](/fr/public-cloud/dns/api/),
 [Dépannage](/fr/public-cloud/dns/troubleshooting),
 [Référence du CLI](/fr/public-cloud/cli/reference)

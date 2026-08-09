@@ -46,9 +46,9 @@ You learn how to:
   account
 - [Public Cloud quickstart](/public-cloud/getting-started/quickstart): the same first deployment
   from the web portal
-- [Changelog](/changelog): what is new across the platform
+- [Changelog](/changelog/): what is new across the platform
 
-### [Manage ZCP with Terraform or OpenTofu](/tutorials/manage-infrastructure-terraform)
+### [Manage ZCP with Terraform or OpenTofu](/tutorials/manage-infrastructure-terraform/)
 
 Provision a network and a virtual machine declaratively with the official `zsoftly/zcp` provider,
 published on the Terraform and OpenTofu registries. You write one configuration file, apply it,

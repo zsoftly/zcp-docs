@@ -29,4 +29,4 @@ The Swagger UI provides:
 | Support          | Tickets and FAQs                   |
 
 See also: [Authentication](/public-cloud/api/authentication),
-[API Quickstart](/public-cloud/api/quickstart)
+[API Quickstart](/public-cloud/api/quickstart/)

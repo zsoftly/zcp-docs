@@ -8,9 +8,16 @@ import SiteTitle from 'virtual:starlight/components/SiteTitle';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import type { Props } from '@astrojs/starlight/props';
+import { websiteUrl } from '../data/site';
 
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
+const websiteLinks = [
+  { label: Astro.locals.t('zs.header.services'), href: `${websiteUrl}/services` },
+  { label: Astro.locals.t('zs.header.compare'), href: `${websiteUrl}/compare` },
+  { label: Astro.locals.t('zs.header.pricing'), href: `${websiteUrl}/pricing` },
+  { label: Astro.locals.t('zs.header.privateCloud'), href: `${websiteUrl}/services/private-cloud` },
+];
 ---
 
 <div class="header sl-flex">
@@ -24,6 +31,18 @@ const shouldRenderSearch =
     <div class="sl-flex social-icons">
       <SocialIcons {...Astro.props} />
     </div>
+    <details class="header-site-links">
+      <summary>{Astro.locals.t('zs.header.explore')}</summary>
+      <nav aria-label={Astro.locals.t('zs.header.websiteNav')}>
+        {
+          websiteLinks.map((link) => (
+            <a href={link.href} target="_blank" rel="noopener noreferrer">
+              {link.label}
+            </a>
+          ))
+        }
+      </nav>
+    </details>
     <ThemeSelect {...Astro.props} />
     <LanguageSelect {...Astro.props} />
     <!--
@@ -83,6 +102,61 @@ const shouldRenderSearch =
       gap: 0.5rem;
       padding-inline-start: 0.75rem;
       border-inline-start: 1px solid var(--sl-color-gray-5);
+    }
+
+    .header-site-links {
+      position: relative;
+    }
+
+    .header-site-links summary {
+      color: var(--sl-color-text);
+      cursor: pointer;
+      font-size: var(--sl-text-sm);
+      font-weight: 600;
+      list-style: none;
+      white-space: nowrap;
+    }
+
+    .header-site-links summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .header-site-links summary::after {
+      content: '⌄';
+      margin-inline-start: 0.3rem;
+    }
+
+    .header-site-links nav {
+      background: var(--sl-color-bg-nav);
+      border: 1px solid var(--sl-color-gray-5);
+      border-radius: 0.5rem;
+      box-shadow: var(--sl-shadow-md);
+      display: none;
+      inset-block-start: calc(100% + 0.65rem);
+      inset-inline-end: 0;
+      min-inline-size: 12rem;
+      padding: 0.35rem;
+      position: absolute;
+      z-index: 20;
+    }
+
+    .header-site-links[open] nav {
+      display: grid;
+    }
+
+    .header-site-links a {
+      border-radius: 0.3rem;
+      color: var(--sl-color-text);
+      font-size: var(--sl-text-sm);
+      padding: 0.45rem 0.55rem;
+      text-decoration: none;
+    }
+
+    .header-site-links a:hover,
+    .header-site-links a:focus-visible,
+    .header-site-links summary:focus-visible {
+      background: var(--sl-color-gray-6);
+      outline: none;
     }
 
     /* Utility button style for future Language / Preferences buttons */

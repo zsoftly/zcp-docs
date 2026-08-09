@@ -185,6 +185,6 @@ Pour suivre la propagation mondiale, utilisez un outil en ligne comme
 
 - [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli) : consultez la référence complète des
   commandes d'enregistrement.
-- [Gérer le DNS avec l'API](/fr/public-cloud/dns/api) : effectuez les mêmes opérations par REST.
+- [Gérer le DNS avec l'API](/fr/public-cloud/dns/api/) : effectuez les mêmes opérations par REST.
 - [Domaines](/fr/public-cloud/dns/domains) : consultez les étapes propres à chaque registraire et
   l'exception Cloudflare.

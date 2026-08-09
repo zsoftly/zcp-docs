@@ -69,7 +69,7 @@ Click the **Credentials** icon to view your **S3 Access Key** and **Secret Key**
 access.
 
 See also: [Access Keys](/public-cloud/storage/object-storage/access-keys),
-[S3 Usage](/public-cloud/storage/object-storage/s3-usage)
+[S3 Usage](/public-cloud/storage/object-storage/s3-usage/)
 
 :::tip
 
