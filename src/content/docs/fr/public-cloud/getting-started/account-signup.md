@@ -5,21 +5,21 @@ title: Création de compte
 
 ## Guide de création d'un compte ZSoftly Public Cloud
 
+Ce guide vous accompagne étape par étape pour créer un compte ZSoftly Public Cloud, configurer la
+facturation et vérifier votre compte.
+
 :::tip[Commencer à bâtir gratuitement]
 
 Les nouveaux comptes reçoivent **100
 $ CA de crédit** à l'inscription, valide pendant **30 jours**.
-Après avoir dépensé **200 $ CA** sur
-des plans de calcul admissibles, vous pouvez demander **200
-$ CA**
-de crédit supplémentaire, pour un total pouvant atteindre **300 $ CA**. La vérification du
+Après avoir dépensé **200 $ CA sur des
+plans de calcul admissibles**, vous pouvez demander **200
+$
+CA** de crédit supplémentaire, pour un total pouvant atteindre **300 $ CA**. La vérification du
 compte exige un paiement de **1,00 $ CA**. Nous le recréditons à votre compte sous forme de crédit
 d'infrastructure, vous en conservez donc la pleine valeur.
 
 :::
-
-Ce guide vous accompagne étape par étape pour créer un compte ZSoftly Public Cloud, configurer la
-facturation et vérifier votre compte.
 
 ### Structure des comptes et des projets
 
@@ -98,15 +98,16 @@ utilisables**; vous conservez donc sa pleine valeur.
 Les nouveaux comptes reçoivent automatiquement **100 $ CA de crédit** à l'inscription, valide
 pendant **30 jours**.
 
-Après avoir dépensé **200 $ CA** sur la plateforme, vous pouvez demander **200 $ CA de crédit**
-supplémentaire. Faites la demande depuis l'adresse courriel de votre compte au moyen de notre
-[page de contact](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), en indiquant votre
-**numéro de compte** et la mention
+Après avoir dépensé **200 $ CA sur des plans de calcul admissibles**, vous pouvez demander **200 $
+CA de crédit** supplémentaire. Faites la demande depuis l'adresse courriel de votre compte au moyen
+de notre [page de contact](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), en indiquant
+votre **numéro de compte** et la mention
 **"$200 Credit Request"**. Nous appliquerons directement le
 crédit de **200 $ CA** à votre compte,
 valide pendant **60 jours**, pour un total pouvant atteindre **300 $ CA**.
 
-Le crédit s'applique aux plans Small à XLarge. L'offre est disponible jusqu'au **31 décembre 2026**.
+Le crédit s'applique aux plans de calcul admissibles Small à XLarge. L'offre est disponible jusqu'au
+**31 décembre 2026**.
 
 ### Modes de paiement
 

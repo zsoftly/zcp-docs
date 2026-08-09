@@ -8,10 +8,10 @@ import SiteTitle from 'virtual:starlight/components/SiteTitle';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import type { Props } from '@astrojs/starlight/props';
+import { websiteUrl } from '../data/site';
 
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
-const websiteUrl = import.meta.env.PUBLIC_WEBSITE_URL ?? 'https://zcp.zsoftly.ca';
 const websiteLinks = [
   { label: Astro.locals.t('zs.header.services'), href: `${websiteUrl}/services` },
   { label: Astro.locals.t('zs.header.compare'), href: `${websiteUrl}/compare` },

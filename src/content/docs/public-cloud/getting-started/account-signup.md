@@ -89,14 +89,14 @@ you add is credited to your account as **infra credit you can spend**, so you ke
 
 New accounts receive **CA$100 in credit** automatically at sign-up, valid for **30 days**.
 
-After you spend **CA$200** on the platform, you can claim an extra **CA$200 in credit**: request it
-from your account email address through our
+After you spend **CA$200 on eligible compute plans**, you can claim an extra **CA$200 in credit**:
+request it from your account email address through our
 [contact page](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), including your **account
 number** and referencing **"$200 Credit Request"**. We'll apply the **CA$200** credit to your
 account directly, valid for **60 days**, for up to **CA$300 total**.
 
-The credit applies to Small through XLarge plans. The offer is available until **December 31,
-2026**.
+The credit applies to eligible Small through XLarge compute plans. The offer is available until
+**December 31, 2026**.
 
 ### Payment Methods
 

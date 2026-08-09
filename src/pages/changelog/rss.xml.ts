@@ -9,6 +9,7 @@ export const GET: APIRoute = ({ site }) =>
       'Platform and service features, Marketplace apps, the zcp CLI, and the Terraform / OpenTofu provider.',
     site: site ?? 'https://docs.zcp.zsoftly.ca',
     customData: '<language>en-ca</language>',
+    trailingSlash: false,
     items: changelogFeedEntries.map((entry) => ({
       title: entry.title,
       description: entry.description,

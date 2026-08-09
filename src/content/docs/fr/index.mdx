@@ -22,6 +22,8 @@ hero:
       variant: secondary
 ---
 
+import { websiteUrl } from '../../../data/site';
+
 <div class="home-layout">
 
   <div class="home-main">
@@ -212,10 +214,10 @@ hero:
     <div class="sidebar-links anim-3">
       <h4>Explorer ZCP</h4>
       <ul>
-        <li><a href="https://zcp.zsoftly.ca/services" target="_blank" rel="noopener noreferrer">Parcourir les services cloud →</a></li>
-        <li><a href="https://zcp.zsoftly.ca/compare" target="_blank" rel="noopener noreferrer">Comparer ZCP aux autres clouds →</a></li>
-        <li><a href="https://zcp.zsoftly.ca/pricing" target="_blank" rel="noopener noreferrer">Voir les tarifs →</a></li>
-        <li><a href="https://zcp.zsoftly.ca/services/private-cloud" target="_blank" rel="noopener noreferrer">Explorer le cloud privé →</a></li>
+        <li><a href={`${websiteUrl}/services`} target="_blank" rel="noopener noreferrer">Parcourir les services cloud →</a></li>
+        <li><a href={`${websiteUrl}/compare`} target="_blank" rel="noopener noreferrer">Comparer ZCP aux autres clouds →</a></li>
+        <li><a href={`${websiteUrl}/pricing`} target="_blank" rel="noopener noreferrer">Voir les tarifs →</a></li>
+        <li><a href={`${websiteUrl}/services/private-cloud`} target="_blank" rel="noopener noreferrer">Explorer le cloud privé →</a></li>
       </ul>
     </div>
 

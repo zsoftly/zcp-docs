@@ -1,14 +1,15 @@
 ---
 import Default from '@astrojs/starlight/components/Head.astro';
 
-const isEnglishChangelog = Astro.url.pathname.replace(/\/$/, '') === '/changelog';
+const changelogPath = Astro.url.pathname.replace(/\/$/, '');
+const isChangelog = changelogPath === '/changelog' || changelogPath === '/fr/changelog';
 const changelogRssUrl = new URL('/changelog/rss.xml', Astro.site ?? Astro.url).href;
 ---
 
 <Default {...Astro.props} />
 
 {
-  isEnglishChangelog && (
+  isChangelog && (
     <link
       rel="alternate"
       type="application/rss+xml"
