@@ -57,7 +57,8 @@
   }
 
   handle_errors {
-    rewrite * /404/index.html
+    # Astro emits the branded fallback as /404.html.
+    rewrite * /404.html
     file_server
   }
 

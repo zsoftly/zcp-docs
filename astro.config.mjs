@@ -187,6 +187,9 @@ export default defineConfig({
       },
       favicon: '/favicon.svg',
       lastUpdated: true,
+      // Use the site-level 404 page so missing docs links keep the same
+      // branded recovery experience as the marketing site.
+      disable404Route: true,
       // Expressive Code is configured via ec.config.mjs in the project root.
       // astro-expressive-code auto-discovers that file via loadEcConfigFile()
       // in its astro:config:setup hook — no expressiveCode key is needed here.
