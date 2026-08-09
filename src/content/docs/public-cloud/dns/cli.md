@@ -127,7 +127,7 @@ Record rules:
 :::note
 
 Create `MX` records in the [portal](/public-cloud/dns/records) or with the
-[API](/public-cloud/dns/api#mx-records) too.
+[API](/public-cloud/dns/api/#mx-records) too.
 
 :::
 
@@ -204,5 +204,5 @@ dig A www.example.com @1.1.1.1 +short
 
 See also: [DNS Overview](/public-cloud/dns/overview), [Domains](/public-cloud/dns/domains),
 [DNS Records](/public-cloud/dns/records), [Worked examples](/public-cloud/dns/examples),
-[Manage DNS with the API](/public-cloud/dns/api),
+[Manage DNS with the API](/public-cloud/dns/api/),
 [Troubleshooting](/public-cloud/dns/troubleshooting), [CLI Reference](/public-cloud/cli/reference)

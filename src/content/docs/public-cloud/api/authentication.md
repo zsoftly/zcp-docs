@@ -59,5 +59,5 @@ Every endpoint returns a common envelope:
 Tokens issued from the portal stay valid until you revoke them under **Profile → API Tokens**.
 Revoke and regenerate a token if it is ever exposed.
 
-See also: [API Quickstart](/public-cloud/api/quickstart),
+See also: [API Quickstart](/public-cloud/api/quickstart/),
 [API Reference](/public-cloud/api/reference)

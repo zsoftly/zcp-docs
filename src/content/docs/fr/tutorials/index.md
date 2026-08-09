@@ -37,9 +37,9 @@ Vous apprenez à :
   déjà un compte
 - [Démarrage rapide Public Cloud](/fr/public-cloud/getting-started/quickstart) : le même premier
   déploiement depuis le portail web
-- [Journal des modifications](/fr/changelog) : les nouveautés de la plateforme
+- [Journal des modifications](/fr/changelog/) : les nouveautés de la plateforme
 
-### [Gérer ZCP avec Terraform ou OpenTofu](/tutorials/manage-infrastructure-terraform)
+### [Gérer ZCP avec Terraform ou OpenTofu](/tutorials/manage-infrastructure-terraform/)
 
 Provisionnez un réseau et une machine virtuelle de manière déclarative avec le fournisseur officiel
 `zsoftly/zcp`, publié dans les registres Terraform et OpenTofu. Vous écrivez un fichier de

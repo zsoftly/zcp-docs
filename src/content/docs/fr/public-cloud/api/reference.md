@@ -29,4 +29,4 @@ Swagger UI fournit :
 | Soutien               | Billets et FAQ                                   |
 
 Voir aussi : [Authentification](/fr/public-cloud/api/authentication),
-[Démarrage rapide de l'API](/fr/public-cloud/api/quickstart)
+[Démarrage rapide de l'API](/fr/public-cloud/api/quickstart/)

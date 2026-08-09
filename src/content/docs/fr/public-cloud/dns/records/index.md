@@ -53,7 +53,7 @@ Tous les types se gèrent de la même façon dans chaque interface :
 
 - **Console** : ouvrez la section DNS du portail, puis cliquez sur **Créer un enregistrement**.
 - **CLI** : [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli).
-- **API** : [Gérer le DNS avec l'API](/fr/public-cloud/dns/api).
+- **API** : [Gérer le DNS avec l'API](/fr/public-cloud/dns/api/).
 
 Aucune action de mise à jour n'existe. Pour modifier un enregistrement, supprimez-le, puis
 recréez-le avec la nouvelle valeur.

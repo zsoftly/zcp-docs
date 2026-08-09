@@ -73,7 +73,7 @@ Cliquez sur l'icône **Identifiants** pour afficher votre **S3 Access Key** et v
 pour l'accès programmatique.
 
 Voir aussi : [Clés d'accès](/fr/public-cloud/storage/object-storage/access-keys),
-[Utilisation de S3](/fr/public-cloud/storage/object-storage/s3-usage)
+[Utilisation de S3](/fr/public-cloud/storage/object-storage/s3-usage/)
 
 :::tip
 

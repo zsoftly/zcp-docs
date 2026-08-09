@@ -57,9 +57,9 @@ Point your domain at both. The exact values also appear in the console and in `z
 - **Console**: the DNS section of the portal. See [Records](/public-cloud/dns/records) for the
   per-type reference.
 - **CLI**: [Manage DNS with the CLI](/public-cloud/dns/cli).
-- **API**: [Manage DNS with the API](/public-cloud/dns/api).
+- **API**: [Manage DNS with the API](/public-cloud/dns/api/).
 - **Infrastructure as code**: the `zcp_dns_record` resource in the
-  [Terraform / OpenTofu provider](/tutorials/manage-infrastructure-terraform).
+  [Terraform / OpenTofu provider](/tutorials/manage-infrastructure-terraform/).
 
 DNS commands are account-level. They do not need a region or project, unlike most other resources.
 The one exception is creating a domain, which takes a project.
@@ -72,5 +72,5 @@ The one exception is creating a domain, which takes a project.
   restrict certificate issuance, and delegate a subdomain.
 
 See also: [Manage DNS with the CLI](/public-cloud/dns/cli),
-[Manage DNS with the API](/public-cloud/dns/api),
+[Manage DNS with the API](/public-cloud/dns/api/),
 [Troubleshooting](/public-cloud/dns/troubleshooting)

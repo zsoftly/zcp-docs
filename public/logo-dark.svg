@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 298 40" role="img" aria-labelledby="title">
+  <title id="title">ZSoftly Cloud Platform</title>
   <rect width="40" height="40" rx="8" fill="#00198a"/>
   <path d="m7 13.5 13-6 13 6-13 6-13-6Z" fill="#fff" fill-opacity=".98"/>
   <g>
@@ -7,4 +8,5 @@
   </g>
   <path d="m7 26 13 6 13-6v5.5l-13 6-13-6V26Z" fill="#5b8cff"/>
   <path d="m20 13.5 13-6v5.5l-13 6v-5.5Z" fill="#dae5fa"/>
+  <text x="52" y="25.5" fill="#f8fafc" font-family="Verdana" font-size="16" font-weight="700">ZSoftly Cloud Platform</text>
 </svg>

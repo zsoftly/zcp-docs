@@ -50,7 +50,7 @@ Every type works the same way across all surfaces:
 
 - **Console**: the DNS section of the portal, then **Create Record**.
 - **CLI**: [Manage DNS with the CLI](/public-cloud/dns/cli).
-- **API**: [Manage DNS with the API](/public-cloud/dns/api).
+- **API**: [Manage DNS with the API](/public-cloud/dns/api/).
 
 There is no update action. To change a record, delete it and create it again with the new value.
 

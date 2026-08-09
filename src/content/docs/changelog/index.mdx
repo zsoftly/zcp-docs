@@ -5,9 +5,49 @@ description:
   the zcp CLI, and the Terraform / OpenTofu provider.
 ---
 
+import { changelogFeedEntries } from '../../../data/changelog-feed';
+
+export const formatFeedDate = (date) =>
+  new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${date}T00:00:00Z`));
+
 The single place to follow what's new across the ZSoftly Cloud Platform. Each section below is its
 own changelog: **platform & services**, the **Marketplace**, the **`zcp` CLI**, and the **Terraform
 / OpenTofu provider**, newest first.
+
+<p class="changelog-rss-actions">
+  <a class="changelog-rss-link" href="/changelog/rss.xml">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M4 19h.01M4 4a16 16 0 0 1 16 16M4 10a10 10 0 0 1 10 10" />
+    </svg>
+    <span>Subscribe to RSS</span>
+  </a>
+</p>
+
+## Recent releases
+
+{changelogFeedEntries.map((entry) => (
+
+  <p>
+    <a href={`/changelog/#${entry.slug}`}>{entry.title}</a> ({formatFeedDate(entry.pubDate)})
+  </p>
+))}
 
 :::tip
 
@@ -18,6 +58,8 @@ complete, commit-level history.
 :::
 
 ## Platform & services
+
+<span id="platform-services"></span>
 
 Updates to the Public Cloud platform and managed services.
 
@@ -30,6 +72,8 @@ Updates to the Public Cloud platform and managed services.
 - **ZSoftly Cloud Storage**: dedicated, single-tenant storage clusters are generally available.
 
 ## Marketplace
+
+<span id="marketplace"></span>
 
 One-click application images for compute instances.
 
@@ -44,6 +88,8 @@ The official command-line tool for the platform. The entries below mirror the CL
 
 ### v0.0.26: July 19, 2026
 
+<span id="cli-v0.0.26"></span>
+
 **Port forwarding and SSH key fixes.**
 
 - **`portforward list` shows the ports again.** The public and private port columns were blank
@@ -56,6 +102,8 @@ The official command-line tool for the platform. The entries below mirror the CL
 
 ### v0.0.25: July 18, 2026
 
+<span id="cli-v0.0.25"></span>
+
 **`MX` records now work from the CLI.** `zcp dns record-create` never sent a record's priority, so
 every `MX` create failed with an API error. It now takes a `--priority` flag (0-65535, required for
 `MX`): put the mail server in `--content` and the preference number in `--priority`. The CLI sends a
@@ -67,6 +115,8 @@ zcp dns record-create --domain examplecom --name @ --type MX --content mail.exam
 ```
 
 ### v0.0.24: July 16, 2026
+
+<span id="cli-v0.0.24"></span>
 
 **Deleting a VM now releases its auto-assigned public IP.** `instance delete` uses the same
 service-cancellation workflow as the console, so the address is no longer left allocated and
@@ -176,6 +226,8 @@ predictable and matches how the platform scopes resources. See
   `public_key: The public key has already been taken.`) instead of a generic message.
 
 ### v0.0.17: June 17, 2026
+
+<span id="cli-v0.0.17"></span>
 
 **Object storage: the full S3 feature set in the CLI.** Many of these are available only through the
 CLI (or an S3 SDK) today, not yet in the Web UI. See the
@@ -312,6 +364,8 @@ consistent response format. A large set of command groups arrived:
   installers.
 
 ## Terraform / OpenTofu provider
+
+<span id="terraform-opentofu"></span>
 
 Manage ZCP infrastructure as code with the official provider, published as `zsoftly/zcp` on the
 [OpenTofu registry](https://search.opentofu.org/provider/zsoftly/zcp) and the

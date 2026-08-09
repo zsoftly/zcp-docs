@@ -7,7 +7,7 @@ description:
 
 Practical recipes for common DNS tasks. Each one uses the `zcp` CLI against a zone with the slug
 `examplecom`, then verifies the result with `dig`. Read your slug from `zcp dns list`. The same
-records work from the [console](/public-cloud/dns/records) and the [API](/public-cloud/dns/api).
+records work from the [console](/public-cloud/dns/records) and the [API](/public-cloud/dns/api/).
 
 :::note
 
