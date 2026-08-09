@@ -13,6 +13,6 @@ export const GET: APIRoute = ({ site }) =>
       title: entry.title,
       description: entry.description,
       pubDate: new Date(`${entry.pubDate}T12:00:00Z`),
-      link: `/changelog?entry=${entry.slug}`,
+      link: `/changelog/#${entry.slug}`,
     })),
   });

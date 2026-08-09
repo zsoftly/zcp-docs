@@ -5,6 +5,19 @@ title: Création de compte
 
 ## Guide de création d'un compte ZSoftly Public Cloud
 
+:::tip[Commencer à bâtir gratuitement]
+
+Les nouveaux comptes reçoivent **100
+$ CA de crédit** à l'inscription, valide pendant **30 jours**.
+Après avoir dépensé **200 $ CA** sur
+des plans de calcul admissibles, vous pouvez demander **200
+$ CA**
+de crédit supplémentaire, pour un total pouvant atteindre **300 $ CA**. La vérification du
+compte exige un paiement de **1,00 $ CA**. Nous le recréditons à votre compte sous forme de crédit
+d'infrastructure, vous en conservez donc la pleine valeur.
+
+:::
+
 Ce guide vous accompagne étape par étape pour créer un compte ZSoftly Public Cloud, configurer la
 facturation et vérifier votre compte.
 
