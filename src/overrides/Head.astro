@@ -1,8 +1,23 @@
 ---
 import Default from '@astrojs/starlight/components/Head.astro';
+
+const changelogPath = Astro.url.pathname.replace(/\/$/, '');
+const isChangelog = changelogPath === '/changelog' || changelogPath === '/fr/changelog';
+const changelogRssUrl = new URL('/changelog/rss.xml', Astro.site ?? Astro.url).href;
 ---
 
 <Default {...Astro.props} />
+
+{
+  isChangelog && (
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="ZSoftly Cloud Platform Changelog"
+      href={changelogRssUrl}
+    />
+  )
+}
 
 <!-- External links open in a new tab (utility, all environments) -->
 <script is:inline>

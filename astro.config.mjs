@@ -1,8 +1,10 @@
 // @ts-check
 import { defineConfig, passthroughImageService } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import rehypeMermaid from 'rehype-mermaid';
+import { mdxLinkTargetIndexIntegration } from './src/plugins/rehype-mdx-link-target-index.mjs';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
 /** @type {Record<string, string>} */
@@ -157,10 +159,12 @@ export default defineConfig({
   // renders static inline SVG via Playwright/Chromium — no client JS, no CSP
   // change. Diagrams are single-theme (build-time SVG can't follow the toggle).
   markdown: {
-    remarkPlugins: [remarkMermaid],
-    rehypePlugins: [
-      [rehypeMermaid, { strategy: 'inline-svg', mermaidConfig: { theme: 'neutral' } }],
-    ],
+    processor: unified({
+      remarkPlugins: [remarkMermaid],
+      rehypePlugins: [
+        [rehypeMermaid, { strategy: 'inline-svg', mermaidConfig: { theme: 'neutral' } }],
+      ],
+    }),
   },
   integrations: [
     starlight({
@@ -177,12 +181,15 @@ export default defineConfig({
       // ../section) which resolve correctly; we only want to catch real breakage.
       plugins: [starlightLinksValidator({ errorOnRelativeLinks: false })],
       logo: {
-        light: './public/logo.png',
-        dark: './public/logo-dark.png',
+        light: './public/logo.svg',
+        dark: './public/logo-dark.svg',
         replacesTitle: true,
       },
       favicon: '/favicon.svg',
       lastUpdated: true,
+      // Use the site-level 404 page so missing docs links keep the same
+      // branded recovery experience as the marketing site.
+      disable404Route: true,
       // Expressive Code is configured via ec.config.mjs in the project root.
       // astro-expressive-code auto-discovers that file via loadEcConfigFile()
       // in its astro:config:setup hook — no expressiveCode key is needed here.
@@ -612,6 +619,12 @@ export default defineConfig({
       //   apiKey: 'REPLACE_WITH_SEARCH_API_KEY',
       //   indexName: 'REPLACE_WITH_INDEX_NAME',
       // },
+    }),
+    // Astro 6 does not pass `markdown.processor` plugins to MDX content.
+    // Remove this compatibility bridge once the validator supports that path.
+    mdxLinkTargetIndexIntegration({
+      docsDirectory: new URL('./src/content/docs/', import.meta.url),
+      base: '/',
     }),
   ],
 

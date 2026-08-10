@@ -37,7 +37,7 @@ zcp dns record-create --domain examplecom --name ipv6 --type AAAA --content 2001
 
 API : envoyez une requête `POST` avec
 `{ "name": "www", "type": "A", "content": "203.0.113.10", "ttl": 14400 }`. Voir
-[Gérer le DNS avec l'API](/fr/public-cloud/dns/api#ajouter-un-enregistrement).
+[Gérer le DNS avec l'API](/fr/public-cloud/dns/api/#ajouter-un-enregistrement).
 
 ## Vérifier
 

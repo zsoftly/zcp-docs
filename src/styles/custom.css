@@ -599,6 +599,36 @@
   font-size: 0.875rem;
 }
 
+/* Changelog subscription control */
+.changelog-rss-actions {
+  margin: 1.5rem 0 2rem;
+}
+.changelog-rss-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--sl-color-accent);
+  border-radius: 0.45rem;
+  color: var(--sl-color-accent) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
+}
+.changelog-rss-link:hover,
+.changelog-rss-link:focus-visible {
+  background-color: var(--sl-color-accent);
+  border-color: var(--sl-color-accent);
+  color: #ffffff !important;
+}
+.changelog-rss-link:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 3px;
+}
+
 /* ── Right sidebar ──────────────────────────────────────────── */
 .home-sidebar {
   display: flex;

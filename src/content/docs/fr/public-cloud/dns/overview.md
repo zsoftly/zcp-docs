@@ -61,9 +61,9 @@ Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles.
 - **Console** : la section DNS du portail. Consultez [Enregistrements](/fr/public-cloud/dns/records)
   pour la référence de chaque type.
 - **CLI** : [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli).
-- **API** : [Gérer le DNS avec l'API](/fr/public-cloud/dns/api).
+- **API** : [Gérer le DNS avec l'API](/fr/public-cloud/dns/api/).
 - **Infrastructure en tant que code** : la ressource `zcp_dns_record` du
-  [fournisseur Terraform / OpenTofu](/tutorials/manage-infrastructure-terraform) (en anglais).
+  [fournisseur Terraform / OpenTofu](/tutorials/manage-infrastructure-terraform/) (en anglais).
 
 Les commandes DNS s'exécutent au niveau du compte. Contrairement à la plupart des autres ressources,
 elles n'exigent ni région ni projet. Seule la création d'un domaine exige un projet.
@@ -77,5 +77,5 @@ elles n'exigent ni région ni projet. Seule la création d'un domaine exige un p
   sous-domaine.
 
 Voir aussi : [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli),
-[Gérer le DNS avec l'API](/fr/public-cloud/dns/api),
+[Gérer le DNS avec l'API](/fr/public-cloud/dns/api/),
 [Dépannage](/fr/public-cloud/dns/troubleshooting)

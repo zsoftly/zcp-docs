@@ -10,6 +10,40 @@ L'endroit unique pour suivre les nouveautés de la plateforme infonuagique ZSoft
 ci-dessous est son propre journal : **plateforme et services**, la **place de marché**, le **CLI
 `zcp`** et le **fournisseur Terraform / OpenTofu**, les plus récentes en premier.
 
+<p class="changelog-rss-actions">
+  <a class="changelog-rss-link" href="/changelog/rss.xml">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M4 19h.01M4 4a16 16 0 0 1 16 16M4 10a10 10 0 0 1 10 10" />
+    </svg>
+    <span>S'abonner au RSS</span>
+  </a>
+</p>
+
+## Versions récentes
+
+- [Mises à jour de la plateforme et des services](/fr/changelog/#platform-services) (8 août 2026)
+- [CLI v0.0.26 : correctifs de redirection de ports et de clés SSH](/fr/changelog/#cli-v0.0.26) (19
+  juillet 2026)
+- [CLI v0.0.25 : prise en charge des enregistrements MX](/fr/changelog/#cli-v0.0.25) (18
+  juillet 2026)
+- [CLI v0.0.24 : améliorations du cycle de vie et du SDK](/fr/changelog/#cli-v0.0.24) (16
+  juillet 2026)
+- [CLI v0.0.17 : workflows complets de stockage objet](/fr/changelog/#cli-v0.0.17) (17 juin 2026)
+- [Mises à jour de la place de marché](/fr/changelog/#marketplace) (17 juin 2026)
+- [Fournisseur Terraform et OpenTofu](/fr/changelog/#terraform-opentofu) (10 juin 2026)
+
 :::tip
 
 Chaque composant tient son propre `CHANGELOG.md` sur GitHub. La section **CLI** ci-dessous reflète
@@ -19,6 +53,8 @@ pour l'historique complet au niveau des commits.
 :::
 
 ## Plateforme et services
+
+<span id="platform-services"></span>
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
 
@@ -33,6 +69,8 @@ Mises à jour de la plateforme Public Cloud et des services gérés.
 
 ## Place de marché
 
+<span id="marketplace"></span>
+
 Images d'applications en un clic pour les instances de calcul.
 
 - **Plus de 20 applications en un clic** disponibles, dont cPanel, GitLab, Grafana, WordPress,
@@ -45,6 +83,8 @@ L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous 
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
 ### v0.0.26 : 19 juillet 2026
+
+<span id="cli-v0.0.26"></span>
 
 **Correctifs pour la redirection de ports et les clés SSH.**
 
@@ -60,6 +100,8 @@ L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous 
 
 ### v0.0.25 : 18 juillet 2026
 
+<span id="cli-v0.0.25"></span>
+
 **Les enregistrements `MX` fonctionnent désormais depuis le CLI.** `zcp dns record-create`
 n'envoyait jamais la priorité de l'enregistrement. Chaque création d'un `MX` échouait donc avec une
 erreur d'API. La commande reçoit maintenant l'option `--priority` (de 0 à 65535, obligatoire pour
@@ -72,6 +114,8 @@ zcp dns record-create --domain examplecom --name @ --type MX --content mail.exam
 ```
 
 ### v0.0.24 : 16 juillet 2026
+
+<span id="cli-v0.0.24"></span>
 
 **La suppression d'une VM libère maintenant son IP publique.** `instance delete` passe par le même
 flux d'annulation de service que la console. L'adresse attribuée automatiquement est donc libérée au
@@ -197,6 +241,8 @@ comment les fournir.
   exemple, `public_key: The public key has already been taken.`) au lieu d'un message générique.
 
 ### v0.0.17 : 17 juin 2026
+
+<span id="cli-v0.0.17"></span>
 
 **Stockage objet : l'ensemble des fonctionnalités S3 dans le CLI.** Plusieurs sont disponibles
 uniquement via le CLI (ou un SDK S3) aujourd'hui, pas encore dans l'interface web. Voir le
@@ -350,6 +396,8 @@ arrivé :
   des installateurs en une ligne.
 
 ## Fournisseur Terraform / OpenTofu
+
+<span id="terraform-opentofu"></span>
 
 Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié sous `zsoftly/zcp` sur
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le

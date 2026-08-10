@@ -1,0 +1,364 @@
+---
+import { websiteUrl } from '../data/site';
+
+const links = [
+  { label: 'Getting started', href: '/public-cloud/getting-started/introduction' },
+  { label: 'Tutorials', href: '/tutorials' },
+  { label: 'CLI', href: '/public-cloud/cli/installation' },
+  { label: 'API reference', href: '/public-cloud/api/reference' },
+  { label: 'Changelog', href: '/changelog' },
+  { label: 'Public cloud', href: '/public-cloud/getting-started/introduction' },
+  { label: 'Private cloud', href: '/private-cloud/overview' },
+  { label: 'Contact support', href: 'https://zcp.zsoftly.ca/contact' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="description"
+      content="The documentation page you were looking for does not exist."
+    />
+    <link rel="icon" href="/favicon.svg" />
+    <title>Page not found | ZSoftly Docs</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="ZSoftly Docs home">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="/logo-dark.svg" />
+          <img src="/logo.svg" alt="ZSoftly Cloud Platform" />
+        </picture>
+        <span>ZSoftly Docs</span>
+      </a>
+      <nav aria-label="Site navigation">
+        <a href="/public-cloud/getting-started/introduction">Public cloud</a>
+        <a href="/private-cloud/overview">Private cloud</a>
+        <a href={websiteUrl}>ZCP website</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="not-found" aria-labelledby="page-title">
+        <div class="content">
+          <p class="eyebrow">404</p>
+          <h1 id="page-title">Page not found.</h1>
+          <p class="lede">
+            The documentation page you were looking for does not exist or has been moved.
+          </p>
+
+          <div class="actions">
+            <a class="button button-primary" href="/">Back to docs home</a>
+            <a class="button button-secondary" href="/public-cloud/getting-started/introduction"
+              >Start with the guide</a
+            >
+          </div>
+
+          <div class="link-grid" aria-label="Popular documentation links">
+            {links.map((link) => <a href={link.href}>{link.label}</a>)}
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© {new Date().getFullYear()} ZSoftly Technologies Inc.</span>
+      <a href={websiteUrl}>zcp.zsoftly.ca</a>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(html) {
+    min-width: 320px;
+    background: #f7f9ff;
+  }
+
+  :global(body) {
+    min-height: 100vh;
+    margin: 0;
+    color: #17213c;
+    background:
+      radial-gradient(circle at 50% 18%, rgb(47 87 210 / 0.13), transparent 35rem),
+      linear-gradient(180deg, #f7f9ff 0%, #eef3ff 100%);
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .site-header {
+    display: flex;
+    min-height: 4.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.75rem clamp(1.25rem, 5vw, 4rem);
+    border-bottom: 1px solid rgb(35 62 128 / 0.12);
+    background: rgb(255 255 255 / 0.84);
+    backdrop-filter: blur(16px);
+  }
+
+  .brand,
+  .site-header nav,
+  .site-footer {
+    display: flex;
+    align-items: center;
+  }
+
+  .brand {
+    gap: 0.75rem;
+    color: #142c84;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .brand img {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .site-header nav {
+    gap: clamp(0.75rem, 2.5vw, 2rem);
+    color: #52617e;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .site-header nav a,
+  .site-footer a {
+    text-decoration: none;
+  }
+
+  .site-header nav a:hover,
+  .site-header nav a:focus-visible,
+  .site-footer a:hover,
+  .site-footer a:focus-visible {
+    color: #153bc1;
+  }
+
+  .not-found {
+    display: grid;
+    min-height: calc(100vh - 9rem);
+    place-items: center;
+    padding: clamp(5rem, 12vw, 9rem) 1.25rem;
+    background-image:
+      linear-gradient(rgb(80 111 211 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(80 111 211 / 0.07) 1px, transparent 1px);
+    background-position: center;
+    background-size: 3rem 3rem;
+  }
+
+  .content {
+    width: min(100%, 52rem);
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: #52617e;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+  }
+
+  h1 {
+    margin: 0;
+    color: #1235ac;
+    font-size: clamp(3.25rem, 8vw, 6rem);
+    font-weight: 750;
+    letter-spacing: -0.07em;
+    line-height: 0.98;
+  }
+
+  .lede {
+    max-width: 38rem;
+    margin: 1.5rem auto 0;
+    color: #52617e;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.7;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+
+  .button {
+    display: inline-flex;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+      transform 150ms ease,
+      box-shadow 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .button:hover,
+  .button:focus-visible {
+    transform: translateY(-1px);
+  }
+
+  .button-primary {
+    color: white;
+    background: #1235ac;
+    box-shadow: 0 0.75rem 1.5rem rgb(18 53 172 / 0.2);
+  }
+
+  .button-primary:hover,
+  .button-primary:focus-visible {
+    background: #0e2b8f;
+  }
+
+  .button-secondary {
+    color: #1235ac;
+    border: 1px solid rgb(18 53 172 / 0.25);
+    background: rgb(255 255 255 / 0.7);
+  }
+
+  .button-secondary:hover,
+  .button-secondary:focus-visible {
+    background: white;
+  }
+
+  .link-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 4rem;
+    text-align: left;
+  }
+
+  .link-grid a {
+    border: 1px solid rgb(18 53 172 / 0.14);
+    border-radius: 0.6rem;
+    padding: 0.9rem 1rem;
+    color: #52617e;
+    background: rgb(255 255 255 / 0.58);
+    font-size: 0.875rem;
+    font-weight: 650;
+    text-decoration: none;
+    transition:
+      border-color 150ms ease,
+      color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .link-grid a:hover,
+  .link-grid a:focus-visible {
+    color: #1235ac;
+    border-color: rgb(18 53 172 / 0.4);
+    background: white;
+  }
+
+  .site-footer {
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem clamp(1.25rem, 5vw, 4rem);
+    border-top: 1px solid rgb(35 62 128 / 0.12);
+    color: #71809c;
+    background: rgb(255 255 255 / 0.7);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 700px) {
+    .site-header nav a:nth-child(-n + 2) {
+      display: none;
+    }
+
+    .not-found {
+      min-height: calc(100vh - 8rem);
+    }
+
+    .link-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 3rem;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(html),
+    :global(body) {
+      background-color: #091332;
+    }
+
+    :global(body) {
+      color: #e8edff;
+      background:
+        radial-gradient(circle at 50% 18%, rgb(49 89 215 / 0.25), transparent 35rem),
+        linear-gradient(180deg, #0b1638 0%, #071027 100%);
+    }
+
+    .site-header,
+    .site-footer {
+      border-color: rgb(180 199 255 / 0.14);
+      background: rgb(5 13 37 / 0.82);
+    }
+
+    .brand,
+    h1,
+    .button-secondary,
+    .link-grid a:hover,
+    .link-grid a:focus-visible,
+    .site-header nav a:hover,
+    .site-header nav a:focus-visible,
+    .site-footer a:hover,
+    .site-footer a:focus-visible {
+      color: #b9caff;
+    }
+
+    .eyebrow,
+    .lede,
+    .site-header nav,
+    .site-footer,
+    .link-grid a {
+      color: #a5b1cc;
+    }
+
+    .not-found {
+      background-image:
+        linear-gradient(rgb(143 169 255 / 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(143 169 255 / 0.08) 1px, transparent 1px);
+    }
+
+    .button-secondary,
+    .link-grid a {
+      border-color: rgb(162 184 255 / 0.25);
+      background: rgb(12 28 70 / 0.7);
+    }
+
+    .button-secondary:hover,
+    .button-secondary:focus-visible,
+    .link-grid a:hover,
+    .link-grid a:focus-visible {
+      background: #12265c;
+    }
+  }
+</style>
