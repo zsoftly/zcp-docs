@@ -36,13 +36,14 @@ branch -> open PR -> CI passes -> merge to main -> published
 
 ## Branch naming
 
-| Type    | Pattern                 | Example                     |
-| ------- | ----------------------- | --------------------------- |
-| Feature | `feat/{description}`    | `feat/add-dns-domains-page` |
-| Fix     | `fix/{description}`     | `fix/correct-s3-endpoint`   |
-| Content | `content/{description}` | `content/rewrite-vpc-intro` |
+| Type    | Pattern                     | Example                     |
+| ------- | --------------------------- | --------------------------- |
+| Feature | `feat/{description}`        | `feat/add-dns-domains-page` |
+| Fix     | `fix/{description}`         | `fix/correct-s3-endpoint`   |
+| Content | `content/{description}`     | `content/rewrite-vpc-intro` |
+| Release | `release/{YYYY-MM-DD-HHMM}` | `release/2026-06-01-1400`   |
 
-Use lowercase and hyphens. No spaces, no underscores, no uppercase.
+Use lowercase and hyphens in the description. No spaces, no underscores, no uppercase.
 
 ---
 
