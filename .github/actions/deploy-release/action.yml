@@ -27,32 +27,40 @@ runs:
   steps:
     - name: Write deploy SSH key
       shell: bash
+      env:
+        SSH_KEY: ${{ inputs.ssh-key }}
       run: |
-        mkdir -p ~/.ssh
-        printf '%s\n' "${{ inputs.ssh-key }}" > ~/.ssh/zcp_deploy_key
-        chmod 600 ~/.ssh/zcp_deploy_key
+        printf '%s\n' "$SSH_KEY" > "$RUNNER_TEMP/zcp_deploy_key"
+        chmod 600 "$RUNNER_TEMP/zcp_deploy_key"
 
     - name: Copy release artifact and deploy script to box
       shell: bash
+      env:
+        DEPLOY_HOST: ${{ inputs.deploy-host }}
+        ARTIFACT_PATH: ${{ inputs.artifact-path }}
       run: |
-        scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/zcp_deploy_key \
-          "${{ inputs.artifact-path }}" deploy/scripts/deploy-web.sh \
-          "${{ inputs.deploy-host }}:/tmp/"
+        scp -o StrictHostKeyChecking=accept-new \
+          -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" \
+          -i "$RUNNER_TEMP/zcp_deploy_key" \
+          "$ARTIFACT_PATH" deploy/scripts/deploy-web.sh \
+          "$DEPLOY_HOST:/tmp/"
 
     - name: Run deploy-web.sh on box
       shell: bash
+      env:
+        DEPLOY_HOST: ${{ inputs.deploy-host }}
+        ARTIFACT_PATH: ${{ inputs.artifact-path }}
+        SITE_ROOT: ${{ inputs.site-root }}
+        RELEASES_DIR: ${{ inputs.releases-dir }}
+        KEEP_RELEASES: ${{ inputs.keep-releases }}
       run: |
-        ARTIFACT_NAME=$(basename "${{ inputs.artifact-path }}")
-        ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/zcp_deploy_key "${{ inputs.deploy-host }}" \
-          "sudo env SITE_ROOT='${{ inputs.site-root }}' RELEASES_DIR='${{ inputs.releases-dir }}' KEEP_RELEASES='${{ inputs.keep-releases }}' bash /tmp/deploy-web.sh deploy /tmp/${ARTIFACT_NAME}"
-
-    - name: Reload Caddy
-      shell: bash
-      run: |
-        ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/zcp_deploy_key "${{ inputs.deploy-host }}" \
-          "docker exec caddy caddy reload --config /etc/caddy/Caddyfile --force"
+        artifact_name=$(basename "$ARTIFACT_PATH")
+        ssh -o StrictHostKeyChecking=accept-new \
+          -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" \
+          -i "$RUNNER_TEMP/zcp_deploy_key" "$DEPLOY_HOST" \
+          "sudo env SITE_ROOT='${SITE_ROOT}' RELEASES_DIR='${RELEASES_DIR}' KEEP_RELEASES='${KEEP_RELEASES}' bash /tmp/deploy-web.sh deploy /tmp/${artifact_name}"
 
     - name: Remove deploy SSH key
       if: always()
       shell: bash
-      run: rm -f ~/.ssh/zcp_deploy_key
+      run: rm -f "$RUNNER_TEMP/zcp_deploy_key"

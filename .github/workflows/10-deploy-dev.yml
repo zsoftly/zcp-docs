@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: '00: Checkout'
         uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: '01: Setup Node.js'
         uses: ./.github/actions/setup-node
@@ -50,7 +52,7 @@ jobs:
         run: pnpm build
 
       - name: '04: Package release artifact'
-        run: tar -czf /tmp/zcp-docs-dev.tar.gz -C dist .
+        run: tar -czf "$RUNNER_TEMP/zcp-docs-dev.tar.gz" -C dist .
 
       - name: '05: Deploy release'
         uses: ./.github/actions/deploy-release
@@ -59,7 +61,7 @@ jobs:
           deploy-host: ${{ secrets.DEV_DEPLOY_HOST }}
           site-root: /var/www/zcp-docs-dev
           releases-dir: /var/releases/zcp-docs-dev
-          artifact-path: /tmp/zcp-docs-dev.tar.gz
+          artifact-path: ${{ runner.temp }}/zcp-docs-dev.tar.gz
 
       - name: '06: Smoke test live site'
         run: .github/scripts/smoke-test.sh dev-docs.zcp.zsoftly.ca
