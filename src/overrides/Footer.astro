@@ -40,6 +40,11 @@ const buildDate = new Date().toISOString().slice(0, 10);
       <a href="https://cloud.zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer"
         >{Astro.locals.t('zs.footer.console')}</a
       >
+      <a
+        href="https://status.zcp.zsoftly.ca/status-page/e6c6cd2d-5290-4091-a150-2d046be03d75"
+        target="_blank"
+        rel="noopener noreferrer">{Astro.locals.t('zs.footer.status')}</a
+      >
       <a href="https://github.com/zsoftly/zcp-docs" target="_blank" rel="noopener noreferrer"
         >GitHub</a
       >
@@ -48,6 +53,29 @@ const buildDate = new Date().toISOString().slice(0, 10);
       © {new Date().getFullYear()} ZSoftly Technologies Inc.
       <span class="site-footer__version">{Astro.locals.t('zs.footer.build')} {buildDate}</span>
     </p>
+    <a
+      data-status-badge-link
+      hidden
+      class="site-footer__status"
+      href="https://status.zcp.zsoftly.ca/status-page/e6c6cd2d-5290-4091-a150-2d046be03d75"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img data-status-badge alt="ZCP system status" height="20" />
+    </a>
+    <script is:inline>
+      (function () {
+        var token = (window.__ZCP_ENV || {}).statusBadgeToken;
+        if (!token) return;
+        var img = document.querySelector('[data-status-badge]');
+        var link = document.querySelector('[data-status-badge-link]');
+        if (!img || !link) return;
+        img.src =
+          'https://status.zcp.zsoftly.ca/api/status-page/badge/e6c6cd2d-5290-4091-a150-2d046be03d75?token=' +
+          encodeURIComponent(token);
+        link.hidden = false;
+      })();
+    </script>
   </div>
 </div>
 
@@ -57,5 +85,10 @@ const buildDate = new Date().toISOString().slice(0, 10);
     font-size: 0.7rem;
     color: var(--sl-color-gray-4);
     font-variant-numeric: tabular-nums;
+  }
+
+  .site-footer__status {
+    display: inline-block;
+    margin-block-start: 0.75rem;
   }
 </style>
