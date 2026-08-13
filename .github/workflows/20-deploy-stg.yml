@@ -1,7 +1,9 @@
 name: '20: Deploy Staging'
 
 # Manual deploy to staging from a release branch.
-# Deploy runs on zsoftly-yow (self-hosted) — touches Dokploy API secrets.
+# Deploy runs on zsoftly-yow (self-hosted, VPN-reachable) — builds the site
+# and ships it to the dev/stg Caddy box via deploy/scripts/deploy-web.sh
+# (release-symlink swap).
 
 on:
   workflow_dispatch:
@@ -43,40 +45,35 @@ jobs:
     name: Deploy to Staging
     needs: [ci]
     runs-on: zsoftly-yow
+    environment: stg
     steps:
       - name: '00: Checkout'
         uses: actions/checkout@v5
         with:
           ref: ${{ github.event.inputs.branch }}
 
-      - name: '01: Switch app branch in Dokploy'
+      - name: '01: Setup Node.js'
+        uses: ./.github/actions/setup-node
+
+      - name: '02: Install Chromium for Playwright (build-time Mermaid SVG)'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: '03: Build'
         env:
-          BRANCH: ${{ github.event.inputs.branch }}
-          DOKPLOY_API_URL: ${{ secrets.DOKPLOY_API_URL }}
-          DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
-          DOKPLOY_APP_ID_STG: ${{ secrets.DOKPLOY_APP_ID_STG }}
-          DOKPLOY_GITHUB_ID: ${{ secrets.DOKPLOY_GITHUB_ID }}
-        run: |
-          PAYLOAD=$(jq -nc \
-            --arg app "$DOKPLOY_APP_ID_STG" \
-            --arg branch "$BRANCH" \
-            --arg gh "$DOKPLOY_GITHUB_ID" \
-            '{json:{applicationId:$app,branch:$branch,owner:"zsoftly",repository:"zcp-docs",buildPath:"/",githubId:$gh}}')
-          HTTP_STATUS=$(curl -Ss -o /tmp/dokploy-response.json -w "%{http_code}" -X POST \
-            "${DOKPLOY_API_URL}/api/trpc/application.saveGithubProvider" \
-            -H "x-api-key: ${DOKPLOY_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d "$PAYLOAD")
-          echo "[INFO] HTTP status: $HTTP_STATUS"
-          cat /tmp/dokploy-response.json
-          if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
-            echo "[ERROR] saveGithubProvider failed with HTTP $HTTP_STATUS"
-            exit 1
-          fi
-          echo "[OK] Branch set to $BRANCH"
+          PUBLIC_SITE_URL: https://stg-docs.zcp.zsoftly.ca
+        run: pnpm build
 
-      - name: '02: Deploy to Dokploy (wait for completion)'
-        run: .github/scripts/dokploy-deploy.sh "${{ secrets.DOKPLOY_API_URL }}" "${{ secrets.DOKPLOY_API_KEY }}" "${{ secrets.DOKPLOY_APP_ID_STG }}"
+      - name: '04: Package release artifact'
+        run: tar -czf /tmp/zcp-docs-stg.tar.gz -C dist .
 
-      - name: '03: Smoke test live site'
-        run: .github/scripts/smoke-test.sh stg-docs.apps.zcp.zsoftly.ca
+      - name: '05: Deploy release'
+        uses: ./.github/actions/deploy-release
+        with:
+          ssh-key: ${{ secrets.DEPLOY_SSH_KEY }}
+          deploy-host: ${{ secrets.STG_DEPLOY_HOST }}
+          site-root: /var/www/zcp-docs-stg
+          releases-dir: /var/releases/zcp-docs-stg
+          artifact-path: /tmp/zcp-docs-stg.tar.gz
+
+      - name: '06: Smoke test live site'
+        run: .github/scripts/smoke-test.sh stg-docs.zcp.zsoftly.ca

@@ -1,0 +1,58 @@
+name: 'Deploy Release'
+description: 'Ship a static-site release tarball to a Caddy box via deploy-web.sh (release-symlink swap) and reload Caddy'
+
+inputs:
+  ssh-key:
+    description: 'Private key for the deploy user'
+    required: true
+  deploy-host:
+    description: 'Deploy target as user@host (username carried in the secret, not the repo)'
+    required: true
+  site-root:
+    description: 'SITE_ROOT passed to deploy-web.sh'
+    required: true
+  releases-dir:
+    description: 'RELEASES_DIR passed to deploy-web.sh'
+    required: true
+  keep-releases:
+    description: 'KEEP_RELEASES passed to deploy-web.sh'
+    required: false
+    default: '5'
+  artifact-path:
+    description: 'Path to the release tarball to ship'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Write deploy SSH key
+      shell: bash
+      run: |
+        mkdir -p ~/.ssh
+        printf '%s\n' "${{ inputs.ssh-key }}" > ~/.ssh/zcp_deploy_key
+        chmod 600 ~/.ssh/zcp_deploy_key
+
+    - name: Copy release artifact and deploy script to box
+      shell: bash
+      run: |
+        scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/zcp_deploy_key \
+          "${{ inputs.artifact-path }}" deploy/scripts/deploy-web.sh \
+          "${{ inputs.deploy-host }}:/tmp/"
+
+    - name: Run deploy-web.sh on box
+      shell: bash
+      run: |
+        ARTIFACT_NAME=$(basename "${{ inputs.artifact-path }}")
+        ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/zcp_deploy_key "${{ inputs.deploy-host }}" \
+          "sudo env SITE_ROOT='${{ inputs.site-root }}' RELEASES_DIR='${{ inputs.releases-dir }}' KEEP_RELEASES='${{ inputs.keep-releases }}' bash /tmp/deploy-web.sh deploy /tmp/${ARTIFACT_NAME}"
+
+    - name: Reload Caddy
+      shell: bash
+      run: |
+        ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/zcp_deploy_key "${{ inputs.deploy-host }}" \
+          "docker exec caddy caddy reload --config /etc/caddy/Caddyfile --force"
+
+    - name: Remove deploy SSH key
+      if: always()
+      shell: bash
+      run: rm -f ~/.ssh/zcp_deploy_key

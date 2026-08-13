@@ -3,7 +3,7 @@
 # Usage: ./smoke-test.sh <domain> [max_retries] [retry_delay_seconds]
 #
 # Checks key pages return HTTP 200. Retries the full suite if any page fails,
-# giving Dokploy/Traefik time to propagate the new deployment.
+# giving Caddy time to propagate the new release.
 
 set -euo pipefail
 
