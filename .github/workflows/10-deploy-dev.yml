@@ -1,7 +1,9 @@
 name: '10: Deploy Dev'
 
 # Auto-deploys to dev on every push to main after CI passes.
-# Deploy runs on zsoftly-yow (self-hosted) — touches Dokploy API secrets.
+# Deploy runs on zsoftly-yow (self-hosted, VPN-reachable) — builds the site
+# and ships it to the dev/stg Caddy box via deploy/scripts/deploy-web.sh
+# (release-symlink swap).
 
 on:
   push:
@@ -31,12 +33,35 @@ jobs:
     name: Deploy to Dev
     needs: [ci]
     runs-on: zsoftly-yow
+    environment: dev
     steps:
       - name: '00: Checkout'
         uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
-      - name: '01: Deploy to Dokploy (wait for completion)'
-        run: .github/scripts/dokploy-deploy.sh "${{ secrets.DOKPLOY_API_URL }}" "${{ secrets.DOKPLOY_API_KEY }}" "${{ secrets.DOKPLOY_APP_ID_DEV }}"
+      - name: '01: Setup Node.js'
+        uses: ./.github/actions/setup-node
 
-      - name: '02: Smoke test live site'
-        run: .github/scripts/smoke-test.sh dev-docs.apps.zcp.zsoftly.ca
+      - name: '02: Install Chromium for Playwright (build-time Mermaid SVG)'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: '03: Build'
+        env:
+          PUBLIC_SITE_URL: https://dev-docs.zcp.zsoftly.ca
+        run: pnpm build
+
+      - name: '04: Package release artifact'
+        run: tar -czf "$RUNNER_TEMP/zcp-docs-dev.tar.gz" -C dist .
+
+      - name: '05: Deploy release'
+        uses: ./.github/actions/deploy-release
+        with:
+          ssh-key: ${{ secrets.DEPLOY_SSH_KEY }}
+          deploy-host: ${{ secrets.DEV_DEPLOY_HOST }}
+          site-root: /var/www/zcp-docs-dev
+          releases-dir: /var/releases/zcp-docs-dev
+          artifact-path: ${{ runner.temp }}/zcp-docs-dev.tar.gz
+
+      - name: '06: Smoke test live site'
+        run: .github/scripts/smoke-test.sh dev-docs.zcp.zsoftly.ca

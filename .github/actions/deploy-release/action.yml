@@ -1,0 +1,66 @@
+name: 'Deploy Release'
+description: 'Ship a static-site release tarball to a Caddy box via deploy-web.sh (release-symlink swap) and reload Caddy'
+
+inputs:
+  ssh-key:
+    description: 'Private key for the deploy user'
+    required: true
+  deploy-host:
+    description: 'Deploy target as user@host (username carried in the secret, not the repo)'
+    required: true
+  site-root:
+    description: 'SITE_ROOT passed to deploy-web.sh'
+    required: true
+  releases-dir:
+    description: 'RELEASES_DIR passed to deploy-web.sh'
+    required: true
+  keep-releases:
+    description: 'KEEP_RELEASES passed to deploy-web.sh'
+    required: false
+    default: '5'
+  artifact-path:
+    description: 'Path to the release tarball to ship'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Write deploy SSH key
+      shell: bash
+      env:
+        SSH_KEY: ${{ inputs.ssh-key }}
+      run: |
+        printf '%s\n' "$SSH_KEY" > "$RUNNER_TEMP/zcp_deploy_key"
+        chmod 600 "$RUNNER_TEMP/zcp_deploy_key"
+
+    - name: Copy release artifact and deploy script to box
+      shell: bash
+      env:
+        DEPLOY_HOST: ${{ inputs.deploy-host }}
+        ARTIFACT_PATH: ${{ inputs.artifact-path }}
+      run: |
+        scp -o StrictHostKeyChecking=accept-new \
+          -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" \
+          -i "$RUNNER_TEMP/zcp_deploy_key" \
+          "$ARTIFACT_PATH" deploy/scripts/deploy-web.sh \
+          "$DEPLOY_HOST:/tmp/"
+
+    - name: Run deploy-web.sh on box
+      shell: bash
+      env:
+        DEPLOY_HOST: ${{ inputs.deploy-host }}
+        ARTIFACT_PATH: ${{ inputs.artifact-path }}
+        SITE_ROOT: ${{ inputs.site-root }}
+        RELEASES_DIR: ${{ inputs.releases-dir }}
+        KEEP_RELEASES: ${{ inputs.keep-releases }}
+      run: |
+        artifact_name=$(basename "$ARTIFACT_PATH")
+        ssh -o StrictHostKeyChecking=accept-new \
+          -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" \
+          -i "$RUNNER_TEMP/zcp_deploy_key" "$DEPLOY_HOST" \
+          "sudo env SITE_ROOT='${SITE_ROOT}' RELEASES_DIR='${RELEASES_DIR}' KEEP_RELEASES='${KEEP_RELEASES}' bash /tmp/deploy-web.sh deploy /tmp/${artifact_name}"
+
+    - name: Remove deploy SSH key
+      if: always()
+      shell: bash
+      run: rm -f "$RUNNER_TEMP/zcp_deploy_key"

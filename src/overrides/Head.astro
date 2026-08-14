@@ -8,6 +8,9 @@ const changelogRssUrl = new URL('/changelog/rss.xml', Astro.site ?? Astro.url).h
 
 <Default {...Astro.props} />
 
+<!-- Per-host runtime config: sets window.__ZCP_ENV. Served by the reverse proxy, not built in. -->
+<script is:inline src="/config.js"></script>
+
 {
   isChangelog && (
     <link

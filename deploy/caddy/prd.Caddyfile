@@ -22,7 +22,7 @@
 # Prometheus metrics for the local scrape. /metrics is read-only request
 # counters/latencies (no secrets). The listener is :2080 in-container; the iaas
 # compose host-publishes it as 2019 (zcp) / 2021 (docs), ufw-locked to the
-# Prometheus node (dev/stg on Dokploy do not publish it). It binds all interfaces
+# Prometheus node. It binds all interfaces
 # because Docker port-publish forwards to the container interface, so a 127.0.0.1
 # bind would break the cross-host scrape; as defense-in-depth the metrics handler
 # answers only private source IPs and returns 403 to anything else.
