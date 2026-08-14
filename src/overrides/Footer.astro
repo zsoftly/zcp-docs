@@ -61,7 +61,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
       target="_blank"
       rel="noopener noreferrer"
     >
-      <img data-status-badge alt="ZCP system status" height="20" />
+      <img data-status-badge alt={Astro.locals.t('zs.footer.statusBadgeAlt')} height="20" />
     </a>
     <script is:inline>
       (function () {
