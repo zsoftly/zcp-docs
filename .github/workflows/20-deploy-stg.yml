@@ -57,7 +57,7 @@ jobs:
         uses: ./.github/actions/setup-node
 
       - name: '02: Install Chromium for Playwright (build-time Mermaid SVG)'
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install chromium
 
       - name: '03: Build'
         env:
