@@ -129,7 +129,7 @@ zcp plan storage --region yow-1
 
 Plans are region-specific, so `zcp plan` requires a region (`--region` or `ZCP_REGION`). A plan from
 another region will not deploy. YOW exposes Intel `ci1*` plans, while YUL now exposes Intel `ci2*`
-plans alongside its AMD `ca2*` family.
+and `cim2*` plans alongside its AMD `ca2*` family.
 
 :::
 
