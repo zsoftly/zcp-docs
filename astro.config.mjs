@@ -10,6 +10,8 @@ import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 /** @type {Record<string, string>} */
 const frSidebarLabels = {
   Changelog: 'Journal des modifications',
+  Community: 'Communauté',
+  'Join the ZCP Community': 'Rejoindre la communauté ZCP',
   Tutorials: 'Tutoriels',
   'Deploy a VPS with Dokploy (CLI)': 'Déployer un VPS avec Dokploy (CLI)',
   'Host DNS on ZCP (CLI)': 'Héberger le DNS sur ZCP (CLI)',
@@ -214,6 +216,13 @@ export default defineConfig({
       sidebar: translateSidebar([
         // ── Changelog ──────────────────────────────────────────
         { label: 'Changelog', slug: 'changelog' },
+
+        // ── Community ──────────────────────────────────────────
+        {
+          label: 'Community',
+          collapsed: false,
+          items: [{ label: 'Join the ZCP Community', slug: 'community' }],
+        },
 
         // ── Tutorials ──────────────────────────────────────────
         {
