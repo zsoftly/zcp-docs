@@ -24,12 +24,13 @@ specs (vCPU, RAM, root disk) and pricing of every plan**, see the
 The storage tier is fixed per series and varies by region (see
 [Regions](/public-cloud/getting-started/regions)):
 
-| Tier        | Regions | Series                                 |
-| ----------- | ------- | -------------------------------------- |
-| NVMe        | YOW     | `ci1`, `ca1`, `cim1`, `cam1`, `cac1`   |
-| Pro NVMe    | YUL     | `ca2`, `cam2`, `cac2`                  |
-| Premium SSD | YUL     | `ca2s`, `cam2s`, `cac2s` (budget tier) |
-| HDD         | YOW     | `ci1h`, `ca1h`, `cim1h` (budget tier)  |
+| Tier               | Regions | Series                                 |
+| ------------------ | ------- | -------------------------------------- |
+| NVMe               | YOW     | `ci1`, `ca1`, `cim1`, `cam1`, `cac1`   |
+| Pro NVMe           | YUL     | `ca2`, `cam2`, `cac2`                  |
+| Pro NVMe (`b2.g1`) | YUL     | `ci2`, `cim2`                          |
+| Premium SSD        | YUL     | `ca2s`, `cam2s`, `cac2s` (budget tier) |
+| HDD                | YOW     | `ci1h`, `ca1h`, `cim1h` (budget tier)  |
 
 ## Sizes
 

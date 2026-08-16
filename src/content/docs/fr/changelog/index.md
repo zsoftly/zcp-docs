@@ -58,6 +58,10 @@ pour l'historique complet au niveau des commits.
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
 
+- **Le calcul Intel est désormais offert à Montréal (YUL)** : forfaits à usage général `ci2` de 1 à
+  96 Go de mémoire vive, forfaits optimisés mémoire `cim2` de 8 à 64 Go, configurations Intel
+  personnalisées et capacité de nœuds Kubernetes sur Intel. Voir
+  [Types d'instances](/fr/public-cloud/compute/instance-types).
 - **Le SMTP sortant sur le port 25 est désormais bloqué par défaut** sur toutes les instances de
   calcul afin de protéger la réputation d'envoi de la plateforme. Les ports 465 et 587 restent
   ouverts pour le courriel authentifié. Les clients vérifiés peuvent demander l'accès auprès du

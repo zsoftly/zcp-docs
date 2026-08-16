@@ -49,22 +49,24 @@ graph LR
 
 ## Séries de plans
 
-| Série   | Région | Processeur | Stockage    | Famille                               |
-| ------- | ------ | ---------- | ----------- | ------------------------------------- |
-| `ci1`   | YOW    | Intel      | NVMe        | Usage général                         |
-| `ci1h`  | YOW    | Intel      | HDD         | Usage général (économique)            |
-| `ca1`   | YOW    | AMD        | NVMe        | Usage général                         |
-| `ca1h`  | YOW    | AMD        | HDD         | Usage général (économique)            |
-| `ca2`   | YUL    | AMD        | Pro NVMe    | Usage général                         |
-| `ca2s`  | YUL    | AMD        | Premium SSD | Usage général (économique)            |
-| `cim1`  | YOW    | Intel      | NVMe        | Optimisé pour la mémoire              |
-| `cim1h` | YOW    | Intel      | HDD         | Optimisé pour la mémoire (économique) |
-| `cam1`  | YOW    | AMD        | NVMe        | Optimisé pour la mémoire              |
-| `cam2`  | YUL    | AMD        | Pro NVMe    | Optimisé pour la mémoire              |
-| `cam2s` | YUL    | AMD        | Premium SSD | Optimisé pour la mémoire (économique) |
-| `cac1`  | YOW    | AMD        | NVMe        | Optimisé pour le CPU                  |
-| `cac2`  | YUL    | AMD        | Pro NVMe    | Optimisé pour le CPU                  |
-| `cac2s` | YUL    | AMD        | Premium SSD | Optimisé pour le CPU (économique)     |
+| Série   | Région | Processeur | Stockage           | Famille                               |
+| ------- | ------ | ---------- | ------------------ | ------------------------------------- |
+| `ci1`   | YOW    | Intel      | NVMe               | Usage général                         |
+| `ci1h`  | YOW    | Intel      | HDD                | Usage général (économique)            |
+| `ci2`   | YUL    | Intel      | Pro NVMe (`b2.g1`) | Usage général                         |
+| `ca1`   | YOW    | AMD        | NVMe               | Usage général                         |
+| `ca1h`  | YOW    | AMD        | HDD                | Usage général (économique)            |
+| `ca2`   | YUL    | AMD        | Pro NVMe           | Usage général                         |
+| `ca2s`  | YUL    | AMD        | Premium SSD        | Usage général (économique)            |
+| `cim1`  | YOW    | Intel      | NVMe               | Optimisé pour la mémoire              |
+| `cim1h` | YOW    | Intel      | HDD                | Optimisé pour la mémoire (économique) |
+| `cim2`  | YUL    | Intel      | Pro NVMe (`b2.g1`) | Optimisé pour la mémoire              |
+| `cam1`  | YOW    | AMD        | NVMe               | Optimisé pour la mémoire              |
+| `cam2`  | YUL    | AMD        | Pro NVMe           | Optimisé pour la mémoire              |
+| `cam2s` | YUL    | AMD        | Premium SSD        | Optimisé pour la mémoire (économique) |
+| `cac1`  | YOW    | AMD        | NVMe               | Optimisé pour le CPU                  |
+| `cac2`  | YUL    | AMD        | Pro NVMe           | Optimisé pour le CPU                  |
+| `cac2s` | YUL    | AMD        | Premium SSD        | Optimisé pour le CPU (économique)     |
 
 ## Ratios vCPU/RAM
 

@@ -7,6 +7,13 @@ export type ChangelogFeedEntry = {
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'Intel compute in Montréal (YUL)',
+    description:
+      'General-purpose ci2 and memory-optimized cim2 Intel plans, custom Intel configurations, and Intel-backed Kubernetes node capacity are now available in the YUL region.',
+    pubDate: '2026-08-16',
+    slug: 'platform-services',
+  },
+  {
     title: 'Platform and services updates',
     description:
       'New capabilities and operational changes across the ZSoftly Cloud Platform, including SMTP controls, Kubernetes support, Windows Server images, and ZSoftly Cloud Storage.',

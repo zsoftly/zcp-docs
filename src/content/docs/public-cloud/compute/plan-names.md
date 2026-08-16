@@ -47,22 +47,24 @@ graph LR
 
 ## Plan series
 
-| Series  | Region | Processor | Storage     | Family                    |
-| ------- | ------ | --------- | ----------- | ------------------------- |
-| `ci1`   | YOW    | Intel     | NVMe        | General purpose           |
-| `ci1h`  | YOW    | Intel     | HDD         | General purpose (budget)  |
-| `ca1`   | YOW    | AMD       | NVMe        | General purpose           |
-| `ca1h`  | YOW    | AMD       | HDD         | General purpose (budget)  |
-| `ca2`   | YUL    | AMD       | Pro NVMe    | General purpose           |
-| `ca2s`  | YUL    | AMD       | Premium SSD | General purpose (budget)  |
-| `cim1`  | YOW    | Intel     | NVMe        | Memory-optimized          |
-| `cim1h` | YOW    | Intel     | HDD         | Memory-optimized (budget) |
-| `cam1`  | YOW    | AMD       | NVMe        | Memory-optimized          |
-| `cam2`  | YUL    | AMD       | Pro NVMe    | Memory-optimized          |
-| `cam2s` | YUL    | AMD       | Premium SSD | Memory-optimized (budget) |
-| `cac1`  | YOW    | AMD       | NVMe        | CPU-optimized             |
-| `cac2`  | YUL    | AMD       | Pro NVMe    | CPU-optimized             |
-| `cac2s` | YUL    | AMD       | Premium SSD | CPU-optimized (budget)    |
+| Series  | Region | Processor | Storage            | Family                    |
+| ------- | ------ | --------- | ------------------ | ------------------------- |
+| `ci1`   | YOW    | Intel     | NVMe               | General purpose           |
+| `ci1h`  | YOW    | Intel     | HDD                | General purpose (budget)  |
+| `ci2`   | YUL    | Intel     | Pro NVMe (`b2.g1`) | General purpose           |
+| `ca1`   | YOW    | AMD       | NVMe               | General purpose           |
+| `ca1h`  | YOW    | AMD       | HDD                | General purpose (budget)  |
+| `ca2`   | YUL    | AMD       | Pro NVMe           | General purpose           |
+| `ca2s`  | YUL    | AMD       | Premium SSD        | General purpose (budget)  |
+| `cim1`  | YOW    | Intel     | NVMe               | Memory-optimized          |
+| `cim1h` | YOW    | Intel     | HDD                | Memory-optimized (budget) |
+| `cim2`  | YUL    | Intel     | Pro NVMe (`b2.g1`) | Memory-optimized          |
+| `cam1`  | YOW    | AMD       | NVMe               | Memory-optimized          |
+| `cam2`  | YUL    | AMD       | Pro NVMe           | Memory-optimized          |
+| `cam2s` | YUL    | AMD       | Premium SSD        | Memory-optimized (budget) |
+| `cac1`  | YOW    | AMD       | NVMe               | CPU-optimized             |
+| `cac2`  | YUL    | AMD       | Pro NVMe           | CPU-optimized             |
+| `cac2s` | YUL    | AMD       | Premium SSD        | CPU-optimized (budget)    |
 
 ## vCPU-to-RAM ratios
 
