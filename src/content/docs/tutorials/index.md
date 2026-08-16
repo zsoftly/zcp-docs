@@ -7,8 +7,8 @@ sidebar:
   label: Overview
 ---
 
-Step-by-step tutorials that take you from nothing to a working result. Each one assumes a brand-new
-account and walks every command, so you can copy, paste, and learn as you go.
+These tutorials walk through common ZCP deployments from account setup to verification. Each guide
+lists the required commands, explains the key decisions, and shows how to confirm the result.
 
 Looking for a single feature instead of a full walkthrough? The
 [CLI reference](/public-cloud/cli/reference) and the per-service guides in the sidebar cover those.
@@ -39,6 +39,32 @@ You learn how to:
 - Find a Marketplace app template with the CLI
 - Deploy it in one command with your SSH key
 - Open SSH and confirm the app is ready to configure
+
+### [Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference)
+
+Deploy the Ollama Marketplace image on an Intel VM, pull a model, and use it from the CLI and REST
+API. The reference path uses an 8B model. Deployment time depends on image startup and model
+download speed.
+
+You learn how to:
+
+- Pick a YUL Intel plan from the catalog
+- Use Ollama from the CLI, `/api/chat`, and `/api/generate`
+- Compare the 8B and 70B CPU workload profiles
+- Record timings, resource usage, and failure signals during a bounded test
+
+### [Run Open WebUI With Ollama on ZCP](/tutorials/open-webui-with-ollama)
+
+Add Open WebUI to an existing Ollama VM. Run the browser client on the same machine, connect it to
+the host Ollama service, and expose only the browser port through ZCP networking.
+
+You learn how to:
+
+- Install Open WebUI with Docker and connect it to host Ollama
+- Forward public port 3000 to the private UI port 8080
+- Select models from the browser without changing their compute path
+- Remove the container, network rules, VM, and any orphaned source-NAT IP
+- Record timings, resource usage, and failure signals during a bounded test
 
 ## Where to go next
 
