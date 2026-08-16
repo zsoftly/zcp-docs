@@ -15,6 +15,8 @@ const frSidebarLabels = {
   Tutorials: 'Tutoriels',
   'Deploy a VPS with Dokploy (CLI)': 'Déployer un VPS avec Dokploy (CLI)',
   'Host DNS on ZCP (CLI)': 'Héberger le DNS sur ZCP (CLI)',
+  'Ollama Chat and Inference': 'Ollama : chat et inférence',
+  'Open WebUI With Ollama': 'Open WebUI avec Ollama',
   Installation: 'Installation',
   Quickstart: 'Démarrage rapide',
   Configuration: 'Configuration',
@@ -234,6 +236,14 @@ export default defineConfig({
             {
               label: 'Deploy OpenClaw (Marketplace, CLI)',
               slug: 'tutorials/deploy-openclaw-marketplace-cli',
+            },
+            {
+              label: 'Ollama Chat and Inference',
+              slug: 'tutorials/ollama-chat-and-inference',
+            },
+            {
+              label: 'Open WebUI With Ollama',
+              slug: 'tutorials/open-webui-with-ollama',
             },
             {
               label: 'Manage ZCP with Terraform / OpenTofu',

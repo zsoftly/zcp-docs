@@ -58,7 +58,9 @@ Adjust from there:
   occasional use. Use `cim1.*` in YOW-1 or `cam2.*` in YUL-1 (for example `cim1.xl` or `cam2.xl` for
   64 GB).
 - **Faster responses**: add vCPUs with the CPU-focused family (`cac1.*` in YOW-1, `cac2.*` in
-  YUL-1), or choose a GPU plan for 13B and larger models.
+  YUL-1). Public-cloud GPU VM inference is not currently available in YOW-1 or YUL-1. For larger
+  interactive models, contact ZSoftly about private or dedicated GPU capacity, or use a managed
+  inference service.
 - **Several large models on one instance**: attach a
   [block storage volume](/public-cloud/compute/settings/block-storage/) instead of moving to a
   bigger plan.
@@ -100,7 +102,8 @@ curl http://localhost:11434/api/generate -d '{
 }'
 ```
 
-From another host, replace `localhost` with the VM's IP.
+From another host, use an SSH tunnel or a restricted private path. Do not expose port `11434` to the
+public internet.
 
 ## Managing Ollama
 
@@ -127,14 +130,15 @@ to `/etc/ollama/info.txt`.
 
 ## Security
 
-Port 11434 is open on the VM's network interface, and Ollama has **no built-in authentication**. UFW
-is enabled and allows SSH (port 22) and the Ollama API (port 11434).
+Ollama's local API has **no built-in authentication**. Keep it private unless you place
+authentication in front of it. Before sharing the VM, remove any broad guest firewall rule for port
+`11434` and choose an SSH tunnel or a restricted source CIDR.
 
 **To restrict the API to a specific IP:**
 
 ```bash
 sudo ufw delete allow 11434/tcp
-sudo ufw allow from <trusted-ip> to any port 11434
+sudo ufw allow from <trusted-ip> to any port 11434 proto tcp
 ```
 
 **To reach the API without opening the firewall, use an SSH tunnel:**
@@ -149,5 +153,7 @@ restrict access to trusted IPs only.
 
 ## Next steps
 
+- [Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference)
+- [Run Open WebUI With Ollama on ZCP](/tutorials/open-webui-with-ollama)
 - [Ollama documentation](https://docs.ollama.com/)
 - [Ollama API reference](https://docs.ollama.com/api)

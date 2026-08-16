@@ -31,6 +31,30 @@ Vous apprenez à :
 - Créer une VM exposée sur Internet avec une IP publique
 - Vous connecter en SSH et installer Dokploy
 
+### [Exécuter Ollama pour le chat et l’inférence sur ZCP](/fr/tutorials/ollama-chat-and-inference)
+
+Déployez Ollama dans YUL-1 sur une VM Intel de 64 Go, utilisez un modèle local avec le CLI et l’API
+REST, mesurez la performance sans GPU et vérifiez le coût de la VM, du réseau et de l’adresse IP.
+
+Vous apprenez à :
+
+- Lire le catalogue YUL et déployer l’image Marketplace Ollama
+- Tester d’abord un modèle 8B, puis mesurer un modèle 70B
+- Utiliser `/api/chat`, `/api/generate` et un tunnel SSH
+- Exécuter des tests limités et supprimer toutes les ressources
+
+### [Exécuter Open WebUI avec Ollama sur ZCP](/fr/tutorials/open-webui-with-ollama)
+
+Ajoutez Open WebUI à la même VM qu’Ollama. Exécutez le client navigateur sur la même machine,
+reliez-le au service Ollama de l’hôte et gardez l’accès privé par un tunnel SSH chiffré.
+
+Vous apprenez à :
+
+- Installer Docker et démarrer Open WebUI avec un volume persistant
+- Relier Open WebUI à Ollama sur la même VM
+- Accéder à Open WebUI par un tunnel SSH chiffré
+- Nettoyer le conteneur, la VM, l’IP, les règles et le réseau de test
+
 ## Pour aller plus loin
 
 - [Démarrage rapide du CLI](/fr/public-cloud/cli/quickstart) : la version courte, quand vous avez
