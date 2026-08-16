@@ -22,6 +22,15 @@ pnpm preview      # serve built output (use this to test code blocks and search)
 > Code block syntax highlighting and Pagefind search only work correctly in `pnpm preview`, not
 > `pnpm dev`.
 
+## Community
+
+Join the
+[ZCP Community on Slack](https://join.slack.com/t/zsoftlycloudp-exg5502/shared_invite/zt-469b56b2b-lG5HB2WnuntgwFG4UwfMew)
+to ask questions, share projects, and connect with other builders. Read the
+[community guidelines and information](https://zcp.zsoftly.ca/community) before posting. Community
+discussion takes place on Slack, a separate third-party service and not the ZCP customer
+infrastructure.
+
 ## Quality checks
 
 Run before every commit:

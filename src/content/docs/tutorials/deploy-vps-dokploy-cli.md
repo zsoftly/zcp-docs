@@ -128,8 +128,8 @@ zcp plan storage --region yow-1
 :::note
 
 Plans are region-specific, so `zcp plan` requires a region (`--region` or `ZCP_REGION`). A plan from
-another region will not deploy. For example, the Intel `ci*` plans exist only in `yow-1`, while
-`yul-1` uses the `ca*` family.
+another region will not deploy. YOW exposes Intel `ci1*` plans, while YUL now exposes Intel `ci2*`
+and `cim2*` plans alongside its AMD `ca2*` family.
 
 :::
 

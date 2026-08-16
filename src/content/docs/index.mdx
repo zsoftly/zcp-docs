@@ -22,7 +22,7 @@ hero:
       variant: secondary
 ---
 
-import { websiteUrl } from '../../data/site';
+import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../data/site';
 
 <div class="home-layout">
 
@@ -218,6 +218,27 @@ import { websiteUrl } from '../../data/site';
       <h3>Getting started</h3>
       <p>Deploy your first VM and connect to it via SSH in under 10 minutes.</p>
       <a href="/public-cloud/getting-started/quickstart" class="sidebar-cta">Start the quickstart →</a>
+    </div>
+
+    <div class="sidebar-card anim-2">
+      <h3>Join the community</h3>
+      <p>Ask questions, share projects, and connect with other ZCP builders on Slack.</p>
+      <a
+        href={COMMUNITY_SLACK_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="sidebar-cta"
+      >
+        Join the ZCP Community on Slack →
+      </a>
+      <a
+        href={COMMUNITY_PAGE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="sidebar-cta"
+      >
+        Community guidelines and information →
+      </a>
     </div>
 
     <div class="sidebar-links anim-3">

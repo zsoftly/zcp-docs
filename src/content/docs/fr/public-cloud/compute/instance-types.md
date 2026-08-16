@@ -25,12 +25,13 @@ stockage. Pour comprendre comment un ID de plan encode ces informations, consult
 Le niveau de stockage est fixe par série et varie selon la région. Consultez
 [Régions](/fr/public-cloud/getting-started/regions).
 
-| Niveau      | Régions | Séries                                       |
-| ----------- | ------- | -------------------------------------------- |
-| NVMe        | YOW     | `ci1`, `ca1`, `cim1`, `cam1`, `cac1`         |
-| Pro NVMe    | YUL     | `ca2`, `cam2`, `cac2`                        |
-| Premium SSD | YUL     | `ca2s`, `cam2s`, `cac2s` (niveau économique) |
-| HDD         | YOW     | `ci1h`, `ca1h`, `cim1h` (niveau économique)  |
+| Niveau             | Régions | Séries                                       |
+| ------------------ | ------- | -------------------------------------------- |
+| NVMe               | YOW     | `ci1`, `ca1`, `cim1`, `cam1`, `cac1`         |
+| Pro NVMe           | YUL     | `ca2`, `cam2`, `cac2`                        |
+| Pro NVMe (`b2.g1`) | YUL     | `ci2`, `cim2`                                |
+| Premium SSD        | YUL     | `ca2s`, `cam2s`, `cac2s` (niveau économique) |
+| HDD                | YOW     | `ci1h`, `ca1h`, `cim1h` (niveau économique)  |
 
 ## Tailles
 

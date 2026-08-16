@@ -22,7 +22,7 @@ hero:
       variant: secondary
 ---
 
-import { websiteUrl } from '../../../data/site';
+import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../../data/site';
 
 <div class="home-layout">
 
@@ -209,6 +209,27 @@ import { websiteUrl } from '../../../data/site';
       <h3>Bien démarrer</h3>
       <p>Déployez votre première VM et connectez-vous par SSH en moins de 10 minutes.</p>
       <a href="/fr/public-cloud/getting-started/quickstart" class="sidebar-cta">Lancer le démarrage rapide →</a>
+    </div>
+
+    <div class="sidebar-card anim-2">
+      <h3>Rejoindre la communauté</h3>
+      <p>Posez vos questions, partagez vos projets et échangez avec d'autres personnes sur Slack.</p>
+      <a
+        href={COMMUNITY_SLACK_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="sidebar-cta"
+      >
+        Rejoindre la communauté ZCP sur Slack →
+      </a>
+      <a
+        href={COMMUNITY_PAGE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="sidebar-cta"
+      >
+        Règles et informations sur la communauté →
+      </a>
     </div>
 
     <div class="sidebar-links anim-3">
