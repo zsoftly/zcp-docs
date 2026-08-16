@@ -130,8 +130,8 @@ to `/etc/ollama/info.txt`.
 
 ## Security
 
-Ollama's local API has **no built-in authentication**. Keep it private unless you have a specific
-authenticated access design. Before sharing the VM, remove any broad guest firewall rule for port
+Ollama's local API has **no built-in authentication**. Keep it private unless you place
+authentication in front of it. Before sharing the VM, remove any broad guest firewall rule for port
 `11434` and choose an SSH tunnel or a restricted source CIDR.
 
 **To restrict the API to a specific IP:**

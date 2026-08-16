@@ -56,7 +56,7 @@ You learn how to:
 ### [Run Open WebUI With Ollama on ZCP](/tutorials/open-webui-with-ollama)
 
 Add Open WebUI to an existing Ollama VM. Run the browser client on the same machine, connect it to
-the host Ollama service, and expose only the browser port through ZCP networking.
+the host Ollama service, and keep access private with an encrypted SSH tunnel.
 
 You learn how to:
 

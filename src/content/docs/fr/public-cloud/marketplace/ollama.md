@@ -59,7 +59,9 @@ Ajustez ensuite:
   qui convient aux usages occasionnels. Utilisez `cim1.*` dans YOW-1 ou `cam2.*` dans YUL-1 (par
   exemple `cim1.xl` ou `cam2.xl` pour 64 Go).
 - **Réponses plus rapides**: ajoutez des vCPU avec la famille axée CPU (`cac1.*` dans YOW-1,
-  `cac2.*` dans YUL-1), ou choisissez un forfait GPU pour les modèles 13B et plus.
+  `cac2.*` dans YUL-1). L'inférence GPU sur VM de cloud public n'est pas offerte pour le moment dans
+  YOW-1 ni YUL-1. Pour de grands modèles interactifs, contactez ZSoftly au sujet d'une capacité GPU
+  privée ou dédiée, ou utilisez un service d'inférence géré.
 - **Plusieurs grands modèles sur une instance**: attachez un
   [volume de stockage bloc](/fr/public-cloud/compute/settings/block-storage/) au lieu de passer à un
   forfait plus grand.
@@ -102,7 +104,8 @@ curl http://localhost:11434/api/generate -d '{
 }'
 ```
 
-Depuis un autre hôte, remplacez `localhost` par l'IP de la machine virtuelle.
+Depuis un autre hôte, utilisez un tunnel SSH ou un chemin privé restreint. N'exposez pas le port
+`11434` à l'Internet public.
 
 ## Gérer Ollama
 
@@ -129,15 +132,16 @@ Les modèles sont stockés dans `/usr/share/ollama/.ollama/models`. Un résumé 
 
 ## Sécurité
 
-Le port 11434 est ouvert sur l'interface réseau de la machine virtuelle, et Ollama n'a **pas
-d'authentification intégrée**. UFW est activé et autorise SSH (port 22) et l'API Ollama (port
-11434).
+L'API locale d'Ollama n'a **pas d'authentification intégrée**. Gardez-la privée, sauf si vous placez
+une authentification devant elle. Avant de partager la machine virtuelle, supprimez toute règle de
+pare-feu invité trop large pour le port `11434` et choisissez un tunnel SSH ou un CIDR source
+restreint.
 
 **Pour limiter l'API à une adresse IP précise:**
 
 ```bash
 sudo ufw delete allow 11434/tcp
-sudo ufw allow from <trusted-ip> to any port 11434
+sudo ufw allow from <trusted-ip> to any port 11434 proto tcp
 ```
 
 **Pour accéder à l'API sans ouvrir le pare-feu, utilisez un tunnel SSH:**
@@ -152,5 +156,7 @@ limitez l'accès aux seules adresses IP de confiance.
 
 ## Prochaines étapes
 
+- [Exécuter Ollama pour le chat et l'inférence sur ZCP](/fr/tutorials/ollama-chat-and-inference)
+- [Exécuter Open WebUI avec Ollama sur ZCP](/fr/tutorials/open-webui-with-ollama)
 - [Documentation Ollama](https://docs.ollama.com/)
 - [Référence de l'API Ollama](https://docs.ollama.com/api)

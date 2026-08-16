@@ -8,14 +8,14 @@ sidebar:
 
 This tutorial deploys Ollama on a ZCP virtual machine and shows two direct usage patterns:
 
-- Chat with a model from the Ollama CLI and the /api/chat endpoint.
-- Run one-shot inference with the /api/generate endpoint.
+- Chat with a model from the Ollama CLI and the `/api/chat` endpoint.
+- Run one-shot inference with the `/api/generate` endpoint.
 
 This is the developer and DIY operator guide. It includes the commands, network rules, measurements,
 and cleanup steps needed to reproduce the deployment.
 
-The reference run used a 16 vCPU, 64 GB Intel VM in YUL-1. It was a bounded validation test and was
-deleted after the test.
+The reference run used a 16 vCPU, 64 GB Intel VM in YUL-1. It was a bounded validation test. We
+deleted the VM when it ended.
 
 Version française :
 [Exécuter Ollama pour le chat et l'inférence sur ZCP](/fr/tutorials/ollama-chat-and-inference)
@@ -61,10 +61,10 @@ zcp template list --region yul-1 | grep -i ollama
 ```
 
 The ci2.4xl reference plan provided 16 vCPU, 64 GB RAM, and a 320 GB root disk. A 70B Q4 model uses
-about 42 GB. The remaining memory is small once the service, context, and operating system are
+about 42 GB, which leaves little headroom once the service, context, and operating system are
 running.
 
-## Reference cost in YUL-1
+## Reference Cost in YUL-1
 
 The current catalog lists the reference resources in CAD:
 
@@ -100,7 +100,7 @@ zcp ssh-key import \
   --region yul-1
 ```
 
-Create the VM. Replace <ollama-template> with the template slug returned by the catalog command:
+Create the VM. Replace `<ollama-template>` with the template slug returned by the catalog command:
 
 ```bash
 zcp instance create \
@@ -130,8 +130,8 @@ date -Is
 
 ## 2. Open SSH
 
-Replace <ip-slug> and <trusted-cidr> with values from your account. Use your workstation public IP
-with a /32 suffix when possible.
+Replace `<ip-slug>` and `<trusted-cidr>` with values from your account. Use your workstation public
+IP with a /32 suffix when possible.
 
 ```bash
 zcp firewall create \
@@ -262,7 +262,7 @@ request_end=$(date +%s)
 printf 'request_elapsed_seconds=%s\n' "$((request_end - request_start))"
 ```
 
-Use ollama ps after the request to see the loaded model and processor:
+Use `ollama ps` after the request to see the loaded model and processor:
 
 ```bash
 ollama ps
@@ -309,8 +309,8 @@ rm -f "$stress_log"
 ```
 
 Run a fixed 120-second filesystem test against a newly generated 1 GiB file under `/tmp`. The CRC
-verification and exit-status check make I/O failures visible. The temporary directory is removed
-after the test:
+verification and exit-status check make I/O failures visible. The commands remove the temporary
+directory after the test:
 
 ```bash
 fio_dir=$(mktemp -d /tmp/zcp-fio.XXXXXX)
@@ -357,11 +357,11 @@ zcp instance delete yul-ollama-test \
   --project default-9
 ```
 
-If a source-NAT IP remains after the VM detaches, follow the full cleanup procedure in the Open
-WebUI tutorial at /tutorials/open-webui-with-ollama.
+If a source-NAT IP remains after the VM detaches, follow the full cleanup procedure in
+[Run Open WebUI With Ollama on ZCP](/tutorials/open-webui-with-ollama).
 
 ## Next Steps
 
-- Add Open WebUI to the VM: /tutorials/open-webui-with-ollama
-- Ollama Marketplace reference: /public-cloud/marketplace/ollama
-- Ollama API reference: https://docs.ollama.com/api
+- [Run Open WebUI With Ollama on ZCP](/tutorials/open-webui-with-ollama)
+- [Ollama Marketplace reference](/public-cloud/marketplace/ollama)
+- [Ollama API reference](https://docs.ollama.com/api)

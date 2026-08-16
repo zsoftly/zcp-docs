@@ -16,7 +16,7 @@ Ce guide s’adresse aux développeurs et aux opérateurs DIY. Il contient les c
 réseau, les mesures et les étapes de nettoyage nécessaires pour reproduire le déploiement.
 
 La validation de référence a utilisé une VM Intel de 16 vCPU et 64 Go dans YUL-1. Il s’agissait d’un
-test limité. Les ressources ont été supprimées après le test.
+test limité. Nous avons supprimé les ressources après le test.
 
 Version anglaise : [Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference).
 
@@ -311,7 +311,7 @@ rm -f "$stress_log"
 
 Exécutez un test du système de fichiers fixe de 120 secondes avec un fichier de 1 Gio nouvellement
 créé sous `/tmp`. La vérification CRC et le contrôle du statut de sortie rendent les erreurs d’I/O
-visibles. Le répertoire temporaire est supprimé après le test :
+visibles. Les commandes suppriment le répertoire temporaire après le test :
 
 ```bash
 fio_dir=$(mktemp -d /tmp/zcp-fio.XXXXXX)
@@ -358,13 +358,11 @@ zcp instance delete yul-ollama-test \
   --project default-9
 ```
 
-Si une IP source NAT reste après le détachement, suivez la procédure complète du tutoriel Open WebUI
-:
-
+Si une IP source NAT reste après le détachement, suivez la procédure complète du tutoriel
 [Exécuter Open WebUI avec Ollama sur ZCP](/fr/tutorials/open-webui-with-ollama).
 
 ## Étapes suivantes
 
-- Ajouter Open WebUI : [tutoriel Open WebUI](/fr/tutorials/open-webui-with-ollama)
-- Référence Marketplace Ollama : /fr/public-cloud/marketplace/ollama
-- Référence API Ollama : https://docs.ollama.com/api
+- [Exécuter Open WebUI avec Ollama sur ZCP](/fr/tutorials/open-webui-with-ollama)
+- [Référence Marketplace Ollama](/fr/public-cloud/marketplace/ollama)
+- [Référence de l'API Ollama](https://docs.ollama.com/api)

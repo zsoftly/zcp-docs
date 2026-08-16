@@ -1,8 +1,8 @@
 ---
 title: 'Run Open WebUI With Ollama on ZCP'
 description:
-  Add Open WebUI to an Ollama VM, connect the browser client to the host service, and expose only
-  the browser port through ZCP networking.
+  Add Open WebUI to an Ollama VM, connect the browser client to the host service, and keep access
+  private with an encrypted SSH tunnel or authenticated HTTPS.
 sidebar:
   label: 'Open WebUI With Ollama'
 ---
@@ -13,7 +13,15 @@ same VM. The container provides the browser interface, while Ollama loads and ru
 This is the developer and DIY operator guide for adding the browser layer, exposing it safely, and
 cleaning up the deployment.
 
-Complete Run Ollama Chat and Inference on ZCP at /tutorials/ollama-chat-and-inference first.
+```mermaid
+flowchart LR
+    W["Workstation / Poste de travail"] -->|Encrypted SSH tunnel / Tunnel SSH chiffré| U["Open WebUI"]
+    U -->|Local connection / Connexion locale| O["Ollama at 127.0.0.1:11434"]
+    O --> M["Selected model / Modèle sélectionné"]
+    P["Optional shared access / Accès partagé optionnel"] -->|HTTPS + authentication / HTTPS + authentification| U
+```
+
+Complete [Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference) first.
 
 Version française : [Exécuter Open WebUI avec Ollama sur ZCP](/fr/tutorials/open-webui-with-ollama)
 
@@ -72,20 +80,22 @@ The first browser visit creates the Open WebUI administrator account. The named 
 the account and application data across container restarts.
 
 Open WebUI runs on the same VM as Ollama, so it does not add a second ZCP VM charge. The reference
-YUL-1 deployment costs about CA$0.8082/hour, or CA$582/month, for the `ci2.4xl` VM, one isolated
-network, and one public IPv4 address before tax. Optional storage, backups, snapshots, and discounts
-are separate. See [Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference) for
-the cost breakdown and catalog commands.
+YUL-1 deployment costs about CA$0.8082/hour, or CA$582/month, before tax. This covers the `ci2.4xl`
+VM, one isolated network, and one public IPv4 address. Optional storage, backups, snapshots, and
+discounts are separate. See
+[Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference) for the cost breakdown
+and catalog commands.
 
 ## 3. Prepare Secure Access
 
 The SSH tunnel in the next step does not need a guest firewall rule for port 8080 or a second ZCP
-port forward. Keep Open WebUI private on the VM and use the SSH access restricted in the Ollama
+port forward. Keep Open WebUI private on the VM and reuse the restricted SSH access from the Ollama
 tutorial.
 
 Do not share a plain-HTTP public login URL. For shared public access, terminate TLS at an HTTPS
 reverse proxy on port 443, require authentication, and proxy internally to `127.0.0.1:8080`. Publish
-only the HTTPS firewall rule and port forward. Do not publish port 3000 over plain HTTP.
+only the HTTPS firewall rule and port forward. Do not publish port 8080, or a remapped browser port
+such as 3000, over plain HTTP.
 
 ## 4. Open WebUI Through an Encrypted SSH Tunnel
 
@@ -98,7 +108,7 @@ ssh -i ~/.ssh/id_ed25519 \
   ubuntu@<public-ip>
 ```
 
-Keep the SSH session open and open this local address in your browser:
+Leave the SSH session running and open this local address in your browser:
 
 ```text
 http://127.0.0.1:3000/
@@ -110,7 +120,7 @@ quality tests. Open WebUI does not change the model's compute path.
 
 ## 5. Keep Ollama Private
 
-Open WebUI does not require public access to port 11434 or port 3000. The SSH tunnel keeps both
+Open WebUI does not require public access to port 11434 or port 8080. The SSH tunnel keeps both
 services private.
 
 If another application needs the API, run it on the same VM at `http://127.0.0.1:11434` or place an
@@ -125,9 +135,9 @@ sudo docker rm -f open-webui
 sudo docker volume rm open-webui
 ```
 
-List every rule attached to the test IP. Delete one command per returned ID, including the SSH rule
-and port forward created by the Ollama tutorial. Omit the HTTPS placeholders if you did not create a
-TLS reverse proxy. Add one more delete command for every additional returned ID.
+List every rule attached to the test IP. Run one delete command per returned ID, including the SSH
+rule and port forward created by the Ollama tutorial. Omit the HTTPS placeholders if you did not
+create a TLS reverse proxy. Add one more delete command for every additional returned ID.
 
 ```bash
 zcp firewall list --ip <ip-slug> --region yul-1 --project default-9
@@ -157,7 +167,7 @@ zcp ip list --region yul-1 --project default-9
 ```
 
 If the IP has no VM but still belongs to the VM's auto-created isolated network, delete that network
-only after the VM is gone, then release the IP:
+after the VM is gone:
 
 ```bash
 zcp network delete <auto-created-network> \
@@ -167,7 +177,7 @@ zcp network delete <auto-created-network> \
 ```
 
 Deleting the auto-created network releases its source-NAT IP. Do not run a separate `zcp ip release`
-for that IP. Do not delete a shared network. Remove the deployment SSH key if it was created only
+for that IP. Do not delete a shared network. Remove the deployment SSH key if you created it only
 for this test:
 
 ```bash
@@ -176,7 +186,7 @@ zcp ssh-key delete my-yul-key --yes
 
 ## References
 
-- Ollama Marketplace reference: /public-cloud/marketplace/ollama
-- Open WebUI documentation: https://docs.openwebui.com/
-- ZCP firewall settings: /public-cloud/compute/settings/firewall
-- ZCP port forwarding: /public-cloud/compute/settings/port-forwarding
+- [Ollama Marketplace reference](/public-cloud/marketplace/ollama)
+- [Open WebUI documentation](https://docs.openwebui.com/)
+- [ZCP firewall settings](/public-cloud/compute/settings/firewall)
+- [ZCP port forwarding](/public-cloud/compute/settings/port-forwarding)

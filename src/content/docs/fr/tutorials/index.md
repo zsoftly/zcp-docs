@@ -45,14 +45,14 @@ Vous apprenez à :
 
 ### [Exécuter Open WebUI avec Ollama sur ZCP](/fr/tutorials/open-webui-with-ollama)
 
-Ajoutez Open WebUI à la même VM qu’Ollama. Exposez uniquement l’interface navigateur avec UFW, le
-pare-feu ZCP et une redirection de port, tout en gardant l’API Ollama privée.
+Ajoutez Open WebUI à la même VM qu’Ollama. Exécutez le client navigateur sur la même machine,
+reliez-le au service Ollama de l’hôte et gardez l’accès privé par un tunnel SSH chiffré.
 
 Vous apprenez à :
 
 - Installer Docker et démarrer Open WebUI avec un volume persistant
 - Relier Open WebUI à Ollama sur la même VM
-- Publier le port navigateur 3000 vers le port privé 8080
+- Accéder à Open WebUI par un tunnel SSH chiffré
 - Nettoyer le conteneur, la VM, l’IP, les règles et le réseau de test
 
 ## Pour aller plus loin
