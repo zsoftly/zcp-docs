@@ -100,7 +100,7 @@ zcp ssh-key import \
   --region yul-1
 ```
 
-Créez la VM. Remplacez `<modele-ollama>` par le slug retourné par le catalogue :
+Créez la VM. Remplacez `<ollama-template>` par le slug retourné par le catalogue :
 
 ```bash
 zcp instance create \
@@ -271,7 +271,8 @@ ollama ps
 ## 6. Comprendre la performance sans GPU
 
 La VM de référence n’avait pas de GPU NVIDIA. Les deux modèles ont utilisé le CPU. Un modèle plus
-petit répond plus vite parce qu’il demande moins de calcul.
+petit répond plus vite parce qu’il demande moins de calcul. Un GPU pris en charge peut réduire la
+latence, en particulier pour les modèles plus grands.
 
 | Test                                        | Résultat                                        |
 | ------------------------------------------- | ----------------------------------------------- |
@@ -292,9 +293,53 @@ sudo apt-get update
 sudo apt-get install -y stress-ng fio
 ```
 
-Le test de référence a enregistré 2 774 619 opérations CPU, 178 IOPS en lecture, 76 IOPS en écriture
-et aucune erreur fio pendant des tests séparés de 120 secondes. La vérification finale affichait 61
-Gio de mémoire disponible, 265 Go de disque libre et aucune erreur du noyau.
+Exécutez un test CPU fixe de 120 secondes. Le journal utilise un chemin généré sous `/tmp`, et la
+commande échoue si `stress-ng` retourne un statut différent de zéro :
+
+```bash
+stress_log=$(mktemp /tmp/zcp-stress-ng.XXXXXX)
+stress_status=0
+sudo stress-ng --cpu 0 --timeout 120s --metrics-brief --verify >"$stress_log" 2>&1 || stress_status=$?
+cat "$stress_log"
+if [ "$stress_status" -ne 0 ]; then
+  echo "stress-ng failed with status $stress_status" >&2
+  rm -f "$stress_log"
+  exit 1
+fi
+rm -f "$stress_log"
+```
+
+Exécutez un test du système de fichiers fixe de 120 secondes avec un fichier de 1 Gio nouvellement
+créé sous `/tmp`. La vérification CRC et le contrôle du statut de sortie rendent les erreurs d’I/O
+visibles. Le répertoire temporaire est supprimé après le test :
+
+```bash
+fio_dir=$(mktemp -d /tmp/zcp-fio.XXXXXX)
+fio_log="$fio_dir/fio.log"
+fio_file="$fio_dir/testfile"
+fio_status=0
+fio --name=zcp-nvme \
+  --filename="$fio_file" \
+  --size=1G \
+  --rw=randrw \
+  --rwmixread=70 \
+  --bs=4k \
+  --iodepth=16 \
+  --numjobs=1 \
+  --runtime=120 \
+  --time_based \
+  --direct=1 \
+  --group_reporting \
+  --verify=crc32c \
+  --do_verify=1 >"$fio_log" 2>&1 || fio_status=$?
+cat "$fio_log"
+if [ "$fio_status" -ne 0 ]; then
+  echo "fio failed with status $fio_status" >&2
+  rm -rf "$fio_dir"
+  exit 1
+fi
+rm -rf "$fio_dir"
+```
 
 ## Nettoyage
 

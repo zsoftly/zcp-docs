@@ -79,60 +79,43 @@ ZCP. Le déploiement YUL-1 de référence coûte environ 0,8082 $ CA par heure, 
 pour la VM `ci2.4xl`, un réseau isolé et une adresse IPv4 publique, avant taxes. Les volumes
 optionnels, sauvegardes, instantanés et remises sont séparés.
 
-## 3. Autoriser le port dans la VM
+## 3. Préparer un accès sécurisé
 
-UFW doit autoriser le port utilisé par Open WebUI :
+Le tunnel SSH de l’étape suivante n’a pas besoin d’une règle de pare-feu invité pour le port 8080 ni
+d’une deuxième redirection ZCP. Gardez Open WebUI privé sur la VM et utilisez l’accès SSH limité
+dans le tutoriel Ollama.
 
-```bash
-sudo ufw allow from <trusted-cidr> to any port 8080 proto tcp
-sudo ufw status verbose
-```
+Ne partagez pas une URL de connexion publique en HTTP non chiffré. Pour un accès public partagé,
+terminez TLS avec un reverse proxy HTTPS sur le port 443, exigez une authentification et proxyfiez
+vers `127.0.0.1:8080`. Publiez uniquement la règle et la redirection HTTPS. Ne publiez pas le port
+3000 en HTTP non chiffré.
 
-Pour un test court, `sudo ufw allow 8080/tcp` fonctionne si le réseau source est contrôlé. Supprimez
-ensuite la règle ouverte et appliquez un CIDR fiable avant de partager l’URL.
+## 4. Ouvrir Open WebUI avec un tunnel SSH chiffré
 
-## 4. Rediriger un port par ZCP
-
-Utilisez le port public 3000 et le port privé 8080. Remplacez `<slug-ip>` et `<cidr-fiable>` par les
-valeurs de votre compte :
+Exécutez cette commande sur votre poste. Remplacez `<public-ip>` par l’adresse de la VM :
 
 ```bash
-zcp firewall create \
-  --ip <ip-slug> \
-  --protocol tcp \
-  --cidr <trusted-cidr> \
-  --start-port 3000 \
-  --end-port 3000 \
-  --project default-9 \
-  --region yul-1 \
-  --auto-approve
-
-zcp portforward create \
-  --instance yul-ollama-test \
-  --ip <ip-slug> \
-  --protocol tcp \
-  --public-port 3000 \
-  --private-port 8080 \
-  --public-end-port 3000 \
-  --private-end-port 8080 \
-  --project default-9 \
-  --region yul-1 \
-  --auto-approve
+ssh -i ~/.ssh/id_ed25519 \
+  -N \
+  -L 3000:127.0.0.1:8080 \
+  ubuntu@<public-ip>
 ```
 
-Ouvrez cette adresse :
+Gardez la session SSH ouverte et ouvrez cette adresse locale dans le navigateur :
 
 ```text
-http://<public-ip>:3000/
+http://127.0.0.1:3000/
 ```
 
-Après la connexion, choisissez `llama3.1:8b` pour un chat interactif. Choisissez `llama3.3:70b`
-uniquement pour des tests de qualité plus lents sur CPU. Open WebUI ne change pas le chemin de
-calcul du modèle.
+La connexion du navigateur est locale et SSH chiffre le trafic entre votre poste et la VM. Après la
+connexion, choisissez `llama3.1:8b` pour un chat interactif. Choisissez `llama3.3:70b` uniquement
+pour des tests de qualité plus lents sur CPU. Open WebUI ne change pas le chemin de calcul du
+modèle.
 
 ## 5. Garder Ollama privé
 
-Open WebUI n’a pas besoin d’un accès public au port 11434. N’exposez que le port 3000 au navigateur.
+Open WebUI n’a pas besoin d’un accès public aux ports 11434 ou 3000. Le tunnel SSH garde les deux
+services privés.
 
 Si une autre application a besoin de l’API, exécutez-la sur la même VM à `http://127.0.0.1:11434` ou
 placez un reverse proxy authentifié sur un réseau privé. N’ajoutez pas de redirection publique non
@@ -147,13 +130,18 @@ sudo docker rm -f open-webui
 sudo docker volume rm open-webui
 ```
 
-Supprimez toutes les règles et redirections liées à l’IP de test :
+Listez toutes les règles liées à l’IP de test. Exécutez une commande de suppression par identifiant
+retourné, y compris la règle et la redirection SSH créées par le tutoriel Ollama. Omettez les
+identifiants HTTPS si vous n’avez pas créé de reverse proxy TLS. Ajoutez une commande pour chaque
+identifiant supplémentaire retourné :
 
 ```bash
 zcp firewall list --ip <ip-slug> --region yul-1 --project default-9
 zcp portforward list --ip <ip-slug> --region yul-1 --project default-9
-zcp firewall delete <rule-id> --ip <ip-slug> --yes --region yul-1 --project default-9
-zcp portforward delete <forward-id> --ip <ip-slug> --yes --region yul-1 --project default-9
+zcp firewall delete <ssh-firewall-rule-id> --ip <ip-slug> --yes --region yul-1 --project default-9
+zcp firewall delete <https-firewall-rule-id> --ip <ip-slug> --yes --region yul-1 --project default-9
+zcp portforward delete <ssh-portforward-id> --ip <ip-slug> --yes --region yul-1 --project default-9
+zcp portforward delete <https-portforward-id> --ip <ip-slug> --yes --region yul-1 --project default-9
 ```
 
 Supprimez la VM :
@@ -183,7 +171,6 @@ zcp network delete <auto-created-network> \
   --yes \
   --region yul-1 \
   --project default-9
-
 ```
 
 La suppression du réseau créé automatiquement libère son IP source NAT. N’exécutez pas de commande

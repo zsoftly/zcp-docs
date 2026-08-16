@@ -61,10 +61,9 @@ the host Ollama service, and expose only the browser port through ZCP networking
 You learn how to:
 
 - Install Open WebUI with Docker and connect it to host Ollama
-- Forward public port 3000 to the private UI port 8080
+- Access Open WebUI through an encrypted SSH tunnel
 - Select models from the browser without changing their compute path
 - Remove the container, network rules, VM, and any orphaned source-NAT IP
-- Record timings, resource usage, and failure signals during a bounded test
 
 ## Where to go next
 

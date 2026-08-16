@@ -77,59 +77,41 @@ network, and one public IPv4 address before tax. Optional storage, backups, snap
 are separate. See [Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference) for
 the cost breakdown and catalog commands.
 
-## 3. Allow the Guest Port
+## 3. Prepare Secure Access
 
-Ubuntu UFW must allow the port used by Open WebUI:
+The SSH tunnel in the next step does not need a guest firewall rule for port 8080 or a second ZCP
+port forward. Keep Open WebUI private on the VM and use the SSH access restricted in the Ollama
+tutorial.
 
-```bash
-sudo ufw allow from <trusted-cidr> to any port 8080 proto tcp
-sudo ufw status verbose
-```
+Do not share a plain-HTTP public login URL. For shared public access, terminate TLS at an HTTPS
+reverse proxy on port 443, require authentication, and proxy internally to `127.0.0.1:8080`. Publish
+only the HTTPS firewall rule and port forward. Do not publish port 3000 over plain HTTP.
 
-For a short test, use sudo ufw allow 8080/tcp only when the source network is controlled. Remove the
-unrestricted rule and apply a trusted CIDR before sharing the URL.
+## 4. Open WebUI Through an Encrypted SSH Tunnel
 
-## 4. Forward a Browser Port Through ZCP
-
-Use public port 3000 and private port 8080. Replace <ip-slug> and <trusted-cidr> with values from
-your account.
+Run this command on your workstation. Replace `<public-ip>` with the VM address:
 
 ```bash
-zcp firewall create \
-  --ip <ip-slug> \
-  --protocol tcp \
-  --cidr <trusted-cidr> \
-  --start-port 3000 \
-  --end-port 3000 \
-  --project default-9 \
-  --region yul-1 \
-  --auto-approve
-
-zcp portforward create \
-  --instance yul-ollama-test \
-  --ip <ip-slug> \
-  --protocol tcp \
-  --public-port 3000 \
-  --private-port 8080 \
-  --public-end-port 3000 \
-  --private-end-port 8080 \
-  --project default-9 \
-  --region yul-1 \
-  --auto-approve
+ssh -i ~/.ssh/id_ed25519 \
+  -N \
+  -L 3000:127.0.0.1:8080 \
+  ubuntu@<public-ip>
 ```
 
-Open this address in a browser:
+Keep the SSH session open and open this local address in your browser:
 
 ```text
-http://<public-ip>:3000/
+http://127.0.0.1:3000/
 ```
 
+The browser connection is local, and SSH encrypts the traffic between your workstation and the VM.
 After signing in, select llama3.1:8b for interactive chat. Select llama3.3:70b only for slow CPU
 quality tests. Open WebUI does not change the model's compute path.
 
 ## 5. Keep Ollama Private
 
-Open WebUI does not require public access to port 11434. Expose only port 3000 to the browser.
+Open WebUI does not require public access to port 11434 or port 3000. The SSH tunnel keeps both
+services private.
 
 If another application needs the API, run it on the same VM at `http://127.0.0.1:11434` or place an
 authenticated reverse proxy on a private network. Do not add a public unauthenticated port forward.
@@ -143,13 +125,17 @@ sudo docker rm -f open-webui
 sudo docker volume rm open-webui
 ```
 
-Delete all firewall rules and port forwards attached to the test IP:
+List every rule attached to the test IP. Delete one command per returned ID, including the SSH rule
+and port forward created by the Ollama tutorial. Omit the HTTPS placeholders if you did not create a
+TLS reverse proxy. Add one more delete command for every additional returned ID.
 
 ```bash
 zcp firewall list --ip <ip-slug> --region yul-1 --project default-9
 zcp portforward list --ip <ip-slug> --region yul-1 --project default-9
-zcp firewall delete <rule-id> --ip <ip-slug> --yes --region yul-1 --project default-9
-zcp portforward delete <forward-id> --ip <ip-slug> --yes --region yul-1 --project default-9
+zcp firewall delete <ssh-firewall-rule-id> --ip <ip-slug> --yes --region yul-1 --project default-9
+zcp firewall delete <https-firewall-rule-id> --ip <ip-slug> --yes --region yul-1 --project default-9
+zcp portforward delete <ssh-portforward-id> --ip <ip-slug> --yes --region yul-1 --project default-9
+zcp portforward delete <https-portforward-id> --ip <ip-slug> --yes --region yul-1 --project default-9
 ```
 
 Delete the VM:
@@ -178,7 +164,6 @@ zcp network delete <auto-created-network> \
   --yes \
   --region yul-1 \
   --project default-9
-
 ```
 
 Deleting the auto-created network releases its source-NAT IP. Do not run a separate `zcp ip release`

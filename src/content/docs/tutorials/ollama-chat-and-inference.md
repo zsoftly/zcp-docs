@@ -292,9 +292,53 @@ sudo apt-get update
 sudo apt-get install -y stress-ng fio
 ```
 
-The reference run recorded 2,774,619 CPU stress operations, 178 read IOPS, 76 write IOPS, and zero
-fio errors during separate 120-second CPU and NVMe tests. The final health check showed 61 GiB
-available memory, 265 GB free disk, and no kernel error entries.
+Run a fixed 120-second CPU test. The log uses a generated path under `/tmp`, and the command fails
+if `stress-ng` returns a non-zero status:
+
+```bash
+stress_log=$(mktemp /tmp/zcp-stress-ng.XXXXXX)
+stress_status=0
+sudo stress-ng --cpu 0 --timeout 120s --metrics-brief --verify >"$stress_log" 2>&1 || stress_status=$?
+cat "$stress_log"
+if [ "$stress_status" -ne 0 ]; then
+  echo "stress-ng failed with status $stress_status" >&2
+  rm -f "$stress_log"
+  exit 1
+fi
+rm -f "$stress_log"
+```
+
+Run a fixed 120-second filesystem test against a newly generated 1 GiB file under `/tmp`. The CRC
+verification and exit-status check make I/O failures visible. The temporary directory is removed
+after the test:
+
+```bash
+fio_dir=$(mktemp -d /tmp/zcp-fio.XXXXXX)
+fio_log="$fio_dir/fio.log"
+fio_file="$fio_dir/testfile"
+fio_status=0
+fio --name=zcp-nvme \
+  --filename="$fio_file" \
+  --size=1G \
+  --rw=randrw \
+  --rwmixread=70 \
+  --bs=4k \
+  --iodepth=16 \
+  --numjobs=1 \
+  --runtime=120 \
+  --time_based \
+  --direct=1 \
+  --group_reporting \
+  --verify=crc32c \
+  --do_verify=1 >"$fio_log" 2>&1 || fio_status=$?
+cat "$fio_log"
+if [ "$fio_status" -ne 0 ]; then
+  echo "fio failed with status $fio_status" >&2
+  rm -rf "$fio_dir"
+  exit 1
+fi
+rm -rf "$fio_dir"
+```
 
 ## Cleanup
 
