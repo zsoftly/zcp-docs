@@ -37,11 +37,13 @@ de les gérer à distance.
 
 ## Si la connexion RDP échoue
 
-RDP utilise le port TCP **3389**. Ajoutez une
-[règle de pare-feu](/fr/public-cloud/compute/settings/firewall/) entrante pour le port TCP 3389 et
-limitez la source à votre adresse IP publique. Utilisez la
-[redirection de ports](/fr/public-cloud/compute/settings/port-forwarding/) uniquement lorsque la VM
-n'a pas d'adresse IP publique directement attribuée.
+RDP écoute sur le port TCP **3389** dans la VM. Si une adresse IP publique est directement attribuée
+à la VM, autorisez le port TCP 3389 dans la
+[règle de pare-feu](/fr/public-cloud/compute/settings/firewall/) et connectez-vous à cette adresse
+IP sur le port 3389. Si vous utilisez la
+[redirection de ports](/fr/public-cloud/compute/settings/port-forwarding/), associez le port TCP
+public configuré au port 3389 de la VM, autorisez le port public dans la règle de pare-feu, puis
+connectez-vous à l'adresse IP publique et au port public.
 
 Si la règle de pare-feu est correcte, mais que la connexion échoue toujours, utilisez
 l'[accès à la console](./console-access) pour vérifier le système Windows. Ouvrez PowerShell en tant
@@ -53,17 +55,31 @@ Set-ItemProperty `
   -Name "fDenyTSConnections" `
   -Value 0
 
-Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+Enable-NetFirewallRule -Group "@FirewallAPI.dll,-28752"
 
 Set-Service TermService -StartupType Automatic
+Set-Service UmRdpService -StartupType Automatic
 Start-Service TermService
+Start-Service UmRdpService
 
-Get-Service TermService
-Get-NetTCPConnection -LocalPort 3389 -State Listen
+$services = Get-Service -Name TermService,UmRdpService
+$services | Select-Object Name,Status,StartType
+
+$termServicePid = (Get-CimInstance Win32_Service -Filter "Name='TermService'").ProcessId
+$listeners = Get-NetTCPConnection -LocalPort 3389 -State Listen
+$listeners | Select-Object LocalAddress,LocalPort,OwningProcess
+
+if ($services | Where-Object { $_.Status -ne 'Running' }) {
+  throw "TermService and UmRdpService must both be Running"
+}
+if ($listeners.OwningProcess -notcontains $termServicePid) {
+  throw "The port 3389 listener does not belong to TermService"
+}
+"RDP listener matches TermService PID $termServicePid"
 ```
 
-Vérifiez que `TermService` affiche l'état `Running` et qu'un écouteur apparaît sur le port `3389`.
-Essayez ensuite de vous connecter à nouveau avec RDP.
+Vérifiez que `TermService` et `UmRdpService` affichent l'état `Running` et que la vérification de
+l'écouteur correspond au PID de `TermService`. Essayez ensuite de vous connecter à nouveau avec RDP.
 
 ![PowerShell administrateur montrant le service Remote Desktop en cours d'exécution et le port 3389 à l'écoute](../../../../../assets/compute/connect-rdp-console-enable-service.webp)
 
