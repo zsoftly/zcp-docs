@@ -35,6 +35,38 @@ de les gérer à distance.
 
 ![Connexion à la VM via RDP](../../../../../assets/compute/connect-rdp-connect.webp)
 
+## Si la connexion RDP échoue
+
+RDP utilise le port TCP **3389**. Ajoutez une
+[règle de pare-feu](/fr/public-cloud/compute/settings/firewall/) entrante pour le port TCP 3389 et
+limitez la source à votre adresse IP publique. Utilisez la
+[redirection de ports](/fr/public-cloud/compute/settings/port-forwarding/) uniquement lorsque la VM
+n'a pas d'adresse IP publique directement attribuée.
+
+Si la règle de pare-feu est correcte, mais que la connexion échoue toujours, utilisez
+l'[accès à la console](./console-access) pour vérifier le système Windows. Ouvrez PowerShell en tant
+qu'administrateur et exécutez les commandes suivantes :
+
+```powershell
+Set-ItemProperty `
+  -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" `
+  -Name "fDenyTSConnections" `
+  -Value 0
+
+Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+Set-Service TermService -StartupType Automatic
+Start-Service TermService
+
+Get-Service TermService
+Get-NetTCPConnection -LocalPort 3389 -State Listen
+```
+
+Vérifiez que `TermService` affiche l'état `Running` et qu'un écouteur apparaît sur le port `3389`.
+Essayez ensuite de vous connecter à nouveau avec RDP.
+
+![PowerShell administrateur montrant le service Remote Desktop en cours d'exécution et le port 3389 à l'écoute](../../../../../assets/compute/connect-rdp-console-enable-service.webp)
+
 ## Voir aussi
 
 - [Se connecter avec SSH](/fr/public-cloud/compute/connect-ssh)
