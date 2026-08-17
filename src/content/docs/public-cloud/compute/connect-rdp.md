@@ -33,6 +33,37 @@ Remote Desktop Protocol (RDP) enables you to securely connect to and manage Wind
 
 ![Connecting to the VM over RDP](../../../../assets/compute/connect-rdp-connect.webp)
 
+## If RDP Does Not Connect
+
+RDP uses TCP port **3389**. Add an inbound [firewall rule](/public-cloud/compute/settings/firewall/)
+for TCP 3389 and restrict the source to your public IP address. Use
+[Port Forwarding](/public-cloud/compute/settings/port-forwarding/) only when the VM does not have a
+public IP assigned directly.
+
+If the firewall rule is correct but the connection still fails, use
+[Console Access](./console-access) to check the Windows guest. Open an Administrator PowerShell
+window and run:
+
+```powershell
+Set-ItemProperty `
+  -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" `
+  -Name "fDenyTSConnections" `
+  -Value 0
+
+Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+Set-Service TermService -StartupType Automatic
+Start-Service TermService
+
+Get-Service TermService
+Get-NetTCPConnection -LocalPort 3389 -State Listen
+```
+
+Confirm that `TermService` shows `Running` and that a listener appears on port `3389`. Then retry
+the RDP connection.
+
+![Administrator PowerShell showing the Remote Desktop service running and port 3389 listening](../../../../assets/compute/connect-rdp-console-enable-service.webp)
+
 ## See also
 
 - [Connect With SSH](/public-cloud/compute/connect-ssh)
