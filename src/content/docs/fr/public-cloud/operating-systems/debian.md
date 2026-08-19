@@ -14,9 +14,11 @@ ZCP prend en charge deux images publiques Debian :
 
 :::caution
 
-La disponibilité dépend de la région. Confirmez la région cible et la version dans le portail avant
-d'automatiser le déploiement. Le portail constitue la vérification finale si la configuration du
-catalogue et l'état du déploiement changent à des moments différents.
+YUL-1 est la région principale pour la production. Utilisez YOW-1 pour le développement et les
+tests; YOW-1 n'est pas recommandé pour les charges de production. La disponibilité dépend de la
+région. Confirmez la région cible et la version dans le portail avant d'automatiser le déploiement.
+Le portail constitue la vérification finale si la configuration du catalogue et l'état du
+déploiement changent à des moments différents.
 
 :::
 
@@ -50,8 +52,8 @@ prix actuels.
 - Appliquez les correctifs depuis les dépôts officiels Debian.
 - Configurez les règles de pare-feu, les sauvegardes ou instantanés, la surveillance et les alertes
   d'espace disque avant d'exposer une application.
-- Séparez les données du système d'exploitation et celles de l'application lorsque la charge ou le
-  plan de récupération le justifie.
+- Séparez les données du système d'exploitation et celles de l'application lorsque la charge, le
+  plan de sauvegarde ou le plan de récupération le justifient.
 
 ## Références officielles
 

@@ -14,9 +14,10 @@ ZCP supports two Debian public images:
 
 :::caution
 
-Availability is region-specific. Confirm the target region and release in the portal before
-automating deployment. The portal is the final check if catalog configuration and deployment state
-change at different times.
+YUL-1 is the primary production region. Use YOW-1 for development and testing; YOW-1 is not
+recommended for production workloads. Availability is region-specific. Confirm the target region and
+release in the portal before automating deployment. The portal is the final check if catalog
+configuration and deployment state change at different times.
 
 :::
 
