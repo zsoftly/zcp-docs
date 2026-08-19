@@ -14,12 +14,15 @@ Before connecting, ensure you have:
 - **Authentication Method**: SSH Key (recommended) or the **Provisioning Password** shown on the
   instance's Overview tab (see below).
 
+The table below lists common default usernames. It is not an availability catalog. Debian is not
+currently available as a supported public ZCP image. See the
+[Debian Availability](/public-cloud/operating-systems/debian/) page for the current boundary.
+
 ### Default username by OS
 
 | OS image     | Default username |
 | ------------ | ---------------- |
 | Ubuntu       | `ubuntu`         |
-| Debian       | `debian`         |
 | Rocky Linux  | `rocky`          |
 | AlmaLinux    | `almalinux`      |
 | CentOS       | `centos`         |

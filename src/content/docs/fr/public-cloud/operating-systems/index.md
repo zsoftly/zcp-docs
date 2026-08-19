@@ -70,6 +70,10 @@ Gratuit et à code source ouvert, sans licence ni activation requise.
 | [AlmaLinux](/fr/public-cloud/operating-systems/alma-linux/)      | 9                              | ✅ Disponible |
 | [Oracle Linux](/fr/public-cloud/operating-systems/oracle-linux/) | 9                              | ✅ Disponible |
 
+Debian n'est actuellement pas disponible comme image publique ZCP prise en charge. Consultez la page
+[Disponibilité de Debian](/fr/public-cloud/operating-systems/debian/) pour connaître la limite de
+disponibilité et les alternatives prises en charge.
+
 ### Windows
 
 Sous licence **apportez votre propre licence (BYOL)**. Vous fournissez et activez votre propre

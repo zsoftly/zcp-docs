@@ -62,6 +62,10 @@ Free and open-source, with no license or activation required.
 | [AlmaLinux](/public-cloud/operating-systems/alma-linux/)      | 9                              | ✅ Available |
 | [Oracle Linux](/public-cloud/operating-systems/oracle-linux/) | 9                              | ✅ Available |
 
+Debian is not currently available as a supported public ZCP image. See
+[Debian Availability](/public-cloud/operating-systems/debian/) for the availability boundary and
+supported alternatives.
+
 ### Windows
 
 Licensed **bring-your-own-license (BYOL)**. You supply and activate your own license.
