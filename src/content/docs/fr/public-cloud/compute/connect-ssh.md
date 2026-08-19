@@ -16,16 +16,15 @@ Avant de vous connecter, assurez-vous d'avoir :
   dans l'onglet Overview de l'instance (voir ci-dessous).
 
 Le tableau ci-dessous présente des noms d'utilisateur par défaut courants. Il ne constitue pas un
-catalogue de disponibilité. Debian n'est actuellement pas disponible comme image publique ZCP prise
-en charge. Consultez la
-[page de disponibilité de Debian](/fr/public-cloud/operating-systems/debian/) pour connaître la
-limite actuelle.
+catalogue de disponibilité. Les images Debian utilisent `debian` comme nom d'utilisateur par défaut.
+Confirmez l'image et la région dans le portail avant de vous connecter.
 
 ### Nom d'utilisateur par défaut selon le SE
 
 | Image du SE  | Nom d'utilisateur par défaut |
 | ------------ | ---------------------------- |
 | Ubuntu       | `ubuntu`                     |
+| Debian       | `debian`                     |
 | Rocky Linux  | `rocky`                      |
 | AlmaLinux    | `almalinux`                  |
 | CentOS       | `centos`                     |
