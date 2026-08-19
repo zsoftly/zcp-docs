@@ -48,6 +48,7 @@ au moment où vous créez l'instance.
 | Image        | Utilisateur par défaut | Se connecter avec                            |
 | ------------ | ---------------------- | -------------------------------------------- |
 | Ubuntu       | `ubuntu`               | [SSH](/fr/public-cloud/compute/connect-ssh/) |
+| Debian       | `debian`               | [SSH](/fr/public-cloud/compute/connect-ssh/) |
 | Rocky Linux  | `rocky`                | [SSH](/fr/public-cloud/compute/connect-ssh/) |
 | AlmaLinux    | `almalinux`            | [SSH](/fr/public-cloud/compute/connect-ssh/) |
 | Oracle Linux | `cloud-user`           | [SSH](/fr/public-cloud/compute/connect-ssh/) |
@@ -63,12 +64,13 @@ RDP, utile pour le premier démarrage et le dépannage. Consultez
 
 Gratuit et à code source ouvert, sans licence ni activation requise.
 
-| Image                                                            | Versions disponibles           | État          |
-| ---------------------------------------------------------------- | ------------------------------ | ------------- |
-| [Ubuntu](/fr/public-cloud/operating-systems/ubuntu/)             | 26.04, 24.04, 22.04, 20.04 LTS | ✅ Disponible |
-| [Rocky Linux](/fr/public-cloud/operating-systems/rocky-linux/)   | 9                              | ✅ Disponible |
-| [AlmaLinux](/fr/public-cloud/operating-systems/alma-linux/)      | 9                              | ✅ Disponible |
-| [Oracle Linux](/fr/public-cloud/operating-systems/oracle-linux/) | 9                              | ✅ Disponible |
+| Image                                                            | Versions disponibles           | État                                |
+| ---------------------------------------------------------------- | ------------------------------ | ----------------------------------- |
+| [Ubuntu](/fr/public-cloud/operating-systems/ubuntu/)             | 26.04, 24.04, 22.04, 20.04 LTS | ✅ Disponible                       |
+| [Debian](/fr/public-cloud/operating-systems/debian/)             | 13 (Trixie), 12 (Bookworm)     | ✅ Disponible dans `yow-1`, `yul-1` |
+| [Rocky Linux](/fr/public-cloud/operating-systems/rocky-linux/)   | 9                              | ✅ Disponible                       |
+| [AlmaLinux](/fr/public-cloud/operating-systems/alma-linux/)      | 9                              | ✅ Disponible                       |
+| [Oracle Linux](/fr/public-cloud/operating-systems/oracle-linux/) | 9                              | ✅ Disponible                       |
 
 ### Windows
 

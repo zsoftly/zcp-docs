@@ -15,6 +15,10 @@ Avant de vous connecter, assurez-vous d'avoir :
 - **Méthode d'authentification** : clé SSH, recommandée, ou le **Provisioning Password** affiché
   dans l'onglet Overview de l'instance (voir ci-dessous).
 
+Le tableau ci-dessous présente des noms d'utilisateur par défaut courants. Il ne constitue pas un
+catalogue de disponibilité. Les images Debian utilisent `debian` comme nom d'utilisateur par défaut.
+Confirmez l'image et la région dans le portail avant de vous connecter.
+
 ### Nom d'utilisateur par défaut selon le SE
 
 | Image du SE  | Nom d'utilisateur par défaut |

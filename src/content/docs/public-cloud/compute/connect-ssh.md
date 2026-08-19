@@ -14,6 +14,9 @@ Before connecting, ensure you have:
 - **Authentication Method**: SSH Key (recommended) or the **Provisioning Password** shown on the
   instance's Overview tab (see below).
 
+The table below lists common default usernames. It is not an availability catalog. Debian images use
+`debian` as the default username. Confirm the image and region in the portal before connecting.
+
 ### Default username by OS
 
 | OS image     | Default username |

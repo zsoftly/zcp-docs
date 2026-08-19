@@ -41,6 +41,7 @@ the instance.
 | Image        | Default user    | Connect with                              |
 | ------------ | --------------- | ----------------------------------------- |
 | Ubuntu       | `ubuntu`        | [SSH](/public-cloud/compute/connect-ssh/) |
+| Debian       | `debian`        | [SSH](/public-cloud/compute/connect-ssh/) |
 | Rocky Linux  | `rocky`         | [SSH](/public-cloud/compute/connect-ssh/) |
 | AlmaLinux    | `almalinux`     | [SSH](/public-cloud/compute/connect-ssh/) |
 | Oracle Linux | `cloud-user`    | [SSH](/public-cloud/compute/connect-ssh/) |
@@ -55,12 +56,13 @@ first boot and troubleshooting. See [Console Access](/public-cloud/compute/conso
 
 Free and open-source, with no license or activation required.
 
-| Image                                                         | Versions available             | Status       |
-| ------------------------------------------------------------- | ------------------------------ | ------------ |
-| [Ubuntu](/public-cloud/operating-systems/ubuntu/)             | 26.04, 24.04, 22.04, 20.04 LTS | ✅ Available |
-| [Rocky Linux](/public-cloud/operating-systems/rocky-linux/)   | 9                              | ✅ Available |
-| [AlmaLinux](/public-cloud/operating-systems/alma-linux/)      | 9                              | ✅ Available |
-| [Oracle Linux](/public-cloud/operating-systems/oracle-linux/) | 9                              | ✅ Available |
+| Image                                                         | Versions available             | Status                           |
+| ------------------------------------------------------------- | ------------------------------ | -------------------------------- |
+| [Ubuntu](/public-cloud/operating-systems/ubuntu/)             | 26.04, 24.04, 22.04, 20.04 LTS | ✅ Available                     |
+| [Debian](/public-cloud/operating-systems/debian/)             | 13 (Trixie), 12 (Bookworm)     | ✅ Available in `yow-1`, `yul-1` |
+| [Rocky Linux](/public-cloud/operating-systems/rocky-linux/)   | 9                              | ✅ Available                     |
+| [AlmaLinux](/public-cloud/operating-systems/alma-linux/)      | 9                              | ✅ Available                     |
+| [Oracle Linux](/public-cloud/operating-systems/oracle-linux/) | 9                              | ✅ Available                     |
 
 ### Windows
 

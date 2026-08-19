@@ -43,6 +43,7 @@ const frSidebarLabels = {
   'Power Management': "Gestion de l'alimentation",
   'Activity Logs': "Journaux d'activité",
   'Instance Settings': "Paramètres de l'instance",
+  Debian: 'Debian',
   'Block Storage': 'Stockage bloc',
   'Resize Plan': 'Redimensionner le plan',
   'Change OS': 'Changer le système',
@@ -349,6 +350,7 @@ export default defineConfig({
               items: [
                 { label: 'Overview', slug: 'public-cloud/operating-systems' },
                 { label: 'Ubuntu', slug: 'public-cloud/operating-systems/ubuntu' },
+                { label: 'Debian', slug: 'public-cloud/operating-systems/debian' },
                 { label: 'Rocky Linux', slug: 'public-cloud/operating-systems/rocky-linux' },
                 { label: 'AlmaLinux', slug: 'public-cloud/operating-systems/alma-linux' },
                 { label: 'Oracle Linux', slug: 'public-cloud/operating-systems/oracle-linux' },
