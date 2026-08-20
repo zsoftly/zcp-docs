@@ -17,8 +17,8 @@ port 51821/tcp et le VPN lui-même sur le port 51820/udp.
 
 ## Variables d'environnement
 
-Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
-qu'une valeur sécurisée soit générée.
+Définissez-les facultativement lors du déploiement depuis la Place de marché. Laissez un champ vide
+pour qu'une valeur sécurisée soit générée.
 
 | Variable             | Description                           |
 | -------------------- | ------------------------------------- |

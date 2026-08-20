@@ -431,5 +431,5 @@ curl -sSL https://dokploy.com/install.sh | sudo sh
 - [Se connecter en SSH](/fr/public-cloud/compute/connect-ssh) : gestion des clés et dépannage
 - [Redirection de ports](/fr/public-cloud/compute/settings/port-forwarding) : exposer des services
   précis
-- [Docker sur la Marketplace](/fr/public-cloud/marketplace/docker) : une image prête à l'emploi si
-  vous voulez Docker sans installation manuelle
+- [Docker sur la Place de marché](/fr/public-cloud/marketplace/docker) : une image prête à l'emploi
+  si vous voulez Docker sans installation manuelle

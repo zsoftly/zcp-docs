@@ -27,7 +27,7 @@ authentifié sur le port 587, ou consultez
 
 ## Variables d'environnement
 
-Définissez ces valeurs lors du déploiement de WordPress depuis la marketplace. `SITE_URL` et
+Définissez ces valeurs lors du déploiement de WordPress depuis la Place de marché. `SITE_URL` et
 `ADMIN_EMAIL` doivent contenir les valeurs réelles de votre déploiement. Vous pouvez laisser
 `ADMIN_USER` et `ADMIN_PASSWORD` vides pour générer automatiquement des valeurs aléatoires
 sécurisées.

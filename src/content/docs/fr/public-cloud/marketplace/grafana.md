@@ -17,7 +17,7 @@ l'intelligence d'affaires.
 
 ## Variables d'environnement
 
-Vous pouvez définir ces valeurs lors du déploiement de Grafana depuis la marketplace. Laissez un
+Vous pouvez définir ces valeurs lors du déploiement de Grafana depuis la Place de marché. Laissez un
 champ vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable                     | Description                                 |

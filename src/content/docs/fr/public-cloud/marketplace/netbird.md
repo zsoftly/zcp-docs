@@ -17,7 +17,7 @@ client NetBird préinstallé, prêt à joindre votre réseau.
 ## Variables d'environnement
 
 Vous pouvez éventuellement fournir une clé de configuration NetBird lors du déploiement depuis la
-marketplace. Si elle est définie, la VM rejoint automatiquement votre réseau NetBird au premier
+Place de marché. Si elle est définie, la VM rejoint automatiquement votre réseau NetBird au premier
 démarrage ; sinon, connectez-vous manuellement avec `netbird up` après le déploiement.
 
 | Variable            | Description                                                             |

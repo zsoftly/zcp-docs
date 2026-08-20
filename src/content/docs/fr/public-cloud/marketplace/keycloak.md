@@ -28,8 +28,8 @@ Compose.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Keycloak depuis la Marketplace. Laissez un champ de mot de
-passe vide pour générer automatiquement une valeur aléatoire sécurisée.
+Vous pouvez les définir au déploiement de Keycloak depuis la Place de marché. Laissez un champ de
+mot de passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable                  | Description                                                                                               |
 | ------------------------- | --------------------------------------------------------------------------------------------------------- |

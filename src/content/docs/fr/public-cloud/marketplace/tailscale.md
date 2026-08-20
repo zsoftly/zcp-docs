@@ -17,7 +17,7 @@ Tailscale préinstallé, prête à joindre votre Tailnet.
 ## Variables d'environnement
 
 Vous pouvez éventuellement fournir une clé d'authentification Tailscale lors du déploiement depuis
-la marketplace. Si elle est définie, la VM rejoint automatiquement votre Tailnet au premier
+la Place de marché. Si elle est définie, la VM rejoint automatiquement votre Tailnet au premier
 démarrage ; sinon, connectez-vous manuellement avec `tailscale up` après le déploiement.
 
 | Variable     | Description                                                                 |

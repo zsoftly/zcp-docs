@@ -18,8 +18,8 @@ ou 18 au moment du déploiement.
 
 ## Variables d'environnement
 
-Vous pouvez définir ces valeurs lors du déploiement de PostgreSQL depuis la marketplace. Laissez un
-champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+Vous pouvez définir ces valeurs lors du déploiement de PostgreSQL depuis la Place de marché. Laissez
+un champ vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable            | Description                                         |
 | ------------------- | --------------------------------------------------- |

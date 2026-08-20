@@ -22,7 +22,11 @@ configurez un serveur relais (smart host) sur le port 587. Voir
 | Composant    | Version                 |
 | ------------ | ----------------------- |
 | cPanel & WHM | Dernière version stable |
-| Ubuntu       | 24.04 LTS               |
+| AlmaLinux    | 9                       |
+
+L'image cPanel de la Place de marché ZCP utilise AlmaLinux 9 comme système d'exploitation de base.
+cPanel prend en charge d'autres systèmes dans des déploiements distincts, mais cette image ZCP
+n'utilise pas Ubuntu.
 
 ## Bien démarrer
 

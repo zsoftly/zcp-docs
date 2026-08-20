@@ -15,7 +15,7 @@ réel, la messagerie pub/sub et les files de tâches.
 
 ## Variables d'environnement
 
-Vous pouvez définir ces valeurs lors du déploiement de Valkey depuis la marketplace. Laissez un
+Vous pouvez définir ces valeurs lors du déploiement de Valkey depuis la Place de marché. Laissez un
 champ vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable          | Description                                    |

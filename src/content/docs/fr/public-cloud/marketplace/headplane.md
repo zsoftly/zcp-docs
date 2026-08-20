@@ -10,10 +10,10 @@ c'est pourquoi cette image fournit les deux ensemble.
 
 :::tip[Headscale est le serveur, pas le client]
 
-L'application marketplace Tailscale de ZCP installe le **client** Tailscale qui rejoint un tailnet
-existant. Headscale est le **serveur de contrôle** auto-hébergé auquel un client se connecte, et
-Headplane en est l'interface d'administration. Exécutez Headscale + Headplane ici, puis pointez vos
-clients Tailscale vers l'URL de ce serveur.
+L'application Tailscale de la Place de marché ZCP installe le **client** Tailscale qui rejoint un
+tailnet existant. Headscale est le **serveur de contrôle** auto-hébergé auquel un client se
+connecte, et Headplane en est l'interface d'administration. Exécutez Headscale + Headplane ici, puis
+pointez vos clients Tailscale vers l'URL de ce serveur.
 
 :::
 
@@ -40,8 +40,8 @@ de pile Docker Compose.
 
 ## Variables d'environnement
 
-Vous pouvez définir ces variables au moment du déploiement depuis la marketplace. Laissez-les vides
-pour utiliser l'adresse de la machine virtuelle.
+Vous pouvez définir ces variables au moment du déploiement depuis la Place de marché. Laissez-les
+vides pour utiliser l'adresse de la machine virtuelle.
 
 | Variable               | Description                                                                  |
 | ---------------------- | ---------------------------------------------------------------------------- |

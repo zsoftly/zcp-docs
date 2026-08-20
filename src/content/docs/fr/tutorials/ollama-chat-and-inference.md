@@ -1,8 +1,8 @@
 ---
 title: 'Exécuter Ollama pour le chat et l’inférence sur ZCP'
 description:
-  Déployer l’image Marketplace Ollama sur une machine virtuelle ZCP et utiliser un modèle local avec
-  le CLI et l’API REST.
+  Déployer l’image Ollama de la Place de marché sur une machine virtuelle ZCP et utiliser un modèle
+  local avec le CLI et l’API REST.
 sidebar:
   label: 'Ollama : chat et inférence'
 ---
@@ -364,5 +364,5 @@ Si une IP source NAT reste après le détachement, suivez la procédure complèt
 ## Étapes suivantes
 
 - [Exécuter Open WebUI avec Ollama sur ZCP](/fr/tutorials/open-webui-with-ollama)
-- [Référence Marketplace Ollama](/fr/public-cloud/marketplace/ollama)
+- [Référence Ollama de la Place de marché](/fr/public-cloud/marketplace/ollama)
 - [Référence de l'API Ollama](https://docs.ollama.com/api)

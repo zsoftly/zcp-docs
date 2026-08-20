@@ -38,7 +38,7 @@ REST, mesurez la performance sans GPU et vérifiez le coût de la VM, du réseau
 
 Vous apprenez à :
 
-- Lire le catalogue YUL et déployer l’image Marketplace Ollama
+- Lire le catalogue YUL et déployer l’image Ollama de la Place de marché
 - Tester d’abord un modèle 8B, puis mesurer un modèle 70B
 - Utiliser `/api/chat`, `/api/generate` et un tunnel SSH
 - Exécuter des tests limités et supprimer toutes les ressources

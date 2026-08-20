@@ -11,8 +11,9 @@ run cleanly on the platform.
 
 This is different from the [Marketplace](/public-cloud/marketplace/), where each image is an
 **application** (WordPress, GitLab, a database, …) pre-installed and auto-configured on top of
-Ubuntu. Use an OS image when you want a clean operating system to build on. Use a Marketplace image
-when you want a ready-to-run app.
+Ubuntu 24.04 LTS or AlmaLinux 9. Use an OS image when you want a clean operating system to build on.
+Use a Marketplace image when you want a ready-to-run app. Oracle Linux 10 is an OS template only and
+is not used as a Marketplace application base.
 
 ## How ZCP images work
 
@@ -62,7 +63,7 @@ Free and open-source, with no license or activation required.
 | [Debian](/public-cloud/operating-systems/debian/)             | 13 (Trixie), 12 (Bookworm)     | ✅ Available in `yow-1`, `yul-1` |
 | [Rocky Linux](/public-cloud/operating-systems/rocky-linux/)   | 9                              | ✅ Available                     |
 | [AlmaLinux](/public-cloud/operating-systems/alma-linux/)      | 9                              | ✅ Available                     |
-| [Oracle Linux](/public-cloud/operating-systems/oracle-linux/) | 9                              | ✅ Available                     |
+| [Oracle Linux](/public-cloud/operating-systems/oracle-linux/) | 10, 9                          | ✅ Available in `yow-1`, `yul-1` |
 
 ### Windows
 

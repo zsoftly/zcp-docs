@@ -34,8 +34,8 @@ virtuelle.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Ghost depuis la Marketplace. Laissez `GHOST_DB_PASSWORD`
-vide pour générer automatiquement une valeur aléatoire sécurisée.
+Vous pouvez les définir au déploiement de Ghost depuis la Place de marché. Laissez
+`GHOST_DB_PASSWORD` vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable            | Description                                                  |
 | ------------------- | ------------------------------------------------------------ |

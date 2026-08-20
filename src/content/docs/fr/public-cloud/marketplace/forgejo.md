@@ -29,8 +29,8 @@ le port 3000 et Git via SSH sur le port 2222, ce qui laisse le démon SSH de la 
 
 ## Variables d'environnement
 
-Vous pouvez définir ces variables au moment du déploiement depuis la marketplace. Laissez un champ
-de mot de passe vide pour qu'une valeur aléatoire sûre soit générée automatiquement.
+Vous pouvez définir ces variables au moment du déploiement depuis la Place de marché. Laissez un
+champ de mot de passe vide pour qu'une valeur aléatoire sûre soit générée automatiquement.
 
 | Variable                 | Description                                                        |
 | ------------------------ | ------------------------------------------------------------------ |

@@ -18,7 +18,7 @@ flux de travail.
 
 ## Variables d'environnement
 
-Vous pouvez définir cette valeur lors du déploiement de n8n depuis la marketplace.
+Vous pouvez définir cette valeur lors du déploiement de n8n depuis la Place de marché.
 
 | Variable   | Description                     |
 | ---------- | ------------------------------- |

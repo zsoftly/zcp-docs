@@ -1,12 +1,15 @@
 ---
-title: Marketplace
+title: Place de marché
 tableOfContents: false
 ---
 
-Les images de la Marketplace ZCP sont des modèles de machine virtuelle préconfigurés qui se
-déploient en quelques minutes depuis la console ZCP. Chaque image est fournie sur **Ubuntu 24.04
-LTS** avec un service de premier démarrage qui termine la configuration automatiquement. Les
-identifiants sont générés, les services sont configurés et l'image est prête à utiliser.
+Les images de la Place de marché ZCP sont des modèles de machine virtuelle préconfigurés qui se
+déploient en quelques minutes depuis la console ZCP. Les images standard de la Place de marché
+utilisent **Ubuntu 24.04 LTS** avec un service de premier démarrage qui termine automatiquement la
+configuration. cPanel utilise **AlmaLinux 9**, qui est sa base prise en charge. Les identifiants
+sont générés, les services sont configurés et l'image est prête à l'emploi. Oracle Linux 10 est
+disponible uniquement comme modèle de système d'exploitation et n'est pas utilisé par les
+applications de la Place de marché.
 
 <div class="mp-stats">
   <div class="mp-stat">

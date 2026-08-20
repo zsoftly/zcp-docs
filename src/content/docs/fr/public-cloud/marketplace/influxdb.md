@@ -15,7 +15,7 @@ la surveillance d'infrastructure et les pipelines de données IoT.
 
 ## Variables d'environnement
 
-Vous pouvez définir ces valeurs lors du déploiement d'InfluxDB depuis la marketplace. Laissez un
+Vous pouvez définir ces valeurs lors du déploiement d'InfluxDB depuis la Place de marché. Laissez un
 champ vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable                        | Description                              |

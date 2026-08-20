@@ -30,8 +30,8 @@ postgres-meta, le tout sur PostgreSQL 17.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Supabase depuis la Marketplace. Laissez un champ de mot de
-passe vide pour générer automatiquement une valeur aléatoire sécurisée.
+Vous pouvez les définir au déploiement de Supabase depuis la Place de marché. Laissez un champ de
+mot de passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable             | Description                                                      |
 | -------------------- | ---------------------------------------------------------------- |

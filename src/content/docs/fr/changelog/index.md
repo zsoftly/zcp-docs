@@ -33,6 +33,10 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [Oracle Linux 10 : modèle de système d'exploitation disponible](/fr/changelog/#oracle-linux-10)
+  (20 août 2026)
+- [Images publiques Debian 12 et 13](/fr/changelog/#debian-12-13) (19 août 2026)
+- [Calcul Intel à YUL](/fr/changelog/#intel-compute-yul) (16 août 2026)
 - [Mises à jour de la plateforme et des services](/fr/changelog/#platform-services) (8 août 2026)
 - [CLI v0.0.26 : correctifs de redirection de ports et de clés SSH](/fr/changelog/#cli-v0.0.26) (19
   juillet 2026)
@@ -40,8 +44,8 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
   juillet 2026)
 - [CLI v0.0.24 : améliorations du cycle de vie et du SDK](/fr/changelog/#cli-v0.0.24) (16
   juillet 2026)
+- [Catalogue de la place de marché](/fr/changelog/#marketplace) (9 juillet 2026)
 - [CLI v0.0.17 : workflows complets de stockage objet](/fr/changelog/#cli-v0.0.17) (17 juin 2026)
-- [Mises à jour de la place de marché](/fr/changelog/#marketplace) (17 juin 2026)
 - [Fournisseur Terraform et OpenTofu](/fr/changelog/#terraform-opentofu) (10 juin 2026)
 
 :::tip
@@ -58,18 +62,47 @@ pour l'historique complet au niveau des commits.
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
 
-- **Le calcul Intel est désormais offert à Montréal (YUL)** : forfaits à usage général `ci2` de 1 à
-  96 Go de mémoire vive, forfaits optimisés mémoire `cim2` de 8 à 64 Go, configurations Intel
+<span id="oracle-linux-10"></span>
+
+- **20 août 2026 : Oracle Linux 10** est disponible comme modèle de système d'exploitation dans
+  `yow-1` et `yul-1`. Il ne sert pas de base aux applications de la place de marché.
+
+<span id="debian-12-13"></span>
+
+- **19 août 2026 : Debian 12 et Debian 13** sont disponibles comme images publiques de système
+  d'exploitation dans `yow-1` et `yul-1`.
+
+<span id="intel-compute-yul"></span>
+
+- **16 août 2026 : le calcul Intel est offert à Montréal (YUL)** : forfaits à usage général `ci2` de
+  1 à 96 Go de mémoire vive, forfaits optimisés mémoire `cim2` de 8 à 64 Go, configurations Intel
   personnalisées et capacité de nœuds Kubernetes sur Intel. Voir
   [Types d'instances](/fr/public-cloud/compute/instance-types).
-- **Le SMTP sortant sur le port 25 est désormais bloqué par défaut** sur toutes les instances de
+- **8 août 2026 : le SMTP sortant sur le port 25 est bloqué par défaut** sur toutes les instances de
   calcul afin de protéger la réputation d'envoi de la plateforme. Les ports 465 et 587 restent
   ouverts pour le courriel authentifié. Les clients vérifiés peuvent demander l'accès auprès du
   soutien. Voir [Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25).
-- **Kubernetes 1.36** est désormais pris en charge pour les grappes gérées.
-- Les images **Windows Server 2025** sont disponibles pour les instances de calcul.
-- **ZSoftly Cloud Storage** : les grappes de stockage dédiées à un seul locataire sont disponibles
-  de façon générale.
+- **8 août 2026 : Kubernetes 1.36** est disponible pour les grappes gérées.
+- **8 août 2026 : les images Windows Server 2025** sont disponibles pour les instances de calcul.
+- **8 août 2026 : ZSoftly Cloud Storage** est disponible de façon générale avec des grappes de
+  stockage dédiées à un seul locataire.
+
+## Instantané de disponibilité
+
+<span id="availability"></span>
+
+Les dates ci-dessous indiquent l'accès public des clients. Le journal ne liste pas les dates des
+environnements internes de préproduction. Les éléments sans date confirmée restent sur la feuille de
+route publique.
+
+| Élément                          | État             | Disponibilité publique                           |
+| -------------------------------- | ---------------- | ------------------------------------------------ |
+| Modèle Oracle Linux 10           | Disponible       | 20 août 2026, `yow-1` et `yul-1`                 |
+| Images Debian 12 et 13           | Disponible       | 19 août 2026, `yow-1` et `yul-1`                 |
+| Calcul Intel à YUL               | Disponible       | 16 août 2026                                     |
+| Catalogue de la place de marché  | Disponible       | 9 juillet 2026, 64 images d'applications actives |
+| Rocky Linux 10 et AlmaLinux 10   | Feuille de route | Aucune date annoncée                             |
+| Image OPNsense basée sur FreeBSD | Feuille de route | Aucune date annoncée                             |
 
 ## Place de marché
 
@@ -77,9 +110,12 @@ Mises à jour de la plateforme Public Cloud et des services gérés.
 
 Images d'applications en un clic pour les instances de calcul.
 
-- **Plus de 20 applications en un clic** disponibles, dont cPanel, GitLab, Grafana, WordPress,
-  PostgreSQL, MySQL, MariaDB, MongoDB, Elasticsearch, InfluxDB, Docker, n8n, et plus. Parcourez-les
-  dans la [place de marché](/fr/public-cloud/marketplace).
+- **9 juillet 2026 : 64 images d'applications actives** sont listées, dont cPanel, GitLab, Grafana,
+  WordPress, PostgreSQL, MySQL, MariaDB, MongoDB, Elasticsearch, InfluxDB, Docker, n8n, et plus.
+  Parcourez-les dans la [place de marché](/fr/public-cloud/marketplace).
+- **20 août 2026 : les systèmes d'exploitation de base des images sont maintenant documentés.** Les
+  images standard de la place de marché utilisent Ubuntu 24.04 LTS. L'image cPanel utilise
+  AlmaLinux 9. Oracle Linux 10 est uniquement un modèle de système d'exploitation.
 
 ## CLI (`zcp`)
 

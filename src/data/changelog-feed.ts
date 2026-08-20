@@ -7,11 +7,25 @@ export type ChangelogFeedEntry = {
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'Oracle Linux 10 operating system template',
+    description:
+      'Oracle Linux 10 is now available as an operating system template in the YOW-1 and YUL-1 regions. It is separate from Marketplace applications.',
+    pubDate: '2026-08-20',
+    slug: 'oracle-linux-10',
+  },
+  {
+    title: 'Debian 12 and 13 public images',
+    description:
+      'Debian 12 and Debian 13 are now available as public operating system images in the YOW-1 and YUL-1 regions.',
+    pubDate: '2026-08-19',
+    slug: 'debian-12-13',
+  },
+  {
     title: 'Intel compute in Montréal (YUL)',
     description:
       'General-purpose ci2 and memory-optimized cim2 Intel plans, custom Intel configurations, and Intel-backed Kubernetes node capacity are now available in the YUL region.',
     pubDate: '2026-08-16',
-    slug: 'platform-services',
+    slug: 'intel-compute-yul',
   },
   {
     title: 'Platform and services updates',
@@ -42,18 +56,18 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
     slug: 'cli-v0.0.24',
   },
   {
+    title: 'Marketplace catalog: 64 live images',
+    description:
+      'The ZCP Marketplace catalog now lists 64 live application images across databases, web stacks, observability, automation, and security.',
+    pubDate: '2026-07-09',
+    slug: 'marketplace',
+  },
+  {
     title: 'CLI v0.0.17: full object storage workflows',
     description:
       'The CLI adds object versioning, policies, tagging, encryption, lifecycle rules, CORS, presigned URLs, copy and move, and richer object operations.',
     pubDate: '2026-06-17',
     slug: 'cli-v0.0.17',
-  },
-  {
-    title: 'Marketplace updates',
-    description:
-      'The ZCP Marketplace provides more than 20 one-click application images, including databases, web stacks, observability, automation, and security tools.',
-    pubDate: '2026-06-17',
-    slug: 'marketplace',
   },
   {
     title: 'Terraform and OpenTofu provider',

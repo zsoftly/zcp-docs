@@ -6,11 +6,11 @@ description:
   officielle d'Oracle Linux.
 ---
 
-ZCP propose une image **Oracle Linux** maintenue dans chaque région. Oracle Linux est une
-distribution Linux de qualité entreprise, compatible au niveau binaire avec Red Hat Enterprise Linux
-(RHEL), et livrée avec le choix entre le Red Hat Compatible Kernel ou l'Unbreakable Enterprise
-Kernel (UEK) d'Oracle. L'image elle-même est gratuite à télécharger et à utiliser. Aucune activation
-n'est requise.
+ZCP propose des images **Oracle Linux** maintenues dans les régions `yow-1` et `yul-1`. Oracle Linux
+est une distribution Linux de qualité entreprise, compatible au niveau binaire avec Red Hat
+Enterprise Linux (RHEL), et livrée avec le choix entre le Red Hat Compatible Kernel ou l'Unbreakable
+Enterprise Kernel (UEK) d'Oracle. L'image elle-même est gratuite à télécharger et à utiliser. Aucune
+activation n'est requise.
 
 Pour savoir comment toutes les images ZCP se comportent au premier démarrage, consultez
 [Images de système d'exploitation](/fr/public-cloud/operating-systems/).
@@ -21,12 +21,19 @@ Oracle Linux suit la Lifetime Support Policy d'Oracle : environ 10 ans de suppor
 version majeure, suivis du support étendu (Extended Support), puis du support de maintien indéfini
 (Sustaining Support).
 
-| Version        | Statut        | Fin du support Premier             |
-| -------------- | ------------- | ---------------------------------- |
-| Oracle Linux 9 | ✅ Disponible | 2032 (Extended/Sustaining au-delà) |
+| Version         | Statut        | Fin du support Premier             |
+| --------------- | ------------- | ---------------------------------- |
+| Oracle Linux 10 | ✅ Disponible | Juin 2035                          |
+| Oracle Linux 9  | ✅ Disponible | 2032 (Extended/Sustaining au-delà) |
 
 Les dates de support sont fixées par Oracle. Confirmez dans la
 [Oracle Lifetime Support Policy](https://www.oracle.com/a/ocom/docs/elsp-lifetime-069338.pdf).
+
+## Disponibilité du modèle
+
+Oracle Linux 10 est uniquement un modèle de système d'exploitation, disponible dans `yow-1` et
+`yul-1`. Il est distinct de la Place de marché. Les applications de la Place de marché utilisent
+Ubuntu 24.04 LTS ou AlmaLinux 9. Aucune application de la Place de marché n'utilise Oracle Linux 10.
 
 ## Cas d'usage
 

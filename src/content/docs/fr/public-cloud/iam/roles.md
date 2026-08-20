@@ -118,17 +118,17 @@ Le catalogue complet des permissions est regroupé par domaine. La plupart des s
 
 ### Calcul
 
-| Service                     | Permissions   | Donne accès à                                                                                  |
-| --------------------------- | ------------- | ---------------------------------------------------------------------------------------------- |
-| Virtual Machine             | Read / Manage | Consulter les instances / créer, mettre à jour, supprimer et exploiter les instances           |
-| Virtual Machine Instantané  | Read / Manage | Consulter les instantanés de VM / créer, mettre à jour, supprimer et restaurer des instantanés |
-| Virtual Machine Sauvegardes | Read / Manage | Consulter les sauvegardes de VM / créer, mettre à jour, supprimer et restaurer des sauvegardes |
-| VM Autoscale                | Read / Manage | Consulter l'autoscaling / configurer et gérer l'autoscaling des VM                             |
-| Affinity Groups             | Read / Manage | Consulter, créer, mettre à jour et supprimer des groupes d'affinité                            |
-| Templates                   | Read / Manage | Consulter, créer, mettre à jour et supprimer des modèles                                       |
-| ISO                         | Read / Manage | Consulter, importer et gérer des ISO                                                           |
-| Marketplace App             | Read only     | Consulter les applications du marché                                                           |
-| Monitoring                  | Read only     | Consulter les données de surveillance                                                          |
+| Service                            | Permissions   | Donne accès à                                                                                  |
+| ---------------------------------- | ------------- | ---------------------------------------------------------------------------------------------- |
+| Virtual Machine                    | Read / Manage | Consulter les instances / créer, mettre à jour, supprimer et exploiter les instances           |
+| Virtual Machine Instantané         | Read / Manage | Consulter les instantanés de VM / créer, mettre à jour, supprimer et restaurer des instantanés |
+| Virtual Machine Sauvegardes        | Read / Manage | Consulter les sauvegardes de VM / créer, mettre à jour, supprimer et restaurer des sauvegardes |
+| VM Autoscale                       | Read / Manage | Consulter l'autoscaling / configurer et gérer l'autoscaling des VM                             |
+| Affinity Groups                    | Read / Manage | Consulter, créer, mettre à jour et supprimer des groupes d'affinité                            |
+| Templates                          | Read / Manage | Consulter, créer, mettre à jour et supprimer des modèles                                       |
+| ISO                                | Read / Manage | Consulter, importer et gérer des ISO                                                           |
+| Applications de la place de marché | Read only     | Consulter les applications de la place de marché                                               |
+| Monitoring                         | Read only     | Consulter les données de surveillance                                                          |
 
 ### Conteneurs
 

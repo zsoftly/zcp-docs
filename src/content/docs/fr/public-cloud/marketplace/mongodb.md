@@ -15,7 +15,7 @@ de requêtes riches, d'une mise à l'échelle horizontale ou de schémas qui év
 
 ## Variables d'environnement
 
-Vous pouvez les définir facultativement lors du déploiement de MongoDB depuis la marketplace.
+Vous pouvez les définir facultativement lors du déploiement de MongoDB depuis la Place de marché.
 Laissez un champ vide pour qu'une valeur aléatoire sécurisée soit générée automatiquement.
 
 | Variable                     | Description                                  |

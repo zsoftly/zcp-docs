@@ -31,8 +31,8 @@ Vaultwarden consomme peu de ressources.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement de Vaultwarden depuis la Marketplace. Laissez `ADMIN_TOKEN`
-vide pour générer automatiquement une valeur aléatoire sécurisée.
+Vous pouvez les définir au déploiement de Vaultwarden depuis la Place de marché. Laissez
+`ADMIN_TOKEN` vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable             | Description                                                                             |
 | -------------------- | --------------------------------------------------------------------------------------- |

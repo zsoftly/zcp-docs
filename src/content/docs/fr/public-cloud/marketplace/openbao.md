@@ -36,8 +36,8 @@ disponibilité, provisionnez d'autres instances depuis ce modèle et joignez-les
 
 ## Variables d'environnement
 
-Vous pouvez définir ces variables au déploiement d'OpenBao depuis la Marketplace. Laissez-les vides
-pour utiliser l'adresse de la machine virtuelle et recevoir les secrets générés en clair.
+Vous pouvez définir ces variables au déploiement d'OpenBao depuis la Place de marché. Laissez-les
+vides pour utiliser l'adresse de la machine virtuelle et recevoir les secrets générés en clair.
 
 | Variable                     | Description                                                                            |
 | ---------------------------- | -------------------------------------------------------------------------------------- |

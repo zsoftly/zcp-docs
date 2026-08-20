@@ -1,8 +1,8 @@
 ---
 title: Debian
 description:
-  Déployez Debian 12 et Debian 13 sur ZCP dans YOW-1 et YUL-1 avec un dimensionnement et des
-  pratiques opérationnelles adaptés à la région.
+  Déployez Debian 12 et Debian 13 sur ZCP dans YOW-1 et YUL-1 avec des pratiques opérationnelles
+  adaptées à la région.
 ---
 
 ZCP prend en charge deux images publiques Debian :
@@ -23,25 +23,6 @@ déploiement changent à des moments différents.
 :::
 
 ![Portail ZCP affichant Debian 13 (Trixie) et Debian 12 (Bookworm) dans le sélecteur d'images](../../../../../assets/public-cloud/debian-versions-portal.webp)
-
-## Exigences et dimensionnement
-
-Les plus petits plans généralistes configurés fournissent un point de départ pour une VM Debian de
-base :
-
-| Région  | Plan     | CPU    | Mémoire | Stockage racine | Niveau de stockage |
-| ------- | -------- | ------ | ------- | --------------- | ------------------ |
-| `yow-1` | `ci1.xs` | 1 vCPU | 1 Gio   | 40 Gio          | NVMe               |
-| `yul-1` | `ca2.xs` | 1 vCPU | 1 Gio   | 40 Gio          | Pro-NVMe           |
-
-La valeur de 40 Gio provient des définitions actuelles des forfaits `ci1.xs` et `ca2.xs`. Il s'agit
-de la base de disque racine de ces forfaits d'entrée, et non d'une exigence de Debian. Elle laisse
-de la place pour l'image de base, les métadonnées des paquets, cloud-init, les journaux et les mises
-à jour normales du système. Ajoutez des ressources pour les paquets applicatifs, les bases de
-données, les agents de surveillance, les sauvegardes et la concurrence. Consultez les
-[types d'instances](/fr/public-cloud/compute/instance-types) et la
-[page de tarification ZCP](https://zcp.zsoftly.ca/pricing) pour connaître la disponibilité et les
-prix actuels.
 
 ## Bonnes pratiques
 
@@ -70,4 +51,4 @@ Utilisez une image du [catalogue actuel des images de SE](/fr/public-cloud/opera
 - [Ubuntu](/fr/public-cloud/operating-systems/ubuntu/) : 26.04, 24.04, 22.04 ou 20.04 LTS
 - [Rocky Linux](/fr/public-cloud/operating-systems/rocky-linux/) : 9
 - [AlmaLinux](/fr/public-cloud/operating-systems/alma-linux/) : 9
-- [Oracle Linux](/fr/public-cloud/operating-systems/oracle-linux/) : 9
+- [Oracle Linux](/fr/public-cloud/operating-systems/oracle-linux/) : 10 ou 9

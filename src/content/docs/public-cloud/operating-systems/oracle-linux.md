@@ -5,10 +5,10 @@ description:
   setup, and links to the official Oracle Linux documentation.
 ---
 
-ZCP offers a maintained **Oracle Linux** image in every region. Oracle Linux is an enterprise-grade
-Linux that is binary-compatible with Red Hat Enterprise Linux (RHEL) and ships with a choice of the
-Red Hat Compatible Kernel or Oracle's Unbreakable Enterprise Kernel (UEK). The image itself is free
-to download and use. No activation is required.
+ZCP offers maintained **Oracle Linux** images in both `yow-1` and `yul-1`. Oracle Linux is an
+enterprise-grade Linux that is binary-compatible with Red Hat Enterprise Linux (RHEL) and ships with
+a choice of the Red Hat Compatible Kernel or Oracle's Unbreakable Enterprise Kernel (UEK). The image
+itself is free to download and use. No activation is required.
 
 For how all ZCP images behave on first boot, see
 [Operating System Images](/public-cloud/operating-systems/).
@@ -18,12 +18,19 @@ For how all ZCP images behave on first boot, see
 Oracle Linux follows Oracle's Lifetime Support Policy: about 10 years of Premier Support per major
 release, with Extended Support and then indefinite Sustaining Support beyond it.
 
-| Version        | Status       | End of Premier Support            |
-| -------------- | ------------ | --------------------------------- |
-| Oracle Linux 9 | ✅ Available | 2032 (Extended/Sustaining beyond) |
+| Version         | Status       | End of Premier Support            |
+| --------------- | ------------ | --------------------------------- |
+| Oracle Linux 10 | ✅ Available | June 2035                         |
+| Oracle Linux 9  | ✅ Available | 2032 (Extended/Sustaining beyond) |
 
 Support dates are set by Oracle. Confirm in the
 [Oracle Lifetime Support Policy](https://www.oracle.com/a/ocom/docs/elsp-lifetime-069338.pdf).
+
+## Template availability
+
+Oracle Linux 10 is an operating system template only and is available in `yow-1` and `yul-1`. It is
+separate from the Marketplace. Marketplace applications use Ubuntu 24.04 LTS or AlmaLinux 9. No
+Marketplace application uses Oracle Linux 10.
 
 ## Use cases
 

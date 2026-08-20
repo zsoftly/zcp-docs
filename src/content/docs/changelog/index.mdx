@@ -63,16 +63,46 @@ complete, commit-level history.
 
 Updates to the Public Cloud platform and managed services.
 
-- **Intel compute is now available in Montréal (YUL)**: general-purpose `ci2` plans from 1 to 96 GB
-  of RAM, memory-optimized `cim2` plans from 8 to 64 GB of RAM, custom Intel configurations, and
-  Intel-backed Kubernetes node capacity. See [Instance types](/public-cloud/compute/instance-types).
-- **Outbound SMTP on port 25 is now blocked by default** on all compute instances to protect
-  platform-wide sender reputation. Ports 465 and 587 remain open for authenticated email. Verified
-  customers can request access through support. See
+<span id="oracle-linux-10"></span>
+
+- **August 20, 2026: Oracle Linux 10** is available as an operating system template in `yow-1` and
+  `yul-1`. It is not a Marketplace application base.
+
+<span id="debian-12-13"></span>
+
+- **August 19, 2026: Debian 12 and Debian 13** are available as public operating system images in
+  `yow-1` and `yul-1`.
+
+<span id="intel-compute-yul"></span>
+
+- **August 16, 2026: Intel compute is available in Montréal (YUL)**: general-purpose `ci2` plans
+  from 1 to 96 GB of RAM, memory-optimized `cim2` plans from 8 to 64 GB of RAM, custom Intel
+  configurations, and Intel-backed Kubernetes node capacity. See
+  [Instance types](/public-cloud/compute/instance-types).
+- **August 8, 2026: Outbound SMTP on port 25 is blocked by default** on all compute instances to
+  protect platform-wide sender reputation. Ports 465 and 587 remain open for authenticated email.
+  Verified customers can request access through support. See
   [SMTP Port 25](/public-cloud/networking/public-network/smtp-port-25).
-- **Kubernetes 1.36** is now supported for managed clusters.
-- **Windows Server 2025** images are available for compute instances.
-- **ZSoftly Cloud Storage**: dedicated, single-tenant storage clusters are generally available.
+- **August 8, 2026: Kubernetes 1.36** became available for managed clusters.
+- **August 8, 2026: Windows Server 2025** images became available for compute instances.
+- **August 8, 2026: ZSoftly Cloud Storage** became generally available with dedicated, single-tenant
+  storage clusters.
+
+## Availability snapshot
+
+<span id="availability"></span>
+
+Availability dates below refer to public customer access. The changelog does not list internal
+staging dates. Items without a committed date remain on the public roadmap.
+
+| Item                            | Status    | Public availability                      |
+| ------------------------------- | --------- | ---------------------------------------- |
+| Oracle Linux 10 OS template     | Available | August 20, 2026, `yow-1` and `yul-1`     |
+| Debian 12 and 13 OS images      | Available | August 19, 2026, `yow-1` and `yul-1`     |
+| Intel compute in YUL            | Available | August 16, 2026                          |
+| Marketplace catalog             | Available | July 9, 2026, 64 live application images |
+| Rocky Linux 10 and AlmaLinux 10 | Roadmap   | No date announced                        |
+| FreeBSD-based OPNsense image    | Roadmap   | No date announced                        |
 
 ## Marketplace
 
@@ -80,9 +110,12 @@ Updates to the Public Cloud platform and managed services.
 
 One-click application images for compute instances.
 
-- **20+ one-click apps** available, including cPanel, GitLab, Grafana, WordPress, PostgreSQL, MySQL,
-  MariaDB, MongoDB, Elasticsearch, InfluxDB, Docker, n8n, and more. Browse them in the
-  [Marketplace](/public-cloud/marketplace).
+- **July 9, 2026: 64 live application images** are listed, including cPanel, GitLab, Grafana,
+  WordPress, PostgreSQL, MySQL, MariaDB, MongoDB, Elasticsearch, InfluxDB, Docker, n8n, and more.
+  Browse them in the [Marketplace](/public-cloud/marketplace).
+- **August 20, 2026: image bases are documented clearly.** Standard Marketplace images use Ubuntu
+  24.04 LTS. The cPanel image uses AlmaLinux 9. Oracle Linux 10 is an operating system template
+  only.
 
 ## CLI (`zcp`)
 

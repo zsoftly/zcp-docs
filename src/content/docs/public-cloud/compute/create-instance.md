@@ -97,6 +97,15 @@ Choose whether to enable a public IPv4 address. Enable it if the instance needs 
 directly from the internet. You can also assign one later from the
 [Public IPs](/public-cloud/networking/public-network/public-ips) page.
 
+:::caution
+
+A public IP does not expose all application ports. Standard operating system images typically allow
+SSH on TCP **22** only at the guest firewall. To publish an application on another port, add an
+explicit inbound [firewall](/public-cloud/compute/settings/firewall) rule with the source IP or CIDR
+range, protocol, source port, and destination port. Use the narrowest source range possible.
+
+:::
+
 ## Affinity Groups
 
 Optionally place the instance in an affinity group to control how instances are distributed across

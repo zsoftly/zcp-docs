@@ -88,6 +88,17 @@ Assignez le serveur à l'un de vos projets afin d'organiser les ressources.
 
 Choisissez ensuite d'activer ou non l'IPv4 publique.
 
+:::caution
+
+Une IP publique n'expose pas tous les ports d'application. Les images de systèmes d'exploitation
+standard autorisent généralement uniquement SSH sur le TCP **22** au niveau du pare-feu du système
+invité. Pour publier une application sur un autre port, ajoutez une règle entrante explicite dans le
+[pare-feu](/fr/public-cloud/compute/settings/firewall), avec l'adresse IP ou la plage CIDR source,
+le protocole, le port source et le port de destination. Utilisez la plage source la plus limitée
+possible.
+
+:::
+
 ![Choix d'un réseau](../../../../../assets/compute/create-instance-choose-a-network.webp)
 
 ## Configurer les paramètres du serveur

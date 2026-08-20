@@ -15,8 +15,8 @@ l'analyse de données en temps réel.
 
 ## Variables d'environnement
 
-Vous pouvez définir ces valeurs lors du déploiement d'Elasticsearch depuis la marketplace. Laissez
-un champ vide pour générer automatiquement une valeur aléatoire sécurisée.
+Vous pouvez définir ces valeurs lors du déploiement d'Elasticsearch depuis la Place de marché.
+Laissez un champ vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable           | Description                              |
 | ------------------ | ---------------------------------------- |

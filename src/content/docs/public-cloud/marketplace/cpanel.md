@@ -21,7 +21,10 @@ policy.
 | Component    | Version                      |
 | ------------ | ---------------------------- |
 | cPanel & WHM | Latest stable (release tier) |
-| Ubuntu       | 24.04 LTS                    |
+| AlmaLinux    | 9                            |
+
+The ZCP Marketplace cPanel image uses AlmaLinux 9 as its base operating system. cPanel supports
+other operating systems in separate deployments, but this ZCP image does not use Ubuntu.
 
 ## Getting started
 

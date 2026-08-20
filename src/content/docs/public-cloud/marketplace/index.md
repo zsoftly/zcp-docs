@@ -4,8 +4,10 @@ tableOfContents: false
 ---
 
 ZCP Marketplace images are pre-configured VM templates deployed from the ZCP console in minutes.
-Every image ships on **Ubuntu 24.04 LTS** with a first-boot service that completes setup
-automatically. Credentials are generated, services are configured, and the image is ready to use.
+Standard Marketplace images use **Ubuntu 24.04 LTS** with a first-boot service that completes setup
+automatically. cPanel uses **AlmaLinux 9** because it is the supported base for that application.
+Credentials are generated, services are configured, and the image is ready to use. Oracle Linux 10
+is available as an operating system template only and is not used by Marketplace applications.
 
 <div class="mp-stats">
   <div class="mp-stat">

@@ -12,9 +12,10 @@ chaque version, et optimisée pour démarrer rapidement et fonctionner propremen
 
 Cela diffère de la [Place de marché](/fr/public-cloud/marketplace/), où chaque image est une
 **application** (WordPress, GitLab, une base de données, …) préinstallée et configurée
-automatiquement par-dessus Ubuntu. Utilisez une image de SE lorsque vous voulez un système
-d'exploitation vierge sur lequel bâtir. Utilisez une image de la Place de marché lorsque vous voulez
-une application prête à l'emploi.
+automatiquement par-dessus Ubuntu 24.04 LTS ou AlmaLinux 9. Utilisez une image de SE lorsque vous
+voulez un système d'exploitation vierge sur lequel bâtir. Utilisez une image de la Place de marché
+lorsque vous voulez une application prête à l'emploi. Oracle Linux 10 est uniquement un modèle de SE
+et ne sert pas de base à une application de la Place de marché.
 
 ## Fonctionnement des images ZCP
 
@@ -70,7 +71,7 @@ Gratuit et à code source ouvert, sans licence ni activation requise.
 | [Debian](/fr/public-cloud/operating-systems/debian/)             | 13 (Trixie), 12 (Bookworm)     | ✅ Disponible dans `yow-1`, `yul-1` |
 | [Rocky Linux](/fr/public-cloud/operating-systems/rocky-linux/)   | 9                              | ✅ Disponible                       |
 | [AlmaLinux](/fr/public-cloud/operating-systems/alma-linux/)      | 9                              | ✅ Disponible                       |
-| [Oracle Linux](/fr/public-cloud/operating-systems/oracle-linux/) | 9                              | ✅ Disponible                       |
+| [Oracle Linux](/fr/public-cloud/operating-systems/oracle-linux/) | 10, 9                          | ✅ Disponible dans `yow-1`, `yul-1` |
 
 ### Windows
 

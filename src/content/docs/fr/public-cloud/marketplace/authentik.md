@@ -30,8 +30,8 @@ et au worker.
 
 ## Variables d'environnement
 
-Vous pouvez les définir au déploiement d'Authentik depuis la Marketplace. Laissez un champ de mot de
-passe vide pour générer automatiquement une valeur aléatoire sécurisée.
+Vous pouvez les définir au déploiement d'Authentik depuis la Place de marché. Laissez un champ de
+mot de passe vide pour générer automatiquement une valeur aléatoire sécurisée.
 
 | Variable                       | Description                                               |
 | ------------------------------ | --------------------------------------------------------- |

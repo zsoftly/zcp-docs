@@ -16,8 +16,8 @@ sur les ports 80 et 443.
 
 ## Variables d'environnement
 
-Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
-qu'une valeur sécurisée soit générée.
+Définissez-les facultativement lors du déploiement depuis la Place de marché. Laissez un champ vide
+pour qu'une valeur sécurisée soit générée.
 
 | Variable                | Description                        |
 | ----------------------- | ---------------------------------- |

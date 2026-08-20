@@ -193,7 +193,7 @@ zcp ssh-key delete my-yul-key --yes
 
 ## Références
 
-- [Référence Marketplace Ollama](/fr/public-cloud/marketplace/ollama)
+- [Référence Ollama de la Place de marché](/fr/public-cloud/marketplace/ollama)
 - [Documentation Open WebUI](https://docs.openwebui.com/)
 - [Pare-feu ZCP](/fr/public-cloud/compute/settings/firewall)
 - [Redirection de ports ZCP](/fr/public-cloud/compute/settings/port-forwarding)

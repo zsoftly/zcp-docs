@@ -17,8 +17,8 @@ Le navigateur HTTP fonctionne sur le port 7474 et le protocole Bolt sur le port 
 
 ## Variables d'environnement
 
-Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
-qu'une valeur sécurisée soit générée.
+Définissez-les facultativement lors du déploiement depuis la Place de marché. Laissez un champ vide
+pour qu'une valeur sécurisée soit générée.
 
 | Variable         | Description        |
 | ---------------- | ------------------ |
