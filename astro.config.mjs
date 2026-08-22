@@ -71,6 +71,7 @@ const frSidebarLabels = {
   'VPN Users': 'Utilisateurs VPN',
   Storage: 'Stockage',
   'Create Volume': 'Créer un volume',
+  'Storage Types and Resilience': 'Types de stockage et résilience',
   'Volume Snapshots': 'Instantanés de volume',
   'Object Storage': 'Stockage objet',
   'Create Bucket': 'Créer un compartiment',
@@ -407,6 +408,10 @@ export default defineConfig({
                     {
                       label: 'Create Volume',
                       slug: 'public-cloud/storage/block-storage/create-volume',
+                    },
+                    {
+                      label: 'Storage Types and Resilience',
+                      slug: 'public-cloud/storage/block-storage/storage-types',
                     },
                     {
                       label: 'Volume Snapshots',

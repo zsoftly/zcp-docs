@@ -5,8 +5,9 @@ sidebar_position: 1
 
 ## Block Storage Volumes
 
-Block storage volumes provide NVMe SSD storage that attaches to virtual machines. Once attached,
-format and mount the volume to extend your VM's storage.
+Block storage volumes provide local NVMe SSD, local SATA SSD, or replicated shared storage that
+attaches to virtual machines, depending on the selected region and plan. Once attached, format and
+mount the volume to extend your VM's storage.
 
 ### Create a Block Storage Volume
 
@@ -69,5 +70,6 @@ sudo mount /dev/vdb /data
 echo '/dev/vdb /data ext4 defaults 0 2' | sudo tee -a /etc/fstab
 ```
 
-See also: [Volume Snapshots](/public-cloud/storage/block-storage/snapshots),
+See also: [Storage Types and Resilience](/public-cloud/storage/block-storage/storage-types),
+[Volume Snapshots](/public-cloud/storage/block-storage/snapshots),
 [VM Snapshots](/public-cloud/backups-snapshots/vm-snapshots)

@@ -22,7 +22,8 @@ Throughout these docs:
 
 - **Compute**: Launch VMs with shared CPU, dedicated CPU, high-frequency, or GPU configurations
 - **Networking**: Create public networks or fully isolated VPCs with subnets, ACLs, and VPN gateways
-- **Block Storage**: Attach NVMe SSD volumes to your VMs for additional persistent storage
+- **Block Storage**: Attach local NVMe SSD, local SATA SSD, or replicated shared-storage volumes to
+  your VMs for additional persistent storage
 - **Object Storage**: S3-compatible object storage
 - **Kubernetes**: Managed Kubernetes clusters with HA and autoscaling support
 - **Load Balancer**: Distribute traffic across VM instances with session persistence options

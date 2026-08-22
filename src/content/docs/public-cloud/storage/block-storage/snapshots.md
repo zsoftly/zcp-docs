@@ -1,6 +1,6 @@
 ---
 title: Volume Snapshots
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 Volume Snapshots capture the current state of a block storage volume at a specific point in time.

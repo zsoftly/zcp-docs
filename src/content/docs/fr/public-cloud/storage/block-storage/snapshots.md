@@ -1,6 +1,6 @@
 ---
 title: Instantanés de volume
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 Les instantanés de volume capturent l'état actuel d'un volume de stockage bloc à un moment précis.
