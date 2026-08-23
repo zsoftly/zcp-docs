@@ -11,10 +11,10 @@ tier based on performance, recovery requirements, and workload criticality.
 - **YUL-1** is the primary production region for local storage.
 - **YOW-1** is intended for development and testing. Do not use it as the production target for this
   storage offering.
-- Availability and ordering status are region and plan dependent. Confirm the current selection in
-  the portal or with ZSoftly before deployment.
-- The local plan identifiers are defined for the YUL-1 offering, but CMP catalog publication is
-  still pending. Contact ZSoftly for provisioning status if they are not shown in the portal.
+- Availability and ordering status depend on the selected region and plan. Confirm the current
+  selection in the portal or with ZSoftly before deployment.
+- The plans shown in the portal are the source of truth for current regional availability. If a plan
+  is not shown as orderable, do not assume it is available for self-service deployment.
 
 ## Pricing and ordering
 
@@ -58,9 +58,6 @@ backups according to the recovery objective for the workload.
 Choose shared replicated storage when the workload needs storage-level resilience or recovery on
 another host. Choose local storage when direct disk performance or lower storage cost matters more
 than immediate cross-host recovery.
-
-Current benchmark measurements and the tradeoffs observed in YUL-1 are documented in
-[Local Storage or Replicated Distributed Storage? Our YUL-1 Root Results](https://zcp.zsoftly.ca/blog/local-vs-distributed-yul-root-storage-results/).
 
 See also: [Create Volume](/public-cloud/storage/block-storage/create-volume),
 [Volume Snapshots](/public-cloud/storage/block-storage/snapshots),

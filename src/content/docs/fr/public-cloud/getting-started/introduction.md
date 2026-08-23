@@ -25,8 +25,8 @@ Dans cette documentation :
 - **Calcul** : lancez des VM avec CPU partagé, CPU dédié, haute fréquence ou GPU.
 - **Réseautage** : créez des réseaux publics ou des VPC entièrement isolés avec sous-réseaux, ACL et
   passerelles VPN.
-- **Stockage bloc** : attachez des volumes SSD NVMe locaux, SSD SATA locaux ou de stockage partagé
-  répliqué à vos VM pour ajouter du stockage persistant.
+- **Stockage bloc** : attachez des volumes SSD NVMe locaux, des volumes SSD SATA locaux ou des
+  volumes de stockage partagé répliqué à vos VM pour ajouter du stockage persistant.
 - **Stockage objet** : utilisez un stockage objet compatible S3.
 - **Kubernetes** : gérez des grappes Kubernetes avec haute disponibilité et autoscaling.
 - **Équilibreur de charge** : répartissez le trafic entre des instances VM avec des options de
