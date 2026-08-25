@@ -5,8 +5,9 @@ sidebar_position: 1
 
 ## Volumes de stockage bloc
 
-Les volumes de stockage bloc fournissent du stockage SSD NVMe attachable aux machines virtuelles.
-Une fois le volume attaché, formatez-le et montez-le pour étendre le stockage de votre VM.
+Les volumes de stockage bloc fournissent des volumes SSD NVMe locaux, des volumes SSD SATA locaux ou
+des volumes de stockage partagé répliqué pour les machines virtuelles, selon la région et le plan
+choisis. Une fois le volume attaché, formatez-le et montez-le pour étendre le stockage de votre VM.
 
 ### Créer un volume de stockage bloc
 
@@ -69,5 +70,7 @@ sudo mount /dev/vdb /data
 echo '/dev/vdb /data ext4 defaults 0 2' | sudo tee -a /etc/fstab
 ```
 
-Voir aussi : [Instantanés de volume](/fr/public-cloud/storage/block-storage/snapshots),
+Voir aussi :
+[Types de stockage et résilience](/fr/public-cloud/storage/block-storage/storage-types),
+[Instantanés de volume](/fr/public-cloud/storage/block-storage/snapshots),
 [Instantanés de VM](/fr/public-cloud/backups-snapshots/vm-snapshots)
