@@ -3,4 +3,6 @@
 // this file is never reached there. Blank leaves the footer status badge hidden.
 window.__ZCP_ENV = {
   statusBadgeToken: '',
+  clarityProjectId: '',
+  redditPixelId: '',
 };

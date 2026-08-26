@@ -2,6 +2,7 @@
 import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Footer.astro';
 import { websiteUrl } from '../data/site';
+import ConsentBanner from './ConsentBanner.astro';
 
 const localePrefix = Astro.locals.starlightRoute.locale === 'fr' ? '/fr' : '';
 const buildDate = new Date().toISOString().slice(0, 10);
@@ -79,6 +80,8 @@ const buildDate = new Date().toISOString().slice(0, 10);
     </script>
   </div>
 </div>
+
+<ConsentBanner />
 
 <style>
   .site-footer__version {
