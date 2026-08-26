@@ -10,7 +10,7 @@ manage VMs, networks, storage, Kubernetes, and more from your terminal.
 
 **Current version:**
 <a href="https://github.com/zsoftly/zcp-cli/releases/latest"><img src="https://img.shields.io/github/v/release/zsoftly/zcp-cli?style=flat&label=&color=3b82f6" alt="Latest zcp CLI release" style="display: inline-block; vertical-align: middle;" /></a><br />
-<strong>GitHub:</strong><br /> https://github.com/zsoftly/zcp-cli<br /> <strong>Releases:</strong>
+<strong>GitHub:</strong> https://github.com/zsoftly/zcp-cli<br /> <strong>Releases:</strong>
 https://github.com/zsoftly/zcp-cli/releases
 
 :::note
