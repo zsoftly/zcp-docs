@@ -1,0 +1,250 @@
+---
+import { websiteUrl } from '../data/site';
+
+const isFrench = Astro.locals.starlightRoute.locale === 'fr';
+const copy = isFrench
+  ? {
+      title: 'Préférences de confidentialité',
+      description:
+        'Nous utilisons des outils facultatifs d’analyse et de mesure publicitaire pour améliorer la documentation et comprendre les campagnes. Choisissez séparément vos préférences. Consultez notre',
+      privacy: 'politique de confidentialité',
+      analytics: 'Analyse, pour comprendre l’utilisation de la documentation.',
+      advertising: 'Mesure publicitaire, pour mesurer les campagnes Reddit.',
+      decline: 'Tout refuser',
+      save: 'Enregistrer les choix',
+      acceptAll: 'Tout autoriser',
+      settings: 'Préférences de confidentialité',
+    }
+  : {
+      title: 'Privacy choices',
+      description:
+        'We use optional analytics and advertising measurement to improve the documentation and understand campaign results. Choose each preference separately. Read our',
+      privacy: 'privacy policy',
+      analytics: 'Analytics, helps us understand documentation usage.',
+      advertising: 'Advertising measurement, helps us measure Reddit campaigns.',
+      decline: 'Decline all',
+      save: 'Save choices',
+      acceptAll: 'Accept all',
+      settings: 'Privacy choices',
+    };
+---
+
+<div
+  id="zsoftly-consent-banner"
+  hidden
+  role="dialog"
+  aria-labelledby="zsoftly-consent-title"
+  aria-describedby="zsoftly-consent-description"
+>
+  <div class="zsoftly-consent__content">
+    <div>
+      <h2 id="zsoftly-consent-title">{copy.title}</h2>
+      <p id="zsoftly-consent-description">
+        {copy.description}
+        <a href={`${websiteUrl}/legal/privacy`} target="_blank" rel="noopener noreferrer"
+          >{copy.privacy}</a
+        >.
+      </p>
+      <div class="zsoftly-consent__choices">
+        <label>
+          <input id="zsoftly-consent-analytics" type="checkbox" />
+          <span>{copy.analytics}</span>
+        </label>
+        <label>
+          <input id="zsoftly-consent-advertising" type="checkbox" />
+          <span>{copy.advertising}</span>
+        </label>
+      </div>
+    </div>
+    <div class="zsoftly-consent__actions">
+      <button id="zsoftly-consent-decline" type="button">{copy.decline}</button>
+      <button id="zsoftly-consent-save" type="button">{copy.save}</button>
+      <button id="zsoftly-consent-accept-all" type="button">{copy.acceptAll}</button>
+    </div>
+  </div>
+</div>
+
+<button id="zsoftly-consent-settings" hidden type="button">{copy.settings}</button>
+
+<script is:inline>
+  (function () {
+    var banner = document.getElementById('zsoftly-consent-banner');
+    var settings = document.getElementById('zsoftly-consent-settings');
+    var analytics = document.getElementById('zsoftly-consent-analytics');
+    var advertising = document.getElementById('zsoftly-consent-advertising');
+    var save = document.getElementById('zsoftly-consent-save');
+    var acceptAll = document.getElementById('zsoftly-consent-accept-all');
+    var decline = document.getElementById('zsoftly-consent-decline');
+    var consentKey = 'zsoftly-optional-consent-v2';
+
+    function showBanner() {
+      if (!banner) return;
+      banner.hidden = false;
+      if (settings) settings.hidden = true;
+    }
+
+    function hideBanner() {
+      if (!banner) return;
+      banner.hidden = true;
+      if (settings) settings.hidden = false;
+    }
+
+    function setConsent(consent) {
+      try {
+        window.localStorage.setItem(consentKey, JSON.stringify(consent));
+        window.localStorage.removeItem('zsoftly-optional-consent-v1');
+      } catch (_) {
+        // Tracking remains disabled if storage is unavailable until the next choice.
+      }
+      if (window.__zsoftlyApplyConsent) window.__zsoftlyApplyConsent(consent);
+      hideBanner();
+    }
+
+    function saveChoices() {
+      setConsent({
+        analytics: Boolean(analytics && analytics.checked),
+        advertising: Boolean(advertising && advertising.checked),
+      });
+    }
+
+    if (save) save.addEventListener('click', saveChoices);
+    if (acceptAll)
+      acceptAll.addEventListener('click', function () {
+        setConsent({ analytics: true, advertising: true });
+      });
+    if (decline)
+      decline.addEventListener('click', function () {
+        setConsent({ analytics: false, advertising: false });
+      });
+    if (settings) settings.addEventListener('click', showBanner);
+
+    var storedConsent = null;
+    try {
+      storedConsent = window.localStorage.getItem(consentKey);
+      if (!storedConsent) {
+        var legacyConsent = window.localStorage.getItem('zsoftly-optional-consent-v1');
+        if (legacyConsent === 'granted' || legacyConsent === 'denied') {
+          storedConsent = JSON.stringify({
+            analytics: legacyConsent === 'granted',
+            advertising: legacyConsent === 'granted',
+          });
+        }
+      }
+    } catch (_) {
+      storedConsent = null;
+    }
+
+    if (storedConsent) {
+      try {
+        var parsedConsent = JSON.parse(storedConsent);
+        if (analytics) analytics.checked = parsedConsent.analytics === true;
+        if (advertising) advertising.checked = parsedConsent.advertising === true;
+      } catch (_) {
+        storedConsent = null;
+      }
+    }
+
+    if (storedConsent) hideBanner();
+    else showBanner();
+  })();
+</script>
+
+<style>
+  #zsoftly-consent-banner {
+    position: fixed;
+    inset-inline: 1rem;
+    bottom: 1rem;
+    z-index: 60;
+    max-width: 42rem;
+    margin-inline: auto;
+    padding: 1.25rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 1rem;
+    background: var(--sl-color-bg-nav);
+    box-shadow: 0 1rem 3rem rgb(0 0 0 / 25%);
+  }
+
+  .zsoftly-consent__content {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  #zsoftly-consent-title {
+    margin: 0;
+    color: var(--sl-color-white);
+    font-size: 1rem;
+  }
+
+  #zsoftly-consent-description {
+    margin: 0.5rem 0 0;
+    color: var(--sl-color-gray-2);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  #zsoftly-consent-description a {
+    color: var(--sl-color-text-accent);
+    text-decoration: underline;
+  }
+
+  .zsoftly-consent__choices {
+    display: grid;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    color: var(--sl-color-gray-2);
+    font-size: 0.8rem;
+  }
+
+  .zsoftly-consent__choices label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .zsoftly-consent__choices input {
+    margin-top: 0.15rem;
+  }
+
+  .zsoftly-consent__actions {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .zsoftly-consent__actions button,
+  #zsoftly-consent-settings {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--sl-color-white);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.8rem;
+  }
+
+  #zsoftly-consent-save {
+    border-color: var(--sl-color-accent);
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
+  }
+
+  #zsoftly-consent-settings {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 50;
+    background: var(--sl-color-bg-nav);
+    box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 20%);
+  }
+
+  @media (max-width: 640px) {
+    .zsoftly-consent__content {
+      align-items: stretch;
+      flex-direction: column;
+    }
+  }
+</style>

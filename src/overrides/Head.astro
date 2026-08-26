@@ -11,6 +11,111 @@ const changelogRssUrl = new URL('/changelog/rss.xml', Astro.site ?? Astro.url).h
 <!-- Per-host runtime config: sets window.__ZCP_ENV. Served by the reverse proxy, not built in. -->
 <script is:inline src="/config.js"></script>
 
+<!-- Optional analytics and advertising scripts start only after visitor consent. -->
+<script is:inline>
+  (function (w, d) {
+    var e = w.__ZCP_ENV || {};
+    var consentKey = 'zsoftly-optional-consent-v2';
+
+    function loadScript(id, src, options) {
+      if (d.getElementById(id)) return;
+      var s = d.createElement('script');
+      s.id = id;
+      s.src = src;
+      if (options && options.async) s.async = true;
+      d.head.appendChild(s);
+    }
+
+    function startClarity(advertisingConsent) {
+      if (!e.clarityProjectId) return;
+      w.clarity =
+        w.clarity ||
+        function () {
+          (w.clarity.q = w.clarity.q || []).push(arguments);
+        };
+      w.clarity('consentv2', {
+        ad_Storage: advertisingConsent ? 'granted' : 'denied',
+        analytics_Storage: 'granted',
+      });
+      if (w.__zsoftlyClarityLoaded) return;
+      w.__zsoftlyClarityLoaded = true;
+      loadScript(
+        'zsoftly-clarity-script',
+        'https://www.clarity.ms/tag/' + encodeURIComponent(e.clarityProjectId),
+        { async: true }
+      );
+    }
+
+    function startRedditPixel() {
+      if (!e.redditPixelId || w.__zsoftlyRedditPixelLoaded) return;
+      w.__zsoftlyRedditPixelLoaded = true;
+      if (!w.rdt) {
+        var p = (w.rdt = function () {
+          p.sendEvent ? p.sendEvent.apply(p, arguments) : p.callQueue.push(arguments);
+        });
+        p.callQueue = [];
+      }
+      loadScript('zsoftly-reddit-pixel-script', 'https://www.redditstatic.com/ads/pixel.js', {
+        async: true,
+      });
+      w.rdt('init', e.redditPixelId);
+      w.rdt('track', 'PageVisit');
+    }
+
+    function removeScript(id) {
+      var script = d.getElementById(id);
+      if (script) script.remove();
+    }
+
+    function stopClarity() {
+      if (w.clarity) {
+        w.clarity('consentv2', { ad_Storage: 'denied', analytics_Storage: 'denied' });
+        w.clarity('consent', false);
+      }
+      removeScript('zsoftly-clarity-script');
+      w.__zsoftlyClarityLoaded = false;
+    }
+
+    function stopRedditPixel() {
+      removeScript('zsoftly-reddit-pixel-script');
+      w.__zsoftlyRedditPixelLoaded = false;
+    }
+
+    w.__zsoftlyApplyConsent = function (consent) {
+      var analyticsConsent = consent && consent.analytics === true;
+      var advertisingConsent = consent && consent.advertising === true;
+
+      if (analyticsConsent) startClarity(advertisingConsent);
+      else stopClarity();
+
+      if (advertisingConsent) startRedditPixel();
+      else stopRedditPixel();
+    };
+
+    w.__zsoftlyWithdrawOptionalTracking = function () {
+      w.__zsoftlyApplyConsent({ analytics: false, advertising: false });
+    };
+
+    try {
+      var storedConsent = w.localStorage.getItem(consentKey);
+      if (!storedConsent) {
+        var legacyConsent = w.localStorage.getItem('zsoftly-optional-consent-v1');
+        if (legacyConsent === 'granted' || legacyConsent === 'denied') {
+          storedConsent = JSON.stringify({
+            analytics: legacyConsent === 'granted',
+            advertising: legacyConsent === 'granted',
+          });
+        }
+      }
+      if (storedConsent) {
+        w.__zsoftlyApplyConsent(JSON.parse(storedConsent));
+      }
+    } catch (_) {
+      // Do not start optional tracking when the visitor's consent state is unavailable.
+    }
+  })(window, document);
+</script>
+
 {
   isChangelog && (
     <link
