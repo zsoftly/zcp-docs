@@ -215,6 +215,32 @@ export default defineConfig({
               label: 'Deploy OpenClaw (Marketplace, CLI)',
               slug: 'tutorials/deploy-openclaw-marketplace-cli',
             },
+            {
+              label: 'Secure Private Workspace',
+              collapsed: true,
+              items: [
+                {
+                  label: 'Build a Private Network (CLI)',
+                  slug: 'tutorials/build-private-network-headscale',
+                },
+                {
+                  label: 'Deploy Private Storage (CLI)',
+                  slug: 'tutorials/deploy-private-shared-storage',
+                },
+                {
+                  label: 'Deploy Employee Desktops (CLI)',
+                  slug: 'tutorials/deploy-ubuntu-employee-desktops',
+                },
+                {
+                  label: 'Connect Desktops to Storage',
+                  slug: 'tutorials/connect-desktops-to-storage',
+                },
+                {
+                  label: 'Operate It for a Team',
+                  slug: 'tutorials/operate-workspace-for-a-team',
+                },
+              ],
+            },
           ],
         },
 
