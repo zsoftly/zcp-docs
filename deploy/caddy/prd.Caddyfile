@@ -77,7 +77,7 @@
     # 'wasm-unsafe-eval' is the minimal grant for Starlight's Pagefind search
     # (client-side WebAssembly); it does not permit eval(). Future hardening:
     # replace 'unsafe-inline' in script-src with nonces/hashes.
-    Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://www.redditstatic.com; worker-src 'self' blob:; connect-src 'self' https://analytics.zsoftly.ca https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://www.reddit.com https://alb.reddit.com; img-src 'self' data: https://img.shields.io https://*.clarity.ms https://c.bing.com https://alb.reddit.com; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'"
+    Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://www.redditstatic.com; worker-src 'self' blob:; connect-src 'self' https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://www.reddit.com https://alb.reddit.com; img-src 'self' data: https://img.shields.io https://*.clarity.ms https://c.bing.com https://alb.reddit.com; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'"
     -Server
   }
 
