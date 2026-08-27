@@ -37,10 +37,11 @@
 
 @media (max-width: 49.999rem) {
   starlight-menu-button button[aria-controls='starlight__sidebar'] {
-    top: calc(
-      var(--sl-announcement-height) +
-        ((var(--sl-nav-height) - var(--sl-announcement-height) - var(--sl-menu-button-size)) / 2)
-    ) !important;
+    --zs-mobile-header-height: calc(var(--sl-nav-height) - var(--sl-announcement-height));
+    --zs-menu-button-offset: calc(
+      (var(--zs-mobile-header-height) - var(--sl-menu-button-size)) / 2
+    );
+    top: calc(var(--sl-announcement-height) + var(--zs-menu-button-offset)) !important;
   }
 }
 
