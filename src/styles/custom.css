@@ -27,12 +27,21 @@
    Starlight sets .header height to --sl-nav-height; since we bumped that var to
    make room for the bar, we subtract the bar back out here so the header doesn't
    grow downward and cover the first sidebar item. */
-.header {
+.page > header.header {
   top: var(--sl-announcement-height) !important;
   height: calc(var(--sl-nav-height) - var(--sl-announcement-height)) !important;
 }
-:root[data-promo-dismissed] .header {
+:root[data-promo-dismissed] .page > header.header {
   top: 0 !important;
+}
+
+@media (max-width: 49.999rem) {
+  starlight-menu-button button[aria-controls='starlight__sidebar'] {
+    top: calc(
+      var(--sl-announcement-height) +
+        ((var(--sl-nav-height) - var(--sl-announcement-height) - var(--sl-menu-button-size)) / 2)
+    ) !important;
+  }
 }
 
 :root {
@@ -1036,7 +1045,7 @@ body,
 }
 .sidebar-pane,
 .right-sidebar,
-.header {
+.page > header.header {
   background-color: rgba(255, 255, 255, 0.46);
 }
 
@@ -1045,8 +1054,18 @@ body,
 }
 :root[data-theme='dark'] .sidebar-pane,
 :root[data-theme='dark'] .right-sidebar,
-:root[data-theme='dark'] .header {
+:root[data-theme='dark'] .page > header.header {
   background-color: rgba(6, 10, 26, 0.42);
+}
+
+@media (max-width: 49.999rem) {
+  .sidebar-pane {
+    background-color: var(--sl-color-bg-sidebar);
+  }
+
+  :root[data-theme='dark'] .sidebar-pane {
+    background-color: var(--sl-color-bg-sidebar);
+  }
 }
 
 @media print {
@@ -1056,7 +1075,7 @@ body,
   .content-panel,
   .sidebar-pane,
   .right-sidebar,
-  .header {
+  .page > header.header {
     background-color: #ffffff;
   }
 }
