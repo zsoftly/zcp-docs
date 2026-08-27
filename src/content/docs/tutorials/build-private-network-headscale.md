@@ -99,6 +99,8 @@ Find the Headplane template (it bundles the Headscale control server and a web U
 zcp template list | grep -i headplane
 ```
 
+![zcp template list output showing the Headplane template](../../../assets/build-private-network-headscale/01-template-list.png)
+
 Note the **SLUG** (for example `zmi-headplane-070-ubuntu2404-100-1`). Template slugs vary by region
 and version.
 
@@ -137,6 +139,8 @@ zcp vpc create --name my-workspace --plan virtual-private-cloud-vpc-1 \
   --storage-category pro-nvme
 ```
 
+![zcp vpc create output showing the new VPC](../../../assets/build-private-network-headscale/02-vpc-create.png)
+
 :::note
 
 Use the actual network base for `--network-address` (for example `10.20.0.0`, not `10.20.0.1`).
@@ -149,6 +153,8 @@ CIDR oddly.
 zcp network create --name workspace-tier --vpc my-workspace \
   --gateway 10.20.1.1 --netmask 255.255.255.0 --billing-cycle hourly
 ```
+
+![zcp network create output showing the new tier](../../../assets/build-private-network-headscale/03-tier-create.png)
 
 The tier gets no public IP by default. Only the Headscale server (Step 7) gets a public-facing IP,
 and only on the ports it needs.
@@ -164,7 +170,18 @@ extra IP. If it happens, `zcp ip release <slug>` cleans it up.
 ## Step 6: Lock down the tier with a custom ACL
 
 The tier's default ACL permits everything. Replace it with one that only allows what the tier
-actually needs:
+actually needs.
+
+:::note
+
+The second CIDR below, `100.64.0.0/10`, is Headscale's mesh address range. This isn't something you
+look up after deploying Headplane in Step 7, it's Tailscale and Headscale's documented default IP
+range for every device on the mesh ([RFC 6598](https://www.rfc-editor.org/rfc/rfc6598), the "Shared
+Address Space" block), the same for any default install unless someone deliberately reconfigures it.
+You're allowed to add these rules now, before Headplane exists yet, because the range itself doesn't
+depend on anything you've deployed.
+
+:::
 
 ```bash
 zcp vpc acl-create my-workspace --name workspace-acl \
@@ -178,10 +195,26 @@ zcp acl create-rule my-workspace workspace-acl --number 3 --protocol all \
   --cidr 10.20.1.0/24 --action allow --traffic-type egress
 zcp acl create-rule my-workspace workspace-acl --number 4 --protocol all \
   --cidr 100.64.0.0/10 --action allow --traffic-type egress
+```
 
+![zcp acl create-rule output for all four rules](../../../assets/build-private-network-headscale/04-acl-rules-created.png)
+
+Verify all four rules landed correctly:
+
+```bash
+zcp acl rules my-workspace workspace-acl
+```
+
+![zcp acl rules output showing all four rules Active](../../../assets/build-private-network-headscale/05-acl-rules-list.png)
+
+Then actually turn the ACL on:
+
+```bash
 zcp vpc acl-replace --network workspace-tier --acl workspace-acl \
   --vpc my-workspace
 ```
+
+![zcp vpc acl-replace output confirming the swap](../../../assets/build-private-network-headscale/06-acl-replace.png)
 
 This is the step that actually delivers "private." A VPC alone doesn't guarantee isolation, the ACL
 does.
@@ -211,29 +244,37 @@ zcp instance create --name my-headscale \
   --ssh-key my-key --wait
 ```
 
+![zcp instance create output showing my-headscale Running](../../../assets/build-private-network-headscale/07-headplane-instance-create.png)
+
 Get the VM's public IP:
 
 ```bash
 zcp instance get my-headscale
 ```
 
+![zcp instance get output showing the Public IP field](../../../assets/build-private-network-headscale/08-instance-get.png)
+
 :::caution
 
-Without a further step, the template's first-boot script writes the VM's **private** IP into its
-Headscale and Headplane configuration. The credentials file it generates literally tells you to run
-`tailscale up --login-server http://<private-ip>:8080`, a private IP no external client can ever
-reach. This is not a nice-to-have for a custom domain. It's the difference between a working and a
-broken deployment. SSH in and fix both files, then restart the stack:
+By default, the template's first-boot script points the Headscale and Headplane configuration at the
+VM's **private** IP. External clients need the public IP instead. SSH in, update both config files,
+and restart the stack:
 
 ```bash
 ssh ubuntu@<public-ip>
+```
 
+![SSH session opening on the Headplane VM](../../../assets/build-private-network-headscale/09-ssh-session.png)
+
+```bash
 sudo sed -i 's|^server_url:.*|server_url: http://<public-ip>:8080|' \
   /opt/headplane/headscale/config/config.yaml
 sudo sed -i 's|^  base_url:.*|  base_url: "http://<public-ip>:3000"|' \
   /opt/headplane/headplane/config.yaml
 cd /opt/headplane && sudo docker compose restart
 ```
+
+![docker compose ps showing both containers healthy after the restart](../../../assets/build-private-network-headscale/10-docker-compose-ps.png)
 
 :::
 
@@ -242,6 +283,8 @@ Open the two ports Headplane needs. Get the IP's slug first:
 ```bash
 zcp ip list   # find the row whose VM is my-headscale
 ```
+
+![zcp ip list output showing the source-NAT IP for my-headscale](../../../assets/build-private-network-headscale/11-ip-list.png)
 
 ```bash
 zcp firewall create --ip <ip-slug> --protocol tcp --start-port 3000 \
@@ -278,11 +321,15 @@ First boot handles the rest: it generates a unique cookie secret, starts the sta
 default Headscale user, and mints an API key, written once to `/etc/headplane/credentials.txt` on
 the VM. SSH in to read it. The key can't be retrieved again after.
 
+```bash
+sudo cat /etc/headplane/credentials.txt
+```
+
+![credentials.txt output showing the Headplane URL and API key](../../../assets/build-private-network-headscale/12-credentials-txt.png)
+
 Sign in to the Headplane UI at `http://<public-ip>:3000/admin/login` with the API key.
 
-![Headplane login page](../../../assets/build-private-network-headscale/01-headplane-login.png)
-
-![Headplane Machines dashboard after signing in, showing zero machines](../../../assets/build-private-network-headscale/02-headplane-dashboard.png)
+![Headplane Machines dashboard after signing in, showing zero machines](../../../assets/build-private-network-headscale/13-headplane-dashboard.png)
 
 ## Step 8: Enroll a subnet router for the tier
 
@@ -296,6 +343,8 @@ zcp instance create --name my-subnet-router \
 
 zcp instance add-network my-subnet-router --network workspace-tier
 ```
+
+![zcp instance create output showing my-subnet-router Running](../../../assets/build-private-network-headscale/14-router-instance-create.png)
 
 :::caution
 
@@ -366,10 +415,16 @@ docker exec headscale headscale nodes approve-routes --identifier <node-id> \
   --routes 10.20.1.0/24
 ```
 
-`list-routes` shows the route as **Available** but not **Approved** or **Serving** until
-`approve-routes` runs.
+![docker exec headscale nodes approve-routes output](../../../assets/build-private-network-headscale/15-approve-routes.png)
 
-![Headplane Machines page showing the subnet router connected with a Subnets badge](../../../assets/build-private-network-headscale/03-subnet-router-registered.png)
+`list-routes` shows the route as **Available** but not **Approved** or **Serving** until
+`approve-routes` runs. It can take a few seconds for **Serving (Primary)** to catch up even after
+approval. That's normal, not a sign anything's wrong.
+
+You can also see this from the Headplane UI: the router shows **Connected** with a **Subnets** badge
+once it's advertising the route.
+
+![Headplane Machines page showing the subnet router connected with a Subnets badge](../../../assets/build-private-network-headscale/16-headplane-subnets-badge.png)
 
 This VM is the door into the private tier. Later tutorials' desktops and storage sit behind it
 without needing their own public IPs.
@@ -398,9 +453,9 @@ tailscale status
 ping 10.20.1.<router-tier-ip-last-octet>
 ```
 
-![tailscale status showing three machines connected, including a third-party device](../../../assets/build-private-network-headscale/04-three-machines-connected.png)
+![tailscale status and a successful ping to the subnet router's private tier IP](../../../assets/build-private-network-headscale/17-ping-success.png)
 
-![A successful ping to the subnet router's private tier IP](../../../assets/build-private-network-headscale/05-ping-success.png)
+![Headplane UI showing both the subnet router and the newly connected device](../../../assets/build-private-network-headscale/18-two-machines.png)
 
 Direct, same-region connections typically respond in a few milliseconds. A connection relayed
 through a DERP server (common across distant networks) can take several hundred milliseconds,
