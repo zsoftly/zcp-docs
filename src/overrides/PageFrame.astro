@@ -397,7 +397,7 @@ import type { Props } from '@astrojs/starlight/props';
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-inline: 1rem;
+    padding-inline: 1rem 3rem;
     gap: 0.75rem;
   }
 
@@ -412,7 +412,15 @@ import type { Props } from '@astrojs/starlight/props';
     font-size: 0.8125rem;
     color: rgba(255, 255, 255, 0.9);
     flex-wrap: nowrap;
-    overflow: hidden;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .promo-inner::-webkit-scrollbar {
+    display: none;
   }
 
   .promo-live {
@@ -455,14 +463,14 @@ import type { Props } from '@astrojs/starlight/props';
     color: rgba(255, 255, 255, 0.85);
   }
 
-  /* Hide less important items on narrow screens */
   @media (max-width: 640px) {
-    .promo-text:nth-of-type(2),
-    .promo-text:nth-of-type(3),
-    .promo-sep:nth-of-type(2),
-    .promo-sep:nth-of-type(3),
-    .promo-sep:nth-of-type(4) {
-      display: none;
+    .promo-bar {
+      justify-content: flex-start;
+      padding-inline: 1rem 2.75rem;
+    }
+
+    .promo-inner {
+      inline-size: 100%;
     }
   }
 
