@@ -27,10 +27,9 @@ branch -> open PR -> CI passes -> merge to main -> published
 3. Commit with a [conventional commit](#commit-format) message and open a PR to `main`. CI
    (formatting, lint, type check, dependency audit, build) must be green.
 4. After review and merge to `main`, the change is published to the documentation site through
-   ZSoftly's internal deployment pipeline. Maintainers cut a `release/*` branch from `main` and
-   deploy it to stg with `20: Deploy Staging`. Once stg is validated, the platform team deploys the
-   same ref to prd from the internal deployment pipeline. If a release needs to be reverted, the
-   pipeline redeploys a previous release without rebuilding it.
+   ZSoftly's internal deployment pipeline. Maintainers cut a `release/*` branch from `main`, and the
+   platform team deploys that ref to stg and then to prd from the internal pipeline. If a release
+   needs to be reverted, the pipeline redeploys a previous release without rebuilding it.
 
 ---
 
