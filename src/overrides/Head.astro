@@ -46,18 +46,29 @@ const changelogRssUrl = new URL('/changelog/rss.xml', Astro.site ?? Astro.url).h
       );
     }
 
+    // Reddit advertising consent is a state machine, not a load/unload toggle.
+    // pixel.js cannot be unloaded once it has executed, and removing the script
+    // tag leaves window.rdt and any prior initialization in place:
+    //   unknown -> granted: load the pixel, initialize once, send one PageVisit
+    //   granted -> denied:  make rdt inert and drop the first-party pixel cookie
+    //   denied  -> granted: this page view was already counted, so do not
+    //                       initialize or send PageVisit a second time
+    var redditConsent = 'unknown';
+
     function startRedditPixel() {
-      if (!e.redditPixelId || w.__zsoftlyRedditPixelLoaded) return;
-      w.__zsoftlyRedditPixelLoaded = true;
+      if (!e.redditPixelId || redditConsent === 'granted') return;
+      redditConsent = 'granted';
       if (!w.rdt) {
         var p = (w.rdt = function () {
           p.sendEvent ? p.sendEvent.apply(p, arguments) : p.callQueue.push(arguments);
         });
         p.callQueue = [];
+        loadScript('zsoftly-reddit-pixel-script', 'https://www.redditstatic.com/ads/pixel.js', {
+          async: true,
+        });
       }
-      loadScript('zsoftly-reddit-pixel-script', 'https://www.redditstatic.com/ads/pixel.js', {
-        async: true,
-      });
+      if (w.__zsoftlyRedditPixelInitialized) return;
+      w.__zsoftlyRedditPixelInitialized = true;
       w.rdt('init', e.redditPixelId);
       w.rdt('track', 'PageVisit');
     }
@@ -76,9 +87,25 @@ const changelogRssUrl = new URL('/changelog/rss.xml', Astro.site ?? Astro.url).h
       w.__zsoftlyClarityLoaded = false;
     }
 
+    function clearRedditCookies() {
+      var parts = w.location.hostname.split('.');
+      var scopes = [''];
+      for (var i = 0; i < parts.length - 1; i++) {
+        scopes.push('; domain=.' + parts.slice(i).join('.'));
+      }
+      scopes.forEach(function (scope) {
+        d.cookie = '_rdt_uuid=; Max-Age=0; path=/' + scope;
+      });
+    }
+
     function stopRedditPixel() {
       removeScript('zsoftly-reddit-pixel-script');
-      w.__zsoftlyRedditPixelLoaded = false;
+      if (redditConsent === 'granted') {
+        // The tag is gone but pixel.js is still resident, so make rdt inert.
+        w.rdt = function () {};
+      }
+      redditConsent = 'denied';
+      clearRedditCookies();
     }
 
     w.__zsoftlyApplyConsent = function (consent) {
