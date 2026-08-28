@@ -3,6 +3,7 @@
 // above Starlight's fixed nav header.
 import Default from '@astrojs/starlight/components/PageFrame.astro';
 import type { Props } from '@astrojs/starlight/props';
+import { CLOUD_REGISTER_URL } from '../data/site';
 ---
 
 {/* Prevent FOUC: runs synchronously before paint */}
@@ -227,16 +228,11 @@ import type { Props } from '@astrojs/starlight/props';
     <span class="promo-text">{Astro.locals.t('zs.promo.credit')}</span>
     <span class="promo-sep" aria-hidden="true">·</span>
     <span class="promo-text">{Astro.locals.t('zs.promo.ends')}</span>
-    <span class="promo-sep" aria-hidden="true">·</span>
-    <a
-      href="https://cloud.zcp.zsoftly.ca/register"
-      class="promo-cta"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {Astro.locals.t('zs.promo.cta')}
-    </a>
   </div>
+  <span class="promo-sep promo-sep--cta" aria-hidden="true">·</span>
+  <a href={CLOUD_REGISTER_URL} class="promo-cta" target="_blank" rel="noopener noreferrer">
+    {Astro.locals.t('zs.promo.cta')}
+  </a>
   <button
     id="promo-dismiss"
     class="promo-dismiss"
@@ -397,7 +393,7 @@ import type { Props } from '@astrojs/starlight/props';
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-inline: 1rem;
+    padding-inline: 1rem 3rem;
     gap: 0.75rem;
   }
 
@@ -412,7 +408,17 @@ import type { Props } from '@astrojs/starlight/props';
     font-size: 0.8125rem;
     color: rgba(255, 255, 255, 0.9);
     flex-wrap: nowrap;
-    overflow: hidden;
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .promo-inner::-webkit-scrollbar {
+    display: none;
   }
 
   .promo-live {
@@ -455,13 +461,19 @@ import type { Props } from '@astrojs/starlight/props';
     color: rgba(255, 255, 255, 0.85);
   }
 
-  /* Hide less important items on narrow screens */
   @media (max-width: 640px) {
-    .promo-text:nth-of-type(2),
-    .promo-text:nth-of-type(3),
-    .promo-sep:nth-of-type(2),
-    .promo-sep:nth-of-type(3),
-    .promo-sep:nth-of-type(4) {
+    .promo-bar {
+      justify-content: flex-start;
+      padding-inline: 1rem 2.75rem;
+    }
+
+    .promo-inner {
+      flex: 1 1 auto;
+    }
+
+    /* The CTA is pinned outside the scroller, so the separator that used to
+       precede it would read as trailing punctuation on truncated text. */
+    .promo-sep--cta {
       display: none;
     }
   }
