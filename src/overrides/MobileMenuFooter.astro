@@ -1,0 +1,244 @@
+---
+import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
+import SocialIcons from 'virtual:starlight/components/SocialIcons';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+---
+
+<div class="mobile-menu-footer">
+  <div class="mobile-auth-actions" aria-label="Account actions">
+    <a
+      class="mobile-auth-link mobile-auth-login"
+      href="https://cloud.zcp.zsoftly.ca/login"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {Astro.locals.t('zs.header.login')}
+    </a>
+    <a
+      class="mobile-auth-link mobile-auth-signup"
+      href="https://cloud.zcp.zsoftly.ca/register"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {Astro.locals.t('zs.header.signup')}
+    </a>
+  </div>
+
+  <div class="mobile-preferences sl-flex">
+    <div class="social-icons">
+      <SocialIcons />
+    </div>
+    <div class="mobile-utility-controls">
+      <ThemeSelect />
+      <LanguageSelect />
+    </div>
+  </div>
+</div>
+
+<style>
+  @layer starlight.core {
+    .mobile-menu-footer {
+      margin-inline: calc(-1 * var(--sl-sidebar-pad-x));
+      margin-top: auto;
+      padding: 0.75rem var(--sl-sidebar-pad-x) max(0.75rem, env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(0, 25, 138, 0.18);
+      background-color: var(--zs-mobile-menu-surface, var(--sl-color-bg-sidebar));
+      z-index: 1;
+    }
+
+    .mobile-auth-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0.75rem;
+    }
+
+    .mobile-auth-link {
+      align-items: center;
+      border-radius: 0.375rem;
+      display: flex;
+      font-size: 0.875rem;
+      font-weight: 700;
+      justify-content: center;
+      min-height: 3rem;
+      padding-inline: 1rem;
+      text-decoration: none;
+      transition:
+        background-color 150ms ease,
+        border-color 150ms ease,
+        color 150ms ease;
+    }
+
+    .mobile-auth-login {
+      border: 1px solid var(--sl-color-gray-5);
+      color: var(--sl-color-text);
+    }
+
+    .mobile-auth-login:hover,
+    .mobile-auth-login:focus-visible {
+      background-color: var(--sl-color-gray-6);
+      color: var(--sl-color-text);
+      text-decoration: none;
+    }
+
+    .mobile-auth-signup {
+      background-color: var(--sl-color-accent);
+      color: #ffffff !important;
+    }
+
+    .mobile-auth-signup:hover,
+    .mobile-auth-signup:focus-visible {
+      background-color: var(--sl-color-accent-high);
+      color: #ffffff !important;
+      text-decoration: none;
+    }
+
+    .social-icons {
+      align-items: center;
+      display: flex;
+      gap: 1rem;
+      margin-inline-end: auto;
+      padding-block: 0;
+    }
+
+    .social-icons :global(a) {
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(0, 25, 138, 0.14);
+      border-radius: 999px;
+      color: var(--sl-color-accent);
+      display: flex;
+      height: 2.5rem;
+      justify-content: center;
+      margin: 0;
+      width: 2.5rem;
+    }
+
+    .social-icons:empty {
+      display: none;
+    }
+
+    .mobile-preferences {
+      align-items: center;
+      column-gap: 1rem;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      padding-top: 0.75rem;
+    }
+
+    .mobile-utility-controls {
+      align-items: center;
+      display: flex;
+      gap: 0.5rem;
+      margin-inline-start: auto;
+      min-width: 0;
+    }
+
+    .mobile-utility-controls :global(starlight-theme-toggle),
+    .mobile-utility-controls :global(starlight-lang-select) {
+      display: block;
+      flex: 0 0 auto;
+      line-height: 0;
+    }
+
+    .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn),
+    .mobile-utility-controls :global(starlight-lang-select label) {
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(0, 25, 138, 0.18);
+      border-radius: 999px;
+      color: var(--sl-color-text);
+      display: flex;
+      height: 2.5rem;
+      min-height: 2.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .social-icons :global(a:hover),
+    .social-icons :global(a:focus-visible),
+    .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn:hover),
+    .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn:focus-visible),
+    .mobile-utility-controls :global(starlight-lang-select label:hover),
+    .mobile-utility-controls :global(starlight-lang-select label:focus-within) {
+      background-color: var(--sl-color-accent);
+      border-color: var(--sl-color-accent);
+      color: #ffffff;
+    }
+
+    .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn) {
+      justify-content: center;
+      padding: 0;
+      width: 2.5rem;
+    }
+
+    .mobile-utility-controls :global(starlight-theme-toggle .theme-icon) {
+      flex-shrink: 0;
+    }
+
+    .mobile-utility-controls :global(starlight-lang-select label) {
+      --sl-inline-padding: 0.5rem;
+      min-width: 7.25rem;
+    }
+
+    .mobile-utility-controls :global(starlight-lang-select select) {
+      height: 100%;
+      margin: 0;
+      padding-block: 0;
+    }
+
+    .mobile-utility-controls :global(option) {
+      background-color: var(--sl-color-accent);
+      color: #ffffff;
+    }
+
+    :global(:root[data-theme='dark']) .mobile-menu-footer {
+      border-top-color: rgba(107, 142, 245, 0.22);
+    }
+
+    :global(:root[data-theme='dark']) .social-icons :global(a),
+    :global(:root[data-theme='dark'])
+      .mobile-utility-controls
+      :global(starlight-theme-toggle .theme-toggle-btn),
+    :global(:root[data-theme='dark'])
+      .mobile-utility-controls
+      :global(starlight-lang-select label) {
+      background-color: rgba(6, 10, 26, 0.86);
+      border-color: rgba(107, 142, 245, 0.26);
+    }
+  }
+
+  .mobile-menu-footer .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn) {
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(0, 25, 138, 0.18);
+    border-radius: 999px;
+    color: var(--sl-color-text);
+    display: flex;
+    height: 2.5rem;
+    justify-content: center;
+    min-height: 2.5rem;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 2.5rem;
+  }
+
+  .mobile-menu-footer
+    .mobile-utility-controls
+    :global(starlight-theme-toggle .theme-toggle-btn:hover),
+  .mobile-menu-footer
+    .mobile-utility-controls
+    :global(starlight-theme-toggle .theme-toggle-btn:focus-visible) {
+    background-color: var(--sl-color-accent);
+    border-color: var(--sl-color-accent);
+    color: #ffffff;
+  }
+
+  :global(:root[data-theme='dark'])
+    .mobile-menu-footer
+    .mobile-utility-controls
+    :global(starlight-theme-toggle .theme-toggle-btn) {
+    background-color: rgba(6, 10, 26, 0.86);
+    border-color: rgba(107, 142, 245, 0.26);
+  }
+</style>

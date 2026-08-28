@@ -214,6 +214,7 @@ export default defineConfig({
         ThemeSelect: './src/overrides/ThemeSelect.astro',
         SocialIcons: './src/overrides/SocialIcons.astro',
         Footer: './src/overrides/Footer.astro',
+        MobileMenuFooter: './src/overrides/MobileMenuFooter.astro',
         TableOfContents: './src/overrides/TableOfContents.astro',
         PageFrame: './src/overrides/PageFrame.astro',
       },
