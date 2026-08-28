@@ -45,6 +45,7 @@
     --zs-menu-button-offset: calc(
       (var(--zs-mobile-header-height) - var(--sl-menu-button-size)) / 2
     );
+
     align-items: center;
     background-color: rgba(255, 255, 255, 0.92);
     border: 1px solid var(--sl-color-gray-5);
@@ -1130,6 +1131,7 @@ body,
 
   .sidebar-pane {
     --zs-mobile-menu-surface: #eef4ff;
+
     background-color: var(--zs-mobile-menu-surface);
     overflow: hidden;
   }
@@ -1155,6 +1157,7 @@ body,
 
   :root[data-theme='dark'] .sidebar-pane {
     --zs-mobile-menu-surface: #071024;
+
     background-color: var(--zs-mobile-menu-surface);
   }
 }
