@@ -1,6 +1,7 @@
 {
   "zs.header.login": "Connexion",
   "zs.header.signup": "S'inscrire",
+  "zs.header.accountActions": "Actions du compte",
   "zs.header.explore": "Explorer ZCP",
   "zs.header.websiteNav": "Site Web ZCP",
   "zs.header.services": "Services",

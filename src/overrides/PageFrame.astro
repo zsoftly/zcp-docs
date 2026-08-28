@@ -227,16 +227,16 @@ import type { Props } from '@astrojs/starlight/props';
     <span class="promo-text">{Astro.locals.t('zs.promo.credit')}</span>
     <span class="promo-sep" aria-hidden="true">·</span>
     <span class="promo-text">{Astro.locals.t('zs.promo.ends')}</span>
-    <span class="promo-sep" aria-hidden="true">·</span>
-    <a
-      href="https://cloud.zcp.zsoftly.ca/register"
-      class="promo-cta"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {Astro.locals.t('zs.promo.cta')}
-    </a>
   </div>
+  <span class="promo-sep promo-sep--cta" aria-hidden="true">·</span>
+  <a
+    href="https://cloud.zcp.zsoftly.ca/register"
+    class="promo-cta"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {Astro.locals.t('zs.promo.cta')}
+  </a>
   <button
     id="promo-dismiss"
     class="promo-dismiss"
@@ -412,6 +412,8 @@ import type { Props } from '@astrojs/starlight/props';
     font-size: 0.8125rem;
     color: rgba(255, 255, 255, 0.9);
     flex-wrap: nowrap;
+    flex: 0 1 auto;
+    min-inline-size: 0;
     max-inline-size: 100%;
     overflow-x: auto;
     overflow-y: hidden;
@@ -470,7 +472,13 @@ import type { Props } from '@astrojs/starlight/props';
     }
 
     .promo-inner {
-      inline-size: 100%;
+      flex: 1 1 auto;
+    }
+
+    /* The CTA is pinned outside the scroller, so the separator that used to
+       precede it would read as trailing punctuation on truncated text. */
+    .promo-sep--cta {
+      display: none;
     }
   }
 

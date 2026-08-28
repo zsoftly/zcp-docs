@@ -5,7 +5,11 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 ---
 
 <div class="mobile-menu-footer">
-  <div class="mobile-auth-actions" aria-label="Account actions">
+  <div
+    class="mobile-auth-actions"
+    role="group"
+    aria-label={Astro.locals.t('zs.header.accountActions')}
+  >
     <a
       class="mobile-auth-link mobile-auth-login"
       href="https://cloud.zcp.zsoftly.ca/login"
