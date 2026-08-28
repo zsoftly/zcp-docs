@@ -2,6 +2,7 @@
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import { CLOUD_LOGIN_URL, CLOUD_REGISTER_URL } from '../data/site';
 ---
 
 <div class="mobile-menu-footer">
@@ -12,7 +13,7 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
   >
     <a
       class="mobile-auth-link mobile-auth-login"
-      href="https://cloud.zcp.zsoftly.ca/login"
+      href={CLOUD_LOGIN_URL}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -20,7 +21,7 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
     </a>
     <a
       class="mobile-auth-link mobile-auth-signup"
-      href="https://cloud.zcp.zsoftly.ca/register"
+      href={CLOUD_REGISTER_URL}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -42,12 +43,32 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 <style>
   @layer starlight.core {
     .mobile-menu-footer {
+      /* Light and dark values for the same semantic colour. Everything below
+         reads these, so a theme swap is one block rather than one rule per
+         element. rgb(0 25 138) and rgb(107 142 245) are --sl-color-accent in
+         light and dark; they are spelled out here because CSS cannot apply
+         alpha to a hex custom property. */
+      --zs-menu-divider: rgba(0, 25, 138, 0.18);
+      --zs-menu-chip-bg: rgba(255, 255, 255, 0.88);
+      --zs-menu-chip-border: rgba(0, 25, 138, 0.18);
+      --zs-menu-social-bg: rgba(255, 255, 255, 0.78);
+      --zs-menu-social-border: rgba(0, 25, 138, 0.14);
+      --zs-menu-on-accent: #ffffff;
+
       margin-inline: calc(-1 * var(--sl-sidebar-pad-x));
       margin-top: auto;
       padding: 0.75rem var(--sl-sidebar-pad-x) max(0.75rem, env(safe-area-inset-bottom));
-      border-top: 1px solid rgba(0, 25, 138, 0.18);
+      border-top: 1px solid var(--zs-menu-divider);
       background-color: var(--zs-mobile-menu-surface, var(--sl-color-bg-sidebar));
       z-index: 1;
+    }
+
+    :global(:root[data-theme='dark']) .mobile-menu-footer {
+      --zs-menu-divider: rgba(107, 142, 245, 0.22);
+      --zs-menu-chip-bg: rgba(6, 10, 26, 0.86);
+      --zs-menu-chip-border: rgba(107, 142, 245, 0.26);
+      --zs-menu-social-bg: rgba(6, 10, 26, 0.86);
+      --zs-menu-social-border: rgba(107, 142, 245, 0.26);
     }
 
     .mobile-auth-actions {
@@ -86,13 +107,11 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 
     .mobile-auth-signup {
       background-color: var(--sl-color-accent);
-      color: #ffffff !important;
     }
 
     .mobile-auth-signup:hover,
     .mobile-auth-signup:focus-visible {
       background-color: var(--sl-color-accent-high);
-      color: #ffffff !important;
       text-decoration: none;
     }
 
@@ -106,8 +125,8 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 
     .social-icons :global(a) {
       align-items: center;
-      background-color: rgba(255, 255, 255, 0.78);
-      border: 1px solid rgba(0, 25, 138, 0.14);
+      background-color: var(--zs-menu-social-bg);
+      border: 1px solid var(--zs-menu-social-border);
       border-radius: 999px;
       color: var(--sl-color-accent);
       display: flex;
@@ -144,11 +163,12 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
       line-height: 0;
     }
 
-    .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn),
+    /* The theme toggle gets the same chip treatment, but outside this layer.
+       See the unlayered block below. */
     .mobile-utility-controls :global(starlight-lang-select label) {
       align-items: center;
-      background-color: rgba(255, 255, 255, 0.88);
-      border: 1px solid rgba(0, 25, 138, 0.18);
+      background-color: var(--zs-menu-chip-bg);
+      border: 1px solid var(--zs-menu-chip-border);
       border-radius: 999px;
       color: var(--sl-color-text);
       display: flex;
@@ -160,19 +180,11 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 
     .social-icons :global(a:hover),
     .social-icons :global(a:focus-visible),
-    .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn:hover),
-    .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn:focus-visible),
     .mobile-utility-controls :global(starlight-lang-select label:hover),
     .mobile-utility-controls :global(starlight-lang-select label:focus-within) {
       background-color: var(--sl-color-accent);
       border-color: var(--sl-color-accent);
-      color: #ffffff;
-    }
-
-    .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn) {
-      justify-content: center;
-      padding: 0;
-      width: 2.5rem;
+      color: var(--zs-menu-on-accent);
     }
 
     .mobile-utility-controls :global(starlight-theme-toggle .theme-icon) {
@@ -192,29 +204,24 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 
     .mobile-utility-controls :global(option) {
       background-color: var(--sl-color-accent);
-      color: #ffffff;
+      color: var(--zs-menu-on-accent);
     }
+  }
 
-    :global(:root[data-theme='dark']) .mobile-menu-footer {
-      border-top-color: rgba(107, 142, 245, 0.22);
-    }
-
-    :global(:root[data-theme='dark']) .social-icons :global(a),
-    :global(:root[data-theme='dark'])
-      .mobile-utility-controls
-      :global(starlight-theme-toggle .theme-toggle-btn),
-    :global(:root[data-theme='dark'])
-      .mobile-utility-controls
-      :global(starlight-lang-select label) {
-      background-color: rgba(6, 10, 26, 0.86);
-      border-color: rgba(107, 142, 245, 0.26);
-    }
+  /* Unlayered on purpose. Normal declarations outside a cascade layer beat
+     every layered rule regardless of specificity, which is what these two need
+     against Starlight's own layered defaults. Do not move them back into
+     starlight.core, and do not reach for !important instead. */
+  .mobile-menu-footer .mobile-auth-signup,
+  .mobile-menu-footer .mobile-auth-signup:hover,
+  .mobile-menu-footer .mobile-auth-signup:focus-visible {
+    color: var(--zs-menu-on-accent);
   }
 
   .mobile-menu-footer .mobile-utility-controls :global(starlight-theme-toggle .theme-toggle-btn) {
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(0, 25, 138, 0.18);
+    background-color: var(--zs-menu-chip-bg);
+    border: 1px solid var(--zs-menu-chip-border);
     border-radius: 999px;
     color: var(--sl-color-text);
     display: flex;
@@ -235,14 +242,6 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
     :global(starlight-theme-toggle .theme-toggle-btn:focus-visible) {
     background-color: var(--sl-color-accent);
     border-color: var(--sl-color-accent);
-    color: #ffffff;
-  }
-
-  :global(:root[data-theme='dark'])
-    .mobile-menu-footer
-    .mobile-utility-controls
-    :global(starlight-theme-toggle .theme-toggle-btn) {
-    background-color: rgba(6, 10, 26, 0.86);
-    border-color: rgba(107, 142, 245, 0.26);
+    color: var(--zs-menu-on-accent);
   }
 </style>

@@ -3,6 +3,7 @@
 // above Starlight's fixed nav header.
 import Default from '@astrojs/starlight/components/PageFrame.astro';
 import type { Props } from '@astrojs/starlight/props';
+import { CLOUD_REGISTER_URL } from '../data/site';
 ---
 
 {/* Prevent FOUC: runs synchronously before paint */}
@@ -229,12 +230,7 @@ import type { Props } from '@astrojs/starlight/props';
     <span class="promo-text">{Astro.locals.t('zs.promo.ends')}</span>
   </div>
   <span class="promo-sep promo-sep--cta" aria-hidden="true">·</span>
-  <a
-    href="https://cloud.zcp.zsoftly.ca/register"
-    class="promo-cta"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
+  <a href={CLOUD_REGISTER_URL} class="promo-cta" target="_blank" rel="noopener noreferrer">
     {Astro.locals.t('zs.promo.cta')}
   </a>
   <button
