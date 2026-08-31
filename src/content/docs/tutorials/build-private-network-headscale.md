@@ -286,9 +286,15 @@ zcp ip list   # find the row whose VM is my-headscale
 
 ![zcp ip list output showing the source-NAT IP for my-headscale](../../../assets/build-private-network-headscale/11-ip-list.png)
 
+Find your own machine's public IP (not the VM's):
+
+```bash
+curl -s https://ifconfig.me
+```
+
 ```bash
 zcp firewall create --ip <ip-slug> --protocol tcp --start-port 3000 \
-  --end-port 3000 --cidr <your-ip>/32
+  --end-port 3000 --cidr <your-own-public-ip>/32
 zcp firewall create --ip <ip-slug> --protocol tcp --start-port 8080 \
   --end-port 8080 --cidr 0.0.0.0/0
 
@@ -327,6 +333,17 @@ sudo cat /etc/headplane/credentials.txt
 
 ![credentials.txt output showing the Headplane URL and API key](../../../assets/build-private-network-headscale/12-credentials-txt.png)
 
+:::note
+
+If the Headplane UI rejects this key ("API key was not found in the Headscale database"), mint a
+fresh one directly and use that instead:
+
+```bash
+sudo docker exec headscale headscale apikeys create --expiration 90d
+```
+
+:::
+
 Sign in to the Headplane UI at `http://<public-ip>:3000/admin/login` with the API key.
 
 ![Headplane Machines dashboard after signing in, showing zero machines](../../../assets/build-private-network-headscale/13-headplane-dashboard.png)
@@ -362,6 +379,15 @@ network:
 EOF
 sudo netplan apply
 ```
+
+Confirm it worked and note the address it was given. You'll need it in Step 9:
+
+```bash
+ip -4 -br addr show
+```
+
+`ens8` should now show `UP` with an address in your tier's range (for example `10.20.1.232`). Write
+it down.
 
 :::
 
@@ -407,6 +433,13 @@ sudo tailscale up --login-server http://<headplane-public-ip>:8080 \
   --authkey <key> --advertise-routes=10.20.1.0/24 --accept-routes
 ```
 
+:::note
+
+You may see a warning about "UDP GRO forwarding" being suboptimally configured. This is a
+performance tuning suggestion, not an error. It doesn't block registration and can be ignored.
+
+:::
+
 Approve the route on the Headscale side. This is not automatic:
 
 ```bash
@@ -431,7 +464,19 @@ without needing their own public IPs.
 
 ## Step 9: Connect from your own machine
 
-Install Tailscale locally and register against your Headscale server:
+Install Tailscale locally, if it isn't already:
+
+```bash
+# Linux
+curl -fsSL https://tailscale.com/install.sh | sh
+```
+
+On Windows, install with `winget install tailscale.tailscale`, or download the installer from
+[tailscale.com/download](https://tailscale.com/download). On macOS, install from the
+[Mac App Store](https://apps.apple.com/app/tailscale/id1475387142) or with `brew install tailscale`.
+Confirm it works with `tailscale version`.
+
+Then register against your Headscale server:
 
 ```bash
 tailscale up --login-server http://<headplane-public-ip>:8080 \
