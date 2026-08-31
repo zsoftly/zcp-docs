@@ -253,6 +253,10 @@ export default defineConfig({
               slug: 'tutorials/manage-infrastructure-terraform',
             },
             { label: 'Host DNS on ZCP (CLI)', slug: 'tutorials/host-dns-on-zcp-cli' },
+            {
+              label: 'Build a Private Network (CLI)',
+              slug: 'tutorials/build-private-network-headscale',
+            },
           ],
         },
 
