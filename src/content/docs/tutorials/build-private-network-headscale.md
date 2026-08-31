@@ -576,6 +576,8 @@ ping <tier-private-ip>
 
 ## Next steps
 
-- [Deploy private shared storage](/tutorials/deploy-private-shared-storage): reuses this same tier
-- [Deploy Ubuntu employee desktops](/tutorials/deploy-ubuntu-employee-desktops): reachable the same
-  way as the subnet router above
+The next parts of this series (private shared storage, then Ubuntu employee desktops, both reusing
+the tier and mesh you just built) are still in progress. In the meantime:
+
+- [CLI reference](/public-cloud/cli/reference): every command and flag
+- [Tutorials overview](/tutorials): the full list of available tutorials
