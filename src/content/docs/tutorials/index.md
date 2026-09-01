@@ -77,6 +77,19 @@ You learn how to:
 - Deploy a self-hosted Headscale and Headplane server from the Marketplace
 - Enroll a subnet router and connect your own device to the mesh
 
+### [Deploy Private Shared Storage on ZCP](/tutorials/deploy-private-shared-storage)
+
+Deploy an NFS file share inside the private tier from
+[Build a Private Network with Headscale](/tutorials/build-private-network-headscale), reachable only
+through the mesh and never exposed publicly. About 20 minutes.
+
+You learn how to:
+
+- Deploy a storage VM with SSH locked to your own IP and no other public exposure
+- Format and mount a separate data disk, and export it scoped to the tier and mesh ranges
+- Layer the VM's own firewall on top of ZCP's network-level controls
+- Mount and verify the share from a mesh client, then confirm it is unreachable from outside
+
 ## Where to go next
 
 - [CLI quickstart](/public-cloud/cli/quickstart): the short version, for when you already have an
