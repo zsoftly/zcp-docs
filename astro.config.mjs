@@ -257,6 +257,10 @@ export default defineConfig({
               label: 'Build a Private Network (CLI)',
               slug: 'tutorials/build-private-network-headscale',
             },
+            {
+              label: 'Deploy Private Storage (CLI)',
+              slug: 'tutorials/deploy-private-shared-storage',
+            },
           ],
         },
 

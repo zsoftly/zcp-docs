@@ -576,8 +576,7 @@ ping <tier-private-ip>
 
 ## Next steps
 
-The next parts of this series (private shared storage, then Ubuntu employee desktops, both reusing
-the tier and mesh you just built) are still in progress. In the meantime:
-
+- [Deploy Private Shared Storage on ZCP](/tutorials/deploy-private-shared-storage): an NFS share on
+  this same tier, reachable only through the mesh you just built
 - [CLI reference](/public-cloud/cli/reference): every command and flag
 - [Tutorials overview](/tutorials): the full list of available tutorials
