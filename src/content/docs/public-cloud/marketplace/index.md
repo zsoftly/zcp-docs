@@ -774,7 +774,7 @@ automatically. Credentials are generated, services are configured, and the image
 
   <a href="/public-cloud/marketplace/technitium" class="service-card">
     <div class="mp-brand-icon">
-      <img src="/icons/marketplace/technitium.svg" alt="" width="26" height="26" aria-hidden="true">
+      <img src="/icons/marketplace/technitium.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
       <p class="service-name">Technitium DNS</p>

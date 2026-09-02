@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Technitium DNS Server">
-  <rect width="64" height="64" rx="12" fill="#0f766e"/>
-  <circle cx="32" cy="32" r="20" fill="none" stroke="#f8fafc" stroke-width="4"/>
-  <path d="M16 32h32M32 12c5 5 8 12 8 20s-3 15-8 20M32 12c-5 5-8 12-8 20s3 15 8 20" fill="none" stroke="#f8fafc" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="32" cy="32" r="5" fill="#fbbf24"/>
-</svg>
