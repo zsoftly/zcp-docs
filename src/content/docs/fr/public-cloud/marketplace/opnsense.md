@@ -116,5 +116,5 @@ du fournisseur jusqu'à leur changement manuel.
 
 ## Prochaines étapes
 
-- [Documentation OPNsense](https://docs.opnsense.org/)
-- [Versions OPNsense](https://opnsense.org/download/)
+- [Installation et configuration OPNsense](https://docs.opnsense.org/setup.html)
+- [Téléchargement OPNsense](https://opnsense.org/download)

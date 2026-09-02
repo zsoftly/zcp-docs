@@ -117,5 +117,5 @@ change them manually.
 
 ## Next steps
 
-- [OPNsense documentation](https://docs.opnsense.org/)
-- [OPNsense releases](https://opnsense.org/download/)
+- [OPNsense installation and setup](https://docs.opnsense.org/setup.html)
+- [OPNsense download](https://opnsense.org/download)
