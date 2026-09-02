@@ -160,5 +160,5 @@ nécessaires.
 ## Prochaines étapes
 
 - [Site IceWarp](https://www.icewarp.com/)
-- [Guide d'installation Linux IceWarp](https://support.icewarp.com/hc/en-us/articles/12868451777937-IceWarp-Installation-Guide-for-Linux)
-- [Aide licence IceWarp](https://support.icewarp.com/hc/en-us/categories/203155547-LICENSING)
+- [Installation du serveur IceWarp sur Linux](https://academy.icewarp.com/academy/en/admin/icewarp-server-installation-on-linux)
+- [Administration des licences IceWarp](https://docs.icewarp.com/Content/IceWarp-Server/Administration-Console/Licenses.htm)

@@ -155,5 +155,5 @@ serve IceWarp through a DNS name with TLS and expose only the mail and web ports
 ## Next steps
 
 - [IceWarp product site](https://www.icewarp.com/)
-- [IceWarp Linux installation guide](https://support.icewarp.com/hc/en-us/articles/12868451777937-IceWarp-Installation-Guide-for-Linux)
-- [IceWarp licensing help](https://support.icewarp.com/hc/en-us/categories/203155547-LICENSING)
+- [IceWarp server installation on Linux](https://academy.icewarp.com/academy/en/admin/icewarp-server-installation-on-linux)
+- [IceWarp license administration](https://docs.icewarp.com/Content/IceWarp-Server/Administration-Console/Licenses.htm)
