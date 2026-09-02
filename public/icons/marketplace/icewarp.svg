@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="IceWarp">
+  <rect width="64" height="64" rx="14" fill="#0f172a"/>
+  <path d="M13 22h38v24H13z" fill="#e0f2fe"/>
+  <path d="M13 22l19 15 19-15" fill="none" stroke="#0284c7" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M44 14l7 4-7 4-7-4zM20 42l5 3-5 3-5-3z" fill="#67e8f9"/>
+</svg>

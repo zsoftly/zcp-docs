@@ -17,7 +17,7 @@ automatically. Credentials are generated, services are configured, and the image
     <span class="mp-label">coming soon</span>
   </div>
   <div class="mp-stat">
-    <span class="mp-num">9</span>
+    <span class="mp-num">10</span>
     <span class="mp-label">categories</span>
   </div>
   <div class="mp-stat">
@@ -276,6 +276,28 @@ automatically. Credentials are generated, services are configured, and the image
 
 <div class="mp-section">
 <div class="mp-cat-header">
+  <div class="mp-cat-icon" style="--cat-color: #6366f1; --cat-dim: rgba(99,102,241,0.12);">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
+  </div>
+  <h2 class="mp-cat-title">Remote Desktops</h2>
+</div>
+<div class="service-grid mp-solo">
+
+  <a href="/public-cloud/marketplace/ubuntukde" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/ubuntukde.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Ubuntu KDE</p>
+      <p class="service-desc">Ubuntu desktop with KDE Plasma and XRDP for remote access.</p>
+    </div>
+  </a>
+
+</div>
+</div>
+
+<div class="mp-section">
+<div class="mp-cat-header">
   <div class="mp-cat-icon" style="--cat-color: #a855f7; --cat-dim: rgba(168,85,247,0.12);">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
   </div>
@@ -360,6 +382,16 @@ automatically. Credentials are generated, services are configured, and the image
     <div>
       <p class="service-name">Rancher</p>
       <p class="service-desc">Manage Kubernetes clusters from a single web console.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/k3s" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/k3s.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">K3s</p>
+      <p class="service-desc">Lightweight Kubernetes distribution for development, labs, and edge workloads.</p>
     </div>
   </a>
 
@@ -667,6 +699,16 @@ automatically. Credentials are generated, services are configured, and the image
     </div>
   </a>
 
+  <a href="/public-cloud/marketplace/icewarp" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/icewarp.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">IceWarp</p>
+      <p class="service-desc">Business email, chat, video, files, and collaboration suite.</p>
+    </div>
+  </a>
+
   <a href="/public-cloud/marketplace/wikijs" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/wikijs.svg" alt="" width="26" height="26" aria-hidden="true">
@@ -717,6 +759,26 @@ automatically. Credentials are generated, services are configured, and the image
     <div>
       <p class="service-name">Headplane</p>
       <p class="service-desc">Web UI to manage your self-hosted Headscale network.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/opnsense" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/opnsense.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">OPNsense</p>
+      <p class="service-desc">Open-source firewall and router platform based on FreeBSD.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/technitium" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/technitium.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Technitium DNS</p>
+      <p class="service-desc">Authoritative DNS server, resolver, and web administration console.</p>
     </div>
   </a>
 
@@ -861,6 +923,16 @@ automatically. Credentials are generated, services are configured, and the image
     <div>
       <p class="service-name">OpenClaw</p>
       <p class="service-desc">Self-hosted personal AI assistant and multi-channel gateway.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/hermesagent" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/hermesagent.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">HermesAgent</p>
+      <p class="service-desc">Self-hosted AI agent runtime with memory, tools, and provider integrations.</p>
     </div>
   </a>
 

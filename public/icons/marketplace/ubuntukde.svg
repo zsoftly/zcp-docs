@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Ubuntu KDE</title>
+  <rect width="128" height="128" rx="16" fill="#1d99f3"/>
+  <circle cx="64" cy="64" r="38" fill="none" stroke="#ffffff" stroke-width="10"/>
+  <path fill="#ffffff" d="M64 20l7 14 15-4 1 16 15 5-9 13 9 13-15 5-1 16-15-4-7 14-7-14-15 4-1-16-15-5 9-13-9-13 15-5 1-16 15 4z"/>
+  <circle cx="64" cy="64" r="20" fill="#1d99f3"/>
+  <path fill="#ffffff" d="M57 45h11v16l15-16h14L76 66l23 17H84L68 71v12H57z"/>
+</svg>
