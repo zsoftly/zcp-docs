@@ -111,9 +111,8 @@ Change the default password immediately. Avoid exposing the management web GUI t
 internet. For production, restrict management access to a private network, VPN, or trusted
 administrative IP range.
 
-CloudStack may display a generated password for this template, but OPNsense does not consume it
-because the image has no cloud-init or guest password agent. Use the vendor defaults until you
-change them manually.
+The template does not support SSH-key injection or platform password reset. Log in with the vendor
+defaults, then change the password manually after first login.
 
 ## Next steps
 

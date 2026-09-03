@@ -110,9 +110,9 @@ Changez immédiatement le mot de passe par défaut. Évitez d'exposer l'interfac
 Internet. En production, limitez l'accès d'administration à un réseau privé, un VPN ou une plage
 d'IP administratives de confiance.
 
-CloudStack peut afficher un mot de passe généré pour ce modèle, mais OPNsense ne le consomme pas
-parce que l'image n'a ni cloud-init ni agent invité de mot de passe. Utilisez les valeurs par défaut
-du fournisseur jusqu'à leur changement manuel.
+Le modèle ne prend pas en charge l'injection de clé SSH ni la réinitialisation du mot de passe par
+la plateforme. Connectez-vous avec les valeurs par défaut du fournisseur, puis changez le mot de
+passe manuellement après la première connexion.
 
 ## Prochaines étapes
 
