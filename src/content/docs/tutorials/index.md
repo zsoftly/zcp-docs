@@ -77,6 +77,19 @@ You learn how to:
 - Deploy a self-hosted Headscale and Headplane server from the Marketplace
 - Enroll a subnet router and connect your own device to the mesh
 
+### [Deploy Ubuntu Employee Desktops on ZCP](/tutorials/deploy-ubuntu-employee-desktops)
+
+Deploy a full Ubuntu KDE desktop into the private tier from
+[Build a Private Network with Headscale](/tutorials/build-private-network-headscale), reached only
+through the mesh over RDP. About 30 minutes.
+
+You learn how to:
+
+- Provision a named employee login with cloud-init instead of a generic default user
+- Bring up the tier network interface and lock down a Marketplace template's default-open SSH rule
+- Connect over RDP through the mesh, with no public IP ever needed for the desktop itself
+- Confirm the desktop is a genuinely usable work environment, not just a login screen
+
 ## Where to go next
 
 - [CLI quickstart](/public-cloud/cli/quickstart): the short version, for when you already have an
