@@ -90,6 +90,21 @@ You learn how to:
 - Connect over RDP through the mesh, with no public IP ever needed for the desktop itself
 - Confirm the desktop is a genuinely usable work environment, not just a login screen
 
+### [Connect Your Ubuntu Desktops to Private Storage](/tutorials/connect-desktops-to-storage)
+
+Mount the file share from [Deploy Private Shared Storage](/tutorials/deploy-private-shared-storage)
+on the desktop from [Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops),
+so company files persist independently of any one desktop VM. About 15 minutes per desktop.
+
+You learn how to:
+
+- Mount an NFS share from inside an RDP session and confirm it actually works
+- Understand why NFS permissions are raw UID numbers, not usernames, and what that means for
+  multiple employees sharing storage
+- Give each employee a real, unique identity instead of accepting a shared one, including the real
+  constraints that make it work (timing, session handling, and where retroactive fixes have to run)
+- Confirm the share shows up automatically in the KDE file manager
+
 ## Where to go next
 
 - [CLI quickstart](/public-cloud/cli/quickstart): the short version, for when you already have an

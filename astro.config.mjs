@@ -261,6 +261,10 @@ export default defineConfig({
               label: 'Deploy Employee Desktops (CLI)',
               slug: 'tutorials/deploy-ubuntu-employee-desktops',
             },
+            {
+              label: 'Connect Desktops to Storage',
+              slug: 'tutorials/connect-desktops-to-storage',
+            },
           ],
         },
 
