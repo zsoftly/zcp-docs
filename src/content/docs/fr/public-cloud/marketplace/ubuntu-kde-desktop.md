@@ -24,8 +24,10 @@ standard depuis Windows, macOS ou Linux.
 
 ## Variables d'environnement
 
-Vous pouvez définir ces valeurs lors du déploiement depuis la marketplace pour créer ou mettre à
-jour le compte de bureau.
+Si des champs de variables de déploiement sont disponibles dans votre parcours de lancement,
+utilisez-les à cet endroit. Sinon, fournissez les mêmes valeurs via un user data qui écrit
+`/etc/zmi/deploy.env`, ou configurez-les après le premier démarrage pour créer ou mettre à jour le
+compte de bureau.
 
 | Variable             | Description                                       |
 | -------------------- | ------------------------------------------------- |

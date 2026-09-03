@@ -4,9 +4,9 @@ tableOfContents: false
 ---
 
 Les images de la Marketplace ZCP sont des modèles de machine virtuelle préconfigurés qui se
-déploient en quelques minutes depuis la console ZCP. Chaque image est fournie sur **Ubuntu 24.04
-LTS** avec un service de premier démarrage qui termine la configuration automatiquement. Les
-identifiants sont générés, les services sont configurés et l'image est prête à utiliser.
+déploient en quelques minutes depuis la console ZCP. La plupart des images Linux sont fournies sur
+**Ubuntu 24.04 LTS** avec un service de premier démarrage qui termine la configuration
+automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure depuis sa console.
 
 <div class="mp-stats">
   <div class="mp-stat">
@@ -284,7 +284,7 @@ identifiants sont générés, les services sont configurés et l'image est prêt
 </div>
 <div class="service-grid mp-solo">
 
-  <a href="/public-cloud/marketplace/ubuntukde" class="service-card">
+  <a href="/public-cloud/marketplace/ubuntu-kde-desktop" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/ubuntukde.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -773,7 +773,7 @@ identifiants sont générés, les services sont configurés et l'image est prêt
     </div>
   </a>
 
-  <a href="/public-cloud/marketplace/technitium" class="service-card">
+  <a href="/public-cloud/marketplace/technitium-dns-server" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/technitium.png" alt="" width="26" height="26" aria-hidden="true">
     </div>

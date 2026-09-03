@@ -11,6 +11,7 @@ IceWarp Server avec ses services de base de données et de cache sur Ubuntu 24.0
 | Composant             | Version         |
 | --------------------- | --------------- |
 | IceWarp Server        | 14.3.0.9        |
+| Laforge               | 2.2.3           |
 | Conteneur IceWarp     | 14.3.0.9        |
 | MariaDB               | 10.6            |
 | Redis                 | 7 Alpine        |
@@ -34,9 +35,10 @@ temps.
 
 ## Variables d'environnement
 
-Définissez ces valeurs lors du déploiement depuis la marketplace pour configurer le premier
-démarrage. Laissez les champs de mot de passe vides pour générer des valeurs aléatoires sécurisées
-lorsque c'est pris en charge.
+Si des champs de variables de déploiement sont disponibles dans votre parcours de lancement,
+utilisez-les à cet endroit. Sinon, fournissez les mêmes valeurs via un user data qui écrit
+`/etc/zmi/deploy.env`, ou configurez-les après le premier démarrage. Laissez les champs de mot de
+passe vides pour générer des valeurs aléatoires sécurisées lorsque c'est pris en charge.
 
 | Variable                       | Description                                                            |
 | ------------------------------ | ---------------------------------------------------------------------- |

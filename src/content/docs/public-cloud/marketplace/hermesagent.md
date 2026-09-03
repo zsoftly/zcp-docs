@@ -30,9 +30,10 @@ VM, size the instance separately for those model workloads.
 
 ## Environment variables
 
-Set these values during marketplace deployment if you want first boot to configure provider keys or
-gateway access. Secrets are read from `/etc/zmi/deploy.env` and copied into a root-only runtime
-environment file.
+If deployment variable fields are available in your launch flow, use them there. Otherwise, provide
+the same values through user data that writes `/etc/zmi/deploy.env`, or configure them after first
+boot. Secrets are read from `/etc/zmi/deploy.env` and copied into a root-only runtime environment
+file.
 
 | Variable                  | Description                                     |
 | ------------------------- | ----------------------------------------------- |

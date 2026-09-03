@@ -24,7 +24,9 @@ or Linux.
 
 ## Environment variables
 
-You can set these values during marketplace deployment to create or update the desktop login.
+If deployment variable fields are available in your launch flow, use them there. Otherwise, provide
+the same values through user data that writes `/etc/zmi/deploy.env`, or configure them after first
+boot to create or update the desktop login.
 
 | Variable             | Description                            |
 | -------------------- | -------------------------------------- |

@@ -18,12 +18,26 @@ lourde.
 
 | Ressource | Minimum | Recommandé |
 | --------- | ------- | ---------- |
-| vCPU      | 1       | 2          |
+| vCPU      | 2       | 2          |
 | RAM       | 2 Go    | 4 Go       |
-| Stockage  | 40 Go   | 80 Go      |
+| Stockage  | 20 Go   | 40 Go      |
 
 Dimensionnez l'instance selon les charges que vous voulez exécuter. K3s est léger, mais les
 conteneurs, images, journaux et volumes persistants peuvent grandir avec le temps.
+
+## Variables d'environnement
+
+Si des champs de variables de déploiement sont disponibles dans votre parcours de lancement,
+utilisez-les à cet endroit. Sinon, fournissez les mêmes valeurs via un user data qui écrit
+`/etc/zmi/deploy.env`, ou configurez-les après le premier démarrage.
+
+| Variable           | Description                                                          |
+| ------------------ | -------------------------------------------------------------------- |
+| `K3S_TOKEN`        | Secret partagé utilisé pour ajouter des nœuds au cluster             |
+| `K3S_TLS_SANS`     | Noms d'hôte ou IP supplémentaires, séparés par des virgules          |
+| `K3S_CLUSTER_CIDR` | CIDR du réseau de pods. Utilise la valeur K3s par défaut si vide     |
+| `K3S_SERVICE_CIDR` | CIDR du réseau de services. Utilise la valeur K3s par défaut si vide |
+| `K3S_NODE_NAME`    | Nom de nœud optionnel                                                |
 
 ## Démarrage
 
@@ -33,17 +47,26 @@ conteneurs, images, journaux et volumes persistants peuvent grandir avec le temp
 ssh ubuntu@<your-vm-ip>
 ```
 
-### 2. Vérifier que K3s fonctionne
+### 2. Attendre la configuration au premier démarrage
+
+Le premier démarrage installe et configure K3s avant de désactiver son service de configuration.
+Suivez la progression:
 
 ```bash
-systemctl status k3s --no-pager
+sudo journalctl -u k3s-first-boot.service -f
+```
+
+### 3. Vérifier que K3s fonctionne
+
+```bash
+sudo systemctl status k3s --no-pager
 sudo k3s kubectl get nodes
 sudo k3s kubectl get pods -A
 ```
 
 Le nœud doit afficher `Ready`, et les pods système doivent être en cours d'exécution ou terminés.
 
-### 3. Utiliser kubectl sur la VM
+### 4. Utiliser kubectl sur la VM
 
 K3s inclut son propre wrapper `kubectl`:
 
@@ -64,7 +87,8 @@ Pour utiliser `kubectl` depuis votre poste, copiez le kubeconfig depuis la VM et
 du serveur par l'adresse de la VM que vous pouvez joindre.
 
 ```bash
-scp ubuntu@<your-vm-ip>:/etc/rancher/k3s/k3s.yaml ./k3s.yaml
+ssh ubuntu@<your-vm-ip> 'sudo cat /etc/rancher/k3s/k3s.yaml' > ./k3s.yaml
+chmod 600 ./k3s.yaml
 ```
 
 Modifiez ensuite `./k3s.yaml` et changez le serveur de `https://127.0.0.1:6443` vers:

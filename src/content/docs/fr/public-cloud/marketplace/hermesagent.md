@@ -30,8 +30,9 @@ modèles locaux sur la même VM, dimensionnez l'instance séparément pour ces c
 
 ## Variables d'environnement
 
-Définissez ces valeurs lors du déploiement depuis la marketplace si vous voulez configurer les clés
-de fournisseurs ou l'accès passerelle au premier démarrage. Les secrets sont lus depuis
+Si des champs de variables de déploiement sont disponibles dans votre parcours de lancement,
+utilisez-les à cet endroit. Sinon, fournissez les mêmes valeurs via un user data qui écrit
+`/etc/zmi/deploy.env`, ou configurez-les après le premier démarrage. Les secrets sont lus depuis
 `/etc/zmi/deploy.env` et copiés dans un fichier d'environnement d'exécution lisible uniquement par
 root.
 

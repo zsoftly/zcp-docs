@@ -17,12 +17,26 @@ full operational footprint of a larger Kubernetes platform.
 
 | Resource | Minimum | Recommended |
 | -------- | ------- | ----------- |
-| vCPU     | 1       | 2           |
+| vCPU     | 2       | 2           |
 | RAM      | 2 GB    | 4 GB        |
-| Storage  | 40 GB   | 80 GB       |
+| Storage  | 20 GB   | 40 GB       |
 
 Size the instance for the workloads you plan to run. K3s itself is lightweight, but containers,
 images, logs, and persistent volumes can grow over time.
+
+## Environment variables
+
+If deployment variable fields are available in your launch flow, use them there. Otherwise, provide
+the same values through user data that writes `/etc/zmi/deploy.env`, or configure them after first
+boot.
+
+| Variable           | Description                                                 |
+| ------------------ | ----------------------------------------------------------- |
+| `K3S_TOKEN`        | Shared secret used when adding nodes to the cluster         |
+| `K3S_TLS_SANS`     | Comma-separated extra hostnames or IPs for the API cert     |
+| `K3S_CLUSTER_CIDR` | Pod network CIDR. Defaults to the K3s standard if unset     |
+| `K3S_SERVICE_CIDR` | Service network CIDR. Defaults to the K3s standard if unset |
+| `K3S_NODE_NAME`    | Optional node name override                                 |
 
 ## Getting started
 
@@ -32,17 +46,25 @@ images, logs, and persistent volumes can grow over time.
 ssh ubuntu@<your-vm-ip>
 ```
 
-### 2. Verify K3s is running
+### 2. Wait for first-boot configuration
+
+First boot installs and configures K3s before disabling its setup service. Track progress:
 
 ```bash
-systemctl status k3s --no-pager
+sudo journalctl -u k3s-first-boot.service -f
+```
+
+### 3. Verify K3s is running
+
+```bash
+sudo systemctl status k3s --no-pager
 sudo k3s kubectl get nodes
 sudo k3s kubectl get pods -A
 ```
 
 The node should show `Ready`, and the system pods should be running or completed.
 
-### 3. Use kubectl on the VM
+### 4. Use kubectl on the VM
 
 K3s includes its own `kubectl` wrapper:
 
@@ -63,7 +85,8 @@ To use `kubectl` from your workstation, copy the kubeconfig from the VM and repl
 address with the VM address you can reach.
 
 ```bash
-scp ubuntu@<your-vm-ip>:/etc/rancher/k3s/k3s.yaml ./k3s.yaml
+ssh ubuntu@<your-vm-ip> 'sudo cat /etc/rancher/k3s/k3s.yaml' > ./k3s.yaml
+chmod 600 ./k3s.yaml
 ```
 
 Then edit `./k3s.yaml` and change the server from `https://127.0.0.1:6443` to:

@@ -23,8 +23,9 @@ from a ZCP instance.
 
 ## Environment variables
 
-You can optionally set these values during marketplace deployment. Leave the admin password blank to
-generate a secure random password.
+If deployment variable fields are available in your launch flow, use them there. Otherwise, provide
+the same values through user data that writes `/etc/zmi/deploy.env`, or configure them after first
+boot. Leave the admin password blank to generate a secure random password.
 
 | Variable                                 | Description                                                      |
 | ---------------------------------------- | ---------------------------------------------------------------- |

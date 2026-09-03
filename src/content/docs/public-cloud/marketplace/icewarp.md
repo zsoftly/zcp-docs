@@ -11,6 +11,7 @@ database and cache services on Ubuntu 24.04.
 | Component             | Version       |
 | --------------------- | ------------- |
 | IceWarp Server        | 14.3.0.9      |
+| Laforge               | 2.2.3         |
 | IceWarp container     | 14.3.0.9      |
 | MariaDB               | 10.6          |
 | Redis                 | 7 Alpine      |
@@ -33,8 +34,9 @@ configuration, and collaboration state can grow over time.
 
 ## Environment variables
 
-Set these values during marketplace deployment to configure the first boot. Leave password fields
-blank to have secure random values generated where supported.
+If deployment variable fields are available in your launch flow, use them there. Otherwise, provide
+the same values through user data that writes `/etc/zmi/deploy.env`, or configure them after first
+boot. Leave password fields blank to have secure random values generated where supported.
 
 | Variable                       | Description                                                     |
 | ------------------------------ | --------------------------------------------------------------- |

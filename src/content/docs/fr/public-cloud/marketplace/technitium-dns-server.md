@@ -23,8 +23,10 @@ plateforme de gestion DNS depuis une instance ZCP.
 
 ## Variables d'environnement
 
-Vous pouvez définir ces valeurs lors du déploiement depuis la marketplace. Laissez le mot de passe
-admin vide pour générer un mot de passe aléatoire sécurisé.
+Si des champs de variables de déploiement sont disponibles dans votre parcours de lancement,
+utilisez-les à cet endroit. Sinon, fournissez les mêmes valeurs via un user data qui écrit
+`/etc/zmi/deploy.env`, ou configurez-les après le premier démarrage. Laissez le mot de passe admin
+vide pour générer un mot de passe aléatoire sécurisé.
 
 | Variable                                 | Description                                                              |
 | ---------------------------------------- | ------------------------------------------------------------------------ |
