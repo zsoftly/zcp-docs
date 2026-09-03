@@ -90,7 +90,7 @@ A public IP is deployed here deliberately, for the one-time setup in the next tw
 console/recovery access on this platform, and the tier network interface below needs manual
 configuration the same way it did in the previous tutorials. With no public IP at all, a stuck
 interface would be unrecoverable. The public IP gets locked down to nothing but SSH from your own
-address in Step 5, and RDP never touches it at any point; the desktop is reached exclusively through
+address in Step 6, and RDP never touches it at any point; the desktop is reached exclusively through
 the tier.
 
 :::
@@ -134,7 +134,7 @@ Netplan may warn that `/etc/netplan/60-tier-nic.yaml` has permissions that are "
 :::
 
 ```bash
-ip -4 -br addr show   # confirm ens8 has a 10.x.x.x tier address, note it for Step 6
+ip -4 -br addr show   # confirm ens8 has a 10.x.x.x tier address, note it for Step 7
 ```
 
 ![ip -4 -br addr show output showing ens8 with a tier address](../../../assets/deploy-ubuntu-employee-desktops/08-tier-ip-confirmed.png)
@@ -154,7 +154,57 @@ after trying to RDP in.
 
 :::
 
-## Step 5: Lock down the default SSH rule
+## Step 5: Decide how this desktop's identity works on shared storage
+
+Only relevant if you plan to also mount private shared storage on this desktop, but this is the only
+point where it's cheap and safe to act on: right now, before the employee's first login.
+
+NFS, if you use it, does raw UID-number mapping, not username mapping. `useradd`, used by this
+template's first-boot script, assigns sequential UIDs starting at 1000, and each desktop VM only
+ever creates one custom employee user, so every employee's desktop user will almost certainly get
+the same UID (typically `1001`), regardless of username. On shared storage, that means every
+employee's desktop user is, by default, the same identity as far as the filesystem is concerned.
+
+:::note
+
+**Default: accept it.** If you're not using shared storage, or a trusted team-wide share is fine for
+your organization, no action needed. Skip straight to Step 6.
+
+:::
+
+### Advanced: giving this employee a real, unique identity
+
+Linux lets you reassign the UID with `usermod`, as long as it happens before the employee's first
+login. You're already in the right session for it, still connected as `ubuntu` from Step 4, and
+nobody has ever logged in as the employee yet. Pick a genuinely unique value per employee across
+your whole fleet:
+
+```bash
+sudo usermod -u 2001 jane.doe
+sudo groupmod -g 2001 jane.doe
+sudo find /home/jane.doe -exec chown -h 2001:2001 {} +
+id jane.doe
+```
+
+![The UID/GID reassignment succeeding cleanly, no active session to block it](../../../assets/deploy-ubuntu-employee-desktops/09b-uid-fix-before-first-login.png)
+
+Now the employee can log in for the first time with the reassigned identity already in place:
+
+![First-ever login confirmed working: correct UID, home directory, and sudo access all intact](../../../assets/deploy-ubuntu-employee-desktops/09c-first-login-verified.png)
+
+:::note
+
+Track which UID belongs to which employee somewhere durable once you start doing this across a
+fleet. There's no template-level bookkeeping for it, it's on you to avoid reusing a value.
+
+If a desktop's employee has already logged in at least once before you got to this step, `usermod`
+refuses while their session is active, and closing the RDP client does not end it. The
+Troubleshooting section of the private-storage tutorial in this series has the recovery path for
+that case.
+
+:::
+
+## Step 6: Lock down the default SSH rule
 
 ```bash
 zcp firewall list --ip <ip-slug>
@@ -199,7 +249,7 @@ zcp firewall list --ip <ip-slug>   # confirm SSH is now scoped to just your IP
 
 :::
 
-## Step 6: Connect over RDP
+## Step 7: Connect over RDP
 
 Connect to the desktop's **tier** IP from Step 4, not the public IP. RDP was never opened on the
 public side at all, only SSH, and that's locked to you alone:
@@ -214,7 +264,7 @@ the RDP client rather than relying on auto-negotiation.
 
 :::
 
-## Step 7: Verify the desktop works end to end
+## Step 8: Verify the desktop works end to end
 
 Launch Firefox or Chromium from the KDE application launcher. On any image older than 1.0.2, this
 step fails: the app flashes and closes immediately with no window. Open a terminal too, the same
@@ -224,13 +274,13 @@ way, confirming the desktop is a genuinely usable work environment, not just a b
 
 Confirm internet access works from inside the session too.
 
-## Step 8: RDP performance tuning
+## Step 9: RDP performance tuning
 
 The template disables the KWin compositor and sets a lower color depth by default. The compositor
 fights RDP's non-GPU rendering path, and a lower color depth cuts bandwidth. No action needed here.
 This is context for why the default experience is already tuned, not a step to perform.
 
-## Step 9: A note on video conferencing
+## Step 10: A note on video conferencing
 
 xrdp in this template has no H.264/AVC444 support, only RFX and raw-bitmap encoding, which is fine
 for a static desktop and performs poorly for continuously-changing video content. Zoom, Zoho Meet,
@@ -258,6 +308,10 @@ zcp instance add-network <vm> --network workspace-tier
 
 # on the VM: netplan for the tier interface (same as Tutorials 1 and 2), confirm the
 # cloud-init user exists with getent passwd
+
+# if using shared storage, decide identity now, before first login:
+#   sudo usermod -u <unique-uid> <employee> && sudo groupmod -g <unique-uid> <employee>
+#   sudo find /home/<employee> -exec chown -h <unique-uid>:<unique-uid> {} +
 
 # lock down the default open SSH rule this template creates: delete tcp+udp 22 on
 # 0.0.0.0/0, replace with tcp 22 scoped to your own IP
