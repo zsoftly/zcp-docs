@@ -323,6 +323,27 @@ other device.
 
 :::
 
+:::caution
+
+Marketplace App templates like this one get a default SSH firewall rule at deploy time, open to
+**any address** (`0.0.0.0/0`, both TCP and UDP port 22). Not something you created, and not scoped
+to you. Check for it and lock it down the same way as any other port:
+
+```bash
+zcp firewall list --ip <ip-slug>   # look for tcp/udp port 22 rules with CIDR 0.0.0.0/0
+
+zcp firewall delete <ssh-tcp-rule-id> --ip <ip-slug> --yes
+zcp firewall delete <ssh-udp-rule-id> --ip <ip-slug> --yes
+
+zcp firewall create --ip <ip-slug> --protocol tcp --start-port 22 \
+  --end-port 22 --cidr <your-own-public-ip>/32
+```
+
+Plain OS templates (like the subnet router VM in Step 8) don't get this default rule and start with
+nothing open, so this step only applies here.
+
+:::
+
 First boot handles the rest: it generates a unique cookie secret, starts the stack, creates a
 default Headscale user, and mints an API key, written once to `/etc/headplane/credentials.txt` on
 the VM. SSH in to read it. The key can't be retrieved again after.
@@ -563,6 +584,7 @@ zcp vpc acl-replace --network workspace-tier --acl workspace-acl --vpc my-worksp
 # 7. Deploy Headplane (Headscale + admin UI)
 zcp instance create --template zmi-headplane-070-ubuntu2404-100-1 ...
 zcp firewall create ... && zcp portforward create ...   # ports 3000 and 8080
+zcp firewall delete ...   # lock down the default open SSH rule this template creates
 
 # 8. Subnet router
 zcp instance create --template ubuntu-2404-lts-1 ... && zcp instance add-network ...
