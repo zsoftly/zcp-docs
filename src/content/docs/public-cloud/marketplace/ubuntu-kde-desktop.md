@@ -1,5 +1,5 @@
 ---
-title: Ubuntu KDE
+title: Ubuntu KDE Desktop
 ---
 
 Ubuntu KDE provides an Ubuntu 24.04 desktop image with KDE Plasma and XRDP pre-installed for remote

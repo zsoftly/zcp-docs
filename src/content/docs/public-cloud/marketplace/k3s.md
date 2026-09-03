@@ -17,7 +17,7 @@ full operational footprint of a larger Kubernetes platform.
 
 | Resource | Minimum | Recommended |
 | -------- | ------- | ----------- |
-| vCPU     | 2       | 2           |
+| vCPU     | 2       | 4           |
 | RAM      | 2 GB    | 4 GB        |
 | Storage  | 20 GB   | 40 GB       |
 

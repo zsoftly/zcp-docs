@@ -18,7 +18,7 @@ lourde.
 
 | Ressource | Minimum | Recommandé |
 | --------- | ------- | ---------- |
-| vCPU      | 2       | 2          |
+| vCPU      | 2       | 4          |
 | RAM       | 2 Go    | 4 Go       |
 | Stockage  | 20 Go   | 40 Go      |
 

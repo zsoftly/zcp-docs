@@ -1,5 +1,5 @@
 ---
-title: Ubuntu KDE
+title: Ubuntu KDE Desktop
 ---
 
 Ubuntu KDE fournit une image de bureau Ubuntu 24.04 avec KDE Plasma et XRDP préinstallés pour

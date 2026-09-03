@@ -10,7 +10,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-stats">
   <div class="mp-stat">
-    <span class="mp-num">64</span>
+    <span class="mp-num">70</span>
     <span class="mp-label">images actives</span>
   </div>
   <div class="mp-stat">
