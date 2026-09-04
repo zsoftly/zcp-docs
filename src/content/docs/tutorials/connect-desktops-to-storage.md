@@ -16,9 +16,11 @@ About 15 minutes per desktop.
 
 :::note
 
-By default this is a trusted, team-wide share, not per-employee isolated storage. Step 1 explains
-why, and offers a real fix if your organization needs actual per-employee isolation. Decide before
-the employee logs in for the first time; see that step for why the order matters.
+By default this is a trusted, team-wide share, not per-employee isolated storage. If your
+organization needs real per-employee isolation, that's decided in
+[Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops)'s Step 5, before the
+employee's first login. Nothing to configure here for that. See Troubleshooting at the end of this
+tutorial if a desktop already had its first login before that step was applied.
 
 :::
 
@@ -27,67 +29,11 @@ the employee logs in for the first time; see that step for why the order matters
 - [Deploy Private Shared Storage on ZCP](/tutorials/deploy-private-shared-storage) complete: an NFS
   share up and reachable over the tier
 - [Deploy Ubuntu Employee Desktops on ZCP](/tutorials/deploy-ubuntu-employee-desktops) complete: a
-  desktop VM deployed, but **the employee has not logged in over RDP yet**. Step 1 needs that to
-  still be true. If they already have, skip to Troubleshooting at the end of this tutorial.
+  desktop VM, RDP-reachable, with its named employee user
 - The storage VM's tier IP and export path, and both VMs' public IPs and your SSH key, all from
-  those two tutorials.
+  those two tutorials
 
-## Step 1: Decide how this desktop's identity works on the share
-
-NFS, as configured in the storage tutorial, does raw UID-number mapping, not username mapping. There
-is no identity system involved. `useradd`, used by the `ubuntukde` template's first-boot script,
-assigns sequential UIDs starting at 1000, and each desktop VM only ever creates one custom employee
-user. Every employee's desktop user will almost certainly get the same UID (typically `1001`),
-regardless of username. On the shared NFS mount, Unix permissions are enforced by UID number, not by
-name, so every employee's desktop user is, by default, the same identity as far as the filesystem is
-concerned. Any employee can read or write any other employee's files there.
-
-You get to see this for yourself later, in Step 3, once there's a file on the share to look at. For
-now, decide which of the two options below fits your organization, since one of them has to happen
-before the employee ever logs in.
-
-:::note
-
-**Default: accept it.** Treat the share as a trusted, team-wide area rather than per-employee
-isolated storage, and state that plainly rather than implying isolation it doesn't have. No action
-needed. Skip straight to Step 2.
-
-:::
-
-### Advanced: giving this employee a real, unique identity
-
-`ubuntukde` doesn't support setting an explicit UID at deploy time, but Linux lets you reassign one
-with `usermod`, as long as it happens before the employee's first login. Do this now, from a
-separate SSH session as `ubuntu`, before ever handing over the desktop's RDP credentials:
-
-```bash
-ssh ubuntu@<desktop-vm-public-ip>
-```
-
-Pick a genuinely unique value per employee across your whole fleet. The number below is an example,
-not a fixed convention:
-
-```bash
-sudo usermod -u 2001 adjartey
-sudo groupmod -g 2001 adjartey
-sudo find /home/adjartey -exec chown -h 2001:2001 {} +
-id adjartey
-```
-
-![The UID/GID reassignment succeeding on a desktop the employee hasn't logged into yet](../../../assets/connect-desktops-to-storage/04-uid-fix-and-root-squash.png)
-
-That's it. Since this ran before the employee's first login, there's nothing on the share yet under
-the old UID to worry about. Anything they write from here on gets the correct owner automatically.
-Now hand over the RDP credentials and move to Step 2.
-
-:::note
-
-Track which UID belongs to which employee somewhere durable once you start doing this across a
-fleet. There's no template-level bookkeeping for it, it's on you to avoid reusing a value.
-
-:::
-
-## Step 2: Install the NFS client on the desktop
+## Step 1: Install the NFS client on the desktop
 
 Every remaining command in this tutorial runs inside the RDP session on the desktop VM, not on the
 storage VM, and not on your own local machine. Connect over RDP as in the previous tutorial, open a
@@ -112,7 +58,7 @@ earlier tutorials.
 
 :::
 
-## Step 3: Mount the share
+## Step 2: Mount the share
 
 ```bash
 sudo mkdir -p /mnt/company-share
@@ -141,7 +87,8 @@ ls -la /mnt/company-share/
 
 ![Mount confirmed via df -h, then writing and reading a test file successfully](../../../assets/connect-desktops-to-storage/02-mount-and-verify.png)
 
-Now see the raw-UID behavior from Step 1 for yourself. From a separate session on the storage VM:
+NFS enforces permissions by raw UID number, not by username. See it for yourself, from a separate
+session on the storage VM:
 
 ```bash
 ssh ubuntu@<storage-vm-public-ip>
@@ -170,17 +117,18 @@ default, matching the storage VM's own approach in the previous tutorial.
 
 :::
 
-## Step 4: Confirm it's visible in the KDE desktop environment
+## Step 3: Confirm it's visible in the KDE desktop environment
 
 The mounted share appears automatically in Dolphin, the KDE file manager, under **Places → Remote**
 rather than Devices. No manual bookmarking is needed.
 
 ![Dolphin showing the mounted share under Places, Remote, with both files visible](../../../assets/connect-desktops-to-storage/07-dolphin-share-visible.png)
 
-## Step 5: Repeat for each employee desktop
+## Step 4: Repeat for each employee desktop
 
-Once mounted and verified, this becomes a step in the standard onboarding flow. Decide on the
-identity model (Step 1) before each new employee's first login, same as this one.
+Once mounted and verified, this becomes a step in the standard onboarding flow. If your organization
+needs per-employee isolation, that decision happens in the desktop tutorial's own Step 5, before
+each new employee's first login.
 
 ## Clean up
 
@@ -194,21 +142,17 @@ meant to be permanent.
 ## Recap
 
 ```bash
-# before the employee's first login, decide:
-#   default: trusted team-wide share, no action
-#   advanced: sudo usermod -u <unique-uid> <employee> && sudo groupmod -g <unique-uid> <employee>
-#             sudo find /home/<employee> -exec chown -h <unique-uid>:<unique-uid> {} +
-
 sudo apt-get install -y nfs-common
 sudo mkdir -p /mnt/company-share
 sudo mount -t nfs <storage-vm-tier-ip>:/srv/nfs/company-share /mnt/company-share
 # add to /etc/fstab for persistence
 ```
 
-## Troubleshooting: the employee already logged in before you applied the fix
+## Troubleshooting: the employee already logged in before applying Tutorial 3's identity fix
 
-If Step 1's advanced option is what you need but the employee has already used the desktop at least
-once, the fix still works, with two extra hurdles.
+If your organization needs per-employee isolation but a desktop's employee has already used it at
+least once before [Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops)'s
+Step 5 was applied, the fix still works, with two extra hurdles.
 
 **`usermod` refuses while the employee has an active session.** A logged-in desktop session is a lot
 of processes (KDE, xrdp, the shell, all of it):
@@ -228,9 +172,9 @@ ssh ubuntu@<desktop-vm-public-ip>
 sudo loginctl terminate-user adjartey
 ```
 
-Only once that returns no running processes for the user does the fix from Step 1 succeed. The
-employee can log back in immediately after with the same username and password, home directory and
-`sudo` access both intact:
+Only once that returns no running processes for the user does the fix succeed. The employee can log
+back in immediately after with the same username and password, home directory and `sudo` access both
+intact:
 
 ![Logged back in as the reassigned UID, home directory and sudo access both confirmed working](../../../assets/connect-desktops-to-storage/05-uid-fix-login-verified.png)
 
