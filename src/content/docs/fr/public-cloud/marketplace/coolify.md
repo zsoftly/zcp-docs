@@ -28,6 +28,17 @@ Coolify héberge également les applications, les bases de données et les servi
 Il est donc important de dimensionner correctement l'instance en fonction des charges de travail
 prévues.
 
+## Variables d'environnement
+
+Vous pouvez définir cette valeur lors du déploiement de Coolify depuis la marketplace:
+
+| Variable       | Description                                                                     |
+| -------------- | ------------------------------------------------------------------------------- |
+| `COOLIFY_FQDN` | Nom de domaine complet de l'instance Coolify, par exemple `coolify.example.com` |
+
+Si `COOLIFY_FQDN` est fourni, le premier démarrage écrit l'URL applicative Coolify pour ce nom
+d'hôte. Assurez-vous que le DNS pointe vers la VM avant d'utiliser le domaine pour HTTPS.
+
 ## Démarrage
 
 ### 1. Se connecter à la machine virtuelle
@@ -71,7 +82,9 @@ courriel et un mot de passe forts, car l'inscription se ferme après le premier 
 
 ## Gérer Coolify
 
-Coolify s'exécute comme pile Docker Compose dans `/data/coolify/source`.
+Coolify s'exécute comme pile Docker Compose dans `/data/coolify/source`. Les données d'exécution,
+les secrets générés, les journaux de déploiement et les charges client sont stockés sous
+`/data/coolify`.
 
 ```bash
 # Vérifier l'état
