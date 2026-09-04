@@ -52,12 +52,20 @@ cat > deploy.env-userdata.yaml <<'EOF'
 write_files:
   - path: /etc/zmi/deploy.env
     content: |
-      UBUNTUKDE_USERNAME=jane.doe
+      UBUNTUKDE_USERNAME=janedoe
       UBUNTUKDE_PASSWORD=<a-real-password>
 EOF
 ```
 
 ![The cloud-init file being written and its contents confirmed](../../../assets/deploy-ubuntu-employee-desktops/02-cloud-init-userdata.png)
+
+:::caution
+
+The template's first-boot script rejects some usernames outright. Confirmed live with a dotted
+username (`qa.employee`), which failed with `invalid desktop username` and never created the user at
+all. Stick to plain lowercase letters, digits, and underscores; avoid dots and other punctuation.
+
+:::
 
 ## Step 3: Deploy into your private tier
 
@@ -144,7 +152,7 @@ ip -4 -br addr show   # confirm ens8 has a 10.x.x.x tier address, note it for St
 Confirm the cloud-init user from Step 2 actually exists while you're in here:
 
 ```bash
-getent passwd jane.doe
+getent passwd janedoe
 ```
 
 ![getent passwd output confirming the cloud-init user exists](../../../assets/deploy-ubuntu-employee-desktops/09-user-confirmed.png)
@@ -180,10 +188,10 @@ nobody has ever logged in as the employee yet. Pick a genuinely unique value per
 your whole fleet:
 
 ```bash
-sudo usermod -u 2001 jane.doe
-sudo groupmod -g 2001 jane.doe
-sudo find /home/jane.doe -exec chown -h 2001:2001 {} +
-id jane.doe
+sudo usermod -u 2001 janedoe
+sudo groupmod -g 2001 janedoe
+sudo find /home/janedoe -exec chown -h 2001:2001 {} +
+id janedoe
 ```
 
 ![The UID/GID reassignment succeeding cleanly, no active session to block it](../../../assets/deploy-ubuntu-employee-desktops/09b-uid-fix-before-first-login.png)
@@ -261,6 +269,13 @@ public side at all, only SSH, and that's locked to you alone:
 
 If everything looks tiny despite the RDP window filling the screen, set an explicit resolution in
 the RDP client rather than relying on auto-negotiation.
+
+:::
+
+:::note
+
+On first login, KDE may show a PolicyKit prompt: "System policy prevents control of network
+connections." Entering the employee's own password lets the session continue normally.
 
 :::
 
