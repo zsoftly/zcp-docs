@@ -118,23 +118,25 @@ Chemins importants:
 Le pare-feu de la VM autorise les ports IceWarp courants. N'exposez que les ports nécessaires au
 niveau réseau ZCP ou port-forward.
 
-| Port        | Protocole | Rôle                    |
-| ----------- | --------- | ----------------------- |
-| 22          | TCP       | SSH                     |
-| 80          | TCP       | HTTP WebClient/Admin    |
-| 443         | TCP       | HTTPS WebClient/Admin   |
-| 25          | TCP       | SMTP                    |
-| 465         | TCP       | SMTPS                   |
-| 587         | TCP       | Soumission SMTP         |
-| 110         | TCP       | POP3                    |
-| 995         | TCP       | POP3S                   |
-| 143         | TCP       | IMAP                    |
-| 993         | TCP       | IMAPS                   |
-| 5222, 5223  | TCP       | Accès client XMPP       |
-| 5269        | TCP       | Fédération serveur XMPP |
-| 5060        | TCP/UDP   | SIP                     |
-| 5061        | UDP       | SIP TLS                 |
-| 10000-10010 | UDP       | Plage media/RTP         |
+| Port        | Protocole | Rôle                     |
+| ----------- | --------- | ------------------------ |
+| 22          | TCP       | SSH                      |
+| 80          | TCP       | HTTP WebClient/Admin     |
+| 443         | TCP       | HTTPS WebClient/Admin    |
+| 25          | TCP       | SMTP                     |
+| 465         | TCP       | SMTPS                    |
+| 587         | TCP       | Soumission SMTP          |
+| 110         | TCP       | POP3                     |
+| 995         | TCP       | POP3S                    |
+| 143         | TCP       | IMAP                     |
+| 993         | TCP       | IMAPS                    |
+| 1080        | TCP       | Service SOCKS/contrôle   |
+| 5222, 5223  | TCP       | Accès client XMPP        |
+| 5229        | TCP       | Service de collaboration |
+| 5269        | TCP       | Fédération serveur XMPP  |
+| 5060        | TCP/UDP   | SIP                      |
+| 5061        | UDP       | SIP TLS                  |
+| 10000-10010 | UDP       | Plage media/RTP          |
 
 ## DNS et licence
 

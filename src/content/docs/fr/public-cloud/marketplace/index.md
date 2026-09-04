@@ -284,7 +284,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 </div>
 <div class="service-grid mp-solo">
 
-  <a href="/public-cloud/marketplace/ubuntu-kde-desktop" class="service-card">
+  <a href="/fr/public-cloud/marketplace/ubuntu-kde-desktop" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/ubuntukde.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -386,7 +386,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
     </div>
   </a>
 
-  <a href="/public-cloud/marketplace/k3s" class="service-card">
+  <a href="/fr/public-cloud/marketplace/k3s" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/k3s.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -700,7 +700,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
     </div>
   </a>
 
-  <a href="/public-cloud/marketplace/icewarp" class="service-card">
+  <a href="/fr/public-cloud/marketplace/icewarp" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/icewarp.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -763,7 +763,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
     </div>
   </a>
 
-  <a href="/public-cloud/marketplace/opnsense" class="service-card">
+  <a href="/fr/public-cloud/marketplace/opnsense" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/opnsense.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -773,7 +773,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
     </div>
   </a>
 
-  <a href="/public-cloud/marketplace/technitium-dns-server" class="service-card">
+  <a href="/fr/public-cloud/marketplace/technitium-dns-server" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/technitium.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
@@ -927,7 +927,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
     </div>
   </a>
 
-  <a href="/public-cloud/marketplace/hermesagent" class="service-card">
+  <a href="/fr/public-cloud/marketplace/hermesagent" class="service-card">
     <div class="mp-brand-icon">
       <img src="/icons/marketplace/hermesagent.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>

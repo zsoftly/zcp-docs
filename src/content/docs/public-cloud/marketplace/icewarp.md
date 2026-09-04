@@ -127,7 +127,9 @@ network or port-forward layer.
 | 995         | TCP      | POP3S                  |
 | 143         | TCP      | IMAP                   |
 | 993         | TCP      | IMAPS                  |
+| 1080        | TCP      | SOCKS/control service  |
 | 5222, 5223  | TCP      | XMPP client access     |
+| 5229        | TCP      | Collaboration service  |
 | 5269        | TCP      | XMPP server federation |
 | 5060        | TCP/UDP  | SIP                    |
 | 5061        | UDP      | SIP TLS                |
