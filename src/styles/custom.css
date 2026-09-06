@@ -622,7 +622,8 @@
   margin-top: 1px;
   transition: background-color 200ms ease;
 }
-.service-card:hover .service-icon {
+.service-card:is(:hover, :focus-visible) .service-icon,
+.devtool-card:is(:hover, :focus-visible) .service-icon {
   background: var(--icon-bg, #00198a);
   color: #ffffff;
 }
@@ -637,7 +638,8 @@
 :root:not([data-theme='dark']) .service-name {
   color: #00198a;
 }
-.service-card:hover .service-name {
+.service-card:is(:hover, :focus-visible) .service-name,
+.devtool-card:is(:hover, :focus-visible) .service-name {
   text-decoration: underline;
 }
 

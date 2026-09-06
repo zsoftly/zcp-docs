@@ -4,7 +4,6 @@
 import config from 'virtual:starlight/user-config';
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import Search from 'virtual:starlight/components/Search';
-import SiteTitle from 'virtual:starlight/components/SiteTitle';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import type { Props } from '@astrojs/starlight/props';
@@ -12,6 +11,7 @@ import { CLOUD_LOGIN_URL, CLOUD_REGISTER_URL, websiteUrl } from '../data/site';
 
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
+const { siteTitleHref } = Astro.locals.starlightRoute;
 const websiteLinks = [
   { label: Astro.locals.t('zs.header.services'), href: `${websiteUrl}/services` },
   { label: Astro.locals.t('zs.header.compare'), href: `${websiteUrl}/compare` },
@@ -26,7 +26,10 @@ const websiteLinks = [
 
 <div class="header sl-flex">
   <div class="title-wrapper sl-flex">
-    <SiteTitle {...Astro.props} />
+    <a href={siteTitleHref} class="site-title sl-flex">
+      <img src="/zcp-icon.svg" alt="" width="28" height="28" aria-hidden="true" />
+      <span translate="no">ZSoftly Cloud Platform</span>
+    </a>
   </div>
   <div class="sl-flex print:hidden">
     {shouldRenderSearch && <Search {...Astro.props} />}
@@ -80,6 +83,41 @@ const websiteLinks = [
       padding: 0.25rem;
       margin: -0.25rem;
       min-width: 0;
+    }
+
+    .site-title {
+      align-items: center;
+      color: var(--sl-color-text-accent);
+      flex-shrink: 0;
+      gap: 0.625rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .site-title img {
+      flex-shrink: 0;
+      height: 1.75rem;
+      max-width: none;
+      width: 1.75rem;
+    }
+
+    .site-title span {
+      font-size: var(--sl-text-sm);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    /* The desktop utility controls appear at 48rem. Keep the full icon visible
+       while their combined width is tight, then restore the wordmark once the
+       header has enough room for both. */
+    @media (min-width: 48rem) and (max-width: 71.999rem) {
+      .site-title {
+        gap: 0;
+      }
+
+      .site-title span {
+        display: none;
+      }
     }
 
     .right-group,

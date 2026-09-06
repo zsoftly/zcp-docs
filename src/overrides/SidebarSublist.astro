@@ -5,10 +5,9 @@ import SidebarRestorePoint from '@astrojs/starlight/components/SidebarRestorePoi
 interface Props {
   sublist: SidebarEntry[];
   nested?: boolean;
-  zcpDepth?: number;
 }
 
-const { sublist, nested, zcpDepth } = Astro.props;
+const { sublist, nested } = Astro.props;
 
 const isFrench = Astro.locals.starlightRoute.locale === 'fr';
 
@@ -23,16 +22,17 @@ function hasCurrentEntry(entries: SidebarEntry[]): boolean {
 }
 
 function firstLinkHref(entries: SidebarEntry[]): string | undefined {
-  return entries.find((entry) => entry.type === 'link')?.href;
-}
+  const overview = entries.find(
+    (entry) => entry.type === 'link' && /(?:^|\/)overview\/?$/.test(entry.href)
+  );
+  if (overview?.type === 'link') return overview.href;
 
-function isZcpRoot(entry: SidebarEntry): boolean {
-  return entry.type === 'group' && entry.label === 'ZCP';
-}
+  for (const entry of entries) {
+    if (entry.type === 'link') return entry.href;
 
-function isMarketplaceCategory(entries: SidebarEntry[]): boolean {
-  const href = firstLinkHref(entries);
-  return /^\/(?:fr\/)?public-cloud\/marketplace\/[^/]+\/?$/.test(href ?? '');
+    const href = firstLinkHref(entry.entries);
+    if (href) return href;
+  }
 }
 ---
 
@@ -59,16 +59,8 @@ function isMarketplaceCategory(entries: SidebarEntry[]): boolean {
         );
       }
 
-      const isZcpCategory = zcpDepth === 0;
-      const isLinkedMarketplaceCategory = zcpDepth === 1 && isMarketplaceCategory(entry.entries);
-      const href =
-        isZcpCategory || isLinkedMarketplaceCategory ? firstLinkHref(entry.entries) : undefined;
+      const href = firstLinkHref(entry.entries);
       const isOpen = hasCurrentEntry(entry.entries) || !entry.collapsed;
-      const childZcpDepth = isZcpRoot(entry)
-        ? 0
-        : zcpDepth === undefined
-          ? undefined
-          : zcpDepth + 1;
 
       return (
         <li class:list={{ 'has-linked-label': Boolean(href) }}>
@@ -107,7 +99,7 @@ function isMarketplaceCategory(entries: SidebarEntry[]): boolean {
               </summary>
             )}
             <SidebarRestorePoint />
-            <Astro.self sublist={entry.entries} nested zcpDepth={childZcpDepth} />
+            <Astro.self sublist={entry.entries} nested />
           </details>
         </li>
       );
