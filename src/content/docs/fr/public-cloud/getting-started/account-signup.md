@@ -98,8 +98,8 @@ crédit promotionnel de lancement supplémentaire à votre compte. Il est valide
 pour un total de crédit promotionnel de lancement pouvant atteindre **300 $
 CA**.
 
-Le crédit supplémentaire de **200 $ CA** s'applique aux plans de calcul admissibles allant de Small
-à XLarge. L'offre est disponible jusqu'au **31 décembre 2026**.
+Le crédit promotionnel de lancement supplémentaire de **200 $ CA** s'applique aux plans de calcul
+admissibles allant de Small à XLarge. L'offre est disponible jusqu'au **31 décembre 2026**.
 
 ### Modes de paiement
 

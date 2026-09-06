@@ -91,8 +91,8 @@ number** and referencing
 credit to your account. It is valid for **60 days**, bringing your total launch promotional credit
 to up to **CA$300**.
 
-The extra **CA$200** credit applies to eligible Small through XLarge compute plans. The offer is
-available until **December 31, 2026**.
+The additional **CA$200 in launch promotional credit** applies to eligible Small through XLarge
+compute plans. The offer is available until **December 31, 2026**.
 
 ### Payment Methods
 
