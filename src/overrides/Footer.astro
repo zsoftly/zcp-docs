@@ -1,6 +1,7 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Footer.astro';
+import { PEERPUSH_BADGE_URL, PEERPUSH_LISTING_URL } from '../data/peerpush';
 import { websiteUrl } from '../data/site';
 import ConsentBanner from './ConsentBanner.astro';
 
@@ -55,16 +56,34 @@ const buildDate = new Date().toISOString().slice(0, 10);
       © {new Date().getFullYear()} ZSoftly Technologies Inc.
       <span class="site-footer__version">{Astro.locals.t('zs.footer.build')} {buildDate}</span>
     </p>
-    <a
-      data-status-badge-link
-      hidden
-      class="site-footer__status"
-      href="https://status.zcp.zsoftly.ca/status-page/e6c6cd2d-5290-4091-a150-2d046be03d75"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <img data-status-badge alt={Astro.locals.t('zs.footer.statusBadgeAlt')} height="20" />
-    </a>
+    <div class="site-footer__badges">
+      <a
+        data-status-badge-link
+        hidden
+        class="site-footer__status"
+        href="https://status.zcp.zsoftly.ca/status-page/e6c6cd2d-5290-4091-a150-2d046be03d75"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img data-status-badge alt={Astro.locals.t('zs.footer.statusBadgeAlt')} height="20" />
+      </a>
+      <a
+        class="site-footer__peerpush"
+        href={PEERPUSH_LISTING_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src={PEERPUSH_BADGE_URL}
+          alt={Astro.locals.t('zs.footer.peerpushBadgeAlt')}
+          width="230"
+          height="65"
+          loading="lazy"
+          decoding="async"
+          referrerpolicy="no-referrer"
+        />
+      </a>
+    </div>
     <script is:inline>
       (function () {
         var token = (window.__ZCP_ENV || {}).statusBadgeToken;
@@ -91,12 +110,34 @@ const buildDate = new Date().toISOString().slice(0, 10);
     font-variant-numeric: tabular-nums;
   }
 
+  .site-footer__badges {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
   .site-footer__status {
     display: inline-block;
-    margin-block-start: 0.75rem;
   }
 
   .site-footer__status[hidden] {
     display: none;
+  }
+
+  .site-footer__peerpush {
+    display: inline-block;
+  }
+
+  .site-footer__peerpush:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 3px;
+  }
+
+  .site-footer__peerpush img {
+    display: block;
+    height: auto;
+    max-width: 8.75rem;
+    width: 100%;
   }
 </style>

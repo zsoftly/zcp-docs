@@ -10,11 +10,13 @@ up billing, and verify your account.
 
 :::tip[Start building for free]
 
-New accounts receive **CA$100 in credit** at signup, valid for **30 days**. After spending
-**CA$200**
-on eligible compute plans, you can request another **CA$200**, for up to **CA$300 total**. Account
-verification requires a **CA$1.00 payment**. We credit it back to your account as infrastructure
-credit, so you keep the full value.
+Eligible new accounts receive
+**CA$100 in launch promotional credit** at signup, valid for **30 days**.
+After spending **CA$200**
+on eligible compute plans, you can request an additional
+**CA$200 in
+launch promotional credit**, valid for **60 days**, for up to **CA$300 in total launch
+promotional credit**.
 
 :::
 
@@ -68,35 +70,30 @@ Once verified, ZSoftly Public Cloud sends a welcome email confirming your accoun
 ### Set Up Billing Method
 
 - After verifying your account, you'll be prompted to set up your billing information.
-- Choose a billing type:
-  - **Individual**: For personal use. Enter details like your address.
-  - **Company**: For organizational use. Provide details such as your company name, website, and
-    address.
+- Choose an account type:
+  - **Individual**: For personal use. If you select Postpaid, your initial billing threshold is
+    **CAD 100**. Enter details like your address.
+  - **Company**: For organizational use. If you select Postpaid, your initial billing threshold is
+    **CAD 300**. Provide details such as your company name, website, and address.
 
 - If you have a coupon, redeem it at checkout to receive a discount or promotional offer.
 
-:::note
+### Launch Promotional Credit
 
-To create your account, a minimum payment of **CA$1.00** is required (processed securely through
-Stripe, shown as **Infra Credits**). This is used to verify and validate your account. The amount
-you add is credited to your account as **infra credit you can spend**, so you keep the full value.
+Eligible new accounts receive **CA$100 in launch promotional credit** automatically at sign-up,
+valid for **30 days**. Launch promotional credit is separate from your billing option, account
+credit, and Postpaid billing threshold.
 
-:::
-
-![Stripe checkout for the CA$1.00 Infra Credits account-activation payment](../../../../assets/account-signup/billing-stripe-checkout.webp)
-
-### Account Credit
-
-New accounts receive **CA$100 in credit** automatically at sign-up, valid for **30 days**.
-
-After you spend **CA$200 on eligible compute plans**, you can claim an extra **CA$200 in credit**:
-request it from your account email address through our
+After you spend **CA$200 on eligible compute plans**, you can claim an additional **CA$200 in launch
+promotional credit**: request it from your account email address through our
 [contact page](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), including your **account
-number** and referencing **"$200 Credit Request"**. We'll apply the **CA$200** credit to your
-account directly, with no expiration, for up to **CA$300 total**.
+number** and referencing
+**"$200 Credit Request"**. We'll apply the additional launch promotional
+credit to your account. It is valid for **60 days**, bringing your total launch promotional credit
+to up to **CA$300**.
 
-The extra **CA$200** credit does not expire and applies to eligible Small through XLarge compute
-plans. The offer is available until **December 31, 2026**.
+The additional **CA$200 in launch promotional credit** applies to eligible Small through XLarge
+compute plans. The offer is available until **December 31, 2026**.
 
 ### Payment Methods
 
@@ -106,40 +103,75 @@ ZSoftly Public Cloud accepts:
 - **PayPal**: pay from your PayPal balance or a linked account.
 - **Bank Transfer / Wire**: for manual payments, contact our
   [Sales team](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) and they will arrange the
-  transfer and apply the funds to your account as infra credit.
+  transfer and apply the funds to your account as account credit.
 
 Card and PayPal are self-serve in the portal. Bank transfer and wire are arranged with Sales.
 
 ### Choose a Payment Plan
 
-#### Prepaid (Recommended):
+#### Prepaid
 
-- Prepaid accounts require you to load credits in advance, which you'll use to create resources
-  within the platform.
-- To use resources, purchase infrastructure credits by selecting the desired amount.
-- Pay with **Stripe** or **PayPal** and click **Proceed** to complete the payment, or contact
+- Prepaid requires account credit before you provision a new service. Usage reduces your account
+  credit, and you cannot create a new service without enough credit.
+- To activate Prepaid, add account credit. A minimum **CA$1.00** payment verifies and validates your
+  account. ZCP adds that payment to your account credit, so you can spend the full amount.
+- Active usage or a renewal can still leave your account credit negative. Your next top-up clears a
+  negative balance before adding usable credit.
+- Pay with **Stripe** or **PayPal** and click **Proceed** to complete a top-up, or contact
   [Sales](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) to pay by bank transfer or wire.
+- Choose Prepaid for a quarterly or longer billing cycle.
 
-#### Postpaid:
+#### Postpaid
 
-- Postpaid accounts allow you to pay after consuming resources. This option requires additional
-  verification, such as detailed billing information or credit checks.
-- Add **Stripe** or **PayPal** as your payment method and click **Save Card** to complete setup, or
-  contact [Sales](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) to arrange manual
-  payment by bank transfer or wire.
+- Postpaid lets you use services first and pay invoices later. It applies to hourly and monthly
+  service cycles.
+- To activate Postpaid, save a credit card through Stripe. Postpaid accepts only that Stripe-saved
+  credit card. PayPal, bank transfers, wires, and manual payments are not accepted for Postpaid.
+- Your initial Postpaid billing threshold is **CAD 100** for a personal account and **CAD 300** for
+  an organization account. When usage reaches the threshold, ZCP generates an invoice and
+  auto-charges your saved card. A new threshold cycle then begins.
+
+Choose Prepaid or Postpaid during signup. After you create your account, it remains in that billing
+mode for the life of the account.
 
 ![Choosing a payment plan with Prepaid and Postpaid options](../../../../assets/account-signup/payment-plan.webp)
+
+![Stripe checkout for the CA$1.00 Prepaid account-credit top-up](../../../../assets/account-signup/billing-stripe-checkout.webp)
+
+The Postpaid signup step shows the Postpaid option and Stripe as the only payment method. Save your
+credit card through Stripe to continue.
+
+<div class="postpaid-signup-screenshot">
+  <img
+    class="postpaid-signup-screenshot__light"
+    src="/assets/account-signup/postpaid-signup-light.webp"
+    alt="Postpaid selected during signup, with Stripe as the only payment method and a Save Card button"
+    width="1600"
+    height="944"
+    loading="lazy"
+    decoding="async"
+  />
+  <img
+    class="postpaid-signup-screenshot__dark"
+    src="/assets/account-signup/postpaid-signup-dark.webp"
+    alt="Postpaid selected during signup in dark mode, with Stripe as the only payment method and a Save Card button"
+    width="1600"
+    height="963"
+    loading="lazy"
+    decoding="async"
+  />
+</div>
 
 ### Final Steps
 
 - Review the **Terms & Conditions** of the platform carefully.
 - Accept the terms to complete the registration process.
 
-- **Prepaid Users**: Your account status will display as active, with the account type set to
-  prepaid.
+- **Prepaid Users**: Your account status will display as active, with the billing option set to
+  Prepaid.
 
-- **Postpaid Users**: After verification, your account will display as active with the account type
-  set to postpaid.
+- **Postpaid Users**: After verification, your account will display as active with the billing
+  option set to Postpaid.
 
 ### Sign in to the portal
 

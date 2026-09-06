@@ -204,6 +204,33 @@
   background-color: var(--sl-color-gray-6);
 }
 
+/* Linked sidebar groups have distinct targets: the overview link remains visible
+   outside the native details element, while its summary controls expansion.
+   The summary is positioned over the end of the link row, so closed details do
+   not hide the overview link and expanded child links still flow below it. */
+.sidebar li.has-linked-label {
+  position: relative;
+}
+.sidebar li.has-linked-label > .group-link {
+  padding-inline-end: 3rem;
+}
+.sidebar li.has-linked-label > details.linked-group > .group-toggle {
+  display: flex;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: calc(1.4em + 0.6rem);
+  padding: 0;
+}
+.sidebar li.has-linked-label > details.linked-group > .group-toggle:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: -2px;
+  border-radius: 0.25rem;
+}
+
 .sidebar .group-label .large {
   font-size: 0.875rem;
   font-weight: 600;
@@ -302,6 +329,12 @@
     align-items: center;
     display: flex;
     min-height: 2.5rem;
+  }
+
+  .sidebar li.has-linked-label > .group-link,
+  .sidebar li.has-linked-label > details.linked-group > .group-toggle {
+    min-height: 2.75rem;
+    height: 2.75rem;
   }
 
   .sidebar ul.top-level > li + li {
@@ -589,7 +622,8 @@
   margin-top: 1px;
   transition: background-color 200ms ease;
 }
-.service-card:hover .service-icon {
+.service-card:is(:hover, :focus-visible) .service-icon,
+.devtool-card:is(:hover, :focus-visible) .service-icon {
   background: var(--icon-bg, #00198a);
   color: #ffffff;
 }
@@ -604,7 +638,8 @@
 :root:not([data-theme='dark']) .service-name {
   color: #00198a;
 }
-.service-card:hover .service-name {
+.service-card:is(:hover, :focus-visible) .service-name,
+.devtool-card:is(:hover, :focus-visible) .service-name {
   text-decoration: underline;
 }
 
@@ -729,6 +764,29 @@
   color: var(--sl-color-gray-2);
   margin: 0 0 1rem;
   line-height: 1.55;
+}
+.peerpush-card__badge {
+  display: block;
+  margin-block: 0.25rem 0.875rem;
+}
+.peerpush-card__badge:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 3px;
+}
+.peerpush-card__badge img {
+  display: block;
+  height: auto;
+  max-width: 14.375rem;
+  width: 100%;
+}
+.peerpush-card__recognition,
+.peerpush-card__message {
+  color: var(--sl-color-gray-2);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.peerpush-card__recognition {
+  margin-bottom: 0.5rem;
 }
 .sidebar-cta {
   font-size: 0.8125rem;
@@ -966,6 +1024,19 @@
   display: none;
 }
 
+/* ── Theme-specific documentation screenshots ──────────────── */
+.postpaid-signup-screenshot__dark {
+  display: none;
+}
+
+:root[data-theme='dark'] .postpaid-signup-screenshot__light {
+  display: none;
+}
+
+:root[data-theme='dark'] .postpaid-signup-screenshot__dark {
+  display: block;
+}
+
 /* ============================================================
    Site footer
    ============================================================ */
@@ -1131,22 +1202,6 @@ body,
   .sidebar-pane {
     --zs-mobile-menu-surface: #eef4ff;
     background-color: var(--zs-mobile-menu-surface);
-    overflow: hidden;
-  }
-
-  .sidebar-pane .sidebar-content {
-    height: 100%;
-    min-height: 0;
-    padding-bottom: 0;
-  }
-
-  .sidebar-pane .sidebar-content > sl-sidebar-state-persist {
-    display: block;
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    padding-bottom: 1rem;
-    scrollbar-gutter: stable;
   }
 
   :root[data-theme='dark'] .page > header.header {

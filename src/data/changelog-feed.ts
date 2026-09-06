@@ -7,6 +7,13 @@ export type ChangelogFeedEntry = {
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'Postpaid billing is available',
+    description:
+      'Customers can now choose Postpaid billing during signup for eligible hourly and monthly services. The selected Prepaid or Postpaid mode remains for the life of the account. Postpaid requires a credit card saved through Stripe.',
+    pubDate: '2026-09-01',
+    slug: 'postpaid-billing',
+  },
+  {
     title: 'Intel compute in Montréal (YUL)',
     description:
       'General-purpose ci2 and memory-optimized cim2 Intel plans, custom Intel configurations, and Intel-backed Kubernetes node capacity are now available in the YUL region.',
