@@ -86,15 +86,30 @@ const buildDate = new Date().toISOString().slice(0, 10);
     </div>
     <script is:inline>
       (function () {
-        var token = (window.__ZCP_ENV || {}).statusBadgeToken;
-        if (!token) return;
-        var img = document.querySelector('[data-status-badge]');
-        var link = document.querySelector('[data-status-badge-link]');
-        if (!img || !link) return;
-        img.src =
-          'https://status.zcp.zsoftly.ca/api/status-page/badge/e6c6cd2d-5290-4091-a150-2d046be03d75?token=' +
-          encodeURIComponent(token);
-        link.hidden = false;
+        const BADGE_URL =
+          'https://status.zcp.zsoftly.ca/api/status-page/badge/e6c6cd2d-5290-4091-a150-2d046be03d75?token=';
+
+        function initStatusBadge() {
+          const token = (window.__ZCP_ENV || {}).statusBadgeToken;
+          if (!token) return;
+          const link = document.querySelector('[data-status-badge-link]');
+          const img = document.querySelector('[data-status-badge]');
+          if (!link || !img || link.dataset.statusBadgeReady === 'true') return;
+          img.src = BADGE_URL + encodeURIComponent(token);
+          link.hidden = false;
+          link.dataset.statusBadgeReady = 'true';
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initStatusBadge, { once: true });
+        } else {
+          initStatusBadge();
+        }
+
+        if (!window.__zcpStatusBadgeBound) {
+          window.__zcpStatusBadgeBound = true;
+          document.addEventListener('astro:page-load', initStatusBadge);
+        }
       })();
     </script>
   </div>
