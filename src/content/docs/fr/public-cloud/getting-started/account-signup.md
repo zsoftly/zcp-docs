@@ -160,7 +160,7 @@ Enregistrez votre carte de crédit dans Stripe pour continuer.
   <img
     class="postpaid-signup-screenshot__light"
     src="/assets/account-signup/postpaid-signup-light.webp"
-    alt="Option Postpayé sélectionnée pendant l'inscription, avec Stripe comme seul mode de paiement et le bouton Save Card"
+    alt="Option Postpayé sélectionnée pendant l'inscription, avec Stripe comme seul mode de paiement et un bouton pour enregistrer une carte"
     width="1600"
     height="944"
     loading="lazy"
@@ -169,7 +169,7 @@ Enregistrez votre carte de crédit dans Stripe pour continuer.
   <img
     class="postpaid-signup-screenshot__dark"
     src="/assets/account-signup/postpaid-signup-dark.webp"
-    alt="Option Postpayé sélectionnée pendant l'inscription en mode sombre, avec Stripe comme seul mode de paiement et le bouton Save Card"
+    alt="Option Postpayé sélectionnée pendant l'inscription en mode sombre, avec Stripe comme seul mode de paiement et un bouton pour enregistrer une carte"
     width="1600"
     height="963"
     loading="lazy"
