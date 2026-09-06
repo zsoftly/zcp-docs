@@ -138,20 +138,44 @@ sont organisés avec l'équipe des ventes.
 
 - Le mode postpayé vous permet d'utiliser des services avant de payer les factures. Il s'applique
   aux cycles de service horaires et mensuels.
-- Pour activer le mode postpayé, enregistrez et validez une carte de crédit ou de débit compatible.
-  PayPal, les virements bancaires, les télévirements et les paiements manuels n'activent pas le mode
-  postpayé.
+- Pour activer le mode postpayé, enregistrez une carte de crédit dans Stripe. Le mode postpayé
+  accepte uniquement cette carte enregistrée dans Stripe. PayPal, les virements bancaires, les
+  télévirements et les paiements manuels ne sont pas acceptés pour le mode postpayé.
 - Votre seuil de facturation postpayée initial est de **100 CAD** pour un compte personnel et de
   **300 CAD** pour un compte d'organisation. Lorsque votre utilisation atteint ce seuil, ZCP génère
   une facture et prélève automatiquement votre carte enregistrée. Un nouveau cycle de seuil commence
   ensuite.
 
-Vous ne pouvez pas passer du Prépayé au Postpayé, ou l'inverse, après l'activation. Choisissez votre
-option de facturation avant de provisionner des services.
+Choisissez Prépayé ou Postpayé pendant l'inscription. Après la création de votre compte, il reste
+dans ce mode de facturation pendant toute sa durée de vie.
 
 ![Choix d'un plan de paiement avec les options Prépayé et Postpayé](../../../../../assets/account-signup/payment-plan.webp)
 
 ![Paiement Stripe de 1,00 $ CA pour un ajout de crédit de compte prépayé](../../../../../assets/account-signup/billing-stripe-checkout.webp)
+
+L'étape d'inscription postpayée affiche l'option Postpayé et Stripe comme seul mode de paiement.
+Enregistrez votre carte de crédit dans Stripe pour continuer.
+
+<div class="postpaid-signup-screenshot">
+  <img
+    class="postpaid-signup-screenshot__light"
+    src="/assets/account-signup/postpaid-signup-light.webp"
+    alt="Option Postpayé sélectionnée pendant l'inscription, avec Stripe comme seul mode de paiement et le bouton Save Card"
+    width="1600"
+    height="944"
+    loading="lazy"
+    decoding="async"
+  />
+  <img
+    class="postpaid-signup-screenshot__dark"
+    src="/assets/account-signup/postpaid-signup-dark.webp"
+    alt="Option Postpayé sélectionnée pendant l'inscription en mode sombre, avec Stripe comme seul mode de paiement et le bouton Save Card"
+    width="1600"
+    height="963"
+    loading="lazy"
+    decoding="async"
+  />
+</div>
 
 ### Dernières étapes
 

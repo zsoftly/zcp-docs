@@ -22,10 +22,10 @@ Choisissez **Prépayé** si vous souhaitez ajouter du crédit à votre compte av
 nouveau service. Choisissez **Postpayé** si vous souhaitez utiliser des services d'abord et payer
 les factures plus tard.
 
-| Option       | Fonctionnement                                                                                                                                                                                                                                                                                                                                                               | À choisir si                                                                                                       |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **Prépayé**  | Ajoutez du crédit à votre compte avant de provisionner un nouveau service. Votre utilisation réduit ce solde et vous ne pouvez pas créer un nouveau service sans crédit suffisant. Une utilisation active ou un renouvellement peut tout de même rendre le solde négatif. Votre prochain ajout de crédit règle le solde négatif avant d'ajouter du crédit utilisable.        | Vous souhaitez financer votre utilisation à l'avance ou utiliser un cycle de facturation trimestriel ou plus long. |
-| **Postpayé** | Enregistrez et validez une carte de crédit ou de débit compatible, puis utilisez les services avant de payer les factures. Le mode postpayé s'applique aux cycles horaires et mensuels. Lorsque votre utilisation atteint votre seuil de facturation, ZCP génère une facture et prélève automatiquement votre carte enregistrée. Un nouveau cycle de seuil commence ensuite. | Vous souhaitez payer après avoir utilisé des services horaires ou mensuels avec une carte enregistrée.             |
+| Option       | Fonctionnement                                                                                                                                                                                                                                                                                                                                                                                             | À choisir si                                                                                                       |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **Prépayé**  | Ajoutez du crédit à votre compte avant de provisionner un nouveau service. Votre utilisation réduit ce solde et vous ne pouvez pas créer un nouveau service sans crédit suffisant. Une utilisation active ou un renouvellement peut tout de même rendre le solde négatif. Votre prochain ajout de crédit règle le solde négatif avant d'ajouter du crédit utilisable.                                      | Vous souhaitez financer votre utilisation à l'avance ou utiliser un cycle de facturation trimestriel ou plus long. |
+| **Postpayé** | Enregistrez une carte de crédit dans Stripe, puis utilisez des services horaires ou mensuels avant de payer les factures. Lorsque votre utilisation atteint votre seuil de facturation, ZCP génère une facture et prélève cette carte. Un nouveau cycle de seuil commence ensuite. PayPal, les virements bancaires, les télévirements et les paiements manuels ne sont pas acceptés pour le mode postpayé. | Vous souhaitez payer après avoir utilisé des services avec une carte de crédit enregistrée dans Stripe.            |
 
 Chaque cycle de facturation postpayée commence avec un seuil de facturation initial de **100 CAD**
 pour un compte personnel et de **300 CAD** pour un compte d'organisation. Lorsque votre utilisation
@@ -33,8 +33,9 @@ atteint ce seuil, ZCP génère une facture et prélève automatiquement votre ca
 seuil n'est pas une limite de dépenses. Il est distinct du crédit à votre compte prépayé et du
 crédit promotionnel de lancement.
 
-Vous ne pouvez pas passer du Prépayé au Postpayé, ou l'inverse, après l'activation. Choisissez
-l'option qui convient à votre cycle de service et à votre mode de paiement avant votre inscription.
+Choisissez Prépayé ou Postpayé pendant l'inscription. Après la création de votre compte, il reste
+dans ce mode de facturation pendant toute sa durée de vie. Le mode postpayé accepte uniquement une
+carte de crédit enregistrée dans Stripe.
 
 Vous pouvez ajouter du crédit à votre compte dans **Billing → Modes de paiement** si vous utilisez
 le mode prépayé.

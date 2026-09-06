@@ -989,6 +989,19 @@
   display: none;
 }
 
+/* ── Theme-specific documentation screenshots ──────────────── */
+.postpaid-signup-screenshot__dark {
+  display: none;
+}
+
+:root[data-theme='dark'] .postpaid-signup-screenshot__light {
+  display: none;
+}
+
+:root[data-theme='dark'] .postpaid-signup-screenshot__dark {
+  display: block;
+}
+
 /* ============================================================
    Site footer
    ============================================================ */

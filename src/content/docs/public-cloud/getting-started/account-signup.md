@@ -125,18 +125,42 @@ Card and PayPal are self-serve in the portal. Bank transfer and wire are arrange
 
 - Postpaid lets you use services first and pay invoices later. It applies to hourly and monthly
   service cycles.
-- To activate Postpaid, save and validate a compatible credit or debit card. PayPal, bank transfer,
-  wire transfer, and manual payment do not activate Postpaid.
+- To activate Postpaid, save a credit card through Stripe. Postpaid accepts only that Stripe-saved
+  credit card. PayPal, bank transfers, wires, and manual payments are not accepted for Postpaid.
 - Your initial Postpaid billing threshold is **CAD 100** for a personal account and **CAD 300** for
   an organization account. When usage reaches the threshold, ZCP generates an invoice and
   auto-charges your saved card. A new threshold cycle then begins.
 
-You cannot switch between Prepaid and Postpaid after activation. Choose your billing option before
-you provision services.
+Choose Prepaid or Postpaid during signup. After you create your account, it remains in that billing
+mode for the life of the account.
 
 ![Choosing a payment plan with Prepaid and Postpaid options](../../../../assets/account-signup/payment-plan.webp)
 
 ![Stripe checkout for the CA$1.00 Prepaid account-credit top-up](../../../../assets/account-signup/billing-stripe-checkout.webp)
+
+The Postpaid signup step shows the Postpaid option and Stripe as the only payment method. Save your
+credit card through Stripe to continue.
+
+<div class="postpaid-signup-screenshot">
+  <img
+    class="postpaid-signup-screenshot__light"
+    src="/assets/account-signup/postpaid-signup-light.webp"
+    alt="Postpaid selected during signup, with Stripe as the only payment method and a Save Card button"
+    width="1600"
+    height="944"
+    loading="lazy"
+    decoding="async"
+  />
+  <img
+    class="postpaid-signup-screenshot__dark"
+    src="/assets/account-signup/postpaid-signup-dark.webp"
+    alt="Postpaid selected during signup in dark mode, with Stripe as the only payment method and a Save Card button"
+    width="1600"
+    height="963"
+    loading="lazy"
+    decoding="async"
+  />
+</div>
 
 ### Final Steps
 

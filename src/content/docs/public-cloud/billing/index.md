@@ -20,18 +20,18 @@ Navigate to **Billing → Summary** for an overview of your account's financial 
 Choose **Prepaid** if you want to fund account credit before provisioning a new service. Choose
 **Postpaid** if you want to use services first and pay invoices later.
 
-| Option       | How it works                                                                                                                                                                                                                                                                                   | Choose it when                                                                |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| **Prepaid**  | Add account credit before you provision a new service. Usage reduces that balance, and you cannot create a new service without enough credit. Active usage or a renewal can still leave the balance negative. Your next top-up clears a negative balance before adding usable credit.          | You want to fund usage in advance or use a quarterly or longer billing cycle. |
-| **Postpaid** | Save and validate a compatible credit or debit card, then use services before paying invoices. Postpaid applies to hourly and monthly service cycles. When usage reaches your billing threshold, ZCP generates an invoice and auto-charges your saved card. A new threshold cycle then begins. | You want to pay after using hourly or monthly services with a saved card.     |
+| Option       | How it works                                                                                                                                                                                                                                                                                                   | Choose it when                                                                |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Prepaid**  | Add account credit before you provision a new service. Usage reduces that balance, and you cannot create a new service without enough credit. Active usage or a renewal can still leave the balance negative. Your next top-up clears a negative balance before adding usable credit.                          | You want to fund usage in advance or use a quarterly or longer billing cycle. |
+| **Postpaid** | Save a credit card through Stripe, then use hourly or monthly services before paying invoices. When usage reaches your billing threshold, ZCP generates an invoice and charges that card. A new threshold cycle then begins. PayPal, bank transfers, wires, and manual payments are not accepted for Postpaid. | You want to pay after using services with a Stripe-saved credit card.         |
 
 Each Postpaid billing cycle starts with an initial billing threshold of **CAD 100** for a personal
 account and **CAD 300** for an organization account. When usage reaches this threshold, ZCP
 generates an invoice and automatically charges your saved card. This threshold is not a spending
 limit and is separate from Prepaid account credit and launch promotional credit.
 
-You cannot switch between Prepaid and Postpaid after activation. Choose the option that fits your
-service cycle and payment method before you sign up.
+Choose Prepaid or Postpaid during signup. After you create your account, it remains in that billing
+mode for the life of the account. Postpaid accepts only a credit card saved through Stripe.
 
 You can add account credit through **Billing → Payment Methods** when you use Prepaid.
 
