@@ -25,6 +25,17 @@ and a web dashboard, while keeping all your data under your control.
 
 Coolify also runs the applications you deploy, so size the instance for those workloads too.
 
+## Environment variables
+
+You can optionally set this value when deploying Coolify from the marketplace:
+
+| Variable       | Description                                                                         |
+| -------------- | ----------------------------------------------------------------------------------- |
+| `COOLIFY_FQDN` | Fully qualified domain name for the Coolify instance, such as `coolify.example.com` |
+
+If `COOLIFY_FQDN` is provided, first boot writes the Coolify application URL for that hostname. Make
+sure DNS points to the VM before using the domain for HTTPS.
+
 ## Getting started
 
 ### 1. Connect to your VM
@@ -65,7 +76,8 @@ immediately, since registration closes after the first user.
 
 ## Managing Coolify
 
-Coolify runs as a Docker Compose stack in `/data/coolify/source`.
+Coolify runs as a Docker Compose stack in `/data/coolify/source`. Runtime data, generated secrets,
+deployment logs, and customer workloads are stored under `/data/coolify`.
 
 ```bash
 # Check status
