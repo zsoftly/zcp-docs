@@ -11,12 +11,13 @@ facturation et vérifier votre compte.
 :::tip[Commencer à bâtir gratuitement]
 
 Les nouveaux comptes reçoivent **100
-$ CA de crédit** à l'inscription, valide pendant **30 jours**.
-Après avoir dépensé **200 $ CA sur des
-plans de calcul admissibles**, vous pouvez demander **200
-$ CA** de crédit supplémentaire, sans date d'expiration, pour un total pouvant atteindre **300 $
-CA**. La vérification du compte exige un paiement de **1,00 $ CA**. Nous le recréditons à votre
-compte sous forme de crédit d'infrastructure, vous en conservez donc la pleine valeur.
+$ CA de crédit promotionnel de lancement** à l'inscription,
+valide pendant **30 jours**. Après avoir dépensé **200 $
+CA sur des plans de calcul admissibles**, vous pouvez demander **200
+$ CA de crédit promotionnel de lancement supplémentaire**, valide
+pendant **60 jours**, pour un total de crédit promotionnel de lancement pouvant atteindre
+**300 $
+CA**.
 
 :::
 
@@ -25,8 +26,8 @@ compte sous forme de crédit d'infrastructure, vous en conservez donc la pleine 
 **Une adresse courriel, un compte.** Chaque adresse courriel correspond à un seul compte ZCP. Vous
 ne pouvez pas créer un deuxième compte avec une adresse déjà utilisée.
 
-**Utilisez les projets pour isoler les environnements.** La plupart des équipes n'ont besoin que d
-un seul compte. Créez des **Projets** distincts pour `dev`, `stg` et `prd`. Chaque projet possède
+**Utilisez les projets pour isoler les environnements.** La plupart des équipes n'ont besoin que
+d'un seul compte. Créez des **Projets** distincts pour `dev`, `stg` et `prd`. Chaque projet possède
 ses propres ressources, quotas et membres. Les ressources de projets différents ne partagent pas les
 réseaux ni le stockage. Consultez [Projets](/fr/public-cloud/projects) pour en savoir plus.
 
@@ -73,37 +74,29 @@ que votre compte est prêt.
 ### Configurer le mode de facturation
 
 - Après la vérification du compte, vous serez invité à configurer vos renseignements de facturation.
-- Choisissez un type de facturation :
-  - **Individual** : pour un usage personnel; entrez des renseignements comme votre adresse.
-  - **Company** : pour une organisation; fournissez des renseignements comme le nom de l'entreprise,
+- Choisissez un type de compte :
+  - **Individual** : pour un usage personnel. Entrez des renseignements comme votre adresse.
+  - **Company** : pour une organisation. Fournissez des renseignements comme le nom de l'entreprise,
     le site Web et l'adresse.
 
 - Si vous avez un coupon, appliquez-le au paiement pour recevoir un rabais ou une offre
   promotionnelle.
 
-:::note
+### Crédit promotionnel de lancement
 
-Pour créer votre compte, un paiement minimal de **1,00 $ CA** est requis. Il est traité de façon
-sécurisée par Stripe et affiché comme **Infra Credits**. Ce paiement sert à vérifier et valider
-votre compte. Le montant ajouté est crédité à votre compte sous forme de **crédits d'infrastructure
-utilisables**; vous conservez donc sa pleine valeur.
-
-:::
-
-![Paiement Stripe de 1,00 $ CA en Infra Credits pour activer le compte](../../../../../assets/account-signup/billing-stripe-checkout.webp)
-
-### Crédit de compte
-
-Les nouveaux comptes reçoivent automatiquement **100 $ CA de crédit** à l'inscription, valide
-pendant **30 jours**.
+Les nouveaux comptes reçoivent automatiquement **100 $ CA de crédit promotionnel de lancement** à
+l'inscription, valide pendant **30 jours**. Le crédit promotionnel de lancement est distinct de
+votre option de facturation, du crédit à votre compte et du seuil de facturation postpayée.
 
 Après avoir dépensé **200 $ CA sur des plans de calcul admissibles**, vous pouvez demander **200 $
-CA de crédit** supplémentaire. Faites la demande depuis l'adresse courriel de votre compte au moyen
-de notre [page de contact](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), en indiquant
-votre **numéro de compte** et la mention
-**"$200 Credit Request"**. Nous appliquerons directement le
-crédit de **200 $ CA** à votre compte,
-sans date d'expiration, pour un total pouvant atteindre **300 $ CA**.
+CA de crédit promotionnel de lancement supplémentaire**. Faites la demande depuis l'adresse courriel
+de votre compte au moyen de notre
+[page de contact](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), en indiquant votre
+**numéro de compte** et la mention
+**"$200 Credit Request"**. Nous appliquerons directement ce
+crédit promotionnel de lancement supplémentaire à votre compte. Il est valide pendant **60 jours**,
+pour un total de crédit promotionnel de lancement pouvant atteindre **300 $
+CA**.
 
 Le crédit supplémentaire de **200 $ CA** s'applique aux plans de calcul admissibles allant de Small
 à XLarge. L'offre est disponible jusqu'au **31 décembre 2026**.
@@ -116,33 +109,46 @@ ZSoftly Public Cloud accepte :
 - **PayPal** : paiement depuis votre solde PayPal ou un compte lié.
 - **Bank Transfer / Wire** : pour les paiements manuels, communiquez avec notre
   [équipe des ventes](https://zcp.zsoftly.ca/contact?source=docs&topic=billing). Elle organisera le
-  transfert et appliquera les fonds à votre compte sous forme de crédits d'infrastructure.
+  transfert et appliquera les fonds à votre compte sous forme de crédit à votre compte.
 
 Les paiements par carte et PayPal sont en libre-service dans le portail. Les virements bancaires
 sont organisés avec l'équipe des ventes.
 
 ### Choisir un plan de paiement
 
-#### Prépayé (recommandé)
+#### Prépayé
 
-- Les comptes prépayés exigent l'ajout de crédits à l'avance; ces crédits servent ensuite à créer
-  des ressources sur la plateforme.
-- Pour utiliser des ressources, achetez des crédits d'infrastructure en sélectionnant le montant
-  désiré.
-- Payez avec **Stripe** ou **PayPal**, puis cliquez sur **Proceed** pour terminer le paiement. Pour
-  payer par virement bancaire, communiquez avec
+- Le mode prépayé exige du crédit à votre compte avant de provisionner un nouveau service. Votre
+  utilisation réduit ce crédit et vous ne pouvez pas créer un nouveau service sans crédit suffisant.
+- Pour activer le mode prépayé, ajoutez du crédit à votre compte. Un paiement minimal de **1,00 $
+  CA** sert à vérifier et à valider votre compte. ZCP ajoute ce paiement au crédit de votre compte
+  et vous pouvez utiliser le montant complet.
+- Une utilisation active ou un renouvellement peut tout de même rendre le crédit à votre compte
+  négatif. Votre prochain ajout de crédit règle le solde négatif avant d'ajouter du crédit
+  utilisable.
+- Payez avec **Stripe** ou **PayPal**, puis cliquez sur **Proceed** pour terminer un ajout de
+  crédit. Pour payer par virement bancaire, communiquez avec
   [l'équipe des ventes](https://zcp.zsoftly.ca/contact?source=docs&topic=billing).
+- Choisissez le mode prépayé pour un cycle de facturation trimestriel ou plus long.
 
 #### Postpayé
 
-- Les comptes postpayés vous permettent de payer après avoir consommé des ressources. Cette option
-  exige une vérification supplémentaire, comme des renseignements de facturation détaillés ou des
-  vérifications de crédit.
-- Ajoutez **Stripe** ou **PayPal** comme mode de paiement, puis cliquez sur **Save Card** pour
-  terminer la configuration. Pour organiser un paiement manuel par virement bancaire, communiquez
-  avec [l'équipe des ventes](https://zcp.zsoftly.ca/contact?source=docs&topic=billing).
+- Le mode postpayé vous permet d'utiliser des services avant de payer les factures. Il s'applique
+  aux cycles de service horaires et mensuels.
+- Pour activer le mode postpayé, enregistrez et validez une carte de crédit ou de débit compatible.
+  PayPal, les virements bancaires, les télévirements et les paiements manuels n'activent pas le mode
+  postpayé.
+- Votre seuil de facturation postpayée initial est de **100 CAD** pour un compte personnel et de
+  **300 CAD** pour un compte d'organisation. Lorsque votre utilisation atteint ce seuil, ZCP génère
+  une facture et prélève automatiquement votre carte enregistrée. Un nouveau cycle de seuil commence
+  ensuite.
+
+Vous ne pouvez pas passer du Prépayé au Postpayé, ou l'inverse, après l'activation. Choisissez votre
+option de facturation avant de provisionner des services.
 
 ![Choix d'un plan de paiement avec les options Prépayé et Postpayé](../../../../../assets/account-signup/payment-plan.webp)
+
+![Paiement Stripe de 1,00 $ CA pour un ajout de crédit de compte prépayé](../../../../../assets/account-signup/billing-stripe-checkout.webp)
 
 ### Dernières étapes
 
