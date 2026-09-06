@@ -92,8 +92,8 @@ These are Starlight-specific and easy to get wrong:
 ### Code blocks
 
 - Code blocks render as flat boxes (no frame chrome) via `defaultProps.frame: 'none'` in
-  `ec.config.mjs`. This is intentional and also works around an Expressive Code 0.42 / Astro 6 bug
-  where terminal frames fail to paint single-line code blocks. Do not re-enable frames.
+  `ec.config.mjs`. This is the site’s visual standard. Keep frames disabled unless the design calls
+  for terminal or editor chrome.
 - Multi-language examples (API/SDK) go in `<Tabs>` with `syncKey` so the language choice syncs
   across sections. CLI/shell/portal-UI examples stay single-language.
 
@@ -122,8 +122,8 @@ Always use the short forms:
 
 ## Tech Stack Quick Reference
 
-- Framework: **Astro 6** + **Starlight 0.39**
-- Code blocks: **Expressive Code 0.42** (configured in `ec.config.mjs`)
+- Framework: **Astro 7.3** + **Starlight 0.42**
+- Code blocks: **astro-expressive-code 0.44.2** (configured in `ec.config.mjs`)
 - Content: Markdown + MDX via Starlight content collections (`src/content/docs/`)
 - Layout overrides: `src/overrides/*.astro`; global styles: `src/styles/custom.css`
 - Package manager: **pnpm 10**

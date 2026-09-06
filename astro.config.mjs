@@ -4,7 +4,6 @@ import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import rehypeMermaid from 'rehype-mermaid';
-import { mdxLinkTargetIndexIntegration } from './src/plugins/rehype-mdx-link-target-index.mjs';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
 /** @type {Record<string, string>} */
@@ -664,32 +663,6 @@ export default defineConfig({
       //   indexName: 'REPLACE_WITH_INDEX_NAME',
       // },
     }),
-    // Astro 6 does not pass `markdown.processor` plugins to MDX content.
-    // Remove this compatibility bridge once the validator supports that path.
-    mdxLinkTargetIndexIntegration({
-      docsDirectory: new URL('./src/content/docs/', import.meta.url),
-      base: '/',
-    }),
   ],
 
-  vite: {
-    build: {
-      rollupOptions: {
-        // Silence a harmless Rollup warning from Expressive Code's prebuilt
-        // dist: @expressive-code/core re-exports CONTINUE/EXIT from
-        // unist-util-visit-parents but doesn't use them in this bundle. Scoped
-        // narrowly to that exact import so our own unused-import warnings still
-        // surface. Upstream issue in @expressive-code/core@0.42.0.
-        onwarn(warning, defaultHandler) {
-          if (
-            warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
-            warning.exporter === 'unist-util-visit-parents'
-          ) {
-            return;
-          }
-          defaultHandler(warning);
-        },
-      },
-    },
-  },
 });
