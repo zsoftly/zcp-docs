@@ -8,7 +8,8 @@ Navigate to **Billing → Summary** for an overview of your account's financial 
 
 - **Active Services**: count and cost breakdown by service type (VMs, IPs, Networks, etc.)
 - **Cost Reports**: detailed expense breakdown per resource
-- **Billing Threshold**: view your Postpaid spending threshold and set billing alerts
+- **Postpaid Billing Threshold**: view the amount that triggers an invoice and saved-card payment,
+  then set billing alerts
 - **Billing Type**: Prepaid or Postpaid; shows all-time consumption, monthly usage, and projected
   spend
 - **Invoices**: view all past and pending invoices
@@ -24,10 +25,10 @@ Choose **Prepaid** if you want to fund account credit before provisioning a new 
 | **Prepaid**  | Add account credit before you provision a new service. Usage reduces that balance, and you cannot create a new service without enough credit. Active usage or a renewal can still leave the balance negative. Your next top-up clears a negative balance before adding usable credit.          | You want to fund usage in advance or use a quarterly or longer billing cycle. |
 | **Postpaid** | Save and validate a compatible credit or debit card, then use services before paying invoices. Postpaid applies to hourly and monthly service cycles. When usage reaches your billing threshold, ZCP generates an invoice and auto-charges your saved card. A new threshold cycle then begins. | You want to pay after using hourly or monthly services with a saved card.     |
 
-The initial Postpaid billing threshold is **CAD 100** for a personal account and **CAD 300** for an
-organization account. When usage reaches this threshold, ZCP generates an invoice and automatically
-charges your saved card. This threshold is separate from Prepaid account credit and launch
-promotional credit.
+Each Postpaid billing cycle starts with an initial billing threshold of **CAD 100** for a personal
+account and **CAD 300** for an organization account. When usage reaches this threshold, ZCP
+generates an invoice and automatically charges your saved card. This threshold is not a spending
+limit and is separate from Prepaid account credit and launch promotional credit.
 
 You cannot switch between Prepaid and Postpaid after activation. Choose the option that fits your
 service cycle and payment method before you sign up.
@@ -44,8 +45,8 @@ You can add account credit through **Billing → Payment Methods** when you use 
 
 ### Payment Methods
 
-**Billing → Payment Methods**: manage payment preferences and add Prepaid account credit. Enter the
-credit amount and it charges to your default payment method.
+**Billing → Payment Methods**: for Prepaid accounts, manage payment preferences and top up account
+credit. Enter the top-up amount and it charges to your default payment method.
 
 We accept:
 

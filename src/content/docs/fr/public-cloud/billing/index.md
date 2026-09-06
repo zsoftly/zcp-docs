@@ -9,8 +9,8 @@ compte.
 
 - **Services actifs** : nombre et ventilation des coûts par type de service (VM, IP, réseaux, etc.).
 - **Cost Reports** : ventilation détaillée des dépenses par ressource.
-- **Seuil de facturation** : consultez votre seuil de dépenses postpayées et configurez des alertes
-  de facturation.
+- **Seuil de facturation postpayée** : consultez le montant qui déclenche une facture et un
+  prélèvement sur votre carte enregistrée, puis configurez des alertes de facturation.
 - **Type de facturation** : prépayé ou postpayé. Il affiche la consommation totale, l'utilisation
   mensuelle et les dépenses prévues.
 - **Factures** : consultez les factures passées et en attente.
@@ -27,10 +27,11 @@ les factures plus tard.
 | **Prépayé**  | Ajoutez du crédit à votre compte avant de provisionner un nouveau service. Votre utilisation réduit ce solde et vous ne pouvez pas créer un nouveau service sans crédit suffisant. Une utilisation active ou un renouvellement peut tout de même rendre le solde négatif. Votre prochain ajout de crédit règle le solde négatif avant d'ajouter du crédit utilisable.        | Vous souhaitez financer votre utilisation à l'avance ou utiliser un cycle de facturation trimestriel ou plus long. |
 | **Postpayé** | Enregistrez et validez une carte de crédit ou de débit compatible, puis utilisez les services avant de payer les factures. Le mode postpayé s'applique aux cycles horaires et mensuels. Lorsque votre utilisation atteint votre seuil de facturation, ZCP génère une facture et prélève automatiquement votre carte enregistrée. Un nouveau cycle de seuil commence ensuite. | Vous souhaitez payer après avoir utilisé des services horaires ou mensuels avec une carte enregistrée.             |
 
-Le seuil de facturation postpayée initial est de **100 CAD** pour un compte personnel et de **300
-CAD** pour un compte d'organisation. Lorsque votre utilisation atteint ce seuil, ZCP génère une
-facture et prélève automatiquement votre carte enregistrée. Ce seuil est distinct du crédit à votre
-compte prépayé et du crédit promotionnel de lancement.
+Chaque cycle de facturation postpayée commence avec un seuil de facturation initial de **100 CAD**
+pour un compte personnel et de **300 CAD** pour un compte d'organisation. Lorsque votre utilisation
+atteint ce seuil, ZCP génère une facture et prélève automatiquement votre carte enregistrée. Ce
+seuil n'est pas une limite de dépenses. Il est distinct du crédit à votre compte prépayé et du
+crédit promotionnel de lancement.
 
 Vous ne pouvez pas passer du Prépayé au Postpayé, ou l'inverse, après l'activation. Choisissez
 l'option qui convient à votre cycle de service et à votre mode de paiement avant votre inscription.
@@ -49,9 +50,9 @@ le mode prépayé.
 
 ### Modes de paiement
 
-**Billing → Modes de paiement** vous permet de gérer vos préférences de paiement et d'ajouter du
-crédit prépayé à votre compte. Entrez le montant du crédit. ZCP le facture à votre mode de paiement
-par défaut.
+**Billing → Modes de paiement** permet aux comptes prépayés de gérer leurs préférences de paiement
+et d'ajouter du crédit à leur compte. Entrez le montant de l'ajout de crédit. ZCP le facture à votre
+mode de paiement par défaut.
 
 Les modes de paiement acceptés sont :
 

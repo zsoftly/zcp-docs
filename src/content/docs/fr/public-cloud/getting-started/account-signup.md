@@ -10,7 +10,7 @@ facturation et vérifier votre compte.
 
 :::tip[Commencer à bâtir gratuitement]
 
-Les nouveaux comptes reçoivent **100
+Les nouveaux comptes admissibles reçoivent **100
 $ CA de crédit promotionnel de lancement** à l'inscription,
 valide pendant **30 jours**. Après avoir dépensé **200 $
 CA sur des plans de calcul admissibles**, vous pouvez demander **200
@@ -75,18 +75,21 @@ que votre compte est prêt.
 
 - Après la vérification du compte, vous serez invité à configurer vos renseignements de facturation.
 - Choisissez un type de compte :
-  - **Individual** : pour un usage personnel. Entrez des renseignements comme votre adresse.
-  - **Company** : pour une organisation. Fournissez des renseignements comme le nom de l'entreprise,
-    le site Web et l'adresse.
+  - **Individual** : pour un usage personnel. Si vous choisissez le Postpayé, votre seuil de
+    facturation initial est de **100 CAD**. Entrez des renseignements comme votre adresse.
+  - **Company** : pour une organisation. Si vous choisissez le Postpayé, votre seuil de facturation
+    initial est de **300 CAD**. Fournissez des renseignements comme le nom de l'entreprise, le site
+    Web et l'adresse.
 
 - Si vous avez un coupon, appliquez-le au paiement pour recevoir un rabais ou une offre
   promotionnelle.
 
 ### Crédit promotionnel de lancement
 
-Les nouveaux comptes reçoivent automatiquement **100 $ CA de crédit promotionnel de lancement** à
-l'inscription, valide pendant **30 jours**. Le crédit promotionnel de lancement est distinct de
-votre option de facturation, du crédit à votre compte et du seuil de facturation postpayée.
+Les nouveaux comptes admissibles reçoivent automatiquement **100 $ CA de crédit promotionnel de
+lancement** à l'inscription, valide pendant **30 jours**. Le crédit promotionnel de lancement est
+distinct de votre option de facturation, du crédit à votre compte et du seuil de facturation
+postpayée.
 
 Après avoir dépensé **200 $ CA sur des plans de calcul admissibles**, vous pouvez demander **200 $
 CA de crédit promotionnel de lancement supplémentaire**. Faites la demande depuis l'adresse courriel
@@ -155,11 +158,11 @@ option de facturation avant de provisionner des services.
 - Passez attentivement en revue les **Terms & Conditions** de la plateforme.
 - Acceptez les conditions pour terminer l'inscription.
 
-- **Utilisateurs prépayés** : l'état de votre compte s'affichera comme actif, avec le type de compte
-  prépayé.
+- **Utilisateurs prépayés** : l'état de votre compte s'affichera comme actif, avec l'option de
+  facturation Prépayé.
 
-- **Utilisateurs postpayés** : après la vérification, votre compte s'affichera comme actif, avec le
-  type de compte postpayé.
+- **Utilisateurs postpayés** : après la vérification, votre compte s'affichera comme actif, avec
+  l'option de facturation Postpayé.
 
 ### Se connecter au portail
 

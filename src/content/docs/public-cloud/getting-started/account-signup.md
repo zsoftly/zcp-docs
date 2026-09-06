@@ -10,7 +10,7 @@ up billing, and verify your account.
 
 :::tip[Start building for free]
 
-New accounts receive
+Eligible new accounts receive
 **CA$100 in launch promotional credit** at signup, valid for **30 days**.
 After spending **CA$200**
 on eligible compute plans, you can request an additional
@@ -71,17 +71,18 @@ Once verified, ZSoftly Public Cloud sends a welcome email confirming your accoun
 
 - After verifying your account, you'll be prompted to set up your billing information.
 - Choose an account type:
-  - **Individual**: For personal use. Enter details like your address.
-  - **Company**: For organizational use. Provide details such as your company name, website, and
-    address.
+  - **Individual**: For personal use. If you select Postpaid, your initial billing threshold is
+    **CAD 100**. Enter details like your address.
+  - **Company**: For organizational use. If you select Postpaid, your initial billing threshold is
+    **CAD 300**. Provide details such as your company name, website, and address.
 
 - If you have a coupon, redeem it at checkout to receive a discount or promotional offer.
 
 ### Launch Promotional Credit
 
-New accounts receive **CA$100 in launch promotional credit** automatically at sign-up, valid for
-**30 days**. Launch promotional credit is separate from your billing option, account credit, and
-Postpaid billing threshold.
+Eligible new accounts receive **CA$100 in launch promotional credit** automatically at sign-up,
+valid for **30 days**. Launch promotional credit is separate from your billing option, account
+credit, and Postpaid billing threshold.
 
 After you spend **CA$200 on eligible compute plans**, you can claim an additional **CA$200 in launch
 promotional credit**: request it from your account email address through our
@@ -142,11 +143,11 @@ you provision services.
 - Review the **Terms & Conditions** of the platform carefully.
 - Accept the terms to complete the registration process.
 
-- **Prepaid Users**: Your account status will display as active, with the account type set to
-  prepaid.
+- **Prepaid Users**: Your account status will display as active, with the billing option set to
+  Prepaid.
 
-- **Postpaid Users**: After verification, your account will display as active with the account type
-  set to postpaid.
+- **Postpaid Users**: After verification, your account will display as active with the billing
+  option set to Postpaid.
 
 ### Sign in to the portal
 
