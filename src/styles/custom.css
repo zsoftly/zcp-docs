@@ -730,6 +730,25 @@
   margin: 0 0 1rem;
   line-height: 1.55;
 }
+.peerpush-card__badge {
+  display: block;
+  line-height: 0;
+  margin-block: 0.25rem 0.875rem;
+}
+.peerpush-card__badge img {
+  height: auto;
+  max-width: 14.375rem;
+  width: 100%;
+}
+.peerpush-card__recognition,
+.peerpush-card__message {
+  color: var(--sl-color-gray-2);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.peerpush-card__recognition {
+  margin-bottom: 0.5rem;
+}
 .sidebar-cta {
   font-size: 0.8125rem;
   font-weight: 600;
