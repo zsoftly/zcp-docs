@@ -1,6 +1,7 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Footer.astro';
+import { PEERPUSH_BADGE_URL, PEERPUSH_LISTING_URL } from '../data/peerpush';
 import { websiteUrl } from '../data/site';
 import ConsentBanner from './ConsentBanner.astro';
 
@@ -68,13 +69,18 @@ const buildDate = new Date().toISOString().slice(0, 10);
       </a>
       <a
         class="site-footer__peerpush"
-        href="https://peerpush.com/p/zsoftly-cloud-platform"
+        href={PEERPUSH_LISTING_URL}
         target="_blank"
         rel="noopener noreferrer"
       >
         <img
-          src="https://peerpush.com/p/zsoftly-cloud-platform/badge.png"
+          src={PEERPUSH_BADGE_URL}
           alt={Astro.locals.t('zs.footer.peerpushBadgeAlt')}
+          width="230"
+          height="65"
+          loading="lazy"
+          decoding="async"
+          referrerpolicy="no-referrer"
         />
       </a>
     </div>
@@ -121,10 +127,15 @@ const buildDate = new Date().toISOString().slice(0, 10);
 
   .site-footer__peerpush {
     display: inline-block;
-    line-height: 0;
+  }
+
+  .site-footer__peerpush:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 3px;
   }
 
   .site-footer__peerpush img {
+    display: block;
     height: auto;
     max-width: 8.75rem;
     width: 100%;

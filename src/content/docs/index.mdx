@@ -22,6 +22,7 @@ hero:
       variant: secondary
 ---
 
+import { PEERPUSH_BADGE_URL, PEERPUSH_LISTING_URL } from '../../data/peerpush';
 import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../data/site';
 
 <div class="home-layout">
@@ -244,19 +245,24 @@ import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../data/
     <div class="sidebar-card peerpush-card anim-3">
       <h3>Recognition</h3>
       <a
-        href="https://peerpush.com/p/zsoftly-cloud-platform"
+        href={PEERPUSH_LISTING_URL}
         target="_blank"
         rel="noopener noreferrer"
         class="peerpush-card__badge"
       >
         <img
-          src="https://peerpush.com/p/zsoftly-cloud-platform/badge.png"
+          src={PEERPUSH_BADGE_URL}
           alt="ZSoftly Cloud Platform is Trending on PeerPush"
+          width="230"
+          height="65"
+          loading="lazy"
+          decoding="async"
+          referrerpolicy="no-referrer"
         />
       </a>
       <div class="peerpush-card__recognition">
         <a
-          href="https://peerpush.com/p/zsoftly-cloud-platform"
+          href={PEERPUSH_LISTING_URL}
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -732,10 +732,14 @@
 }
 .peerpush-card__badge {
   display: block;
-  line-height: 0;
   margin-block: 0.25rem 0.875rem;
 }
+.peerpush-card__badge:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 3px;
+}
 .peerpush-card__badge img {
+  display: block;
   height: auto;
   max-width: 14.375rem;
   width: 100%;
