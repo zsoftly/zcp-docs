@@ -7,6 +7,13 @@ export type ChangelogFeedEntry = {
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'Kubernetes 1.37 is available',
+    description:
+      'Kubernetes 1.37 is now available for new managed clusters, along with refreshed patch releases for the 1.34, 1.35, and 1.36 lines. The default version for new clusters is 1.36.4.',
+    pubDate: '2026-09-06',
+    slug: 'kubernetes-1.37',
+  },
+  {
     title: 'Postpaid billing is available',
     description:
       'Customers can now choose Postpaid billing during signup for eligible hourly and monthly services. The selected Prepaid or Postpaid mode remains for the life of the account. Postpaid requires a credit card saved through Stripe.',

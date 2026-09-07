@@ -13,9 +13,10 @@ dépanner les ressources de votre cluster.
 
 ### Télécharger kubectl
 
-ZSoftly Cloud Platform supports Kubernetes **1.34**, **1.35**, and **1.36** (current: **1.36.1**).
-Installez la version de `kubectl` qui correspond à la version mineure de votre cluster. Kubernetes
-exige que le client et le serveur soient à moins d'une version mineure l'un de l'autre.
+ZSoftly Cloud Platform prend en charge Kubernetes **1.34**, **1.35**, **1.36** et **1.37**. Les
+nouveaux clusters utilisent par défaut la version **1.36.4**. Installez la version de `kubectl` qui
+correspond à la version mineure de votre cluster. Kubernetes exige que le client et le serveur
+soient à moins d'une version mineure l'un de l'autre.
 
 La façon la plus rapide d'installer la dernière version compatible :
 
@@ -34,7 +35,7 @@ Pour macOS, remplacez `linux` par `darwin` dans l'URL ci-dessus.
 **Windows (PowerShell):**
 
 ```powershell
-curl.exe -LO "https://dl.k8s.io/release/v1.36.0/bin/windows/amd64/kubectl.exe"
+curl.exe -LO "https://dl.k8s.io/release/v1.36.4/bin/windows/amd64/kubectl.exe"
 ```
 
 **Ou utilisez un gestionnaire de paquets :**

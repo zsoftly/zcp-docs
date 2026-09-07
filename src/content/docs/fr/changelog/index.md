@@ -33,6 +33,7 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [Kubernetes 1.37 est disponible](/fr/changelog/#kubernetes-1.37) (6 septembre 2026)
 - [La facturation postpayée est disponible](/fr/changelog/#postpaid-billing) (1er septembre 2026)
 - [Mises à jour de la plateforme et des services](/fr/changelog/#platform-services) (8 août 2026)
 - [CLI v0.0.26 : correctifs de redirection de ports et de clés SSH](/fr/changelog/#cli-v0.0.26) (19
@@ -58,6 +59,18 @@ pour l'historique complet au niveau des commits.
 <span id="platform-services"></span>
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
+
+<span id="kubernetes-1.37"></span>
+
+- **Kubernetes 1.37 est disponible (6 septembre 2026)** : les nouvelles grappes gérées peuvent
+  utiliser 1.37.0, la nouvelle version mineure, ou les versions correctives actualisées 1.36.4 (la
+  version par défaut), 1.35.8 et 1.34.11. Les grappes qui utilisent déjà 1.36.1, 1.35.1 ou 1.34.3
+  conservent cette version. Ce n'est plus le choix recommandé pour les nouvelles grappes. Mettez à
+  niveau une version mineure à la fois, ou appliquez une mise à niveau corrective au sein de la même
+  version mineure. Faites-le depuis la page
+  [Vue d'ensemble du cluster](/fr/public-cloud/kubernetes/cluster-overview). Disponible dans les
+  deux régions. Voir [Créer un cluster Kubernetes](/fr/public-cloud/kubernetes/create-cluster) pour
+  la liste complète des versions.
 
 <span id="postpaid-billing"></span>
 
