@@ -33,6 +33,7 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit) (7 septembre 2026)
 - [CLI v0.0.28 : correctifs de sécurité et sauvegardes fonctionnelles](/fr/changelog/#cli-v0.0.28)
   (7 septembre 2026)
 - [Kubernetes 1.37 est disponible](/fr/changelog/#kubernetes-1.37) (6 septembre 2026)
@@ -61,6 +62,14 @@ pour l'historique complet au niveau des commits.
 <span id="platform-services"></span>
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
+
+<span id="vpc-subnet-limit"></span>
+
+- **Jusqu'à 8 sous-réseaux par VPC (7 septembre 2026)** : chaque VPC prend en charge jusqu'à 8
+  sous-réseaux, contre 3 auparavant. Les VPC existants obtiennent la nouvelle limite sans aucune
+  modification de votre part. Si une charge de travail a besoin de plus de 8 sous-réseaux dans un
+  même VPC, ouvrez un billet de soutien depuis la console. Nous étudierons la demande. Voir
+  [Ajouter un sous-réseau](/fr/public-cloud/networking/vpc/add-subnet).
 
 <span id="kubernetes-1.37"></span>
 

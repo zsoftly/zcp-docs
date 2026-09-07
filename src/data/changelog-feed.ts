@@ -7,6 +7,13 @@ export type ChangelogFeedEntry = {
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'Up to 8 subnets per VPC',
+    description:
+      'Each VPC supports up to 8 subnets, up from 3. Existing VPCs get the new limit with no changes. Raise a support ticket if a workload needs more.',
+    pubDate: '2026-09-07',
+    slug: 'vpc-subnet-limit',
+  },
+  {
     title: 'CLI v0.0.28: security fixes and working backups',
     description:
       'The zcp CLI redacts credentials from --debug output. It fixes the backup and vm-backup commands and makes instance ssh prefer the public IP.',
