@@ -14,17 +14,16 @@ in your cluster.
 ### Download kubectl
 
 ZSoftly Cloud Platform supports Kubernetes **1.34**, **1.35**, **1.36**, and **1.37**. New clusters
-default to **1.36.4**. Install the `kubectl` version that matches your cluster's minor version.
-Kubernetes requires client and server to be within one minor version of each other.
+default to **1.36.4**.
 
-The examples use the current default version, 1.36.4. Replace the full version with a patched
-version that matches your cluster's actual minor version.
+Install the latest stable `kubectl` release, and keep the client within one minor version of your
+cluster. See the [version skew policy](https://kubernetes.io/releases/version-skew-policy/) for
+details.
 
 **Linux / macOS:**
 
 ```bash
-# Install kubectl 1.36.4
-curl -LO "https://dl.k8s.io/release/v1.36.4/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/kubectl
 kubectl version --client
@@ -35,28 +34,15 @@ For macOS replace `linux` with `darwin` in the URL above.
 **Windows (PowerShell):**
 
 ```powershell
-curl.exe -LO "https://dl.k8s.io/release/v1.36.4/bin/windows/amd64/kubectl.exe"
+$version = (Invoke-WebRequest -Uri "https://dl.k8s.io/release/stable.txt" -UseBasicParsing).Content.Trim()
+curl.exe -LO "https://dl.k8s.io/release/$version/bin/windows/amd64/kubectl.exe"
 ```
 
-To install the newest minor version, 1.37.0, instead:
-
-**Linux / macOS:**
-
-```bash
-# Install kubectl 1.37.0
-curl -LO "https://dl.k8s.io/release/v1.37.0/bin/linux/amd64/kubectl"
-chmod +x kubectl
-sudo mv kubectl /usr/local/bin/kubectl
-kubectl version --client
-```
-
-For macOS replace `linux` with `darwin` in the URL above.
-
-**Windows (PowerShell):**
-
-```powershell
-curl.exe -LO "https://dl.k8s.io/release/v1.37.0/bin/windows/amd64/kubectl.exe"
-```
+If your cluster runs an older minor version, replace the fetched version with a release from the
+matching minor line. See the upstream install guides for full instructions per platform:
+[Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/),
+[macOS](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/), and
+[Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/).
 
 **Or use a package manager:**
 

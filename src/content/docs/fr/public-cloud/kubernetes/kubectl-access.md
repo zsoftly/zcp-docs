@@ -14,17 +14,16 @@ dépanner les ressources de votre cluster.
 ### Télécharger kubectl
 
 ZSoftly Cloud Platform prend en charge Kubernetes **1.34**, **1.35**, **1.36** et **1.37**. Les
-nouveaux clusters utilisent par défaut la version **1.36.4**. Installez la version de `kubectl` qui
-correspond à la version mineure de votre cluster. Kubernetes exige que le client et le serveur
-soient à moins d'une version mineure l'un de l'autre.
+nouveaux clusters utilisent par défaut la version **1.36.4**.
 
-Les exemples ci-dessous utilisent la version par défaut actuelle, 1.36.4. Remplacez la version
-complète par une version corrective qui correspond à la version mineure réelle de votre cluster.
+Installez la dernière version stable de `kubectl` et gardez le client à moins d'une version mineure
+de votre cluster. Consultez la
+[politique de dérive de version](https://kubernetes.io/releases/version-skew-policy/) pour plus de
+détails.
 
 **Linux / macOS:**
 
 ```bash
-# Install latest stable kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/kubectl
@@ -36,28 +35,16 @@ Pour macOS, remplacez `linux` par `darwin` dans l'URL ci-dessus.
 **Windows (PowerShell):**
 
 ```powershell
-curl.exe -LO "https://dl.k8s.io/release/v1.36.4/bin/windows/amd64/kubectl.exe"
+$version = (Invoke-WebRequest -Uri "https://dl.k8s.io/release/stable.txt" -UseBasicParsing).Content.Trim()
+curl.exe -LO "https://dl.k8s.io/release/$version/bin/windows/amd64/kubectl.exe"
 ```
 
-Pour installer la version mineure la plus récente, 1.37.0 :
-
-**Linux / macOS:**
-
-```bash
-# Install kubectl 1.37.0
-curl -LO "https://dl.k8s.io/release/v1.37.0/bin/linux/amd64/kubectl"
-chmod +x kubectl
-sudo mv kubectl /usr/local/bin/kubectl
-kubectl version --client
-```
-
-Pour macOS, remplacez `linux` par `darwin` dans l'URL ci-dessus.
-
-**Windows (PowerShell):**
-
-```powershell
-curl.exe -LO "https://dl.k8s.io/release/v1.37.0/bin/windows/amd64/kubectl.exe"
-```
+Si votre cluster utilise une version mineure plus ancienne, remplacez la version récupérée par une
+version de la ligne mineure correspondante. Consultez les guides d'installation officiels pour les
+instructions complètes par plateforme :
+[Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/),
+[macOS](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/) et
+[Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/).
 
 **Ou utilisez un gestionnaire de paquets :**
 
@@ -72,8 +59,7 @@ snap install kubectl --classic
 winget install Kubernetes.kubectl
 ```
 
-Pour une version précise (par exemple pour correspondre à un cluster 1.34), remplacez
-`$(curl -Ls https://dl.k8s.io/release/stable.txt)` par `v1.34.0`.
+Remplacez la version dans l'URL par celle qui correspond à votre cluster.
 
 Consultez le [guide d'installation officiel de kubectl](https://kubernetes.io/docs/tasks/tools/)
 pour toutes les options.
