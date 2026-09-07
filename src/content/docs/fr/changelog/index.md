@@ -81,9 +81,9 @@ peuvent désormais résoudre le point de terminaison de stockage objet.
 Les nouvelles grappes gérées peuvent utiliser 1.37.0, la nouvelle version mineure, ou les versions
 correctives actualisées 1.36.4 (la version par défaut), 1.35.8 et 1.34.11. Au moment de la
 publication, les grappes qui utilisaient déjà 1.36.1, 1.35.1 ou 1.34.3 sont restées sur leur version
-respective jusqu'à leur mise à niveau. Ces versions correctives plus anciennes ne sont plus proposées
-pour les nouvelles grappes. Mettez à niveau une version mineure à la fois, ou appliquez une mise à
-niveau corrective au sein de la même version mineure. Faites-le depuis la page
+respective jusqu'à leur mise à niveau. Ces versions correctives plus anciennes ne sont plus
+proposées pour les nouvelles grappes. Mettez à niveau une version mineure à la fois, ou appliquez
+une mise à niveau corrective au sein de la même version mineure. Faites-le depuis la page
 [Vue d'ensemble du cluster](/fr/public-cloud/kubernetes/cluster-overview). Disponible dans les deux
 régions. Voir [Créer un cluster Kubernetes](/fr/public-cloud/kubernetes/create-cluster) pour la
 liste complète des versions et les informations sur leur cycle de vie.
