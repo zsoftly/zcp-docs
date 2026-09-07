@@ -7,6 +7,13 @@ export type ChangelogFeedEntry = {
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'Object storage endpoint DNS resolution from VPCs',
+    description:
+      'Fixed DNS configuration for newly created VPCs. Workloads in these VPCs now resolve the object storage endpoint.',
+    pubDate: '2026-09-06',
+    slug: 'object-storage-vpc-dns-resolution',
+  },
+  {
     title: 'Kubernetes 1.37 is available',
     description:
       'Kubernetes 1.37 is now available for new managed clusters, along with refreshed patch releases for the 1.34, 1.35, and 1.36 lines. The default version for new clusters is 1.36.4.',
