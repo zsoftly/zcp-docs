@@ -40,6 +40,19 @@ storage VM, and not on your own local machine. Connect over RDP as in the previo
 terminal inside the desktop (Konsole, from the KDE application launcher), and run everything below
 there.
 
+:::caution
+
+This means an actual RDP session as the employee, not an SSH session into the desktop VM as
+`ubuntu`. The two look interchangeable since both give you a shell on the same machine, but they are
+not: `ubuntu` and the employee are different Linux users, so a mount run over SSH as `ubuntu`
+succeeds but comes up owned by `ubuntu`, not the employee, breaking Step 2's UID check below. Also
+worth knowing: any value you noted down or exported as a shell variable in an earlier tutorial's
+local terminal or SSH session (like the storage VM's tier IP) is not available here either. The RDP
+terminal is its own session with no shared shell state, so re-enter such values directly wherever
+this tutorial calls for them.
+
+:::
+
 `nfs-common` is not present by default on the `ubuntukde` template:
 
 ```bash
