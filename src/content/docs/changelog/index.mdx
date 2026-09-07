@@ -127,6 +127,19 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v0.0.29: September 7, 2026 {/* changelog-id: cli-v0.0.29 */}
+
+**Complete volume listings and clearer VPC quota errors.** See the
+[v0.0.29 release](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.29) on GitHub.
+
+- **Volume listings now retrieve every page.** The CLI and its Go SDK no longer miss volumes beyond
+  the API's first results page. Pagination anomalies return explicit errors instead of partial or
+  duplicated results.
+- **VPC subnet-limit failures explain the next step.** When `zcp network create --vpc` reaches the
+  default limit of eight subnets, it directs you to request a quota increase through support. Run
+  the command again after the increase is applied. See the
+  [CLI reference](/public-cloud/cli/reference).
+
 ### v0.0.28: September 7, 2026 {/* changelog-id: cli-v0.0.28 */}
 
 **Security fixes, working backups, and a public-IP-first `instance ssh`.** This release also ships

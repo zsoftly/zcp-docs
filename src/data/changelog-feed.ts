@@ -22,6 +22,13 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
     slug: 'terraform-v0.2.0',
   },
   {
+    title: 'CLI v0.0.29: complete volume listings',
+    description:
+      'The zcp CLI and SDK now retrieve every page in volume listings and return explicit pagination errors. VPC subnet-limit failures now direct you to request a quota increase before retrying.',
+    pubDate: '2026-09-07',
+    slug: 'cli-v0.0.29',
+  },
+  {
     title: 'Up to 8 subnets per VPC',
     description:
       'Each VPC supports up to 8 subnets, up from 3. Existing VPCs get the new limit with no changes. Raise a support ticket if a workload needs more.',

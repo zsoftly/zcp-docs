@@ -34,6 +34,7 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 ## Versions récentes
 
 - [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0) (7 septembre 2026)
+- [CLI v0.0.29 : listes de volumes complètes](/fr/changelog/#cli-v0.0.29) (7 septembre 2026)
 - [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit) (7 septembre 2026)
 - [CLI v0.0.28 : correctifs de sécurité et sauvegardes fonctionnelles](/fr/changelog/#cli-v0.0.28)
   (7 septembre 2026)
@@ -133,6 +134,20 @@ Images d'applications en un clic pour les instances de calcul.
 
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
+
+### v0.0.29 : 7 septembre 2026 <!-- changelog-id: cli-v0.0.29 -->
+
+**Listes de volumes complètes et erreurs de quota VPC plus claires.** Consultez la
+[version v0.0.29](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.29) sur GitHub.
+
+- **Les listes de volumes récupèrent maintenant chaque page.** Le CLI et son SDK Go ne manquent plus
+  les volumes au-delà de la première page de résultats de l'API. Les anomalies de pagination
+  renvoient des erreurs explicites au lieu de résultats partiels ou dupliqués.
+- **Les échecs de limite de sous-réseaux VPC indiquent la prochaine étape.** Lorsque
+  `zcp network create --vpc` atteint la limite par défaut de huit sous-réseaux, la commande vous
+  dirige vers le soutien pour demander une augmentation de quota. Exécutez de nouveau la commande
+  après l'application de l'augmentation. Consultez la
+  [référence du CLI](/fr/public-cloud/cli/reference).
 
 ### v0.0.28 : 7 septembre 2026 <!-- changelog-id: cli-v0.0.28 -->
 
