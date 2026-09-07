@@ -4,6 +4,7 @@ import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import rehypeMermaid from 'rehype-mermaid';
+import remarkExplicitHeadingIds from './src/plugins/remark-explicit-heading-ids.mjs';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
 /** @type {Record<string, string>} */
@@ -166,7 +167,7 @@ export default defineConfig({
   // change. Diagrams are single-theme (build-time SVG can't follow the toggle).
   markdown: {
     processor: unified({
-      remarkPlugins: [remarkMermaid],
+      remarkPlugins: [remarkExplicitHeadingIds, remarkMermaid],
       rehypePlugins: [
         [rehypeMermaid, { strategy: 'inline-svg', mermaidConfig: { theme: 'neutral' } }],
       ],

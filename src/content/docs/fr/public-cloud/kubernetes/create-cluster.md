@@ -11,17 +11,22 @@ partout.
 
 ## Versions prises en charge
 
-ZCP prend en charge Kubernetes **1.34**, **1.35** et **1.36** (actuelle : **1.36.1**). Mettez à
-niveau un cluster en cours d'exécution vers une version plus récente, directement depuis la
+ZCP prend en charge Kubernetes **1.34**, **1.35**, **1.36** et **1.37**. Les nouveaux clusters
+peuvent choisir **1.37.0**, **1.36.4** (la version par défaut), **1.35.8** ou **1.34.11**. Un
+cluster créé avec une version corrective plus ancienne, comme 1.36.1, 1.35.1 ou 1.34.3, conserve
+cette version jusqu'à ce que vous le mettiez à niveau.
+
+Mettez à niveau un cluster en cours d'exécution une version mineure à la fois, ou appliquez un
+correctif au sein de la même version mineure. Faites-le en place depuis la
 [Vue d'ensemble du cluster](/fr/public-cloud/kubernetes/cluster-overview). Faites correspondre votre
 client `kubectl` à la version mineure du cluster. Voir
 [Accès kubectl](/fr/public-cloud/kubernetes/kubectl-access).
 
-| Élément        | Prise en charge                                   |
-| -------------- | ------------------------------------------------- |
-| Kubernetes     | 1.34, 1.35, 1.36 (actuelle 1.36.1)                |
-| Distribution   | Kubernetes standard en amont, sans fork           |
-| Mises à niveau | En place, vers toute version mineure plus récente |
+| Élément        | Prise en charge                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------- |
+| Kubernetes     | 1.34, 1.35, 1.36, 1.37 (version par défaut pour les nouveaux clusters : 1.36.4)             |
+| Distribution   | Kubernetes standard en amont, sans fork                                                     |
+| Mises à niveau | En place, une version mineure à la fois, ou un correctif au sein de la même version mineure |
 
 ## Ce que vous obtenez
 

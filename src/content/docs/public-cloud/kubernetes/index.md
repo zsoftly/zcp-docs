@@ -14,6 +14,9 @@ the workload. Consider the capacity that application pods need and how the workl
 
 Use [Create Cluster](/public-cloud/kubernetes/create-cluster) for the portal workflow.
 
+Review the [version lifecycle](/public-cloud/kubernetes/create-cluster#version-lifecycle) before
+selecting a Kubernetes minor version.
+
 ## Operate Your Cluster
 
 The cluster overview shows the cluster status, node configuration, resource totals, and management
@@ -23,6 +26,7 @@ browser-based view of cluster resources.
 ## Next Steps
 
 - [Create a cluster](/public-cloud/kubernetes/create-cluster)
+- [Review version lifecycle](/public-cloud/kubernetes/create-cluster#version-lifecycle)
 - [Review cluster details](/public-cloud/kubernetes/cluster-overview)
 - [Connect with kubectl](/public-cloud/kubernetes/kubectl-access)
 - [Open the dashboard](/public-cloud/kubernetes/dashboard-access)
