@@ -33,6 +33,8 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [CLI v0.0.28 : correctifs de sécurité et sauvegardes fonctionnelles](/fr/changelog/#cli-v0.0.28)
+  (7 septembre 2026)
 - [Kubernetes 1.37 est disponible](/fr/changelog/#kubernetes-1.37) (6 septembre 2026)
 - [La facturation postpayée est disponible](/fr/changelog/#postpaid-billing) (1er septembre 2026)
 - [Mises à jour de la plateforme et des services](/fr/changelog/#platform-services) (8 août 2026)
@@ -106,6 +108,37 @@ Images d'applications en un clic pour les instances de calcul.
 
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
+
+### v0.0.28 : 7 septembre 2026
+
+<span id="cli-v0.0.28"></span>
+
+**Correctifs de sécurité, sauvegardes fonctionnelles et un `instance ssh` qui privilégie l'IP
+publique.** Cette version livre aussi tout ce qui était prêt pour la v0.0.27, jamais publiée. La
+mise à niveau depuis la v0.0.26 récupère donc les deux ensembles de changements. Voir la
+[version v0.0.28](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.28) sur GitHub.
+
+- **La sortie `--debug` ne divulgue plus votre jeton d'API.** La sortie de débogage et les messages
+  d'erreur construits à partir de réponses que le CLI ne peut pas analyser masquent maintenant le
+  jeton, le champ `password` et les autres champs d'identifiants. `golang.org/x/crypto` et la chaîne
+  d'outils Go ont été mis à jour pour corriger deux failles de déni de service SSH. Si vous avez
+  partagé une sortie `--debug` avant cette version, révoquez et régénérez votre jeton.
+- **Les sauvegardes fonctionnent de nouveau.** `backup list` décode l'heure planifiée que l'API la
+  renvoie en nombre ou en chaîne. `vm-backup delete` fonctionne maintenant : la commande envoie une
+  demande d'annulation au lieu du `DELETE` que l'API rejetait toujours. `--interval` n'accepte que
+  `dailyAt` ou `hourlyAt`. `backup list` et `vm-backup list` affichent des colonnes plus claires.
+- **`instance ssh` privilégie l'IP publique.** La commande se connecte à l'IP publique quand elle
+  est attribuée et revient à l'IP privée sinon. Les nouvelles options `--use-public` et
+  `--use-private` forcent le choix.
+- **Correctifs d'affichage** : `firewall list` affiche l'état de chaque règle, `dns show` affiche
+  `-` au lieu d'un statut fabriqué, et `autoscale policy delete`/`autoscale condition delete`
+  affichent correctement l'identifiant numérique.
+- **De la v0.0.27** : `instance create` prend en charge le type de réseau `Vpc` et peut rattacher
+  des réseaux existants avec `--networks`. `ip static-nat enable` exige maintenant `--network`.
+  `volume attach` et `volume detach` affichent le statut de l'API au lieu d'une ligne vide.
+- **Limite connue** : `object-storage bucket encryption enable` est désactivée tant que la
+  passerelle de la région ne prend pas en charge le chiffrement par défaut SSE-S3. `status` et
+  `disable` fonctionnent toujours.
 
 ### v0.0.26 : 19 juillet 2026
 

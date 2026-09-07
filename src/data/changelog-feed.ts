@@ -7,6 +7,13 @@ export type ChangelogFeedEntry = {
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'CLI v0.0.28: security fixes and working backups',
+    description:
+      'The zcp CLI redacts credentials from --debug output. It fixes the backup and vm-backup commands and makes instance ssh prefer the public IP.',
+    pubDate: '2026-09-07',
+    slug: 'cli-v0.0.28',
+  },
+  {
     title: 'Object storage endpoint DNS resolution from VPCs',
     description:
       'Fixed DNS configuration for newly created VPCs. Workloads in these VPCs now resolve the object storage endpoint.',

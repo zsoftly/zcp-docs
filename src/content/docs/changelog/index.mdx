@@ -111,6 +111,36 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v0.0.28: September 7, 2026
+
+<span id="cli-v0.0.28"></span>
+
+**Security fixes, working backups, and a public-IP-first `instance ssh`.** This release also ships
+everything prepared for v0.0.27, which was never published. Upgrading from v0.0.26 picks up both
+sets of changes. See the [v0.0.28 release](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.28)
+on GitHub.
+
+- **`--debug` output no longer leaks your API token.** Debug output and error messages now redact
+  the token, the `password` field, and other credential fields. This includes messages built from
+  responses the CLI cannot parse. We updated `golang.org/x/crypto` and the Go toolchain to close two
+  SSH denial-of-service advisories. Rotate your token if you shared `--debug` output before this
+  release.
+- **Backups work again.** `backup list` decodes the scheduled hour whether the API sends it as a
+  number or a string. `vm-backup delete` now works: it submits a cancellation request instead of the
+  `DELETE` request the API always rejected. `--interval` accepts only `dailyAt` or `hourlyAt`.
+  `backup list` and `vm-backup list` show clearer columns.
+- **`instance ssh` prefers the public IP.** It connects over the public IP when one is attached and
+  falls back to the private IP otherwise. New `--use-public` and `--use-private` flags force the
+  choice.
+- **Output fixes**: `firewall list` now shows each rule's state. `dns show` prints `-` instead of a
+  fabricated status. `autoscale policy delete` and `autoscale condition delete` print the numeric ID
+  correctly.
+- **From v0.0.27**: `instance create` supports the `Vpc` network type and can attach existing
+  networks with `--networks`. `ip static-nat enable` now requires `--network`. `volume attach` and
+  `volume detach` show the API's status instead of a blank row.
+- **Known limitation**: `object-storage bucket encryption enable` is disabled until the region's
+  gateway supports SSE-S3 default encryption. `status` and `disable` still work.
+
 ### v0.0.26: July 19, 2026
 
 <span id="cli-v0.0.26"></span>
