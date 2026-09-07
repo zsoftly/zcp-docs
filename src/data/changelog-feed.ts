@@ -1,9 +1,17 @@
 export type ChangelogFeedEntry = {
   title: string;
   description: string;
+  // Publication calendar date in YYYY-MM-DD format, not a release timestamp.
   pubDate: string;
   slug: string;
 };
+
+// Changelog dates are publication calendar dates, not recorded release times.
+// Parse them explicitly in UTC so rendering does not vary with the build host's timezone.
+export const publicationDateAtUtcMidnight = (date: string) => new Date(`${date}T00:00:00Z`);
+
+// RSS uses noon UTC to preserve the existing feed publication instant.
+export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:00:00Z`);
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
@@ -46,7 +54,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
     description:
       'General-purpose ci2 and memory-optimized cim2 Intel plans, custom Intel configurations, and Intel-backed Kubernetes node capacity are now available in the YUL region.',
     pubDate: '2026-08-16',
-    slug: 'platform-services',
+    slug: 'intel-compute-yul',
   },
   {
     title: 'Platform and services updates',

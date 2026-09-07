@@ -36,8 +36,11 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 - [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit) (7 septembre 2026)
 - [CLI v0.0.28 : correctifs de sécurité et sauvegardes fonctionnelles](/fr/changelog/#cli-v0.0.28)
   (7 septembre 2026)
+- [Résolution DNS du point de terminaison de stockage objet depuis les VPC](/fr/changelog/#object-storage-vpc-dns-resolution)
+  (6 septembre 2026)
 - [Kubernetes 1.37 est disponible](/fr/changelog/#kubernetes-1.37) (6 septembre 2026)
 - [La facturation postpayée est disponible](/fr/changelog/#postpaid-billing) (1er septembre 2026)
+- [Calcul Intel à Montréal (YUL)](/fr/changelog/#intel-compute-yul) (16 août 2026)
 - [Mises à jour de la plateforme et des services](/fr/changelog/#platform-services) (8 août 2026)
 - [CLI v0.0.26 : correctifs de redirection de ports et de clés SSH](/fr/changelog/#cli-v0.0.26) (19
   juillet 2026)
@@ -57,55 +60,67 @@ pour l'historique complet au niveau des commits.
 
 :::
 
-## Plateforme et services
-
-<span id="platform-services"></span>
+## Plateforme et services <!-- changelog-id: platform-services -->
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
 
-<span id="vpc-subnet-limit"></span>
+### Jusqu'à 8 sous-réseaux par VPC (7 septembre 2026) <!-- changelog-id: vpc-subnet-limit -->
 
-- **Jusqu'à 8 sous-réseaux par VPC (7 septembre 2026)** : chaque VPC prend en charge jusqu'à 8
-  sous-réseaux, contre 3 auparavant. Les VPC existants obtiennent la nouvelle limite sans aucune
-  modification de votre part. Si une charge de travail a besoin de plus de 8 sous-réseaux dans un
-  même VPC, ouvrez un billet de soutien depuis la console. Nous étudierons la demande. Voir
-  [Ajouter un sous-réseau](/fr/public-cloud/networking/vpc/add-subnet).
+Chaque VPC prend en charge jusqu'à 8 sous-réseaux, contre 3 auparavant. Les VPC existants obtiennent
+la nouvelle limite sans aucune modification de votre part. Si une charge de travail a besoin de plus
+de 8 sous-réseaux dans un même VPC, ouvrez un billet de soutien depuis la console. Nous étudierons
+la demande. Voir [Ajouter un sous-réseau](/fr/public-cloud/networking/vpc/add-subnet).
 
-<span id="kubernetes-1.37"></span>
+### Résolution DNS du point de terminaison de stockage objet depuis les VPC (6 septembre 2026) <!-- changelog-id: object-storage-vpc-dns-resolution -->
 
-- **Kubernetes 1.37 est disponible (6 septembre 2026)** : les nouvelles grappes gérées peuvent
-  utiliser 1.37.0, la nouvelle version mineure, ou les versions correctives actualisées 1.36.4 (la
-  version par défaut), 1.35.8 et 1.34.11. Les grappes qui utilisent déjà 1.36.1, 1.35.1 ou 1.34.3
-  conservent cette version. Ces versions correctives plus anciennes ne sont plus le choix recommandé
-  pour les nouvelles grappes. Mettez à niveau une version mineure à la fois, ou appliquez une mise à
-  niveau corrective au sein de la même version mineure. Faites-le depuis la page
-  [Vue d'ensemble du cluster](/fr/public-cloud/kubernetes/cluster-overview). Disponible dans les
-  deux régions. Voir [Créer un cluster Kubernetes](/fr/public-cloud/kubernetes/create-cluster) pour
-  la liste complète des versions.
+Configuration DNS corrigée pour les VPC nouvellement créés. Les charges de travail dans ces VPC
+peuvent désormais résoudre le point de terminaison de stockage objet.
 
-<span id="postpaid-billing"></span>
+### Kubernetes 1.37 est disponible (6 septembre 2026) <!-- changelog-id: kubernetes-1.37 -->
 
-- **La facturation postpayée est disponible (1er septembre 2026)** : choisissez le mode Postpayé
-  pendant l'inscription pour les services horaires et mensuels admissibles, puis payez les factures
-  avec une carte de crédit enregistrée dans Stripe. Choisissez Prépayé ou Postpayé pendant
-  l'inscription. Après la création de votre compte, il reste dans ce mode de facturation pendant
-  toute sa durée de vie. Consultez la [facturation](/fr/public-cloud/billing).
-- **Le calcul Intel est désormais offert à Montréal (YUL)** : forfaits à usage général `ci2` de 1 à
-  96 Go de mémoire vive, forfaits optimisés mémoire `cim2` de 8 à 64 Go, configurations Intel
-  personnalisées et capacité de nœuds Kubernetes sur Intel. Voir
-  [Types d'instances](/fr/public-cloud/compute/instance-types).
-- **Le SMTP sortant sur le port 25 est désormais bloqué par défaut** sur toutes les instances de
-  calcul afin de protéger la réputation d'envoi de la plateforme. Les ports 465 et 587 restent
-  ouverts pour le courriel authentifié. Les clients vérifiés peuvent demander l'accès auprès du
-  soutien. Voir [Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25).
-- **Kubernetes 1.36** est désormais pris en charge pour les grappes gérées.
-- Les images **Windows Server 2025** sont disponibles pour les instances de calcul.
-- **ZSoftly Cloud Storage** : les grappes de stockage dédiées à un seul locataire sont disponibles
-  de façon générale.
+Les nouvelles grappes gérées peuvent utiliser 1.37.0, la nouvelle version mineure, ou les versions
+correctives actualisées 1.36.4 (la version par défaut), 1.35.8 et 1.34.11. Au moment de la
+publication, les grappes qui utilisaient déjà 1.36.1, 1.35.1 ou 1.34.3 sont restées sur leur version
+respective jusqu'à leur mise à niveau. Ces versions correctives plus anciennes ne sont plus proposées
+pour les nouvelles grappes. Mettez à niveau une version mineure à la fois, ou appliquez une mise à
+niveau corrective au sein de la même version mineure. Faites-le depuis la page
+[Vue d'ensemble du cluster](/fr/public-cloud/kubernetes/cluster-overview). Disponible dans les deux
+régions. Voir [Créer un cluster Kubernetes](/fr/public-cloud/kubernetes/create-cluster) pour la
+liste complète des versions et les informations sur leur cycle de vie.
 
-## Place de marché
+### La facturation postpayée est disponible (1er septembre 2026) <!-- changelog-id: postpaid-billing -->
 
-<span id="marketplace"></span>
+Choisissez le mode Postpayé pendant l'inscription pour les services horaires et mensuels
+admissibles, puis payez les factures avec une carte de crédit enregistrée dans Stripe. Choisissez
+Prépayé ou Postpayé pendant l'inscription. Après la création de votre compte, il reste dans ce mode
+de facturation pendant toute sa durée de vie. Consultez la [facturation](/fr/public-cloud/billing).
+
+### Calcul Intel à Montréal (YUL) <!-- changelog-id: intel-compute-yul -->
+
+Forfaits à usage général `ci2` de 1 à 96 Go de mémoire vive, forfaits optimisés mémoire `cim2` de 8
+à 64 Go, configurations Intel personnalisées et capacité de nœuds Kubernetes sur Intel. Voir
+[Types d'instances](/fr/public-cloud/compute/instance-types).
+
+### SMTP sortant sur le port 25 <!-- changelog-id: smtp-port-25 -->
+
+Le SMTP sortant sur le port 25 est désormais bloqué par défaut sur toutes les instances de calcul
+afin de protéger la réputation d'envoi de la plateforme. Les ports 465 et 587 restent ouverts pour
+le courriel authentifié. Les clients vérifiés peuvent demander l'accès auprès du soutien. Voir
+[Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25).
+
+### Kubernetes 1.36
+
+Kubernetes 1.36 est désormais pris en charge pour les grappes gérées.
+
+### Windows Server 2025
+
+Les images Windows Server 2025 sont disponibles pour les instances de calcul.
+
+### ZSoftly Cloud Storage
+
+Les grappes de stockage dédiées à un seul locataire sont disponibles de façon générale.
+
+## Place de marché <!-- changelog-id: marketplace -->
 
 Images d'applications en un clic pour les instances de calcul.
 
@@ -118,9 +133,7 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
-### v0.0.28 : 7 septembre 2026
-
-<span id="cli-v0.0.28"></span>
+### v0.0.28 : 7 septembre 2026 <!-- changelog-id: cli-v0.0.28 -->
 
 **Correctifs de sécurité, sauvegardes fonctionnelles et un `instance ssh` qui privilégie l'IP
 publique.** Cette version livre aussi tout ce qui était prêt pour la v0.0.27, jamais publiée. La
@@ -149,9 +162,7 @@ mise à niveau depuis la v0.0.26 récupère donc les deux ensembles de changemen
   passerelle de la région ne prend pas en charge le chiffrement par défaut SSE-S3. `status` et
   `disable` fonctionnent toujours.
 
-### v0.0.26 : 19 juillet 2026
-
-<span id="cli-v0.0.26"></span>
+### v0.0.26 : 19 juillet 2026 <!-- changelog-id: cli-v0.0.26 -->
 
 **Correctifs pour la redirection de ports et les clés SSH.**
 
@@ -165,9 +176,7 @@ mise à niveau depuis la v0.0.26 récupère donc les deux ensembles de changemen
   auparavant que le slug et rejetait l'identifiant affiché par `ssh-key list`. La suppression d'une
   clé inconnue est maintenant une opération sans effet.
 
-### v0.0.25 : 18 juillet 2026
-
-<span id="cli-v0.0.25"></span>
+### v0.0.25 : 18 juillet 2026 <!-- changelog-id: cli-v0.0.25 -->
 
 **Les enregistrements `MX` fonctionnent désormais depuis le CLI.** `zcp dns record-create`
 n'envoyait jamais la priorité de l'enregistrement. Chaque création d'un `MX` échouait donc avec une
@@ -180,9 +189,7 @@ affiche un message clair. Voir [Gérer le DNS avec le CLI](/fr/public-cloud/dns/
 zcp dns record-create --domain examplecom --name @ --type MX --content mail.example.com. --priority 10
 ```
 
-### v0.0.24 : 16 juillet 2026
-
-<span id="cli-v0.0.24"></span>
+### v0.0.24 : 16 juillet 2026 <!-- changelog-id: cli-v0.0.24 -->
 
 **La suppression d'une VM libère maintenant son IP publique.** `instance delete` passe par le même
 flux d'annulation de service que la console. L'adresse attribuée automatiquement est donc libérée au
@@ -307,9 +314,7 @@ comment les fournir.
 - **Les erreurs de validation de l'API** affichent maintenant le détail au niveau du champ (par
   exemple, `public_key: The public key has already been taken.`) au lieu d'un message générique.
 
-### v0.0.17 : 17 juin 2026
-
-<span id="cli-v0.0.17"></span>
+### v0.0.17 : 17 juin 2026 <!-- changelog-id: cli-v0.0.17 -->
 
 **Stockage objet : l'ensemble des fonctionnalités S3 dans le CLI.** Plusieurs sont disponibles
 uniquement via le CLI (ou un SDK S3) aujourd'hui, pas encore dans l'interface web. Voir le
@@ -462,9 +467,7 @@ arrivé :
   option **`--pager`**, et des **binaires multiplateformes** (Linux/macOS/Windows, amd64/arm64) avec
   des installateurs en une ligne.
 
-## Fournisseur Terraform / OpenTofu
-
-<span id="terraform-opentofu"></span>
+## Fournisseur Terraform / OpenTofu <!-- changelog-id: terraform-opentofu -->
 
 Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié sous `zsoftly/zcp` sur
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le

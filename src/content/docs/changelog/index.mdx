@@ -5,7 +5,7 @@ description:
   the zcp CLI, and the Terraform / OpenTofu provider.
 ---
 
-import { changelogFeedEntries } from '../../../data/changelog-feed';
+import { changelogFeedEntries, publicationDateAtUtcMidnight } from '../../../data/changelog-feed';
 
 export const formatFeedDate = (date) =>
   new Intl.DateTimeFormat('en-CA', {
@@ -13,7 +13,7 @@ export const formatFeedDate = (date) =>
     month: 'long',
     day: 'numeric',
     timeZone: 'UTC',
-  }).format(new Date(`${date}T00:00:00Z`));
+  }).format(publicationDateAtUtcMidnight(date));
 
 The single place to follow what's new across the ZSoftly Cloud Platform. Each section below is its
 own changelog: **platform & services**, the **Marketplace**, the **`zcp` CLI**, and the **Terraform
@@ -57,55 +57,64 @@ complete, commit-level history.
 
 :::
 
-## Platform & services
-
-<span id="platform-services"></span>
+## Platform & services {/* changelog-id: platform-services */}
 
 Updates to the Public Cloud platform and managed services.
 
-<span id="vpc-subnet-limit"></span>
+### Up to 8 subnets per VPC (September 7, 2026) {/* changelog-id: vpc-subnet-limit */}
 
-- **Up to 8 subnets per VPC (September 7, 2026)**: each VPC supports up to 8 subnets, up from 3.
-  Existing VPCs get the new limit with no changes on your side. If a workload needs more than 8
-  subnets in a single VPC, raise a support ticket from the console. We will review the request. See
-  [Add Subnet](/public-cloud/networking/vpc/add-subnet).
+Each VPC supports up to 8 subnets, up from 3. Existing VPCs get the new limit with no changes on
+your side. If a workload needs more than 8 subnets in a single VPC, raise a support ticket from the
+console. We will review the request. See [Add Subnet](/public-cloud/networking/vpc/add-subnet).
 
-<span id="object-storage-vpc-dns-resolution"></span>
+### Object storage endpoint DNS resolution from VPCs (September 6, 2026) {/* changelog-id: object-storage-vpc-dns-resolution */}
 
-- **Object storage endpoint DNS resolution from VPCs (September 6, 2026)**: Fixed DNS configuration
-  for newly created VPCs. Workloads in these VPCs now resolve the object storage endpoint.
+Fixed DNS configuration for newly created VPCs. Workloads in these VPCs now resolve the object
+storage endpoint.
 
-<span id="kubernetes-1.37"></span>
+### Kubernetes 1.37 is available (September 6, 2026) {/* changelog-id: kubernetes-1.37 */}
 
-- **Kubernetes 1.37 is available (September 6, 2026)**: new managed clusters can run 1.37.0 or the
-  refreshed patch releases 1.36.4 (the default), 1.35.8, and 1.34.11. At release, clusters already
-  running 1.36.1, 1.35.1, or 1.34.3 remained on those versions until an upgrade. Those earlier patch
-  releases are no longer offered for new clusters. Upgrade one minor version at a time, or apply a
-  patch upgrade within the same minor version. Do this from the
-  [Cluster Overview](/public-cloud/kubernetes/cluster-overview) page. These versions are available
-  in both regions. See [Create Kubernetes Cluster](/public-cloud/kubernetes/create-cluster) for the
-  full version list and lifecycle information.
+New managed clusters can run 1.37.0 or the refreshed patch releases 1.36.4 (the default), 1.35.8,
+and 1.34.11. At release, clusters already running 1.36.1, 1.35.1, or 1.34.3 remained on those
+versions until an upgrade. Those earlier patch releases are no longer offered for new clusters.
+Upgrade one minor version at a time, or apply a patch upgrade within the same minor version. Do this
+from the [Cluster Overview](/public-cloud/kubernetes/cluster-overview) page. These versions are
+available in both regions. See [Create Kubernetes Cluster](/public-cloud/kubernetes/create-cluster)
+for the full version list and lifecycle information.
 
-<span id="postpaid-billing"></span>
+### Postpaid billing is available (September 1, 2026) {/* changelog-id: postpaid-billing */}
 
-- **Postpaid billing is available (September 1, 2026)**: choose Postpaid during signup for eligible
-  hourly and monthly services, then pay invoices with a credit card saved through Stripe. Choose
-  Prepaid or Postpaid during signup. After you create your account, it remains in that billing mode
-  for the life of the account. See [Billing](/public-cloud/billing).
-- **Intel compute is now available in Montréal (YUL)**: general-purpose `ci2` plans from 1 to 96 GB
-  of RAM, memory-optimized `cim2` plans from 8 to 64 GB of RAM, custom Intel configurations, and
-  Intel-backed Kubernetes node capacity. See [Instance types](/public-cloud/compute/instance-types).
-- **Outbound SMTP on port 25 is now blocked by default** on all compute instances to protect
-  platform-wide sender reputation. Ports 465 and 587 remain open for authenticated email. Verified
-  customers can request access through support. See
-  [SMTP Port 25](/public-cloud/networking/public-network/smtp-port-25).
-- **Kubernetes 1.36** is now supported for managed clusters.
-- **Windows Server 2025** images are available for compute instances.
-- **ZSoftly Cloud Storage**: dedicated, single-tenant storage clusters are generally available.
+Choose Postpaid during signup for eligible hourly and monthly services, then pay invoices with a
+credit card saved through Stripe. Choose Prepaid or Postpaid during signup. After you create your
+account, it remains in that billing mode for the life of the account. See
+[Billing](/public-cloud/billing).
 
-## Marketplace
+### Intel compute in Montréal (YUL) {/* changelog-id: intel-compute-yul */}
 
-<span id="marketplace"></span>
+General-purpose `ci2` plans from 1 to 96 GB of RAM, memory-optimized `cim2` plans from 8 to 64 GB of
+RAM, custom Intel configurations, and Intel-backed Kubernetes node capacity. See
+[Instance types](/public-cloud/compute/instance-types).
+
+### Outbound SMTP on Port 25 {/* changelog-id: smtp-port-25 */}
+
+Outbound SMTP on port 25 is now blocked by default on all compute instances to protect platform-wide
+sender reputation. Ports 465 and 587 remain open for authenticated email. Verified customers can
+request access through support. See
+[SMTP Port 25](/public-cloud/networking/public-network/smtp-port-25).
+
+### Kubernetes 1.36
+
+Kubernetes 1.36 is now supported for managed clusters.
+
+### Windows Server 2025
+
+Windows Server 2025 images are available for compute instances.
+
+### ZSoftly Cloud Storage
+
+Dedicated, single-tenant storage clusters are generally available.
+
+## Marketplace {/* changelog-id: marketplace */}
 
 One-click application images for compute instances.
 
@@ -118,9 +127,7 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
-### v0.0.28: September 7, 2026
-
-<span id="cli-v0.0.28"></span>
+### v0.0.28: September 7, 2026 {/* changelog-id: cli-v0.0.28 */}
 
 **Security fixes, working backups, and a public-IP-first `instance ssh`.** This release also ships
 everything prepared for v0.0.27, which was never published. Upgrading from v0.0.26 picks up both
@@ -148,9 +155,7 @@ on GitHub.
 - **Known limitation**: `object-storage bucket encryption enable` is disabled until the region's
   gateway supports SSE-S3 default encryption. `status` and `disable` still work.
 
-### v0.0.26: July 19, 2026
-
-<span id="cli-v0.0.26"></span>
+### v0.0.26: July 19, 2026 {/* changelog-id: cli-v0.0.26 */}
 
 **Port forwarding and SSH key fixes.**
 
@@ -162,9 +167,7 @@ on GitHub.
 - **`ssh-key delete` accepts the key's ID, name, or slug.** It previously took only the slug and
   rejected the ID that `ssh-key list` shows. Deleting an unknown key is now a no-op.
 
-### v0.0.25: July 18, 2026
-
-<span id="cli-v0.0.25"></span>
+### v0.0.25: July 18, 2026 {/* changelog-id: cli-v0.0.25 */}
 
 **`MX` records now work from the CLI.** `zcp dns record-create` never sent a record's priority, so
 every `MX` create failed with an API error. It now takes a `--priority` flag (0-65535, required for
@@ -176,9 +179,7 @@ every `MX` create failed with an API error. It now takes a `--priority` flag (0-
 zcp dns record-create --domain examplecom --name @ --type MX --content mail.example.com. --priority 10
 ```
 
-### v0.0.24: July 16, 2026
-
-<span id="cli-v0.0.24"></span>
+### v0.0.24: July 16, 2026 {/* changelog-id: cli-v0.0.24 */}
 
 **Deleting a VM now releases its auto-assigned public IP.** `instance delete` uses the same
 service-cancellation workflow as the console, so the address is no longer left allocated and
@@ -287,9 +288,7 @@ predictable and matches how the platform scopes resources. See
 - **API validation errors** now surface the field-level detail (for example,
   `public_key: The public key has already been taken.`) instead of a generic message.
 
-### v0.0.17: June 17, 2026
-
-<span id="cli-v0.0.17"></span>
+### v0.0.17: June 17, 2026 {/* changelog-id: cli-v0.0.17 */}
 
 **Object storage: the full S3 feature set in the CLI.** Many of these are available only through the
 CLI (or an S3 SDK) today, not yet in the Web UI. See the
@@ -425,9 +424,7 @@ consistent response format. A large set of command groups arrived:
   option, and **multi-platform binaries** (Linux/macOS/Windows, amd64/arm64) with one-line
   installers.
 
-## Terraform / OpenTofu provider
-
-<span id="terraform-opentofu"></span>
+## Terraform / OpenTofu provider {/* changelog-id: terraform-opentofu */}
 
 Manage ZCP infrastructure as code with the official provider, published as `zsoftly/zcp` on the
 [OpenTofu registry](https://search.opentofu.org/provider/zsoftly/zcp) and the
