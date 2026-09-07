@@ -65,9 +65,9 @@ Mises à jour de la plateforme Public Cloud et des services gérés.
 - **Kubernetes 1.37 est disponible (6 septembre 2026)** : les nouvelles grappes gérées peuvent
   utiliser 1.37.0, la nouvelle version mineure, ou les versions correctives actualisées 1.36.4 (la
   version par défaut), 1.35.8 et 1.34.11. Les grappes qui utilisent déjà 1.36.1, 1.35.1 ou 1.34.3
-  conservent cette version. Ce n'est plus le choix recommandé pour les nouvelles grappes. Mettez à
-  niveau une version mineure à la fois, ou appliquez une mise à niveau corrective au sein de la même
-  version mineure. Faites-le depuis la page
+  conservent cette version. Ces versions correctives plus anciennes ne sont plus le choix recommandé
+  pour les nouvelles grappes. Mettez à niveau une version mineure à la fois, ou appliquez une mise à
+  niveau corrective au sein de la même version mineure. Faites-le depuis la page
   [Vue d'ensemble du cluster](/fr/public-cloud/kubernetes/cluster-overview). Disponible dans les
   deux régions. Voir [Créer un cluster Kubernetes](/fr/public-cloud/kubernetes/create-cluster) pour
   la liste complète des versions.

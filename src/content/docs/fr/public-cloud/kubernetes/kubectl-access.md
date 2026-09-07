@@ -18,7 +18,8 @@ nouveaux clusters utilisent par défaut la version **1.36.4**. Installez la vers
 correspond à la version mineure de votre cluster. Kubernetes exige que le client et le serveur
 soient à moins d'une version mineure l'un de l'autre.
 
-La façon la plus rapide d'installer la dernière version compatible :
+Les exemples ci-dessous utilisent la version par défaut actuelle, 1.36.4. Remplacez la version
+complète par une version corrective qui correspond à la version mineure réelle de votre cluster.
 
 **Linux / macOS:**
 
@@ -36,6 +37,26 @@ Pour macOS, remplacez `linux` par `darwin` dans l'URL ci-dessus.
 
 ```powershell
 curl.exe -LO "https://dl.k8s.io/release/v1.36.4/bin/windows/amd64/kubectl.exe"
+```
+
+Pour installer la version mineure la plus récente, 1.37.0 :
+
+**Linux / macOS:**
+
+```bash
+# Install kubectl 1.37.0
+curl -LO "https://dl.k8s.io/release/v1.37.0/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/kubectl
+kubectl version --client
+```
+
+Pour macOS, remplacez `linux` par `darwin` dans l'URL ci-dessus.
+
+**Windows (PowerShell):**
+
+```powershell
+curl.exe -LO "https://dl.k8s.io/release/v1.37.0/bin/windows/amd64/kubectl.exe"
 ```
 
 **Ou utilisez un gestionnaire de paquets :**

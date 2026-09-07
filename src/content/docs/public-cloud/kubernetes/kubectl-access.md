@@ -38,6 +38,26 @@ For macOS replace `linux` with `darwin` in the URL above.
 curl.exe -LO "https://dl.k8s.io/release/v1.36.4/bin/windows/amd64/kubectl.exe"
 ```
 
+To install the newest minor version, 1.37.0, instead:
+
+**Linux / macOS:**
+
+```bash
+# Install kubectl 1.37.0
+curl -LO "https://dl.k8s.io/release/v1.37.0/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/kubectl
+kubectl version --client
+```
+
+For macOS replace `linux` with `darwin` in the URL above.
+
+**Windows (PowerShell):**
+
+```powershell
+curl.exe -LO "https://dl.k8s.io/release/v1.37.0/bin/windows/amd64/kubectl.exe"
+```
+
 **Or use a package manager:**
 
 ```bash
