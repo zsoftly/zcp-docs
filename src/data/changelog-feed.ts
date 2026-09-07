@@ -15,6 +15,13 @@ export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:0
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'Terraform / OpenTofu provider v0.2.0',
+    description:
+      'The provider adds object storage bucket configuration resources, VPC and multi-network instances, and volume lookups. It also fixes volume-backup reads, VM-backup destruction, interval validation, and volume-list pagination.',
+    pubDate: '2026-09-07',
+    slug: 'terraform-v0.2.0',
+  },
+  {
     title: 'Up to 8 subnets per VPC',
     description:
       'Each VPC supports up to 8 subnets, up from 3. Existing VPCs get the new limit with no changes. Raise a support ticket if a workload needs more.',

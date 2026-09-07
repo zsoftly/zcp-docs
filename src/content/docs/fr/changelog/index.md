@@ -33,6 +33,7 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0) (7 septembre 2026)
 - [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit) (7 septembre 2026)
 - [CLI v0.0.28 : correctifs de sécurité et sauvegardes fonctionnelles](/fr/changelog/#cli-v0.0.28)
   (7 septembre 2026)
@@ -473,6 +474,54 @@ Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié 
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v0.2.0 : 7 septembre 2026 <!-- changelog-id: terraform-v0.2.0 -->
+
+**Configuration de stockage objet, réseau d'instances enrichi et recherches de volumes.** Consultez
+la [version v0.2.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v0.2.0) et le
+[journal des modifications associé à la version](https://github.com/zsoftly/terraform-provider-zcp/blob/v0.2.0/CHANGELOG.md)
+pour la liste complète des modifications.
+
+- **Gérez les paramètres des compartiments de stockage objet comme du code.** Les nouvelles
+  ressources `zcp_object_storage_bucket_versioning`, `zcp_object_storage_bucket_policy`,
+  `zcp_object_storage_bucket_tagging`, `zcp_object_storage_bucket_lifecycle` et
+  `zcp_object_storage_bucket_cors` gèrent les paramètres respectifs de la passerelle compatible S3.
+  Le fournisseur obtient les identifiants de la passerelle en interne et ne les expose pas comme
+  attributs de ressources.
+- **Rattachez les instances aux VPC et à plusieurs réseaux.** `zcp_instance` prend maintenant en
+  charge le type de réseau `Vpc` et plusieurs réseaux, conformément aux capacités de création
+  d'instances du CLI v0.0.27.
+- **Recherchez les volumes et les disques attachés.** La nouvelle source de données `zcp_volume`
+  recherche un volume existant. `data.zcp_instance` expose maintenant `root_volume` et `volumes`.
+- **Lisez de nouveau les sauvegardes de volumes.** `zcp_volume_backup` décode maintenant
+  correctement le format de la liste de sauvegardes de la plateforme.
+- **Détruisez les planifications de sauvegarde VM.** `zcp_vm_backup` détruit les planifications via
+  le flux d'annulation de facturation au lieu d'une suppression directe refusée.
+- **Validez les intervalles de sauvegarde avant l'application.** `zcp_vm_backup` et
+  `zcp_volume_backup` n'acceptent que `dailyAt` ou `hourlyAt` pour `interval`, comme la plateforme.
+- **Détectez les IP publiques de VPC identifiables.** `zcp_firewall_rule` échoue dès qu'il identifie
+  une IP publique de VPC. Il n'attend plus l'expiration du délai pour une règle que la plateforme
+  n'appliquera pas.
+- **Corrigez l'ordre de création d'IP publique dans un VPC.** `zcp_ip_address` explique qu'un niveau
+  réseau VPC doit exister d'abord et indique quand ajouter `depends_on`.
+- **Les listes de volumes sont complètes.** Le fournisseur utilise maintenant le SDK du CLI `zcp`
+  v0.0.29, qui récupère chaque page d'une liste de volumes.
+
+Mettez à niveau votre contrainte de fournisseur, puis initialisez de nouveau :
+
+```hcl
+terraform {
+  required_providers {
+    zcp = {
+      source  = "zsoftly/zcp"
+      version = "~> 0.2.0"
+    }
+  }
+}
+```
+
+Exécutez `terraform init -upgrade` avec Terraform ou `tofu init -upgrade` avec OpenTofu. Si OpenTofu
+indique qu'aucune version ne correspond, attendez que son registre liste v0.2.0, puis réessayez.
 
 ### v0.1.3 : 20 juillet 2026
 
