@@ -145,8 +145,8 @@ L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous 
   renvoient des erreurs explicites au lieu de résultats partiels ou dupliqués.
 - **Les échecs de limite de sous-réseaux VPC indiquent la prochaine étape.** Lorsque
   `zcp network create --vpc` atteint la limite par défaut de huit sous-réseaux, la commande vous
-  dirige vers le soutien pour demander une augmentation de quota. Exécutez de nouveau la commande
-  après l'application de l'augmentation. Consultez la
+  vous invite à demander une augmentation de quota au soutien technique. Réexécutez la commande
+  une fois l’augmentation appliquée. Consultez la
   [référence du CLI](/fr/public-cloud/cli/reference).
 
 ### v0.0.28 : 7 septembre 2026 <!-- changelog-id: cli-v0.0.28 -->

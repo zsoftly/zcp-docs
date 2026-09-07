@@ -24,7 +24,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
     title: 'CLI v0.0.29: complete volume listings',
     description:
-      'The zcp CLI and SDK now retrieve every page in volume listings and return explicit pagination errors. VPC subnet-limit failures now direct you to request a quota increase before retrying.',
+      'The zcp CLI and SDK now retrieve every page in volume listings and return explicit pagination errors. When a VPC reaches its subnet limit, the CLI directs you to request a quota increase before retrying.',
     pubDate: '2026-09-07',
     slug: 'cli-v0.0.29',
   },
