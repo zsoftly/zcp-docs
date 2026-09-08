@@ -33,6 +33,7 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [La facturation postpayée est disponible](/fr/changelog/#postpaid-billing) (1er septembre 2026)
 - [Mises à jour de la plateforme et des services](/fr/changelog/#platform-services) (8 août 2026)
 - [CLI v0.0.26 : correctifs de redirection de ports et de clés SSH](/fr/changelog/#cli-v0.0.26) (19
   juillet 2026)
@@ -58,6 +59,13 @@ pour l'historique complet au niveau des commits.
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
 
+<span id="postpaid-billing"></span>
+
+- **La facturation postpayée est disponible (1er septembre 2026)** : choisissez le mode Postpayé
+  pendant l'inscription pour les services horaires et mensuels admissibles, puis payez les factures
+  avec une carte de crédit enregistrée dans Stripe. Choisissez Prépayé ou Postpayé pendant
+  l'inscription. Après la création de votre compte, il reste dans ce mode de facturation pendant
+  toute sa durée de vie. Consultez la [facturation](/fr/public-cloud/billing).
 - **Le calcul Intel est désormais offert à Montréal (YUL)** : forfaits à usage général `ci2` de 1 à
   96 Go de mémoire vive, forfaits optimisés mémoire `cim2` de 8 à 64 Go, configurations Intel
   personnalisées et capacité de nœuds Kubernetes sur Intel. Voir

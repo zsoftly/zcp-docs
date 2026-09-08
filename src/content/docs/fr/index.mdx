@@ -22,6 +22,7 @@ hero:
       variant: secondary
 ---
 
+import { PEERPUSH_BADGE_URL, PEERPUSH_LISTING_URL } from '../../../data/peerpush';
 import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../../data/site';
 
 <div class="home-layout">
@@ -230,6 +231,39 @@ import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../../da
       >
         Règles et informations sur la communauté →
       </a>
+    </div>
+
+    <div class="sidebar-card peerpush-card anim-3">
+      <h3>Reconnaissance</h3>
+      <a
+        href={PEERPUSH_LISTING_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="peerpush-card__badge"
+      >
+        <img
+          src={PEERPUSH_BADGE_URL}
+          alt="ZSoftly Cloud Platform est tendance sur PeerPush"
+          width="230"
+          height="65"
+          loading="lazy"
+          decoding="async"
+          referrerpolicy="no-referrer"
+        />
+      </a>
+      <div class="peerpush-card__recognition">
+        <a
+          href={PEERPUSH_LISTING_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>Tendance sur PeerPush</span>
+        </a>
+      </div>
+      <div class="peerpush-card__message">
+        ZSoftly Cloud Platform attire l'attention des développeurs et des créateurs à la recherche
+        d'alternatives aux infrastructures infonuagiques.
+      </div>
     </div>
 
     <div class="sidebar-links anim-3">

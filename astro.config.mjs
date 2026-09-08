@@ -4,7 +4,6 @@ import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import rehypeMermaid from 'rehype-mermaid';
-import { mdxLinkTargetIndexIntegration } from './src/plugins/rehype-mdx-link-target-index.mjs';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
 /** @type {Record<string, string>} */
@@ -33,6 +32,7 @@ const frSidebarLabels = {
   'Roles & Permissions': 'Rôles et autorisations',
   'Account Security': 'Sécurité du compte',
   Compute: 'Calcul',
+  'Operating System Images': 'Images des systèmes d’exploitation',
   'Create Instance': 'Créer une instance',
   'Instance Overview': "Vue d'ensemble de l'instance",
   'Plan Names': 'Noms des plans',
@@ -213,6 +213,7 @@ export default defineConfig({
         Hero: './src/overrides/Hero.astro',
         ThemeSelect: './src/overrides/ThemeSelect.astro',
         SocialIcons: './src/overrides/SocialIcons.astro',
+        Sidebar: './src/overrides/Sidebar.astro',
         Footer: './src/overrides/Footer.astro',
         MobileMenuFooter: './src/overrides/MobileMenuFooter.astro',
         TableOfContents: './src/overrides/TableOfContents.astro',
@@ -314,6 +315,7 @@ export default defineConfig({
               label: 'Compute',
               collapsed: true,
               items: [
+                { label: 'Overview', slug: 'public-cloud/compute' },
                 { label: 'Create Instance', slug: 'public-cloud/compute/create-instance' },
                 { label: 'Instance Overview', slug: 'public-cloud/compute/instance-overview' },
                 { label: 'Plan Names', slug: 'public-cloud/compute/plan-names' },
@@ -368,6 +370,7 @@ export default defineConfig({
               label: 'Networking',
               collapsed: true,
               items: [
+                { label: 'Overview', slug: 'public-cloud/networking' },
                 {
                   label: 'Public Network',
                   collapsed: true,
@@ -406,6 +409,7 @@ export default defineConfig({
               label: 'Storage',
               collapsed: true,
               items: [
+                { label: 'Overview', slug: 'public-cloud/storage' },
                 {
                   label: 'Block Storage',
                   collapsed: true,
@@ -449,6 +453,7 @@ export default defineConfig({
               label: 'Kubernetes',
               collapsed: true,
               items: [
+                { label: 'Overview', slug: 'public-cloud/kubernetes' },
                 { label: 'Create Cluster', slug: 'public-cloud/kubernetes/create-cluster' },
                 { label: 'Cluster Overview', slug: 'public-cloud/kubernetes/cluster-overview' },
                 { label: 'kubectl Access', slug: 'public-cloud/kubernetes/kubectl-access' },
@@ -489,6 +494,7 @@ export default defineConfig({
                   label: 'Databases',
                   collapsed: true,
                   items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/databases' },
                     { label: 'MongoDB 8.0', slug: 'public-cloud/marketplace/mongodb' },
                     { label: 'MariaDB 11.8', slug: 'public-cloud/marketplace/mariadb' },
                     { label: 'MySQL', slug: 'public-cloud/marketplace/mysql' },
@@ -502,6 +508,7 @@ export default defineConfig({
                   label: 'Web Stacks',
                   collapsed: true,
                   items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/web-stacks' },
                     { label: 'WordPress', slug: 'public-cloud/marketplace/wordpress' },
                     { label: 'LAMP Stack', slug: 'public-cloud/marketplace/lamp' },
                     { label: 'LEMP Stack', slug: 'public-cloud/marketplace/lemp' },
@@ -511,6 +518,7 @@ export default defineConfig({
                   label: 'Monitoring & Automation',
                   collapsed: true,
                   items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/monitoring-automation' },
                     { label: 'Grafana', slug: 'public-cloud/marketplace/grafana' },
                     { label: 'n8n', slug: 'public-cloud/marketplace/n8n' },
                   ],
@@ -519,6 +527,7 @@ export default defineConfig({
                   label: 'Developer Tools',
                   collapsed: true,
                   items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/developer-tools' },
                     { label: 'Docker', slug: 'public-cloud/marketplace/docker' },
                     { label: 'Node.js 24', slug: 'public-cloud/marketplace/nodejs' },
                     { label: 'OpenClaw', slug: 'public-cloud/marketplace/openclaw' },
@@ -527,12 +536,16 @@ export default defineConfig({
                 {
                   label: 'DevOps & Source Control',
                   collapsed: true,
-                  items: [{ label: 'GitLab CE 19.1', slug: 'public-cloud/marketplace/gitlab' }],
+                  items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/devops-source-control' },
+                    { label: 'GitLab CE 19.1', slug: 'public-cloud/marketplace/gitlab' },
+                  ],
                 },
                 {
                   label: 'Networking & VPN',
                   collapsed: true,
                   items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/networking-vpn' },
                     { label: 'Tailscale', slug: 'public-cloud/marketplace/tailscale' },
                     { label: 'NetBird', slug: 'public-cloud/marketplace/netbird' },
                   ],
@@ -540,7 +553,10 @@ export default defineConfig({
                 {
                   label: 'Control Panels',
                   collapsed: true,
-                  items: [{ label: 'cPanel', slug: 'public-cloud/marketplace/cpanel' }],
+                  items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/control-panels' },
+                    { label: 'cPanel', slug: 'public-cloud/marketplace/cpanel' },
+                  ],
                 },
               ],
             },
@@ -651,32 +667,6 @@ export default defineConfig({
       //   indexName: 'REPLACE_WITH_INDEX_NAME',
       // },
     }),
-    // Astro 6 does not pass `markdown.processor` plugins to MDX content.
-    // Remove this compatibility bridge once the validator supports that path.
-    mdxLinkTargetIndexIntegration({
-      docsDirectory: new URL('./src/content/docs/', import.meta.url),
-      base: '/',
-    }),
   ],
 
-  vite: {
-    build: {
-      rollupOptions: {
-        // Silence a harmless Rollup warning from Expressive Code's prebuilt
-        // dist: @expressive-code/core re-exports CONTINUE/EXIT from
-        // unist-util-visit-parents but doesn't use them in this bundle. Scoped
-        // narrowly to that exact import so our own unused-import warnings still
-        // surface. Upstream issue in @expressive-code/core@0.42.0.
-        onwarn(warning, defaultHandler) {
-          if (
-            warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
-            warning.exporter === 'unist-util-visit-parents'
-          ) {
-            return;
-          }
-          defaultHandler(warning);
-        },
-      },
-    },
-  },
 });
