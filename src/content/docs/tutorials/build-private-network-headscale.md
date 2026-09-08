@@ -7,6 +7,8 @@ sidebar:
   label: 'Build a Private Network (CLI)'
 ---
 
+<!-- Depends on zsoftly/tools PR for zcp/build-private-network.sh and zcp/destroy-private-network.sh - do not merge this tutorial before that lands. -->
+
 This tutorial builds a private network on ZCP: a VPC with a network tier that has no public exposure
 by default, plus a self-hosted [Headscale](https://headscale.net) server that gives you
 WireGuard-based mesh access into it. It's the foundation for the rest of this series: private
@@ -36,6 +38,8 @@ value for your account and region. Always use those, don't copy the examples ver
 - A ZSoftly Public Cloud account. [Sign up](/public-cloud/getting-started/account-signup) first if
   you do not have one.
 - A terminal with an SSH client.
+- `jq` installed. The build and teardown scripts in this tutorial require it (`apt install jq` or
+  `brew install jq`).
 - The [Tailscale client](https://tailscale.com/download) installed on your own machine, to prove
   connectivity at the end.
 
@@ -131,195 +135,145 @@ account.
 
 :::
 
-## Step 5: Create the VPC and a private tier
+## Run the script
 
-```bash
-zcp vpc create --name my-workspace --plan virtual-private-cloud-vpc-1 \
-  --network-address 10.20.0.0 --size 16 --billing-cycle hourly \
-  --storage-category pro-nvme
-```
-
-![zcp vpc create output showing the new VPC](../../../assets/build-private-network-headscale/02-vpc-create.png)
+Building the VPC, private tier, ACL, Headplane, and subnet router is one script:
+`zcp/build-private-network.sh` from the [zsoftly/tools](https://github.com/zsoftly/tools)
+repository. It runs through the same phases explained in the next section, in order, and prints each
+resource as it creates it.
 
 :::note
 
-Use the actual network base for `--network-address` (for example `10.20.0.0`, not `10.20.0.1`).
-Passing a host address instead of the base still works, but the CLI prints a warning and records the
-CIDR oddly.
+This script and the teardown script further down need a bash shell. That's native on macOS and
+Linux. On Windows, run it from WSL or Git Bash.
 
 :::
 
 ```bash
-zcp network create --name workspace-tier --vpc my-workspace \
-  --gateway 10.20.1.1 --netmask 255.255.255.0 --billing-cycle hourly
+bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/build-private-network.sh) \
+  --ssh-key my-key --name my-workspace
 ```
 
-![zcp network create output showing the new tier](../../../assets/build-private-network-headscale/03-tier-create.png)
+The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them in Step 2.
+Pass `--region`/`--project` instead if you didn't.
 
-The tier gets no public IP by default. Only the Headscale server (Step 7) gets a public-facing IP,
-and only on the ports it needs.
+| Flag        | Purpose                                   | Default / requirement      |
+| ----------- | ----------------------------------------- | -------------------------- |
+| `--ssh-key` | Key name from Step 4, used for both VMs   | Required                   |
+| `--name`    | Prefix for every resource name it creates | `workspace`                |
+| `--region`  | zcp region slug                           | Required (flag or env var) |
+| `--project` | zcp project slug                          | Required (flag or env var) |
+
+The Headplane template, both compute plans, the network plan, the VPC router plan, and both storage
+categories are auto-discovered from your account. The script prints what it picked at the top of its
+own output, so you can see the choice before anything is created.
+
+The subnet router template isn't looked up. It defaults to a fixed slug (`ubuntu-2404-lts-1`). Pass
+`--router-template` if your account doesn't have that template. Your public IP (`--my-ip`), the VPC
+network base (`--network-address`), and the billing cycle (`--billing-cycle`) aren't account lookups
+either. They default to an auto-detected or fixed value that you can override.
+
+Pass any flag explicitly to pin a specific value instead. Run the script with `--help` for the full
+list.
+
+```text
+==> Preflight checks
+[OK] zcp CLI authenticated, region=yul-1 project=default-9
+[INFO] Detecting your public IP...
+[INFO] Admin-port access scoped to: <your-ip>/32
+[INFO] Resolved resources:
+    Headplane template : zmi-headplane-070-ubuntu2404-100-1
+    Headplane plan      : ci2ls
+    Router template      : ubuntu-2404-lts-1
+    Router plan            : ci2ls
+    Network plan            : pnet-yul
+    VPC router plan          : virtual-private-cloud-vpc-1
+    VPC storage category      : pro-nvme
+    VM storage category        : pro-nvme
+```
+
+The script takes several minutes. It waits for both VMs to boot, waits for Headplane's first-boot
+provisioning to finish, and waits for SSH before configuring anything over it.
+
+## What the script builds
+
+### VPC and private tier
+
+**The private tier itself has no public IP. Only Headplane gets an internet-facing application
+port.**
+
+The script creates a VPC (`my-workspace`) and a network tier inside it (`my-workspace-tier`), with
+no public IP on the tier itself. Both VMs the script deploys get their own public IP, needed to
+reach Headscale and for the script to configure them over SSH. Headplane is the only one of the two
+with an internet-facing application port, opened deliberately through firewall and port-forward
+rules.
 
 :::note
 
-The VPC itself is given a source-NAT IP for outbound traffic automatically at creation. You don't
-need to allocate one yourself with `zcp ip allocate`. Doing so just creates a redundant, billable
-extra IP. If it happens, `zcp ip release <slug>` cleans it up.
+ZCP gives the VPC a source-NAT IP for outbound traffic automatically at creation. The script doesn't
+allocate one itself, and you shouldn't either with `zcp ip allocate`. Doing so creates a redundant,
+billable extra IP. If it happens, `zcp ip release <slug>` cleans it up.
 
 :::
 
-## Step 6: Lock down the tier with a custom ACL
+### The custom network ACL
 
-The tier's default ACL permits everything. Replace it with one that only allows what the tier
-actually needs.
+**The ACL makes the tier private, not the VPC by itself.**
 
-:::note
-
-The second CIDR below, `100.64.0.0/10`, is Headscale's mesh address range. This isn't something you
-look up after deploying Headplane in Step 7, it's Tailscale and Headscale's documented default IP
-range for every device on the mesh ([RFC 6598](https://www.rfc-editor.org/rfc/rfc6598), the "Shared
-Address Space" block), the same for any default install unless someone deliberately reconfigures it.
-You're allowed to add these rules now, before Headplane exists yet, because the range itself doesn't
-depend on anything you've deployed.
-
-:::
-
-```bash
-zcp vpc acl-create my-workspace --name workspace-acl \
-  --description "Workspace tier lockdown"
-
-zcp acl create-rule my-workspace workspace-acl --number 1 --protocol all \
-  --cidr 10.20.1.0/24 --action allow --traffic-type ingress
-zcp acl create-rule my-workspace workspace-acl --number 2 --protocol all \
-  --cidr 100.64.0.0/10 --action allow --traffic-type ingress
-zcp acl create-rule my-workspace workspace-acl --number 3 --protocol all \
-  --cidr 10.20.1.0/24 --action allow --traffic-type egress
-zcp acl create-rule my-workspace workspace-acl --number 4 --protocol all \
-  --cidr 100.64.0.0/10 --action allow --traffic-type egress
-```
-
-![zcp acl create-rule output for all four rules](../../../assets/build-private-network-headscale/04-acl-rules-created.png)
-
-Verify all four rules landed correctly:
-
-```bash
-zcp acl rules my-workspace workspace-acl
-```
-
-![zcp acl rules output showing all four rules Active](../../../assets/build-private-network-headscale/05-acl-rules-list.png)
-
-Then actually turn the ACL on:
-
-```bash
-zcp vpc acl-replace --network workspace-tier --acl workspace-acl \
-  --vpc my-workspace
-```
-
-![zcp vpc acl-replace output confirming the swap](../../../assets/build-private-network-headscale/06-acl-replace.png)
-
-This is the step that actually delivers "private." A VPC alone doesn't guarantee isolation, the ACL
+The tier's default ACL permits everything. The script replaces it with one that only allows what the
+tier needs, then applies that ACL to the tier. A VPC alone doesn't guarantee isolation, the ACL
 does.
+
+:::note
+
+The second CIDR the script allows, `100.64.0.0/10`, is Headscale's mesh address range. This isn't
+something looked up after Headplane exists. It's Tailscale and Headscale's documented default IP
+range for every device on the mesh ([RFC 6598](https://www.rfc-editor.org/rfc/rfc6598), the "Shared
+Address Space" block). Every default install uses it, unless someone deliberately reconfigures it.
+The script can add these rules before Headplane is deployed, because the range itself doesn't depend
+on anything else it builds.
+
+:::
 
 :::caution
 
 Allowing only the tier's own CIDR (`10.20.1.0/24`) is not enough. Reaching the subnet router's own
-tier IP through the mesh works with just that rule, because that traffic terminates directly at the
+tier IP through the mesh works with only that rule, because that traffic terminates directly at the
 router's WireGuard tunnel endpoint, before the tier ACL is evaluated. Reaching any _other_ VM on the
 tier requires the router to forward the packet onward, and it preserves the mesh client's original
-Headscale-range source IP rather than rewriting it to a tier address. Without the second rule above,
+Headscale-range source IP rather than rewriting it to a tier address. Without the mesh-range rule,
 traffic to anything beyond the router itself is silently dropped. Egress rules are required too.
 This platform's network ACLs are stateless, so ingress rules alone are not enough for return
 traffic.
 
 :::
 
-## Step 7: Deploy the Headplane marketplace template
+Verify the rules landed (see `zcp acl rules` under Inspect what was created, below):
 
-Deploy Headplane on its own public network. This VM is deliberately the one internet-facing piece in
-the whole design:
+![zcp acl rules output showing all four rules Active](../../../assets/build-private-network-headscale/05-acl-rules-list.png)
 
-```bash
-zcp instance create --name my-headscale \
-  --template zmi-headplane-070-ubuntu2404-100-1 --plan ca2sm \
-  --billing-cycle hourly --network-plan pnet-yul --storage-category premium-ssd \
-  --ssh-key my-key --wait
-```
+### Headplane
 
-![zcp instance create output showing my-headscale Running](../../../assets/build-private-network-headscale/07-headplane-instance-create.png)
+**Headplane is the only VM with an internet-facing application port, opened deliberately.**
 
-Get the VM's public IP:
-
-```bash
-zcp instance get my-headscale
-```
-
-![zcp instance get output showing the Public IP field](../../../assets/build-private-network-headscale/08-instance-get.png)
-
-:::caution
+The script deploys the Headplane marketplace template (it bundles the Headscale control server and a
+web UI) on its own public network.
 
 By default, the template's first-boot script points the Headscale and Headplane configuration at the
-VM's **private** IP. External clients need the public IP instead. SSH in, update both config files,
-and restart the stack:
+VM's **private** IP. External clients need the public IP instead, so the script SSHes in, rewrites
+both config files to the VM's actual public IP, and restarts the stack.
 
-```bash
-ssh ubuntu@<public-ip>
-```
-
-![SSH session opening on the Headplane VM](../../../assets/build-private-network-headscale/09-ssh-session.png)
-
-```bash
-sudo sed -i 's|^server_url:.*|server_url: http://<public-ip>:8080|' \
-  /opt/headplane/headscale/config/config.yaml
-sudo sed -i 's|^  base_url:.*|  base_url: "http://<public-ip>:3000"|' \
-  /opt/headplane/headplane/config.yaml
-cd /opt/headplane && sudo docker compose restart
-```
-
-![docker compose ps showing both containers healthy after the restart](../../../assets/build-private-network-headscale/10-docker-compose-ps.png)
-
-:::
-
-Open the two ports Headplane needs. Get the IP's slug first:
-
-```bash
-zcp ip list   # find the row whose VM is my-headscale
-```
-
-![zcp ip list output showing the source-NAT IP for my-headscale](../../../assets/build-private-network-headscale/11-ip-list.png)
-
-Find your own machine's public IP (not the VM's):
-
-```bash
-curl -s https://ifconfig.me
-```
-
-```bash
-zcp firewall create --ip <ip-slug> --protocol tcp --start-port 3000 \
-  --end-port 3000 --cidr <your-own-public-ip>/32
-zcp firewall create --ip <ip-slug> --protocol tcp --start-port 8080 \
-  --end-port 8080 --cidr 0.0.0.0/0
-
-zcp portforward create --ip <ip-slug> --protocol tcp --public-port 3000 \
-  --public-end-port 3000 --private-port 3000 --private-end-port 3000 \
-  --instance my-headscale
-zcp portforward create --ip <ip-slug> --protocol tcp --public-port 8080 \
-  --public-end-port 8080 --private-port 8080 --private-end-port 8080 \
-  --instance my-headscale
-```
-
-:::caution
-
-A firewall rule alone permits the traffic at the network level, but on this kind of network it does
-**not** get you reachability by itself. A port-forward rule is what actually maps the public IP's
-port to the VM's private IP. Both are required for every port.
-
-:::
+The script also opens the two ports Headplane needs and creates the matching port-forward rules. A
+firewall rule alone permits traffic at the network level. On this kind of network it does not get
+you reachability by itself. A port-forward rule maps the public IP's port to the VM's private IP.
+Both are required for every port.
 
 :::caution
 
 Keep port **3000** (the admin UI) scoped to your own trusted IP address. Leave port **8080**
 (Headscale's control endpoint) open broadly. Any remote device that will ever connect needs to reach
 it from wherever it is, by design. Scoping 8080 to one trusted IP breaks registration for every
-other device.
+other device. The script applies this split automatically.
 
 :::
 
@@ -327,37 +281,22 @@ other device.
 
 Marketplace App templates like this one get a default SSH firewall rule at deploy time, open to
 **any address** (`0.0.0.0/0`, both TCP and UDP port 22). Not something you created, and not scoped
-to you. Check for it and lock it down the same way as any other port:
-
-```bash
-zcp firewall list --ip <ip-slug>   # look for tcp/udp port 22 rules with CIDR 0.0.0.0/0
-
-zcp firewall delete <ssh-tcp-rule-id> --ip <ip-slug> --yes
-zcp firewall delete <ssh-udp-rule-id> --ip <ip-slug> --yes
-
-zcp firewall create --ip <ip-slug> --protocol tcp --start-port 22 \
-  --end-port 22 --cidr <your-own-public-ip>/32
-```
-
-Plain OS templates (like the subnet router VM in Step 8) don't get this default rule and start with
-nothing open, so this step only applies here.
+to you. The script finds and deletes it, then adds a replacement scoped to your own IP. Plain OS
+templates (like the subnet router below) don't get this default rule and start with nothing open, so
+this only applies to the Headplane VM.
 
 :::
 
-First boot handles the rest: it generates a unique cookie secret, starts the stack, creates a
-default Headscale user, and mints an API key, written once to `/etc/headplane/credentials.txt` on
-the VM. SSH in to read it. The key can't be retrieved again after.
-
-```bash
-sudo cat /etc/headplane/credentials.txt
-```
-
-![credentials.txt output showing the Headplane URL and API key](../../../assets/build-private-network-headscale/12-credentials-txt.png)
+First boot on the Headplane VM generates a unique cookie secret, starts the stack, creates a default
+Headscale user, and mints an API key, written to `/etc/headplane/credentials.txt` on the VM. The
+script reads it over SSH and prints it in its final summary. That's a one-time read by convention,
+not a technical limit: if you need the key again later, SSH in and read
+`/etc/headplane/credentials.txt` directly.
 
 :::note
 
 If the Headplane UI rejects this key ("API key was not found in the Headscale database"), mint a
-fresh one directly and use that instead:
+fresh one directly on the VM and use that instead:
 
 ```bash
 sudo docker exec headscale headscale apikeys create --expiration 90d
@@ -365,115 +304,42 @@ sudo docker exec headscale headscale apikeys create --expiration 90d
 
 :::
 
-Sign in to the Headplane UI at `http://<public-ip>:3000/admin/login` with the API key.
+Sign in to the Headplane UI at the URL the script prints
+(`http://<headplane-public-ip>:3000/admin/login`) with the API key.
 
 ![Headplane Machines dashboard after signing in, showing zero machines](../../../assets/build-private-network-headscale/13-headplane-dashboard.png)
 
-## Step 8: Enroll a subnet router for the tier
+### The subnet router
 
-Deploy a small VM with two network interfaces: its own public network, to reach Headscale for
-registration, plus the private tier, attached after creation:
+**The subnet router is the only path between the internet and the private tier.**
 
-```bash
-zcp instance create --name my-subnet-router \
-  --template ubuntu-2404-lts-1 --plan ca2sxs --billing-cycle hourly \
-  --network-plan pnet-yul --storage-category premium-ssd --ssh-key my-key --wait
-
-zcp instance add-network my-subnet-router --network workspace-tier
-```
-
-![zcp instance create output showing my-subnet-router Running](../../../assets/build-private-network-headscale/14-router-instance-create.png)
-
-:::caution
+The script deploys a small VM with two network interfaces: its own public network, to reach
+Headscale for registration, plus the private tier, attached after creation.
 
 The platform hot-adds the second network interface, but the operating system doesn't bring it up
-automatically. Add a netplan file for the new interface (check its name with `ip -br link show`,
-typically `ens8`) and apply it:
+automatically. The script writes a netplan file for the new interface and applies it, then reads
+back the address the tier's DHCP assigned.
 
-```bash
-sudo tee /etc/netplan/60-tier-nic.yaml <<'EOF'
-network:
-  version: 2
-  ethernets:
-    ens8:
-      dhcp4: true
-EOF
-sudo netplan apply
-```
+It installs the Tailscale client on the router (the same client Headscale uses, pointed at a custom
+control server) and enables IP forwarding **before** registering. `tailscale up` prints a warning
+about this ("IP forwarding is disabled, subnet routing/exit nodes will not work"). It does not block
+on it. Skip this step and you end up with a route that's approved but never forwards traffic.
 
-Confirm it worked and note the address it was given. You'll need it in Step 9:
-
-```bash
-ip -4 -br addr show
-```
-
-`ens8` should now show `UP` with an address in your tier's range (for example `10.20.1.232`). Write
-it down.
-
-:::
-
-Install the Tailscale client. It's the same client Headscale uses, just pointed at a custom control
-server:
-
-```bash
-curl -fsSL https://tailscale.com/install.sh | sudo sh
-```
-
-:::caution
-
-Enable IP forwarding **before** registering. `tailscale up` prints a warning about this ("IP
-forwarding is disabled, subnet routing/exit nodes will not work") but does not block on it, so it's
-easy to end up with a route that's approved but never actually forwards traffic.
-
-```bash
-echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
-echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
-sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
-```
-
-:::
-
-Create a preauth key on the Headplane server (SSH into it first):
-
-```bash
-docker exec headscale headscale users list
-docker exec headscale headscale preauthkeys create --user <numeric-id> --expiration 1h
-```
+The script mints a preauth key on the Headplane server and uses it to register the router,
+advertising the tier's CIDR as a route.
 
 :::note
 
-Pass the numeric user ID from `users list`, not the username string. `--user default` fails with a
-parse error.
+Registering needs the numeric Headscale user ID, not the username string. `--user default` fails
+with a parse error. You may also see a warning about "UDP GRO forwarding" being suboptimally
+configured. That's a performance tuning suggestion, not an error, and it doesn't block registration.
 
 :::
 
-Register the subnet router, advertising the tier's CIDR as a route:
-
-```bash
-sudo tailscale up --login-server http://<headplane-public-ip>:8080 \
-  --authkey <key> --advertise-routes=10.20.1.0/24 --accept-routes
-```
-
-:::note
-
-You may see a warning about "UDP GRO forwarding" being suboptimally configured. This is a
-performance tuning suggestion, not an error. It doesn't block registration and can be ignored.
-
-:::
-
-Approve the route on the Headscale side. This is not automatic:
-
-```bash
-docker exec headscale headscale nodes list-routes
-docker exec headscale headscale nodes approve-routes --identifier <node-id> \
-  --routes 10.20.1.0/24
-```
-
-![docker exec headscale nodes approve-routes output](../../../assets/build-private-network-headscale/15-approve-routes.png)
-
-`list-routes` shows the route as **Available** but not **Approved** or **Serving** until
-`approve-routes` runs. It can take a few seconds for **Serving (Primary)** to catch up even after
-approval. That's normal, not a sign anything's wrong.
+Approving an advertised route on the Headscale side is not automatic, so the script does this for
+you: it looks up the router's node ID and approves the tier CIDR against it. Without that approval,
+`list-routes` shows the route as **Available** but never **Approved** or **Serving**. It can take a
+few seconds for **Serving (Primary)** to catch up even after approval. That's normal.
 
 You can also see this from the Headplane UI: the router shows **Connected** with a **Subnets** badge
 once it's advertising the route.
@@ -483,40 +349,46 @@ once it's advertising the route.
 This VM is the door into the private tier. Later tutorials' desktops and storage sit behind it
 without needing their own public IPs.
 
-## Step 9: Connect from your own machine
+## Inspect what was created
 
-Install Tailscale locally, if it isn't already:
-
-```bash
-# Linux
-curl -fsSL https://tailscale.com/install.sh | sh
-```
-
-On Windows, install with `winget install tailscale.tailscale`, or download the installer from
-[tailscale.com/download](https://tailscale.com/download). On macOS, install from the
-[Mac App Store](https://apps.apple.com/app/tailscale/id1475387142) or with `brew install tailscale`.
-Confirm it works with `tailscale version`.
-
-Then register against your Headscale server:
+Everything the script built is a normal ZCP resource. List it the same way you'd list anything else:
 
 ```bash
-tailscale up --login-server http://<headplane-public-ip>:8080 \
-  --auth-key <key> --accept-routes --reset
+zcp vpc list
+zcp network list
+zcp instance list
+zcp acl rules my-workspace my-workspace-acl
 ```
 
-:::note
+```text
+ID                                    NAME               STATE    PRIVATE IP  PUBLIC IP        REGION
+a1b2c3d4-...                          my-workspace-headscale       Running  10.0.0.214  198.51.100.10   YUL-1
+e5f6a7b8-...                          my-workspace-subnet-router   Running  10.0.0.76   198.51.100.11   YUL-1
+```
 
-Your client may want `--auth-key` (with a hyphen) rather than `--authkey`, and may need `--reset` if
-it already has non-default settings from a different network. Both depend on your installed client
-version.
+## Connect from your own machine
 
-:::
+The build script's own final summary already mints a fresh preauth key for your device. It prints a
+ready one-liner that installs Tailscale, if it isn't already installed, and registers it against
+your Headscale server in one step. This is the same `vpn/install.sh` script used for onboarding any
+other endpoint. Copy that line from your terminal output. It looks like this (key genericized, yours
+is a real value):
+
+```bash
+HEADSCALE_URL="http://198.51.100.10:8080" \
+  bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/vpn/install.sh) "your-name" --key "hskey-auth-EXAMPLE..."
+```
+
+Paste it into a terminal on your own machine and run it. On macOS you may need to approve a network
+extension once in **System Settings → Privacy & Security** before it finishes connecting. On Windows
+without WSL or Git Bash, use `vpn/install.ps1` from the same `zsoftly/tools` repository instead. The
+PowerShell invocation pattern is in that repo's README.
 
 Verify:
 
 ```bash
 tailscale status
-ping 10.20.1.<router-tier-ip-last-octet>
+ping <router-tier-ip>
 ```
 
 ![tailscale status and a successful ping to the subnet router's private tier IP](../../../assets/build-private-network-headscale/17-ping-success.png)
@@ -531,8 +403,8 @@ latency far more than VM size does.
 :::caution
 
 If a node shows **offline** in `tailscale status`, with a health check message about being unable to
-reach the coordination server, even though nothing about the network setup is wrong, restart
-`tailscaled` on the affected node:
+reach the coordination server, restart `tailscaled` on the affected node. This can happen even when
+nothing about the network setup is wrong:
 
 ```bash
 sudo systemctl restart tailscaled
@@ -542,64 +414,48 @@ This has been observed on both the subnet router and plain clients.
 
 :::
 
-## Step 10: Verify isolation
+## Verify isolation
 
-This is implicitly proven by Step 9. The subnet router's tier IP has no public IP or port-forward
-rule of its own. The only way the external client reached it was through the Headscale-approved
-route. Nothing about the tier itself is internet-reachable.
+This is implicitly proven by the previous section. The subnet router's tier IP has no public IP or
+port-forward rule of its own. The only way the external client reached it was through the
+Headscale-approved route. Nothing about the tier itself is internet-reachable.
 
 ## Clean up
 
-Hourly billing runs while resources exist. Remove them when you are done:
+Hourly billing runs while resources exist. The teardown script removes everything the build script
+created for a given `--name` prefix: the subnet router, the Headplane VM, and the VPC (which removes
+the tier automatically).
 
 ```bash
-zcp instance delete my-subnet-router
-zcp instance delete my-headscale
-zcp vpc delete my-workspace
+bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-private-network.sh) \
+  --name my-workspace
 ```
 
-Deleting the last VM in a tier removes the tier automatically. Each `instance delete` also releases
-that VM's own public IP. Check `zcp ip list` afterward for anything left over (for example, an
-accidentally allocated VPC egress IP from Step 5) and release it.
+It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the build script does. Pass
+`--region`/`--project` instead if you didn't export them.
+
+It also checks for a public IP left attached to a deleted VM. Deletion doesn't always release an IP
+synchronously, so this is usually propagation lag: re-run the script in a minute. If it still shows
+up, the IP is likely tied to a standalone network the platform created for that VM rather than to
+the VPC itself. The platform refuses to release a source-NAT IP directly (`zcp ip release` fails on
+one), so find its network with `zcp network list` and delete that instead. The IP goes with it.
 
 ## Recap
 
-```bash
-# 1-2. Install and authenticate
-zcp profile add default && zcp auth validate
-export ZCP_REGION=yul-1 ZCP_PROJECT=default-9
-
-# 3-4. Find resources and add your SSH key
-zcp template list | grep -i headplane
-zcp plan vm && zcp plan network && zcp plan router && zcp storage-category list
-zcp ssh-key import --name my-key --key-file ~/.ssh/id_ed25519.pub
-
-# 5-6. VPC, tier, and ACL
-zcp vpc create --name my-workspace --plan virtual-private-cloud-vpc-1 ...
-zcp network create --name workspace-tier --vpc my-workspace ...
-zcp vpc acl-create my-workspace --name workspace-acl ...
-zcp acl create-rule my-workspace workspace-acl ...   # x4, ingress+egress, tier CIDR + 100.64.0.0/10
-zcp vpc acl-replace --network workspace-tier --acl workspace-acl --vpc my-workspace
-
-# 7. Deploy Headplane (Headscale + admin UI)
-zcp instance create --template zmi-headplane-070-ubuntu2404-100-1 ...
-zcp firewall create ... && zcp portforward create ...   # ports 3000 and 8080
-zcp firewall delete ...   # lock down the default open SSH rule this template creates
-
-# 8. Subnet router
-zcp instance create --template ubuntu-2404-lts-1 ... && zcp instance add-network ...
-# on the router: enable IP forwarding, install tailscale, register, advertise route
-docker exec headscale headscale nodes approve-routes ...
-
-# 9-10. Connect and verify
-tailscale up --login-server ... --accept-routes   # on your own machine
-ping <tier-private-ip>
-```
+1. Install the CLI, authenticate, find your account's resource slugs, and import an SSH key (Steps
+   1-4).
+2. Run `build-private-network.sh --ssh-key <name> --name my-workspace`. It creates the VPC, private
+   tier, locked-down ACL, Headplane, and subnet router, then prints a connect command for your own
+   device.
+3. Copy that command from the script's output, run it on your own machine, then verify with
+   `tailscale status` and a ping into the tier.
+4. Run `destroy-private-network.sh --name <prefix>` when you're done, to remove everything and stop
+   billing.
 
 ## Next steps
 
 The next parts of this series (private shared storage, then Ubuntu employee desktops, both reusing
-the tier and mesh you just built) are still in progress. In the meantime:
+the tier and mesh you built) are still in progress. In the meantime:
 
 - [CLI reference](/public-cloud/cli/reference): every command and flag
 - [Tutorials overview](/tutorials): the full list of available tutorials
