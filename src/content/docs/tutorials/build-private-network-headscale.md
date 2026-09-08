@@ -280,10 +280,12 @@ other device. The script applies this split automatically.
 :::caution
 
 Marketplace App templates like this one get a default SSH firewall rule at deploy time, open to
-**any address** (`0.0.0.0/0`, both TCP and UDP port 22). Not something you created, and not scoped
-to you. The script finds and deletes it, then adds a replacement scoped to your own IP. Plain OS
-templates (like the subnet router below) don't get this default rule and start with nothing open, so
-this only applies to the Headplane VM.
+**any address** (`0.0.0.0/0`, both TCP and UDP port 22), an explicit rule visible in
+`zcp firewall list`. Not something you created, and not scoped to you. The script finds and deletes
+it, then adds a replacement scoped to your own IP.
+
+This is specific to Marketplace App templates. The subnet router, deployed from a plain OS image,
+never gets this default rule, so this lockdown step only applies to Headplane.
 
 :::
 
