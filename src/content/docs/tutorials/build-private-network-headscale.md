@@ -437,15 +437,44 @@ public exposure. It does not prove the tier as a whole is isolated: that traffic
 at the router's WireGuard endpoint, which is a different path than reaching any _other_ VM on the
 tier through the router's forwarding.
 
-For real proof, repeat Step 8's `zcp instance create` + `add-network` pattern for a second VM on the
-tier (skip the Tailscale steps, this one doesn't need them). From your already-connected device:
+For real proof, deploy a second VM the same way the script deployed the subnet router: its own
+public IP for setup, then attached to the tier. That public IP is only there so you can configure
+it, not part of what's being tested:
 
 ```bash
-ping <second-vm-tier-ip>
+zcp instance create --name isolation-check \
+  --template ubuntu-2404-lts-1 --plan ci2ls --billing-cycle hourly \
+  --network-plan pnet-yul --storage-category pro-nvme --ssh-key my-key --wait
+
+zcp instance add-network isolation-check --network my-workspace-tier
+```
+
+SSH in over its own public IP and bring up the hot-added tier NIC the same way the script did for
+the router (see "The subnet router" above for why this manual step is needed):
+
+```bash
+ip -br link show   # find the new interface, typically ens8
+
+sudo tee /etc/netplan/60-tier-nic.yaml <<'EOF'
+network:
+  version: 2
+  ethernets:
+    ens8:
+      dhcp4: true
+EOF
+sudo netplan apply
+
+ip -4 -br addr show ens8   # note the address it gets, e.g. 10.20.1.201
+```
+
+From your already-connected device:
+
+```bash
+ping <isolation-check-tier-ip>
 ```
 
 That succeeds, through the mesh and the router's forwarding, not just to the router's own address.
-Now try reaching the same IP from anywhere that never joined the mesh: your own home network, a
+Now try reaching the same tier IP from anywhere that never joined the mesh: your own home network, a
 different machine, anywhere on the public internet. It fails, every time. That address is private,
 with no public IP and no port-forward rule anywhere in this design. It was never internet-reachable
 in the first place, mesh or no mesh, which is the actual proof of isolation, not the mesh being what
