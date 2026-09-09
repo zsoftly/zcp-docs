@@ -46,7 +46,8 @@ value for your account and region. Always use those, don't copy the examples ver
 :::note
 
 No domain or TLS certificate is required. The Headplane template runs over plain HTTP by default,
-and that's the baseline this tutorial uses.
+and that's the baseline this tutorial uses. Encryption for the admin UI comes from an SSH tunnel
+instead of TLS, not from skipping encryption entirely. See "What the script builds" below.
 
 :::
 
@@ -67,14 +68,15 @@ Confirm it works with `zcp version`.
 ## Step 2: Authenticate
 
 1. In the portal, open **Profile → API Tokens** and create a token. Copy it.
-2. Create a CLI profile and paste the token when prompted:
+2. Create a CLI profile and answer its prompts:
 
 ```bash
 zcp profile add default
 ```
 
-You are prompted for the **Bearer token** and the **API URL** (`https://api.zcp.zsoftly.ca/api`).
-Then verify:
+It prompts for the **Bearer token** you copied, then a **default region** and **default project**
+(see the note below to look those up first if you don't already know them). There's no API URL
+prompt. That's a fixed default unless you override it with `--api-url-override`. Then verify:
 
 ```bash
 zcp auth validate
@@ -82,16 +84,17 @@ zcp auth validate
 
 :::note
 
-Every command that touches a region-specific resource requires a **region** and a **project**. Set
-them once so you don't repeat the flags:
+Every command that touches a region-specific resource needs a **region** and a **project**. The
+profile you just created already carries defaults from the prompts above. Look them up first if you
+don't know them yet:
 
 ```bash
 zcp region list                # find your region, e.g. yul-1
 zcp project list                # find your project slug, e.g. default-9
-
-export ZCP_REGION=yul-1
-export ZCP_PROJECT=default-9
 ```
+
+Override the profile's defaults for one command with `--region`/`--project` flags, or for the rest
+of your shell session with `export ZCP_REGION=...`/`export ZCP_PROJECT=...`.
 
 :::
 
@@ -238,13 +241,15 @@ on anything else it builds.
 :::caution
 
 Allowing only the tier's own CIDR (`10.20.1.0/24`) is not enough. Reaching the subnet router's own
-tier IP through the mesh works with only that rule, because that traffic terminates directly at the
-router's WireGuard tunnel endpoint, before the tier ACL is evaluated. Reaching any _other_ VM on the
-tier requires the router to forward the packet onward, and it preserves the mesh client's original
-Headscale-range source IP rather than rewriting it to a tier address. Without the mesh-range rule,
-traffic to anything beyond the router itself is silently dropped. Egress rules are required too.
-This platform's network ACLs are stateless, so ingress rules alone are not enough for return
-traffic.
+tier IP through the mesh works with just that rule, because that traffic terminates directly at the
+router's WireGuard tunnel endpoint, before the tier ACL is evaluated.
+
+Traffic to any _other_ VM on the tier is forwarded by the router first. We confirmed directly with a
+packet capture that Tailscale's default source NAT rewrites this forwarded traffic to the router's
+own tier address, not the original mesh client's address. The mesh-CIDR rule (ingress and egress)
+stays in this ACL because an earlier live test found reaching other tier VMs fails without it.
+Egress rules are required too, since this platform's network ACLs are stateless: an ingress-only
+rule doesn't cover return traffic.
 
 :::
 
@@ -254,26 +259,36 @@ Verify the rules landed (see `zcp acl rules` under Inspect what was created, bel
 
 ### Headplane
 
-**Headplane is the only VM with an internet-facing application port, opened deliberately.**
+**Headplane opens exactly one application port to the internet, deliberately: the mesh control
+endpoint. The admin UI never touches the public internet at all.**
 
 The script deploys the Headplane marketplace template (it bundles the Headscale control server and a
 web UI) on its own public network.
 
-By default, the template's first-boot script points the Headscale and Headplane configuration at the
-VM's **private** IP. External clients need the public IP instead, so the script SSHes in, rewrites
-both config files to the VM's actual public IP, and restarts the stack.
+By default, the template's first-boot script points the Headscale configuration at the VM's
+**private** IP. External devices need the public IP instead, so the script SSHes in, rewrites that
+config, and restarts the stack.
 
-The script also opens the two ports Headplane needs and creates the matching port-forward rules. A
-firewall rule alone permits traffic at the network level. On this kind of network it does not get
-you reachability by itself. A port-forward rule maps the public IP's port to the VM's private IP.
-Both are required for every port.
+The script opens port **8080** (Headscale's mesh control endpoint) on the firewall and creates the
+matching port-forward rule. A firewall rule alone permits traffic at the network level. On this kind
+of network it does not get you reachability by itself. A port-forward rule maps the public IP's port
+to the VM's private IP. Both are required. 8080 has to stay open broadly (`0.0.0.0/0`): any remote
+device that will ever join the mesh needs to reach it from wherever it is, by design.
 
 :::caution
 
-Keep port **3000** (the admin UI) scoped to your own trusted IP address. Leave port **8080**
-(Headscale's control endpoint) open broadly. Any remote device that will ever connect needs to reach
-it from wherever it is, by design. Scoping 8080 to one trusted IP breaks registration for every
-other device. The script applies this split automatically.
+Port **3000**, the admin UI, is never opened on the firewall at all, not even scoped to your own IP.
+The API key it protects controls the entire mesh: minting preauth keys, approving routes, seeing
+every connected device. Sending that key over plain HTTP on a public port is a real credential-theft
+risk, not a theoretical one, so the script never exposes it that way. Reach it only through an SSH
+tunnel over the port 22 rule already in place:
+
+```bash
+ssh -L 3000:localhost:3000 ubuntu@<headplane-public-ip>
+```
+
+Leave that connected, then open `http://localhost:3000/admin/login` in your own browser. The
+script's final summary prints this exact command with your real IP filled in.
 
 :::
 
@@ -306,8 +321,7 @@ sudo docker exec headscale headscale apikeys create --expiration 90d
 
 :::
 
-Sign in to the Headplane UI at the URL the script prints
-(`http://<headplane-public-ip>:3000/admin/login`) with the API key.
+With the tunnel open, sign in at `http://localhost:3000/admin/login` with the API key.
 
 ![Headplane Machines dashboard after signing in, showing zero machines](../../../assets/build-private-network-headscale/13-headplane-dashboard.png)
 
@@ -418,15 +432,32 @@ This has been observed on both the subnet router and plain clients.
 
 ## Verify isolation
 
-This is implicitly proven by the previous section. The subnet router's tier IP has no public IP or
-port-forward rule of its own. The only way the external client reached it was through the
-Headscale-approved route. Nothing about the tier itself is internet-reachable.
+Reaching the subnet router's own tier IP in the previous section proves the router itself has no
+public exposure. It does not prove the tier as a whole is isolated: that traffic terminates directly
+at the router's WireGuard endpoint, which is a different path than reaching any _other_ VM on the
+tier through the router's forwarding.
+
+For real proof, repeat Step 8's `zcp instance create` + `add-network` pattern for a second VM on the
+tier (skip the Tailscale steps, this one doesn't need them). From your already-connected device:
+
+```bash
+ping <second-vm-tier-ip>
+```
+
+That succeeds, through the mesh and the router's forwarding, not just to the router's own address.
+Now try reaching the same IP from anywhere that never joined the mesh: your own home network, a
+different machine, anywhere on the public internet. It fails, every time. That address is private,
+with no public IP and no port-forward rule anywhere in this design. It was never internet-reachable
+in the first place, mesh or no mesh, which is the actual proof of isolation, not the mesh being what
+blocks it.
+
+Delete the second VM when you're done (`zcp instance delete <name>`). It's not part of the working
+setup, just a way to see this for yourself.
 
 ## Clean up
 
-Hourly billing runs while resources exist. The teardown script removes everything the build script
-created for a given `--name` prefix: the subnet router, the Headplane VM, and the VPC (which removes
-the tier automatically).
+Hourly billing runs while resources exist. The teardown script removes the subnet router, the
+Headplane VM, and the VPC (which removes the tier automatically) for a given `--name` prefix.
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-private-network.sh) \
@@ -436,11 +467,17 @@ bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destr
 It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the build script does. Pass
 `--region`/`--project` instead if you didn't export them.
 
-It also checks for a public IP left attached to a deleted VM. Deletion doesn't always release an IP
-synchronously, so this is usually propagation lag: re-run the script in a minute. If it still shows
-up, the IP is likely tied to a standalone network the platform created for that VM rather than to
-the VPC itself. The platform refuses to release a source-NAT IP directly (`zcp ip release` fails on
-one), so find its network with `zcp network list` and delete that instead. The IP goes with it.
+:::caution
+
+This does not always remove everything on its own. Each VM's deploy implicitly creates its own
+standalone network, separate from the VPC and tier, and deleting the VM never removes that network
+or the source-NAT IP pinned to it. The script detects this and warns you with the network's ID, but
+it cannot delete it automatically. There's no `zcp` command that resolves that ID to something
+deletable. Before you consider cleanup done, check the script's output for this warning, and if it
+appears, remove the flagged network from the CMP web portal (search by the network ID it prints).
+Confirm nothing billable is left with `zcp instance list` and `zcp vpc list`.
+
+:::
 
 ## Recap
 
