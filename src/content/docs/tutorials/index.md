@@ -65,6 +65,18 @@ You learn how to:
 - Select models from the browser without changing their compute path
 - Remove the container, network rules, VM, and any orphaned source-NAT IP
 
+### [Build a Private Network with Headscale](/tutorials/build-private-network-headscale)
+
+Create a private VPC and tier, lock it down with a custom network ACL, and deploy a self-hosted
+Headscale server from the Marketplace to give yourself mesh access into it. About 30 minutes.
+
+You learn how to:
+
+- Create a VPC and a private network tier with no public exposure by default
+- Replace the default network ACL with one scoped to exactly what the tier needs
+- Deploy a self-hosted Headscale and Headplane server from the Marketplace
+- Enroll a subnet router and connect your own device to the mesh
+
 ## Where to go next
 
 - [CLI quickstart](/public-cloud/cli/quickstart): the short version, for when you already have an
