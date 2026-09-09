@@ -33,7 +33,16 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0) (7 septembre 2026)
+- [CLI v0.0.29 : listes de volumes complètes](/fr/changelog/#cli-v0.0.29) (7 septembre 2026)
+- [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit) (7 septembre 2026)
+- [CLI v0.0.28 : correctifs de sécurité et sauvegardes fonctionnelles](/fr/changelog/#cli-v0.0.28)
+  (7 septembre 2026)
+- [Résolution DNS du point de terminaison de stockage objet depuis les VPC](/fr/changelog/#object-storage-vpc-dns-resolution)
+  (6 septembre 2026)
+- [Kubernetes 1.37 est disponible](/fr/changelog/#kubernetes-1.37) (6 septembre 2026)
 - [La facturation postpayée est disponible](/fr/changelog/#postpaid-billing) (1er septembre 2026)
+- [Calcul Intel à Montréal (YUL)](/fr/changelog/#intel-compute-yul) (16 août 2026)
 - [Mises à jour de la plateforme et des services](/fr/changelog/#platform-services) (8 août 2026)
 - [CLI v0.0.26 : correctifs de redirection de ports et de clés SSH](/fr/changelog/#cli-v0.0.26) (19
   juillet 2026)
@@ -53,35 +62,67 @@ pour l'historique complet au niveau des commits.
 
 :::
 
-## Plateforme et services
-
-<span id="platform-services"></span>
+## Plateforme et services <!-- changelog-id: platform-services -->
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
 
-<span id="postpaid-billing"></span>
+### Jusqu'à 8 sous-réseaux par VPC (7 septembre 2026) <!-- changelog-id: vpc-subnet-limit -->
 
-- **La facturation postpayée est disponible (1er septembre 2026)** : choisissez le mode Postpayé
-  pendant l'inscription pour les services horaires et mensuels admissibles, puis payez les factures
-  avec une carte de crédit enregistrée dans Stripe. Choisissez Prépayé ou Postpayé pendant
-  l'inscription. Après la création de votre compte, il reste dans ce mode de facturation pendant
-  toute sa durée de vie. Consultez la [facturation](/fr/public-cloud/billing).
-- **Le calcul Intel est désormais offert à Montréal (YUL)** : forfaits à usage général `ci2` de 1 à
-  96 Go de mémoire vive, forfaits optimisés mémoire `cim2` de 8 à 64 Go, configurations Intel
-  personnalisées et capacité de nœuds Kubernetes sur Intel. Voir
-  [Types d'instances](/fr/public-cloud/compute/instance-types).
-- **Le SMTP sortant sur le port 25 est désormais bloqué par défaut** sur toutes les instances de
-  calcul afin de protéger la réputation d'envoi de la plateforme. Les ports 465 et 587 restent
-  ouverts pour le courriel authentifié. Les clients vérifiés peuvent demander l'accès auprès du
-  soutien. Voir [Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25).
-- **Kubernetes 1.36** est désormais pris en charge pour les grappes gérées.
-- Les images **Windows Server 2025** sont disponibles pour les instances de calcul.
-- **ZSoftly Cloud Storage** : les grappes de stockage dédiées à un seul locataire sont disponibles
-  de façon générale.
+Chaque VPC prend en charge jusqu'à 8 sous-réseaux, contre 3 auparavant. Les VPC existants obtiennent
+la nouvelle limite sans aucune modification de votre part. Si une charge de travail a besoin de plus
+de 8 sous-réseaux dans un même VPC, ouvrez un billet de soutien depuis la console. Nous étudierons
+la demande. Voir [Ajouter un sous-réseau](/fr/public-cloud/networking/vpc/add-subnet).
 
-## Place de marché
+### Résolution DNS du point de terminaison de stockage objet depuis les VPC (6 septembre 2026) <!-- changelog-id: object-storage-vpc-dns-resolution -->
 
-<span id="marketplace"></span>
+Configuration DNS corrigée pour les VPC nouvellement créés. Les charges de travail dans ces VPC
+peuvent désormais résoudre le point de terminaison de stockage objet.
+
+### Kubernetes 1.37 est disponible (6 septembre 2026) <!-- changelog-id: kubernetes-1.37 -->
+
+Les nouvelles grappes gérées peuvent utiliser 1.37.0, la nouvelle version mineure, ou les versions
+correctives actualisées 1.36.4 (la version par défaut), 1.35.8 et 1.34.11. Au moment de la
+publication, les grappes qui utilisaient déjà 1.36.1, 1.35.1 ou 1.34.3 sont restées sur leur version
+respective jusqu'à leur mise à niveau. Ces versions correctives plus anciennes ne sont plus
+proposées pour les nouvelles grappes. Mettez à niveau une version mineure à la fois, ou appliquez
+une mise à niveau corrective au sein de la même version mineure. Faites-le depuis la page
+[Vue d'ensemble du cluster](/fr/public-cloud/kubernetes/cluster-overview). Disponible dans les deux
+régions. Voir [Créer un cluster Kubernetes](/fr/public-cloud/kubernetes/create-cluster) pour la
+liste complète des versions et les informations sur leur cycle de vie.
+
+### La facturation postpayée est disponible (1er septembre 2026) <!-- changelog-id: postpaid-billing -->
+
+Choisissez le mode Postpayé pendant l'inscription pour les services horaires et mensuels
+admissibles, puis payez les factures avec une carte de crédit enregistrée dans Stripe. Choisissez
+Prépayé ou Postpayé pendant l'inscription. Après la création de votre compte, il reste dans ce mode
+de facturation pendant toute sa durée de vie. Consultez la [facturation](/fr/public-cloud/billing).
+
+### Calcul Intel à Montréal (YUL) <!-- changelog-id: intel-compute-yul -->
+
+Forfaits à usage général `ci2` de 1 à 96 Go de mémoire vive, forfaits optimisés mémoire `cim2` de 8
+à 64 Go, configurations Intel personnalisées et capacité de nœuds Kubernetes sur Intel. Voir
+[Types d'instances](/fr/public-cloud/compute/instance-types).
+
+### SMTP sortant sur le port 25 <!-- changelog-id: smtp-port-25 -->
+
+Le SMTP sortant sur le port 25 est désormais bloqué par défaut sur toutes les instances de calcul
+afin de protéger la réputation d'envoi de la plateforme. Les ports 465 et 587 restent ouverts pour
+le courriel authentifié. Les clients vérifiés peuvent demander l'accès auprès du soutien. Voir
+[Port SMTP 25](/fr/public-cloud/networking/public-network/smtp-port-25).
+
+### Kubernetes 1.36
+
+Kubernetes 1.36 est désormais pris en charge pour les grappes gérées.
+
+### Windows Server 2025
+
+Les images Windows Server 2025 sont disponibles pour les instances de calcul.
+
+### ZSoftly Cloud Storage
+
+Les grappes de stockage dédiées à un seul locataire sont disponibles de façon générale.
+
+## Place de marché <!-- changelog-id: marketplace -->
 
 Images d'applications en un clic pour les instances de calcul.
 
@@ -94,9 +135,49 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
-### v0.0.26 : 19 juillet 2026
+### v0.0.29 : 7 septembre 2026 <!-- changelog-id: cli-v0.0.29 -->
 
-<span id="cli-v0.0.26"></span>
+**Listes de volumes complètes et erreurs de quota VPC plus claires.** Consultez la
+[version v0.0.29](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.29) sur GitHub.
+
+- **Les listes de volumes récupèrent maintenant chaque page.** Le CLI et son SDK Go ne manquent plus
+  les volumes au-delà de la première page de résultats de l'API. Les anomalies de pagination
+  renvoient des erreurs explicites au lieu de résultats partiels ou dupliqués.
+- **Les échecs de limite de sous-réseaux VPC indiquent la prochaine étape.** Lorsque
+  `zcp network create --vpc` atteint la limite par défaut de huit sous-réseaux, la commande vous
+  vous invite à demander une augmentation de quota au soutien technique. Réexécutez la commande une
+  fois l’augmentation appliquée. Consultez la [référence du CLI](/fr/public-cloud/cli/reference).
+
+### v0.0.28 : 7 septembre 2026 <!-- changelog-id: cli-v0.0.28 -->
+
+**Correctifs de sécurité, sauvegardes fonctionnelles et un `instance ssh` qui privilégie l'IP
+publique.** Cette version livre aussi tout ce qui était prêt pour la v0.0.27, jamais publiée. La
+mise à niveau depuis la v0.0.26 récupère donc les deux ensembles de changements. Voir la
+[version v0.0.28](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.28) sur GitHub.
+
+- **La sortie `--debug` ne divulgue plus votre jeton d'API.** La sortie de débogage et les messages
+  d'erreur construits à partir de réponses que le CLI ne peut pas analyser masquent maintenant le
+  jeton, le champ `password` et les autres champs d'identifiants. `golang.org/x/crypto` et la chaîne
+  d'outils Go ont été mis à jour pour corriger deux failles de déni de service SSH. Si vous avez
+  partagé une sortie `--debug` avant cette version, révoquez et régénérez votre jeton.
+- **Les sauvegardes fonctionnent de nouveau.** `backup list` décode l'heure planifiée que l'API la
+  renvoie en nombre ou en chaîne. `vm-backup delete` fonctionne maintenant : la commande envoie une
+  demande d'annulation au lieu du `DELETE` que l'API rejetait toujours. `--interval` n'accepte que
+  `dailyAt` ou `hourlyAt`. `backup list` et `vm-backup list` affichent des colonnes plus claires.
+- **`instance ssh` privilégie l'IP publique.** La commande se connecte à l'IP publique quand elle
+  est attribuée et revient à l'IP privée sinon. Les nouvelles options `--use-public` et
+  `--use-private` forcent le choix.
+- **Correctifs d'affichage** : `firewall list` affiche l'état de chaque règle, `dns show` affiche
+  `-` au lieu d'un statut fabriqué, et `autoscale policy delete`/`autoscale condition delete`
+  affichent correctement l'identifiant numérique.
+- **De la v0.0.27** : `instance create` prend en charge le type de réseau `Vpc` et peut rattacher
+  des réseaux existants avec `--networks`. `ip static-nat enable` exige maintenant `--network`.
+  `volume attach` et `volume detach` affichent le statut de l'API au lieu d'une ligne vide.
+- **Limite connue** : `object-storage bucket encryption enable` est désactivée tant que la
+  passerelle de la région ne prend pas en charge le chiffrement par défaut SSE-S3. `status` et
+  `disable` fonctionnent toujours.
+
+### v0.0.26 : 19 juillet 2026 <!-- changelog-id: cli-v0.0.26 -->
 
 **Correctifs pour la redirection de ports et les clés SSH.**
 
@@ -110,9 +191,7 @@ L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous 
   auparavant que le slug et rejetait l'identifiant affiché par `ssh-key list`. La suppression d'une
   clé inconnue est maintenant une opération sans effet.
 
-### v0.0.25 : 18 juillet 2026
-
-<span id="cli-v0.0.25"></span>
+### v0.0.25 : 18 juillet 2026 <!-- changelog-id: cli-v0.0.25 -->
 
 **Les enregistrements `MX` fonctionnent désormais depuis le CLI.** `zcp dns record-create`
 n'envoyait jamais la priorité de l'enregistrement. Chaque création d'un `MX` échouait donc avec une
@@ -125,9 +204,7 @@ affiche un message clair. Voir [Gérer le DNS avec le CLI](/fr/public-cloud/dns/
 zcp dns record-create --domain examplecom --name @ --type MX --content mail.example.com. --priority 10
 ```
 
-### v0.0.24 : 16 juillet 2026
-
-<span id="cli-v0.0.24"></span>
+### v0.0.24 : 16 juillet 2026 <!-- changelog-id: cli-v0.0.24 -->
 
 **La suppression d'une VM libère maintenant son IP publique.** `instance delete` passe par le même
 flux d'annulation de service que la console. L'adresse attribuée automatiquement est donc libérée au
@@ -252,9 +329,7 @@ comment les fournir.
 - **Les erreurs de validation de l'API** affichent maintenant le détail au niveau du champ (par
   exemple, `public_key: The public key has already been taken.`) au lieu d'un message générique.
 
-### v0.0.17 : 17 juin 2026
-
-<span id="cli-v0.0.17"></span>
+### v0.0.17 : 17 juin 2026 <!-- changelog-id: cli-v0.0.17 -->
 
 **Stockage objet : l'ensemble des fonctionnalités S3 dans le CLI.** Plusieurs sont disponibles
 uniquement via le CLI (ou un SDK S3) aujourd'hui, pas encore dans l'interface web. Voir le
@@ -407,14 +482,60 @@ arrivé :
   option **`--pager`**, et des **binaires multiplateformes** (Linux/macOS/Windows, amd64/arm64) avec
   des installateurs en une ligne.
 
-## Fournisseur Terraform / OpenTofu
-
-<span id="terraform-opentofu"></span>
+## Fournisseur Terraform / OpenTofu <!-- changelog-id: terraform-opentofu -->
 
 Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié sous `zsoftly/zcp` sur
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v0.2.0 : 7 septembre 2026 <!-- changelog-id: terraform-v0.2.0 -->
+
+**Configuration de stockage objet, réseau d'instances enrichi et recherches de volumes.** Consultez
+la [version v0.2.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v0.2.0) et le
+[journal des modifications associé à la version](https://github.com/zsoftly/terraform-provider-zcp/blob/v0.2.0/CHANGELOG.md)
+pour la liste complète des modifications.
+
+- **Gérez les paramètres des compartiments de stockage objet comme du code.** Les nouvelles
+  ressources `zcp_object_storage_bucket_versioning`, `zcp_object_storage_bucket_policy`,
+  `zcp_object_storage_bucket_tagging`, `zcp_object_storage_bucket_lifecycle` et
+  `zcp_object_storage_bucket_cors` gèrent les paramètres respectifs de la passerelle compatible S3.
+  Le fournisseur obtient les identifiants de la passerelle en interne et ne les expose pas comme
+  attributs de ressources.
+- **Rattachez les instances aux VPC et à plusieurs réseaux.** `zcp_instance` prend maintenant en
+  charge le type de réseau `Vpc` et plusieurs réseaux, conformément aux capacités de création
+  d'instances du CLI v0.0.27.
+- **Recherchez les volumes et les disques attachés.** La nouvelle source de données `zcp_volume`
+  recherche un volume existant. `data.zcp_instance` expose maintenant `root_volume` et `volumes`.
+- **Lisez de nouveau les sauvegardes de volumes.** `zcp_volume_backup` décode maintenant
+  correctement le format de la liste de sauvegardes de la plateforme.
+- **Détruisez les planifications de sauvegarde VM.** `zcp_vm_backup` détruit les planifications via
+  le flux d'annulation de facturation au lieu d'une suppression directe refusée.
+- **Validez les intervalles de sauvegarde avant l'application.** `zcp_vm_backup` et
+  `zcp_volume_backup` n'acceptent que `dailyAt` ou `hourlyAt` pour `interval`, comme la plateforme.
+- **Détectez les IP publiques de VPC identifiables.** `zcp_firewall_rule` échoue dès qu'il identifie
+  une IP publique de VPC. Il n'attend plus l'expiration du délai pour une règle que la plateforme
+  n'appliquera pas.
+- **Corrigez l'ordre de création d'IP publique dans un VPC.** `zcp_ip_address` explique qu'un niveau
+  réseau VPC doit exister d'abord et indique quand ajouter `depends_on`.
+- **Les listes de volumes sont complètes.** Le fournisseur utilise maintenant le SDK du CLI `zcp`
+  v0.0.29, qui récupère chaque page d'une liste de volumes.
+
+Mettez à niveau votre contrainte de fournisseur, puis initialisez de nouveau :
+
+```hcl
+terraform {
+  required_providers {
+    zcp = {
+      source  = "zsoftly/zcp"
+      version = "~> 0.2.0"
+    }
+  }
+}
+```
+
+Exécutez `terraform init -upgrade` avec Terraform ou `tofu init -upgrade` avec OpenTofu. Si OpenTofu
+indique qu'aucune version ne correspond, attendez que son registre liste v0.2.0, puis réessayez.
 
 ### v0.1.3 : 20 juillet 2026
 

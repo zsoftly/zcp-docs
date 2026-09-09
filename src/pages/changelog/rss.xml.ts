@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
 import type { APIRoute } from 'astro';
-import { changelogFeedEntries } from '../../data/changelog-feed';
+import { changelogFeedEntries, publicationDateAtUtcNoon } from '../../data/changelog-feed';
 
 export const GET: APIRoute = ({ site }) =>
   rss({
@@ -13,7 +13,7 @@ export const GET: APIRoute = ({ site }) =>
     items: changelogFeedEntries.map((entry) => ({
       title: entry.title,
       description: entry.description,
-      pubDate: new Date(`${entry.pubDate}T12:00:00Z`),
+      pubDate: publicationDateAtUtcNoon(entry.pubDate),
       link: `/changelog/#${entry.slug}`,
     })),
   });

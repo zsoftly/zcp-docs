@@ -13,16 +13,16 @@ in your cluster.
 
 ### Download kubectl
 
-ZSoftly Cloud Platform supports Kubernetes **1.34**, **1.35**, and **1.36** (current: **1.36.1**).
-Install the `kubectl` version that matches your cluster's minor version. Kubernetes requires client
-and server to be within one minor version of each other.
+ZSoftly Cloud Platform supports Kubernetes **1.34**, **1.35**, **1.36**, and **1.37**. New clusters
+default to **1.36.4**.
 
-The fastest way to install the latest compatible version:
+Install the latest stable `kubectl` release, and keep the client within one minor version of your
+cluster. See the [version skew policy](https://kubernetes.io/releases/version-skew-policy/) for
+details.
 
 **Linux / macOS:**
 
 ```bash
-# Install latest stable kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/kubectl
@@ -34,8 +34,15 @@ For macOS replace `linux` with `darwin` in the URL above.
 **Windows (PowerShell):**
 
 ```powershell
-curl.exe -LO "https://dl.k8s.io/release/v1.36.0/bin/windows/amd64/kubectl.exe"
+$version = (Invoke-WebRequest -Uri "https://dl.k8s.io/release/stable.txt" -UseBasicParsing).Content.Trim()
+curl.exe -LO "https://dl.k8s.io/release/$version/bin/windows/amd64/kubectl.exe"
 ```
+
+If your cluster runs an older minor version, replace the fetched version with a release from the
+matching minor line. See the upstream install guides for full instructions per platform:
+[Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/),
+[macOS](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/), and
+[Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/).
 
 **Or use a package manager:**
 
@@ -50,8 +57,9 @@ snap install kubectl --classic
 winget install Kubernetes.kubectl
 ```
 
-For a specific version (e.g. to match a 1.34 cluster), replace
-`$(curl -Ls https://dl.k8s.io/release/stable.txt)` with `v1.34.0`.
+Package-manager latest versions may not match your cluster's minor version. Check the
+[version lifecycle](/public-cloud/kubernetes/create-cluster#version-lifecycle) and Kubernetes
+[version-skew guidance](https://kubernetes.io/releases/version-skew-policy/) before installing one.
 
 See the [official kubectl install guide](https://kubernetes.io/docs/tasks/tools/) for all options.
 

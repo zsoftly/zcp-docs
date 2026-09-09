@@ -10,7 +10,9 @@ Kubernetes.
 
 ### Boutons d'action
 
-- **Upgrade Kubernetes Version** : mettre à jour vers une version plus récente
+- **Upgrade Kubernetes Version** : mettre à jour vers une version plus récente. Les mises à niveau
+  se font une version mineure à la fois. Une mise à niveau corrective au sein de la même version
+  mineure est aussi possible.
 - **Refresh** : recharger les données les plus récentes du cluster
 - **Download Config** : télécharger le fichier `kubeconfig` pour `kubectl`
 - **Power Off** : arrêter le cluster proprement
