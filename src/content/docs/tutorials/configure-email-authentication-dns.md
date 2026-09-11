@@ -351,11 +351,10 @@ provide a safe way to merge values managed elsewhere.
 
 :::
 
-To bring an existing zone or dedicated record set under Terraform, first write the matching resource
-block. The supported import forms are:
+To bring an existing dedicated DKIM TXT record set under Terraform, configure the
+`zcp_dns_record.dkim` resource above to match its current values, then import it:
 
 ```bash
-terraform import zcp_dns_domain.existing exampleca
 terraform import zcp_dns_record.dkim exampleca/TXT/mailer1._domainkey
 ```
 

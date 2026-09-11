@@ -15,7 +15,7 @@ Looking for a single feature instead of a full walkthrough? The
 
 ## Tutorials
 
-### [Configure Email Authentication DNS](/tutorials/configure-email-authentication-dns/)
+### [Configure Email Authentication DNS](/tutorials/configure-email-authentication-dns)
 
 Publish DKIM and DMARC records on an existing ZCP DNS zone with the CLI or Terraform/OpenTofu. Learn
 where SPF needs a separate, carefully reviewed change, how to keep a single owner for each record
