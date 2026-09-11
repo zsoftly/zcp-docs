@@ -15,6 +15,19 @@ Looking for a single feature instead of a full walkthrough? The
 
 ## Tutorials
 
+### [Configure Email Authentication DNS](/tutorials/configure-email-authentication-dns/)
+
+Publish DKIM and DMARC records on an existing ZCP DNS zone with the CLI or Terraform/OpenTofu. Learn
+where SPF needs a separate, carefully reviewed change, how to keep a single owner for each record
+set, and how to verify both DNS and delivered mail.
+
+You learn how to:
+
+- Inventory senders and existing DNS record sets before a change
+- Publish a provider-issued DKIM TXT record or CNAME and a monitoring DMARC policy
+- Manage dedicated record sets through either the CLI or Terraform/OpenTofu
+- Test DNS answers and `Authentication-Results` for every sender before enforcement
+
 ### [Deploy a VPS and install Dokploy with the CLI](/tutorials/deploy-vps-dokploy-cli)
 
 Go from a fresh account to a public virtual machine running [Dokploy](https://dokploy.com), a

@@ -255,6 +255,10 @@ export default defineConfig({
               slug: 'tutorials/manage-infrastructure-terraform',
             },
             { label: 'Host DNS on ZCP (CLI)', slug: 'tutorials/host-dns-on-zcp-cli' },
+            {
+              label: 'Configure Email Authentication DNS',
+              slug: 'tutorials/configure-email-authentication-dns',
+            },
           ],
         },
 
@@ -665,5 +669,4 @@ export default defineConfig({
       // },
     }),
   ],
-
 });
