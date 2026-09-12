@@ -115,10 +115,10 @@ You also need a **compute plan**, a **network plan**, a **VPC router plan**, and
 category**:
 
 ```bash
-zcp plan vm            # compute plans, e.g. ca2sm
-zcp plan network        # network plans, e.g. pnet-yul
-zcp plan router          # VPC router plan, e.g. virtual-private-cloud-vpc-1
-zcp storage-category list  # e.g. pro-nvme, ssd-storage, premium-ssd
+zcp plan vm                 # compute plans, e.g. ca2sm
+zcp plan network            # network plans, e.g. pnet-yul
+zcp plan router             # VPC router plan, e.g. virtual-private-cloud-vpc-1
+zcp storage-category list   # e.g. pro-nvme, ssd-storage, premium-ssd
 ```
 
 ## Step 4: Add your SSH key
@@ -157,15 +157,21 @@ bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/build
   --ssh-key my-key --name my-workspace
 ```
 
+This tutorial uses `my-workspace` as the `--name` prefix throughout its command examples. The
+screenshots below are from an earlier test run with a different prefix, so the resource names you
+see in them won't match the command examples exactly. Your own resource names will differ from both,
+based on whatever `--name` you choose.
+
 The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them in Step 2.
 Pass `--region`/`--project` instead if you didn't.
 
-| Flag        | Purpose                                   | Default / requirement      |
-| ----------- | ----------------------------------------- | -------------------------- |
-| `--ssh-key` | Key name from Step 4, used for both VMs   | Required                   |
-| `--name`    | Prefix for every resource name it creates | `workspace`                |
-| `--region`  | zcp region slug                           | Required (flag or env var) |
-| `--project` | zcp project slug                          | Required (flag or env var) |
+| Flag         | Purpose                                   | Default / requirement      |
+| ------------ | ----------------------------------------- | -------------------------- |
+| `--ssh-key`  | Key name from Step 4, used for both VMs   | Required                   |
+| `--name`     | Prefix for every resource name it creates | `workspace`                |
+| `--region`   | zcp region slug                           | Required (flag or env var) |
+| `--project`  | zcp project slug                          | Required (flag or env var) |
+| `-y`/`--yes` | Skip the confirmation prompt below        | Off                        |
 
 The Headplane template, both compute plans, the network plan, the VPC router plan, and both storage
 categories are auto-discovered from your account. The script prints what it picked at the top of its
@@ -185,18 +191,25 @@ list.
 [INFO] Detecting your public IP...
 [INFO] Admin-port access scoped to: <your-ip>/32
 [INFO] Resolved resources:
-    Headplane template : zmi-headplane-070-ubuntu2404-100-1
-    Headplane plan      : ci2ls
+    Headplane template   : zmi-headplane-070-ubuntu2404-100-1
+    Headplane plan       : ci2ls
     Router template      : ubuntu-2404-lts-1
-    Router plan            : ci2ls
-    Network plan            : pnet-yul
-    VPC router plan          : virtual-private-cloud-vpc-1
-    VPC storage category      : pro-nvme
-    VM storage category        : pro-nvme
+    Router plan          : ci2ls
+    Network plan         : pnet-yul
+    VPC router plan      : virtual-private-cloud-vpc-1
+    VPC storage category : pro-nvme
+    VM storage category  : pro-nvme
+
+This creates a VPC, two VMs (plans above), and networking on your account now.
+Billing starts as soon as each resource is created.
+Type 'yes' to continue:
 ```
 
-The script takes several minutes. It waits for both VMs to boot, waits for Headplane's first-boot
-provisioning to finish, and waits for SSH before configuring anything over it.
+Unless you passed `-y`/`--yes`, the script stops here and waits for you to type `yes`. Everything
+above this point is read-only lookups, nothing has been created yet.
+
+The script then takes several minutes. It waits for both VMs to boot, waits for Headplane's
+first-boot provisioning to finish, and waits for SSH before configuring anything over it.
 
 ## What the script builds
 
@@ -206,10 +219,12 @@ provisioning to finish, and waits for SSH before configuring anything over it.
 port.**
 
 The script creates a VPC (`my-workspace`) and a network tier inside it (`my-workspace-tier`), with
-no public IP on the tier itself. Both VMs the script deploys get their own public IP, needed to
-reach Headscale and for the script to configure them over SSH. Headplane is the only one of the two
-with an internet-facing application port, opened deliberately through firewall and port-forward
-rules.
+no public IP on the tier itself. Both VMs the script deploys get their own public IP, and the script
+needs it to configure each one over SSH regardless. Beyond that, each VM needs it for a different
+reason. Headplane needs it because it _is_ the Headscale server: the router and your own device both
+reach it over that address. The router needs it too, but only during setup, to reach Headplane
+before it enrolls in the mesh. Headplane is the only one of the two with an internet-facing
+application port, opened deliberately through firewall and port-forward rules.
 
 :::note
 
@@ -224,7 +239,7 @@ billable extra IP. If it happens, `zcp ip release <slug>` cleans it up.
 **The ACL makes the tier private, not the VPC by itself.**
 
 The tier's default ACL permits everything. The script replaces it with one that only allows what the
-tier needs, then applies that ACL to the tier. A VPC alone doesn't guarantee isolation, the ACL
+tier needs, then applies that ACL to the tier. A VPC alone doesn't guarantee isolation. The ACL
 does.
 
 :::note
@@ -296,11 +311,16 @@ script's final summary prints this exact command with your real IP filled in.
 
 Marketplace App templates like this one get a default SSH firewall rule at deploy time, open to
 **any address** (`0.0.0.0/0`, both TCP and UDP port 22), an explicit rule visible in
-`zcp firewall list`. Not something you created, and not scoped to you. The script finds and deletes
-it, then adds a replacement scoped to your own IP.
+`zcp firewall list --ip <ip-slug>` (find the slug with `zcp ip list`). Not something you created,
+and not scoped to you. The script adds a replacement rule scoped to your own IP and confirms it
+exists before deleting the open one. That way, a failure partway through never leaves the VM
+unreachable over SSH.
 
-This is specific to Marketplace App templates. The subnet router, deployed from a plain OS image,
-never gets this default rule, so this lockdown step only applies to Headplane.
+The script runs this same routine on both VMs it creates, not just Headplane: add and confirm a rule
+scoped to your own IP, then remove any open `0.0.0.0/0` rule found. The subnet router, deployed from
+a plain OS image, may not have the default open rule Marketplace App templates get, but it still
+gets the scoped rule. It's the actual gateway into your private tier, so it needs to be locked down
+too, whatever its starting state.
 
 :::
 
@@ -377,16 +397,20 @@ zcp acl rules my-workspace my-workspace-acl
 ```
 
 ```text
-ID                                    NAME               STATE    PRIVATE IP  PUBLIC IP        REGION
-a1b2c3d4-...                          my-workspace-headscale       Running  10.0.0.214  198.51.100.10   YUL-1
-e5f6a7b8-...                          my-workspace-subnet-router   Running  10.0.0.76   198.51.100.11   YUL-1
+ID            NAME                        STATE    PRIVATE IP  PUBLIC IP      REGION
+a1b2c3d4-...  my-workspace-headscale      Running  10.0.0.214  198.51.100.10  YUL-1
+e5f6a7b8-...  my-workspace-subnet-router  Running  10.0.0.76   198.51.100.11  YUL-1
 ```
+
+`acl rules` takes the VPC's slug, not its name. They're the same on a clean account, but a name can
+get an auto-suffixed slug (`my-workspace-1`) if something else already used it. If the command above
+doesn't resolve, get the real slug from `zcp vpc list` first.
 
 ## Connect from your own machine
 
 The build script's own final summary already mints a fresh preauth key for your device. It prints a
 ready one-liner that installs Tailscale, if it isn't already installed, and registers it against
-your Headscale server in one step. This is the same `vpn/install.sh` script used for onboarding any
+your Headscale server in one step. This is the same `vpn/install.sh` script you'd use to onboard any
 other endpoint. Copy that line from your terminal output. It looks like this (key genericized, yours
 is a real value):
 
@@ -433,9 +457,9 @@ This has been observed on both the subnet router and plain clients.
 ## Verify isolation
 
 Reaching the subnet router's own tier IP in the previous section proves the router itself has no
-public exposure. It does not prove the tier as a whole is isolated: that traffic terminates directly
-at the router's WireGuard endpoint, which is a different path than reaching any _other_ VM on the
-tier through the router's forwarding.
+public exposure. It does not prove the tier as a whole is isolated. That traffic terminates directly
+at the router's WireGuard endpoint. Reaching any _other_ VM on the tier goes through the router's
+forwarding instead, a different path.
 
 For real proof, deploy a second VM the same way the script deployed the subnet router: its own
 public IP for setup, then attached to the tier. That public IP is only there so you can configure
@@ -448,6 +472,9 @@ zcp instance create --name isolation-check \
 
 zcp instance add-network isolation-check --network my-workspace-tier
 ```
+
+`add-network` also takes the tier's slug, not its name, the same caveat as above. Get it from
+`zcp network list` if the name alone doesn't resolve.
 
 SSH in over its own public IP and bring up the hot-added tier NIC the same way the script did for
 the router (see "The subnet router" above for why this manual step is needed):
@@ -477,11 +504,21 @@ That succeeds, through the mesh and the router's forwarding, not just to the rou
 Now try reaching the same tier IP from anywhere that never joined the mesh: your own home network, a
 different machine, anywhere on the public internet. It fails, every time. That address is private,
 with no public IP and no port-forward rule anywhere in this design. It was never internet-reachable
-in the first place, mesh or no mesh, which is the actual proof of isolation, not the mesh being what
-blocks it.
+in the first place, mesh or no mesh. That is the actual proof of isolation, not the mesh itself.
 
-Delete the second VM when you're done (`zcp instance delete <name>`). It's not part of the working
-setup, just a way to see this for yourself.
+Like every `--network-plan` deploy in this tutorial, `isolation-check` also created its own
+standalone network and pinned source-NAT IP. `instance delete` won't remove it, and the teardown
+script only manages resources under `--name my-workspace`, so it won't touch this one either.
+Capture that network's ID **before** deleting the VM, since the association disappears once the VM
+is gone:
+
+```bash
+zcp ip list -o json | jq -r '.[] | select(.vm=="isolation-check") | .network_id // empty' | head -1
+```
+
+Then delete the VM (`zcp instance delete isolation-check`). It's not part of the working setup, just
+a way to see this for yourself. Find the network that ID belongs to and remove it from the CMP web
+portal, the same way described in the Clean up caution below.
 
 ## Clean up
 
@@ -502,9 +539,18 @@ This does not always remove everything on its own. Each VM's deploy implicitly c
 standalone network, separate from the VPC and tier, and deleting the VM never removes that network
 or the source-NAT IP pinned to it. The script detects this and warns you with the network's ID, but
 it cannot delete it automatically. There's no `zcp` command that resolves that ID to something
-deletable. Before you consider cleanup done, check the script's output for this warning, and if it
-appears, remove the flagged network from the CMP web portal (search by the network ID it prints).
-Confirm nothing billable is left with `zcp instance list` and `zcp vpc list`.
+deletable. It also runs with no confirmation prompt of its own: every delete it issues happens
+immediately.
+
+A confirmed leftover always makes the script exit non-zero, so check `$?` after running it. A "can't
+verify" warning only does the same if it actually deleted something this run. If it deleted nothing
+because everything was already gone, that warning means "nothing here to check," not "you have a
+leftover," and the script exits 0. Either way, check its output for a leftover-network or
+cannot-verify warning before you consider cleanup done. If one appears, confirm what's left with
+`zcp ip list`. It carries the network ID you need, while `zcp network list` doesn't expose one to
+match against, which is also why the script can't delete this automatically. A leftover is a network
+and its pinned IP, not an instance or a VPC, so `zcp instance list`/`zcp vpc list` won't show it.
+Remove the flagged network from the CMP web portal (search by the network ID the script prints).
 
 :::
 
