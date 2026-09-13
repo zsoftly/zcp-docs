@@ -47,6 +47,28 @@ dans vos coûts totaux de stockage.
 
 ![Boîte de dialogue Créer un compartiment avec les options de nom, versionnement et verrouillage d'objets](../../../../../../assets/storage/object-storage/create-bucket-create-a-bucket.webp)
 
+:::caution
+
+Le compartiment obtenu ne porte pas exactement le nom que vous avez saisi. La plateforme ajoute un
+suffixe numérique : un compartiment demandé sous le nom `app-backups` est créé sous un nom du type
+`app-backups-001024`. C'est cette valeur suffixée qui constitue le véritable nom de compartiment S3
+que vos outils doivent utiliser. Relisez-la avant toute configuration :
+
+```bash
+zcp object-storage bucket list <storage-slug> --region os-yul --project <project-slug>
+```
+
+```
+SLUG                 NAME                 OBJECTS  SIZE (GB)  STATUS
+app-backups-001024   app-backups-001024   0                   Inactive
+```
+
+Utilisez la colonne **NAME** dans les URL de point de terminaison, les appels SDK et les commandes
+`aws s3`. Un compartiment affichant `Inactive` avec zéro objet est normal tant que rien n'y a été
+écrit. Voir [Utilisation de l'API S3](/fr/public-cloud/storage/object-storage/s3-usage/).
+
+:::
+
 ### Gérer les compartiments
 
 - **Share** : activer le partage public afin que toute personne ayant l'URL de l'objet puisse y

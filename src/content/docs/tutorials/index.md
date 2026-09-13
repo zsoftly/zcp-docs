@@ -78,6 +78,20 @@ You learn how to:
 - Select models from the browser without changing their compute path
 - Remove the container, network rules, VM, and any orphaned source-NAT IP
 
+### [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+
+Deploy a Vaultwarden password manager with Terraform or OpenTofu, then back its database up to ZCP
+object storage every night with [restic](https://github.com/restic/restic). restic encrypts on the
+VM, so the bucket only ever holds ciphertext. That stays true whether or not server-side encryption
+ships. About 45 minutes.
+
+You learn how to:
+
+- Provision a VM, a public IP, firewall rules, and an object storage bucket in one configuration
+- Snapshot a live SQLite database without stopping the service
+- Run restic on a systemd timer with retention, pruning, and integrity checks
+- Read an object straight out of the bucket to confirm it is unreadable, then restore the vault
+
 ## Where to go next
 
 - [CLI quickstart](/public-cloud/cli/quickstart): the short version, for when you already have an

@@ -259,6 +259,10 @@ export default defineConfig({
               label: 'Configure Email Authentication DNS',
               slug: 'tutorials/configure-email-authentication-dns',
             },
+            {
+              label: 'Vaultwarden Backups with restic',
+              slug: 'tutorials/backup-vaultwarden-restic-object-storage',
+            },
           ],
         },
 

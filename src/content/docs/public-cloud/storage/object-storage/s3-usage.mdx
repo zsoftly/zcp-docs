@@ -34,6 +34,35 @@ ZSoftly object storage is S3-compatible. Any tool or SDK that supports S3 works 
 
 Examples below use the YUL endpoint. Substitute YOW if your bucket is in Ottawa.
 
+### Find your bucket name
+
+Before you write an endpoint URL, confirm the bucket's real name. The platform appends a numeric
+suffix to the name you asked for when the bucket is created. A bucket you requested as `my-bucket`
+exists as something like `my-bucket-001024`. That suffixed value is the name the S3 API answers to.
+Using the name you typed gives `NoSuchBucket` even though the bucket exists.
+
+```bash
+zcp object-storage bucket list <storage-slug> --region os-yul --project <project-slug>
+```
+
+```
+SLUG                NAME                OBJECTS  SIZE (GB)  STATUS
+my-bucket-001024    my-bucket-001024    0                   Inactive
+```
+
+Use that value everywhere below in place of `my-bucket`. A bucket showing `Inactive` with zero
+objects is normal until something is written to it.
+
+:::note
+
+The CLI's own bucket subcommands are split. Commands that go through the S3 gateway (`object …`,
+`bucket versioning`, `bucket policy`, `bucket lifecycle`, `bucket cors`, `bucket tag`,
+`bucket empty`) take the bucket **name**, even though their help text labels the argument
+`<bucket-slug>`. Only `bucket delete`, which goes through the control plane, takes the slug. In
+practice the name and the slug are usually the same suffixed string.
+
+:::
+
 ### Connect and list buckets
 
 Configure your client with the regional endpoint and your access keys, then list your buckets. Pick
@@ -233,6 +262,27 @@ foreach ($s3->listBuckets()["Buckets"] as $bucket) {
 Always enable path-style addressing: `forcePathStyle` (JS/TS), `UsePathStyle` (Go), `ForcePathStyle`
 (C#), `pathStyleAccessEnabled` (Java), `force_path_style` (Ruby), or `use_path_style_endpoint`
 (PHP). ZSoftly object storage requires it. Virtual-hosted style is not supported.
+
+:::
+
+:::danger
+
+Do not set default bucket encryption (SSE-S3). The storage gateway has no encryption key backend
+yet, and a bucket with default encryption configured rejects **every** subsequent upload with
+`InvalidArgument` until the setting is removed. This applies to `PutBucketEncryption` from any SDK
+or `aws s3api put-bucket-encryption`. Server-side encryption is planned to land before the end of
+Q3 2026.
+
+Clear the setting on a bucket that already has it:
+
+```bash
+zcp object-storage bucket encryption status <storage-slug> <bucket-name>
+zcp object-storage bucket encryption disable <storage-slug> <bucket-name>
+```
+
+To encrypt what you store today, encrypt on the client before upload. See
+[Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+for a worked example.
 
 :::
 

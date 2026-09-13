@@ -1,0 +1,910 @@
+---
+title: 'Back Up Vaultwarden to Object Storage with restic'
+description:
+  Deploy Vaultwarden on ZCP with Terraform or OpenTofu, then back its database up to ZCP object
+  storage every night with restic, encrypted on the VM before it is uploaded.
+sidebar:
+  label: 'Vaultwarden Backups with restic'
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+[restic](https://github.com/restic/restic) is a backup program that encrypts and signs every byte on
+the machine being backed up, before anything reaches the storage backend. Its
+[Amazon S3 walkthrough](https://restic.readthedocs.io/en/stable/080_examples.html) is a well-known
+reference, and because ZCP object storage speaks the S3 API, the same setup works here with one
+changed endpoint.
+
+This tutorial builds the whole thing end to end. Terraform or OpenTofu provisions a Vaultwarden
+password-manager VM, a network, a public IP, and an object storage bucket. A bash script then backs
+the SQLite database up to that bucket on a nightly timer.
+
+By the end you have:
+
+- Vaultwarden running on a VM you can reach over HTTPS
+- An object storage bucket holding a restic repository
+- A backup script on a systemd timer, with retention and integrity checks
+- Proof that what lands in the bucket is ciphertext, and a restore that turns it back into a working
+  vault
+
+Plan for about 45 minutes.
+
+:::caution
+
+Server-side encryption is not available on ZCP object storage yet.
+`zcp object-storage bucket encryption enable` refuses to run, because the storage gateway has no
+encryption key backend and setting default SSE-S3 makes every later upload to that bucket fail with
+`InvalidArgument`. Support is planned to land before the end of Q3 2026.
+
+restic does not wait for it. It encrypts on the client, so the bucket only ever receives ciphertext.
+Server-side encryption, once it arrives, protects data written by clients that do not encrypt. It
+adds nothing to a restic repository.
+
+:::
+
+:::note
+
+The slugs in this tutorial (region `yul-1`, project `default-9`, plan `ca2sm`, template
+`zmi-vaultwarden-1360-ubuntu2404-100-1`, and so on) are examples from one account. Yours will
+differ. Every step shows the `zcp` command that prints the right value for your account. Use those
+rather than copying the examples.
+
+:::
+
+## Before you start
+
+- A ZSoftly Public Cloud account. [Sign up](/public-cloud/getting-started/account-signup) if you do
+  not have one.
+- [Terraform](https://developer.hashicorp.com/terraform/install) 1.0 or later, or
+  [OpenTofu](https://opentofu.org/docs/intro/install/) 1.6 or later.
+- The [`zcp` CLI](/public-cloud/cli/installation), to look up slugs and inspect the bucket.
+- An SSH key pair. Generate one with `ssh-keygen -t ed25519` if you need to.
+
+## Step 1: Export your API token
+
+In the [console](https://cloud.zcp.zsoftly.ca), go to **Account → API Keys**, create a token, and
+export it. The provider and the CLI both read the same variable:
+
+```bash
+export ZCP_BEARER_TOKEN="<your-token>"
+```
+
+The token stays out of your configuration and out of your state file.
+
+## Step 2: Find the slugs for your account
+
+Compute and object storage live in separate regions. Virtual machines run in `yul-1` (Montreal) or
+`yow-1` (Ottawa), and object storage stores sit in `os-yul` or `os-yow`. Pick the pair in the same
+city for the lowest latency and the smallest transfer bill, or the other city to keep the backup
+outside the failure domain of the VM it protects.
+
+```bash
+zcp region list                                      # regions, including the os- ones
+zcp project list                                     # your project slug
+zcp plan vm --region yul-1                           # compute plans
+zcp plan network --region yul-1                      # network plans
+zcp plan ip --region yul-1                           # public IP plans
+zcp storage-category list --region yul-1             # VM disk categories
+zcp template list --region yul-1 | grep -i vaultwarden
+zcp plan object-storage --region os-yul              # object storage sizes
+zcp storage-category list --region os-yul            # object storage categories
+```
+
+The Vaultwarden image is a [Marketplace app](/public-cloud/marketplace/vaultwarden). It ships
+Vaultwarden in Docker Compose on Ubuntu 24.04, generates a self-signed certificate and an admin
+token on first boot, and serves the web vault on port 8000.
+
+## Step 3: Write the configuration
+
+Create an empty directory with one file, `main.tf`. Object storage takes its own region data source,
+so nothing is hardcoded twice:
+
+```hcl
+terraform {
+  required_providers {
+    zcp = {
+      source  = "zsoftly/zcp"
+      version = "~> 0.2"
+    }
+  }
+}
+
+provider "zcp" {
+  default_project = "default-9"
+}
+
+variable "admin_cidr" {
+  description = "CIDR allowed to reach SSH and the web vault. Deliberately has no default."
+  type        = string
+}
+
+data "zcp_region" "compute" {
+  slug = "yul-1"
+}
+
+data "zcp_region" "objects" {
+  slug = "os-yul"
+}
+
+resource "zcp_ssh_key" "vault" {
+  name       = "vault-key"
+  region     = data.zcp_region.compute.slug
+  public_key = file("~/.ssh/id_ed25519.pub")
+}
+
+resource "zcp_network" "vault" {
+  name           = "vault-network"
+  cloud_provider = data.zcp_region.compute.cloud_provider
+  region         = data.zcp_region.compute.slug
+  network_plan   = "pnet-yul"
+  billing_cycle  = "hourly"
+}
+
+resource "zcp_instance" "vault" {
+  name             = "vault-01"
+  cloud_provider   = data.zcp_region.compute.cloud_provider
+  region           = data.zcp_region.compute.slug
+  template         = "zmi-vaultwarden-1360-ubuntu2404-100-1"
+  plan             = "ca2sm"
+  billing_cycle    = "hourly"
+  network          = zcp_network.vault.id
+  storage_category = "premium-ssd"
+  ssh_key          = zcp_ssh_key.vault.name
+  assign_public_ip = false
+}
+
+resource "zcp_ip_address" "vault" {
+  plan          = "ipv4-yul"
+  billing_cycle = "hourly"
+  network       = zcp_network.vault.id
+}
+
+resource "zcp_egress_rule" "https_out" {
+  network    = zcp_network.vault.id
+  protocol   = "tcp"
+  cidr       = "0.0.0.0/0"
+  start_port = "443"
+  end_port   = "443"
+}
+
+resource "zcp_egress_rule" "http_out" {
+  network    = zcp_network.vault.id
+  protocol   = "tcp"
+  cidr       = "0.0.0.0/0"
+  start_port = "80"
+  end_port   = "80"
+}
+
+resource "zcp_egress_rule" "dns_out" {
+  network    = zcp_network.vault.id
+  protocol   = "udp"
+  cidr       = "0.0.0.0/0"
+  start_port = "53"
+  end_port   = "53"
+}
+
+resource "zcp_firewall_rule" "ssh" {
+  ip_address = zcp_ip_address.vault.id
+  protocol   = "tcp"
+  cidr_list  = var.admin_cidr
+  start_port = "22"
+  end_port   = "22"
+}
+
+resource "zcp_firewall_rule" "vault_web" {
+  ip_address = zcp_ip_address.vault.id
+  protocol   = "tcp"
+  cidr_list  = var.admin_cidr
+  start_port = "8000"
+  end_port   = "8000"
+}
+
+resource "zcp_port_forward" "ssh" {
+  ip_address         = zcp_ip_address.vault.id
+  protocol           = "tcp"
+  public_start_port  = "22"
+  public_end_port    = "22"
+  private_start_port = "22"
+  private_end_port   = "22"
+  virtual_machine    = zcp_instance.vault.id
+}
+
+resource "zcp_port_forward" "vault_web" {
+  ip_address         = zcp_ip_address.vault.id
+  protocol           = "tcp"
+  public_start_port  = "8000"
+  public_end_port    = "8000"
+  private_start_port = "8000"
+  private_end_port   = "8000"
+  virtual_machine    = zcp_instance.vault.id
+}
+
+resource "zcp_object_storage" "backups" {
+  name             = "vault-backups"
+  cloud_provider   = data.zcp_region.objects.cloud_provider
+  region           = data.zcp_region.objects.slug
+  billing_cycle    = "hourly"
+  storage_category = "ssd-storage"
+  plan             = "o210g"
+}
+
+resource "zcp_object_storage_bucket" "restic" {
+  object_storage = zcp_object_storage.backups.id
+  name           = "vaultwarden-restic"
+}
+
+output "vault_ip" {
+  value = zcp_ip_address.vault.ip_address
+}
+
+output "object_storage_slug" {
+  value = zcp_object_storage.backups.id
+}
+
+# The platform assigns the bucket a suffixed identifier when it is created, and that
+# value is both the bucket slug and the S3 bucket name. The `name` argument above is
+# only the name requested, so never use it in an endpoint URL.
+output "bucket_name" {
+  value = zcp_object_storage_bucket.restic.id
+}
+
+output "s3_access_key" {
+  value     = zcp_object_storage.backups.api_key
+  sensitive = true
+}
+
+output "s3_secret_key" {
+  value     = zcp_object_storage.backups.api_secret
+  sensitive = true
+}
+```
+
+:::caution
+
+`admin_cidr` has no default, so the apply stops and asks for a value rather than quietly exposing
+anything. Set it to the address you administer from, for example
+`tofu apply -var admin_cidr=203.0.113.10/32`, or put it in a `terraform.tfvars`.
+
+Do not set it to `0.0.0.0/0`. Setting it that wide exposes an SSH daemon and a password vault to the
+whole internet. The vault is worth more than the VM. Find your own address with
+`curl -s ifconfig.me`. If it changes, update the variable and apply again rather than widening the
+rule.
+
+:::
+
+Several choices in this file are not obvious. Get one wrong and you end up with a VM you cannot
+reach, or one you cannot back up.
+
+**The egress rules are not optional here.** A network you declare as its own resource starts with no
+egress rules and denies all outbound traffic. Without those three rules the VM cannot reach the
+package archive, GitHub, or the object storage endpoint, and every command in the later steps times
+out. The rules above allow HTTPS, HTTP, and DNS traffic to any destination. Narrow the destination
+CIDRs once you know which hosts you need.
+
+This is specific to managing the network yourself. A network auto-created by the VM, through
+`network_plan` or the CLI's `--network-plan`, is provisioned with working outbound access. Taking
+ownership of the network for a clean `destroy` means taking ownership of its egress rules too.
+
+**Ingress goes through port forwards, not static NAT.** The first public IP allocated into a fresh
+network becomes that network's source-NAT address, and the platform refuses to put static NAT on it.
+A `zcp_ip_association` against that IP reports success and changes nothing, so traffic never
+arrives. Use `zcp_port_forward` instead. Each forward needs a firewall rule on the same IP to let
+the traffic in.
+
+:::caution
+
+`zcp_port_forward` requires `public_end_port` and `private_end_port` even for a single port. The
+registry documentation says to omit them for a single-port rule. The API rejects the omission with
+`API error 500: Private end port is required`. Set the end port equal to the start port.
+
+:::
+
+`assign_public_ip = false` on the instance keeps the platform from allocating a second address. The
+`zcp_ip_address` resource supplies the one address the network uses.
+
+`zcp_ssh_key` takes a `region` argument. The registry documentation for this resource omits it. The
+API needs it to derive the cloud provider, so leaving it out fails validation.
+
+Give the restic repository its own bucket. A repository takes exclusive ownership of the paths it
+writes, so do not point a second workload at the same bucket.
+
+## Step 4: Apply
+
+<Tabs syncKey="iac-tool">
+
+<TabItem label="OpenTofu">
+
+```bash
+tofu init
+tofu plan
+tofu apply
+```
+
+</TabItem>
+
+<TabItem label="Terraform">
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+</TabItem>
+
+</Tabs>
+
+The apply blocks until the VM reports **Running**. The VM is the slow part, at about two and a half
+minutes, and the whole stack lands in three to four minutes. Read the outputs:
+
+```bash
+tofu output vault_ip
+tofu output object_storage_slug
+tofu output bucket_name
+tofu output -raw s3_access_key
+tofu output -raw s3_secret_key
+```
+
+`object_storage_slug` is the store's slug, which is what every `zcp object-storage` command wants as
+its first argument. `bucket_name` comes from the bucket resource's `id`, which the platform sets to
+the suffixed value it assigned. The suffixed value is the string the S3 endpoint answers to. Confirm
+it against the platform before you rely on it, since the resource's `name` argument still holds the
+unsuffixed name you typed:
+
+```bash
+zcp object-storage bucket list <object_storage_slug> --region os-yul --project default-9
+```
+
+Terraform marks the two key outputs sensitive, so they need `-raw` to print. It still writes them to
+state in cleartext. Any provider returning a credential behaves the same way. Keep the state file
+somewhere you would be willing to keep the credential itself.
+
+:::note
+
+The platform creates firewall and port-forward rules asynchronously. They take roughly thirty
+seconds to reach **Active** after the apply returns, and SSH refuses to connect until they do. If
+the first connection times out, wait and retry before you start debugging.
+
+:::
+
+## Step 5: Open the vault and put something in it
+
+First boot takes under a minute. Connect and watch it finish:
+
+```bash
+ssh ubuntu@<vault_ip>
+journalctl -u vaultwarden-first-boot.service -f
+```
+
+Read the generated admin token:
+
+```bash
+sudo cat /root/.credentials/vaultwarden.txt
+```
+
+Open `https://<vault_ip>:8000` in a browser. The self-signed certificate triggers a warning, so
+accept the exception. Self-registration is off by default, so invite yourself from the admin panel
+at `https://<vault_ip>:8000/admin`, under **Users**, then log in and save one password item. You
+will destroy and restore that item later, so it needs to exist before the first backup.
+
+The vault data lives in `/data/vaultwarden/data`: `db.sqlite3`, the attachments and sends
+directories, `config.json`, and the RSA key pair that signs client tokens. The Compose file and the
+environment file sit one level up in `/data/vaultwarden`.
+
+## Step 6: Install restic on the VM
+
+Ubuntu packages restic, but the archive lags upstream by several releases. Install the current
+binary and check it against the published checksums:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y bzip2 rsync sqlite3
+
+RESTIC_VERSION=0.19.1
+cd /tmp
+curl -fsSLO "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_linux_amd64.bz2"
+curl -fsSLO "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/SHA256SUMS"
+sha256sum --ignore-missing -c SHA256SUMS
+
+bunzip2 "restic_${RESTIC_VERSION}_linux_amd64.bz2"
+sudo install -m 755 "restic_${RESTIC_VERSION}_linux_amd64" /usr/local/bin/restic
+restic version
+```
+
+`sha256sum -c` must print `OK` for the archive. If it does not, stop and download again.
+
+:::tip
+
+For a stricter check, restic also publishes `SHA256SUMS.asc`. The
+[installation guide](https://restic.readthedocs.io/en/stable/020_installation.html) lists the
+signing key and the verification steps.
+
+:::
+
+## Step 7: Create the repository
+
+restic reads its configuration from the environment. Put it in a root-only file rather than a shell
+profile, so the systemd timer and your interactive shell share one source of truth.
+
+Generate a repository password first. Anyone who obtains a copy of the bucket still needs it to read
+your vault:
+
+```bash
+sudo install -d -m 700 /etc/restic
+openssl rand -base64 32 | sudo tee /etc/restic/repo-password > /dev/null
+sudo chmod 600 /etc/restic/repo-password
+sudo cat /etc/restic/repo-password
+```
+
+:::danger
+
+Copy that password somewhere off this VM before you go further, and keep a second copy in a
+different place. There is no recovery path. A restic repository whose password is lost is
+indistinguishable from random data, which is the point of the design. Storing it only in the vault
+you are backing up leaves you locked out at exactly the moment you need the backup.
+
+:::
+
+Now write the environment file, substituting the endpoint for your region, the bucket name, and the
+two keys from the Terraform outputs:
+
+```bash
+sudo install -d -m 700 /var/cache/restic
+sudo tee /etc/restic/vaultwarden.env > /dev/null <<'EOF'
+RESTIC_REPOSITORY=s3:https://objects.yul.zcp.zsoftly.ca/<your-bucket-name>
+RESTIC_PASSWORD_FILE=/etc/restic/repo-password
+RESTIC_CACHE_DIR=/var/cache/restic
+AWS_ACCESS_KEY_ID=<access-key>
+AWS_SECRET_ACCESS_KEY=<secret-key>
+EOF
+sudo chmod 600 /etc/restic/vaultwarden.env
+```
+
+`RESTIC_CACHE_DIR` looks minor, but skipping it breaks the timer. systemd runs services without
+`$HOME`, and restic refuses to start when it cannot locate a cache directory. Without this variable
+set, the nightly timer in Step 9 fails with
+`unable to locate cache directory: neither $XDG_CACHE_HOME nor $HOME are defined`. Putting it in the
+shared env file fixes the timer and your interactive shell at once.
+
+The endpoints are `https://objects.yul.zcp.zsoftly.ca` for `os-yul` and
+`https://objects.yow.zcp.zsoftly.ca` for `os-yow`. The path after the host is the bucket name, which
+is the `s3:https://server/bucket` form restic uses for any S3-compatible server.
+
+:::caution
+
+Do not guess the bucket name. The platform appends a numeric suffix to the name you asked for, so a
+bucket declared as `vaultwarden-restic` is created as something like `vaultwarden-restic-001024`.
+This suffixed value is the real S3 bucket name. Look it up:
+
+```bash
+zcp object-storage bucket list <object_storage_slug> --region os-yul --project default-9
+```
+
+```
+SLUG                       NAME                       OBJECTS  SIZE (GB)  STATUS
+vaultwarden-restic-001024  vaultwarden-restic-001024  0                   Inactive
+```
+
+Use the NAME column in the repository URL. The S3-level CLI commands later in this tutorial take the
+same name, even though their help text labels the argument a slug. Only `bucket delete` works on the
+slug. A bucket reporting `Inactive` with zero objects is normal before anything is written to it.
+
+:::
+
+The file is root-only, so load it in a root shell rather than your own. Every command run on the VM
+from here through Step 11 uses this root shell, so none of them carry `sudo`. The `zcp` commands in
+Step 10 are the exception and run on your workstation:
+
+```bash
+sudo -i
+set -a; . /etc/restic/vaultwarden.env; set +a
+restic init
+```
+
+```
+created restic repository db62f25025 at s3:https://objects.yul.zcp.zsoftly.ca/vaultwarden-restic-001024
+
+Please note that knowledge of your password is required to access
+the repository. Losing your password means that your data is
+irrecoverably lost.
+```
+
+:::tip
+
+ZCP object storage needs path-style addressing, but restic detects that on its own and no extra
+option is required. If a command ever fails to find a bucket that exists, add
+`-o s3.bucket-lookup=path` to force it.
+
+:::
+
+## Step 8: Write the backup script
+
+Vaultwarden keeps its data in SQLite, and copying a live SQLite file with `cp` can capture a
+half-written transaction. The `.backup` command in the `sqlite3` client takes a consistent snapshot
+while the container keeps serving, so no downtime is needed.
+
+Still in the root shell, write the script to `/root/vaultwarden-backup.sh`:
+
+```bash
+#!/usr/bin/env bash
+# Back up Vaultwarden to ZCP object storage with restic.
+set -euo pipefail
+
+VW_DIR=/data/vaultwarden
+DATA_DIR="${VW_DIR}/data"
+STAGE_ROOT=/var/backups/vaultwarden
+STAGE_DIR="${STAGE_ROOT}/stage"
+ENV_FILE=/etc/restic/vaultwarden.env
+
+set -a
+# shellcheck disable=SC1090
+. "${ENV_FILE}"
+set +a
+
+install -d -m 700 "${STAGE_ROOT}"
+install -d -m 700 "${STAGE_DIR}"
+trap 'rm -rf "${STAGE_DIR:?}"' EXIT
+
+# Copy the file-based data, skipping the live database and anything regenerable.
+rsync -a --delete \
+    --exclude 'db.sqlite3*' \
+    --exclude 'icon_cache/' \
+    --exclude 'tmp/' \
+    --exclude 'ssl/' \
+    "${DATA_DIR}/" "${STAGE_DIR}/data/"
+
+# Snapshot the running database without stopping the container.
+sqlite3 "${DATA_DIR}/db.sqlite3" ".backup '${STAGE_DIR}/data/db.sqlite3'"
+
+# Refuse to upload a copy that is already damaged.
+integrity=$(sqlite3 "${STAGE_DIR}/data/db.sqlite3" 'PRAGMA integrity_check;')
+if [ "${integrity}" != "ok" ]; then
+    echo "[ERROR] integrity check on the staged database returned: ${integrity}" >&2
+    exit 1
+fi
+
+# The env file carries the admin token hash, so a restore needs it too.
+install -m 600 "${VW_DIR}/vaultwarden.env" "${STAGE_DIR}/vaultwarden.env"
+
+restic backup --tag vaultwarden "${STAGE_DIR}"
+
+restic forget --tag vaultwarden \
+    --keep-daily 7 --keep-weekly 4 --keep-monthly 6 \
+    --prune
+
+restic check
+
+echo "[OK] vaultwarden backup finished"
+```
+
+Install it and run it once by hand:
+
+```bash
+install -m 700 /root/vaultwarden-backup.sh /usr/local/sbin/vaultwarden-backup.sh
+/usr/local/sbin/vaultwarden-backup.sh
+```
+
+The first run uploads everything. Later runs send only changed chunks, so a vault that gains a few
+passwords a day costs kilobytes per night. A fresh vault produces a very small first snapshot:
+
+```
+Files:           3 new,     0 changed,     0 unmodified
+Dirs:            5 new,     0 changed,     0 unmodified
+Added to the repository: 276.673 KiB (9.721 KiB stored)
+
+processed 3 files, 274.046 KiB in 0:00
+snapshot f5eb9b2f saved
+```
+
+Check what landed:
+
+```bash
+restic snapshots
+```
+
+```
+ID        Time                 Host       Tags         Paths                           Size
+f5eb9b2f  2026-09-13 21:39:33  vwtest-01  vaultwarden  /var/backups/vaultwarden/stage  274.046 KiB
+```
+
+The retention line keeps 7 daily, 4 weekly, and 6 monthly snapshots and prunes whatever falls
+outside all three. `restic check` verifies that every pack and index the snapshots reference is
+present. On a small repository it takes seconds. If the repository grows past a few tens of
+gigabytes, move the check to its own weekly timer and add `--read-data-subset=1/7` there, which
+reads and verifies one seventh of the actual pack data per run.
+
+## Step 9: Run it nightly
+
+Create the service unit at `/etc/systemd/system/vaultwarden-backup.service`:
+
+```ini
+[Unit]
+Description=Back up Vaultwarden to ZCP object storage with restic
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/vaultwarden-backup.sh
+Nice=10
+IOSchedulingClass=idle
+```
+
+And the timer at `/etc/systemd/system/vaultwarden-backup.timer`:
+
+```ini
+[Unit]
+Description=Daily Vaultwarden restic backup
+
+[Timer]
+OnCalendar=*-*-* 02:30:00
+RandomizedDelaySec=20m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+Enable it:
+
+```bash
+systemctl daemon-reload
+systemctl enable --now vaultwarden-backup.timer
+systemctl list-timers vaultwarden-backup.timer
+```
+
+Confirm it runs under systemd rather than waiting until morning:
+
+```bash
+systemctl start vaultwarden-backup.service
+systemctl show vaultwarden-backup.service -p Result -p ExecMainStatus
+```
+
+```
+Result=success
+ExecMainStatus=0
+```
+
+`OnCalendar` follows the VM clock, which is UTC unless you changed it. `Persistent=true` runs a
+missed backup at the next boot, so a VM that was powered off overnight still catches up. Read the
+last run with `journalctl -u vaultwarden-backup.service -n 50`.
+
+:::caution
+
+A `Result=exit-code` here with `unable to locate cache directory` in the journal means
+`RESTIC_CACHE_DIR` is missing from `/etc/restic/vaultwarden.env`. The script works when you run it
+by hand, because the root login shell sets `$HOME`. It fails under the timer, because systemd does
+not.
+
+:::
+
+## Step 10: Confirm the bucket holds ciphertext
+
+This step answers the question the missing server-side encryption leaves open. Every restic
+repository has a small object named `config` at its root. On the VM, restic decrypts it for you:
+
+```bash
+restic cat config
+```
+
+```json
+{
+  "version": 2,
+  "id": "db62f2502541f42cc6af484cc6b9fc04b24498e3dc6430441a4156bcea6553de",
+  "chunker_polynomial": "395c3db449e5db"
+}
+```
+
+Now fetch the same object straight from the bucket. Use the management credentials on your
+workstation instead of restic:
+
+```bash
+zcp object-storage object list <object_storage_slug> <your-bucket-name> \
+  --region os-yul --project default-9
+
+zcp object-storage object download <object_storage_slug> <your-bucket-name> config \
+  --dest /tmp/restic-config --region os-yul --project default-9
+
+file /tmp/restic-config
+head -c 32 /tmp/restic-config | xxd
+```
+
+The listing shows the standard repository layout:
+
+```
+KEY                                                                       SIZE
+config                                                                     155
+data/00/00d100ce161bbecdd894e17051b75e431d81d8178c3f25c665e27373e1b167ff  1945
+data/a3/a31a963e4c25da5fc0a8446cb32840830b6ecf1aa70f26e5145863d6ed13d91c  8081
+index/d17710e043e7ba09fa77ab93681d82dc4ca1bfe7a7ad915f0e45c0046987e07e     638
+keys/78fd2a6413aa925c0f0fe801933cc68f18568ae82cb7dcede38121e288f25bb4      446
+snapshots/f5eb9b2f32fd48703d1f1b4487d33195099250bdeffe625a94149653c66a46bf 379
+```
+
+And the same `config` object, straight out of the bucket, is unreadable:
+
+```
+/tmp/restic-config: data
+00000000: 6498 2898 76cb 76fd 3a6a e81f 1dd5 b9db  d.(.v.v.:j......
+00000010: eac5 6875 a1b5 b406 59c3 7b4c b264 c344  ..hu....Y.{L.d.D
+```
+
+`file` reports `data`, and the hex dump is noise. The same holds for the pack files under `data/`,
+which carry the vault contents. Nothing in the bucket is readable without the repository password,
+and that password never leaves the VM and your offline copy of it. restic encrypts with AES-256 in
+counter mode and authenticates with Poly1305-AES, so a modified object fails its MAC check instead
+of decrypting to something plausible.
+
+:::tip
+
+Turn on object versioning for the bucket. If the VM is ever compromised, its credentials can delete
+objects, and versioning keeps the previous versions recoverable:
+
+```bash
+zcp object-storage bucket versioning enable <object_storage_slug> <your-bucket-name> \
+  --region os-yul --project default-9
+```
+
+:::
+
+## Step 11: Restore
+
+A backup you have never restored is a hypothesis. Prove it now, while losing the data does not
+matter.
+
+Delete the password item you saved in Step 5 from the web vault. Then restore the snapshot:
+
+```bash
+restic snapshots --tag vaultwarden
+restic restore latest --target /tmp/vault-restore
+```
+
+```
+restoring snapshot f5eb9b2f of [/var/backups/vaultwarden/stage] to /tmp/vault-restore
+Summary: Restored 8 files/dirs (274.046 KiB) in 0:00
+```
+
+restore writes the tree under `/tmp/vault-restore/var/backups/vaultwarden/stage`. Put the database
+back with the container stopped, so nothing writes underneath you:
+
+```bash
+cd /data/vaultwarden
+docker compose stop
+cp /tmp/vault-restore/var/backups/vaultwarden/stage/data/db.sqlite3 ./data/db.sqlite3
+if [ -d /tmp/vault-restore/var/backups/vaultwarden/stage/data/attachments ]; then
+  rsync -a /tmp/vault-restore/var/backups/vaultwarden/stage/data/attachments/ ./data/attachments/
+fi
+chown -R root:root ./data
+docker compose start
+```
+
+A vault with no attachments has no `attachments` directory, which is why the copy is guarded.
+
+Reload the web vault and log in. The item you deleted is back. To check without a browser, read the
+database directly before and after:
+
+```bash
+sqlite3 /data/vaultwarden/data/db.sqlite3 'select email from users;'
+```
+
+To rebuild on a fresh VM instead, deploy the same Marketplace image and install restic. Write the
+same `/etc/restic/vaultwarden.env` and repository password, then run the restore against the
+existing repository. Copy `rsa_key.pem` and `config.json` across as well. The RSA key signs client
+tokens, and replacing it logs every client out.
+
+```bash
+restic restore latest --target /tmp/vault-restore
+cp /tmp/vault-restore/var/backups/vaultwarden/stage/vaultwarden.env \
+  /data/vaultwarden/vaultwarden.env
+```
+
+## Clean up
+
+Destroy the whole stack when you are finished testing:
+
+<Tabs syncKey="iac-tool">
+
+<TabItem label="OpenTofu">
+
+```bash
+tofu destroy
+```
+
+</TabItem>
+
+<TabItem label="Terraform">
+
+```bash
+terraform destroy
+```
+
+</TabItem>
+
+</Tabs>
+
+Destroy does not complete in one pass. Expect both failures.
+
+**Empty the bucket first.** A bucket holding a restic repository refuses to delete, and the destroy
+stops with `API error 403` on `zcp_object_storage_bucket`. Clear it, then destroy again:
+
+```bash
+zcp object-storage bucket empty <object_storage_slug> <your-bucket-name> \
+  --region os-yul --project default-9
+```
+
+```
+Removed 9 object/version entries from bucket "vaultwarden-restic-001024".
+```
+
+**The public IP goes with its network, not on its own.** Because the address is the network's
+source-NAT IP, releasing it directly fails with
+`API error 403: Source Nat IP cannot be deleted from the associated network`. Hand it to the network
+destroy instead:
+
+```bash
+tofu state rm zcp_ip_address.vault
+tofu destroy
+```
+
+Deleting the network releases the address with it. Confirm nothing is left billing:
+
+```bash
+zcp instance list --region yul-1 --project default-9
+zcp network list --region yul-1 --project default-9
+zcp ip list --region yul-1 --project default-9
+zcp object-storage list --region os-yul --project default-9
+```
+
+## Troubleshooting
+
+**Everything on the VM times out, including `apt-get update`.** The network has no egress rules, so
+the VM cannot reach the package archive, GitHub, or the object storage endpoint. Check with
+`zcp egress list --network <network-slug> --region yul-1`. An empty list is the problem. Apply the
+three `zcp_egress_rule` resources from Step 3. A VM on an auto-created network does not hit this,
+which is why the CLI tutorials never mention egress.
+
+**SSH times out right after the apply.** Firewall and port-forward rules activate asynchronously and
+take about thirty seconds. Confirm both are `Active`:
+
+```bash
+zcp firewall list --ip <ip-slug> --region yul-1 --project default-9
+zcp portforward list --ip <ip-slug> --region yul-1 --project default-9
+```
+
+An empty firewall list moments after a rule was created usually means the rule has not activated
+yet. It does not necessarily mean the rule failed.
+
+**SSH still times out and the rules are Active.** Check that the port forwards exist. Static NAT on
+the network's source-NAT IP silently does nothing, so a configuration using `zcp_ip_association`
+instead of `zcp_port_forward` leaves the VM unreachable while reporting success.
+
+**`API error 500: Private end port is required`.** A `zcp_port_forward` is missing `public_end_port`
+or `private_end_port`. Set them equal to the start ports.
+
+**The nightly timer fails but the script works by hand.** `RESTIC_CACHE_DIR` is missing from
+`/etc/restic/vaultwarden.env`. systemd runs services without `$HOME`.
+
+**`Fatal: unable to open config file` or a bucket-not-found error.** The repository URL names a
+nonexistent bucket, usually because the platform's numeric suffix was left off. List the real names
+with `zcp object-storage bucket list <object_storage_slug> --region os-yul`.
+
+**`wrong password or no key found`.** The repository password does not match. Check that
+`RESTIC_PASSWORD_FILE` points at the file you generated, and that nothing has edited that file
+since.
+
+**Uploads fail with `InvalidArgument`.** Default bucket encryption is set on the bucket. Clear it
+with `zcp object-storage bucket encryption disable <object_storage_slug> <your-bucket-name>` and
+check the current setting with `encryption status`.
+
+## Next steps
+
+- [Object storage access keys](/public-cloud/storage/object-storage/access-keys) and
+  [S3 API usage](/public-cloud/storage/object-storage/s3-usage/)
+- [Manage ZCP with Terraform or OpenTofu](/tutorials/manage-infrastructure-terraform/) for the
+  provider lifecycle in isolation
+- [Vaultwarden on the Marketplace](/public-cloud/marketplace/vaultwarden) for the image's
+  configuration and production hardening notes
+- [Instance backups and snapshots](/public-cloud/backups-snapshots/backups) for whole-VM recovery
+  alongside this file-level path
+- [restic documentation](https://restic.readthedocs.io/en/stable/) for policies, remote
+  repositories, and mounting a repository as a filesystem
