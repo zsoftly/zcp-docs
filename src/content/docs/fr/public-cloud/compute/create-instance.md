@@ -92,8 +92,9 @@ Choisissez ensuite d'activer ou non l'IPv4 publique.
 
 ## Configurer les paramètres du serveur
 
-- Ajoutez une clé SSH pour un accès sécurisé. Cliquez sur **Add Now**. Pour certaines images de SE,
-  comme Arch Linux, une clé SSH est requise.
+- Dans **Server Settings**, cliquez sur **Add now** à côté de **Add SSH Key To Your Instance**. Dans
+  la boîte de dialogue, entrez un nom et collez votre clé publique, ou sélectionnez une clé
+  existante. Pour certaines images de SE, comme Arch Linux, une clé SSH est requise.
 - Ajoutez un script de démarrage pour automatiser des actions pendant l'initialisation.
 
 ![Configuration des paramètres du serveur](../../../../../assets/compute/create-instance-configure-server-settings.webp)

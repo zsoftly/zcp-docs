@@ -104,8 +104,9 @@ physical hosts. See [Affinity Groups](/public-cloud/affinity-groups).
 
 ## Configure Server Settings
 
-- Add SSH Key for secure access. Click **Add Now**. For some OS images (e.g., Arch Linux) an SSH key
-  is required.
+- In **Server Settings**, click **Add now** beside **Add SSH Key To Your Instance**. In the dialog,
+  either enter a key name and paste your public key, or select an existing key. For some OS images
+  (e.g., Arch Linux), an SSH key is required.
 - Add a startup script to automate actions during initialization.
 
 ![Configuring server settings](../../../../assets/compute/create-instance-configure-server-settings.webp)

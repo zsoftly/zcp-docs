@@ -42,7 +42,7 @@ the default username above.
 
 ## Generate an SSH Key Pair
 
-An SSH key pair has a private key you keep secret and a public key you add to your account or
+An SSH key pair has a private key you keep secret and a public key you provide when you create an
 instance. Create one in your terminal.
 
 On macOS and Linux:
@@ -67,9 +67,10 @@ Print the public key to copy it:
 cat ~/.ssh/id_ed25519.pub
 ```
 
-Add the public key to your account or instance under
-[SSH Keys](/public-cloud/compute/settings/ssh-keys). Keep the private key (`~/.ssh/id_ed25519`)
-private and never share it.
+You add the public key when you create the instance: in **Server Settings**, click **Add now**
+beside **Add SSH Key To Your Instance**. In the dialog, either enter a key name and paste your
+public key, or select an existing key. Keep the private key (`~/.ssh/id_ed25519`) private and never
+share it.
 
 ## Connecting
 

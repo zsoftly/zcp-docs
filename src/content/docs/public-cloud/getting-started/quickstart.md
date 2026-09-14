@@ -10,23 +10,22 @@ Deploy a VM, connect to it via SSH, and attach a block storage volume. End to en
 
 - A ZSoftly Public Cloud account ([sign up](/public-cloud/getting-started/account-signup))
 - An SSH client (Terminal on macOS/Linux, PowerShell or Windows Terminal on Windows)
+- An SSH key pair
 
-## Step 1: Add an SSH key
-
-Before creating a VM, add your public SSH key to the portal to connect without a password.
-
-1. In the portal, go to **Profile → SSH Keys**
-2. Click **Add SSH Key**
-3. Paste your public key (from `~/.ssh/id_ed25519.pub` or `~/.ssh/id_rsa.pub`)
-4. Give it a name and click **Submit**
-
-If you don't have an SSH key yet:
+If you already have an SSH key, display the contents of its `.pub` file. Otherwise, generate an
+Ed25519 key:
 
 ```bash
 ssh-keygen -t ed25519 -C "your@email.com"
 ```
 
-## Step 2: Create a network
+Copy the public key contents for Step 2. For the Ed25519 key generated above, run:
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+## Step 1: Create a network
 
 Your VM needs a network. For a simple setup, use a Public Network.
 
@@ -36,7 +35,7 @@ Your VM needs a network. For a simple setup, use a Public Network.
 4. Assign to a **Project** (or use the default)
 5. Give it a name and click **Create**
 
-## Step 3: Create a VM
+## Step 2: Create a VM
 
 1. In the portal, go to **Instances**
 2. Click the **+** icon
@@ -48,14 +47,15 @@ Your VM needs a network. For a simple setup, use a Public Network.
    - **Project**: assign to your project
    - **Network**: select the public network you just created
    - **Public IPv4**: enable this
-   - **SSH Key**: select the key you added in Step 1
+   - **SSH Key**: in **Server Settings**, click **Add now** beside **Add SSH Key To Your Instance**.
+     In the dialog, either enter a key name and paste your public key, or select an existing key.
    - **Server Name**: give your VM a name
 4. Choose a **Billing Cycle** (Hourly for testing)
 5. Click **Review & Deploy**
 
 Your VM will be ready in 30–60 seconds.
 
-## Step 4: Connect via SSH
+## Step 3: Connect via SSH
 
 Once the VM shows as **Running**:
 
@@ -72,7 +72,7 @@ If you used Ubuntu, the default username is `ubuntu`:
 ssh ubuntu@<public-ip-address>
 ```
 
-## Step 5: Attach block storage (optional)
+## Step 4: Attach block storage (optional)
 
 To add persistent storage separate from the root disk:
 

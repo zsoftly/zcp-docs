@@ -46,7 +46,7 @@ copie pour le copier. Utilisez-le avec le nom d'utilisateur par défaut ci-dessu
 ## Générer une paire de clés SSH
 
 Une paire de clés SSH comprend une clé privée que vous gardez secrète et une clé publique que vous
-ajoutez à votre compte ou à votre instance. Créez-en une dans votre terminal.
+fournissez lors de la création d'une instance. Créez-en une dans votre terminal.
 
 Sur macOS et Linux :
 
@@ -71,9 +71,10 @@ Affichez la clé publique pour la copier :
 cat ~/.ssh/id_ed25519.pub
 ```
 
-Ajoutez la clé publique à votre compte ou à votre instance sous
-[Clés SSH](/fr/public-cloud/compute/settings/ssh-keys). Gardez la clé privée (`~/.ssh/id_ed25519`)
-secrète et ne la partagez jamais.
+Vous ajoutez la clé publique lors de la création de l'instance : dans **Server Settings**, cliquez
+sur **Add now** à côté de **Add SSH Key To Your Instance**. Dans la boîte de dialogue, entrez un nom
+et collez votre clé publique, ou sélectionnez une clé existante. Gardez la clé privée
+(`~/.ssh/id_ed25519`) secrète et ne la partagez jamais.
 
 ## Connexion
 
