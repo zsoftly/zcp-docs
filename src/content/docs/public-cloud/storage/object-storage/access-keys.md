@@ -25,10 +25,22 @@ The endpoint for your instance matches the region you selected when creating it.
    - **Access Key ID**: your S3 access key
    - **Secret Access Key**: your S3 secret key (treat this like a password)
 
+You can also read both keys from the CLI at any time:
+
+```bash
+zcp object-storage get <storage-slug> --region os-yul --project <project-slug>
+```
+
+The output includes the S3 endpoint, the access key, and the secret key.
+
 :::caution
 
-Store your secret key securely. It is shown once and cannot be recovered. If lost, you must generate
-new credentials.
+The secret key is not write-once. Any holder of an API token for the project can print it with
+`zcp object-storage get`, so treat an API token as equivalent to the S3 credentials it can reveal.
+Scope tokens accordingly, and rotate the object storage credentials if a token is exposed.
+
+Store the keys securely wherever you use them. If you need to invalidate them, generate new
+credentials for the instance.
 
 :::
 

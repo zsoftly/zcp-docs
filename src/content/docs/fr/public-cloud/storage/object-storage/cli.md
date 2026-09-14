@@ -11,8 +11,8 @@ des clés d'accès/secrètes de votre instance, que le CLI récupère pour vous.
 
 Résultat : le CLI expose l'ensemble des fonctionnalités S3 de la plateforme — y compris de
 nombreuses capacités **non disponibles dans l'interface du portail** (règles de cycle de vie, CORS,
-politiques de compartiment, chiffrement par défaut, étiquettes, URL pré-signées, copie/déplacement
-côté serveur, flux de gestion des versions d'objets et nettoyage des téléversements multiparties).
+politiques de compartiment, étiquettes, URL pré-signées, copie/déplacement côté serveur, flux de
+gestion des versions d'objets et nettoyage des téléversements multiparties).
 
 Installez et configurez d'abord le CLI — voir [Installation](/fr/public-cloud/cli/installation) et
 [Configuration](/fr/public-cloud/cli/configuration). Le fournisseur infonuagique pour le stockage
@@ -38,7 +38,7 @@ objet est sélectionné automatiquement ; vous choisissez seulement une **régio
 | **Stat d'objet** (HEAD : taille, type, ETag, métadonnées)       |    —    |    ✅     |      ✅      |
 | **Type de contenu et métadonnées au téléversement**             |    —    |    ✅     |      ✅      |
 | **Étiquettes de compartiment et d'objet**                       |    —    |    ✅     |      ✅      |
-| **Chiffrement par défaut (SSE-S3)**                             |    —    |    ✅     |      ✅      |
+| **Chiffrement par défaut (SSE-S3)**                             |    —    |    —²     |      —²      |
 | **Politique de compartiment brute** (get/set/delete)            |    —    |    ✅     |      ✅      |
 | **Règles de cycle de vie / d'expiration**                       |    —    |    ✅     |      ✅      |
 | **Règles CORS**                                                 |    —    |    ✅     |      ✅      |
@@ -46,7 +46,12 @@ objet est sélectionné automatiquement ; vous choisissez seulement une **régio
 | **Vider un compartiment / purger toutes les versions**          |    —    |    ✅     |      ✅      |
 
 ¹ Le verrou d'objet ne peut être activé qu'à la création d'un compartiment. Le portail le prend en
-charge dès aujourd'hui ; la prise en charge dans le CLI est prévue (voir la note en fin de page).
+charge dès aujourd'hui ; la prise en charge dans le CLI est prévue (voir la note en fin de page). ²
+Le chiffrement par défaut n'est **pas encore pris en charge sur cette plateforme**, quelle que soit
+l'interface. Voir
+[Le chiffrement par défaut n'est pas disponible](#le-chiffrement-par-défaut-nest-pas-disponible)
+ci-dessous.
+
 Vous pouvez aussi l'activer directement contre le point de terminaison S3 avec un SDK lors de la
 création du compartiment.
 
@@ -56,9 +61,14 @@ pour des exemples par langage.
 
 ## Référence des commandes
 
-`<storage>` est l'identifiant (slug) de l'instance de stockage objet, `<bucket>` celui d'un
-compartiment, `<key>` la clé d'un objet. Ajoutez `-o json` (ou `-o yaml`) à n'importe quelle
-commande pour une sortie lisible par machine, et `-y` pour ignorer les invites de confirmation.
+`<storage>` est l'identifiant (slug) de l'instance de stockage objet et `<key>` la clé d'un objet.
+`<bucket>` désigne le **nom** du compartiment pour toutes les commandes qui atteignent la passerelle
+S3, et son slug uniquement pour `bucket delete`. Affichez les deux avec
+`zcp object-storage bucket list <storage>`. La plateforme ajoute un suffixe numérique à la création,
+donc aucun des deux n'est le nom que vous avez saisi. Voir
+[Utilisation de l'API S3](/fr/public-cloud/storage/object-storage/s3-usage/). Ajoutez `-o json` (ou
+`-o yaml`) à n'importe quelle commande pour une sortie lisible par machine, et `-y` pour ignorer les
+invites de confirmation.
 
 :::note
 
@@ -124,8 +134,7 @@ zcp object-storage bucket tag set    <storage> <bucket> --tag env=prod --tag tea
 zcp object-storage bucket tag get    <storage> <bucket>
 zcp object-storage bucket tag delete <storage> <bucket>
 
-# Chiffrement par défaut (SSE-S3)
-zcp object-storage bucket encryption enable  <storage> <bucket>
+# Chiffrement par défaut (SSE-S3) - « enable » est refusé, voir l'avertissement ci-dessous
 zcp object-storage bucket encryption status  <storage> <bucket>
 zcp object-storage bucket encryption disable <storage> <bucket>
 
@@ -195,12 +204,45 @@ jusqu'à son expiration (max 7 jours), même sur un compartiment privé.
 
 :::
 
+## Le chiffrement par défaut n'est pas disponible
+
+La passerelle de stockage ne dispose pas encore de backend de clés de chiffrement, donc le
+chiffrement par défaut des compartiments (SSE-S3) ne fonctionne dans aucune interface. L'activer
+fait échouer tous les téléversements suivants vers ce compartiment avec `InvalidArgument` jusqu'au
+retrait du paramètre, ce qui explique le refus pur et simple de `zcp` :
+
+```bash
+zcp object-storage bucket encryption enable <storage> <bucket>
+```
+
+```
+Error: bucket encryption enable is not supported on this platform yet: the object storage
+gateway has no encryption key backend, and enabling default SSE-S3 makes every upload to the
+bucket fail with InvalidArgument until it is disabled again.
+```
+
+L'API S3 accepte `PutBucketEncryption` sans ce garde-fou. Un SDK ou
+`aws s3api put-bucket-encryption` cassera donc le compartiment sans avertissement. Ne l'activez pas.
+Si un compartiment est déjà touché, inspectez et retirez le paramètre :
+
+```bash
+zcp object-storage bucket encryption status  <storage> <bucket>
+zcp object-storage bucket encryption disable <storage> <bucket>
+```
+
+La prise en charge est prévue avant la fin du T3 2026. D'ici là, chiffrez côté client avant le
+téléversement.
+[Sauvegarder Vaultwarden vers le stockage objet avec restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+détaille cette approche avec [restic](https://github.com/restic/restic), qui chiffre et authentifie
+chaque objet avant qu'il ne quitte la machine.
+
 ## Pas encore dans le CLI
 
 - **Verrou d'objet (WORM)** — activez-le à la création d'un compartiment dans le portail, ou
   directement contre le point de terminaison S3 avec un SDK. La prise en charge dans le CLI est
   prévue.
 - **Mise à l'échelle automatique** de l'instance — utilisez le portail.
+- **Chiffrement par défaut (SSE-S3)** — bloqué sur toute la plateforme, voir ci-dessus.
 
 Tout le reste indiqué dans le tableau ci-dessus est entièrement pris en charge par `zcp`
 aujourd'hui.

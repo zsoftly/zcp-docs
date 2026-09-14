@@ -259,6 +259,14 @@ export default defineConfig({
               label: 'Build a Private Network (CLI)',
               slug: 'tutorials/build-private-network-headscale',
             },
+            {
+              label: 'Configure Email Authentication DNS',
+              slug: 'tutorials/configure-email-authentication-dns',
+            },
+            {
+              label: 'Vaultwarden Backups with restic',
+              slug: 'tutorials/backup-vaultwarden-restic-object-storage',
+            },
           ],
         },
 
@@ -669,5 +677,4 @@ export default defineConfig({
       // },
     }),
   ],
-
 });

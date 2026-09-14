@@ -36,6 +36,36 @@ celui-ci.
 Les exemples ci-dessous utilisent le point de terminaison YUL. Remplacez-le par YOW si votre
 compartiment se trouve à Ottawa.
 
+### Trouver le nom de votre compartiment
+
+Avant d'écrire une URL de point de terminaison, confirmez le véritable nom du compartiment. La
+plateforme ajoute un suffixe numérique au nom demandé lors de la création. Un compartiment demandé
+sous le nom `my-bucket` existe sous un nom du type `my-bucket-001024`. C'est cette valeur suffixée
+que l'API S3 reconnaît. Utiliser le nom que vous avez saisi renvoie `NoSuchBucket` même si le
+compartiment existe.
+
+```bash
+zcp object-storage bucket list <storage-slug> --region os-yul --project <project-slug>
+```
+
+```
+SLUG                NAME                OBJECTS  SIZE (GB)  STATUS
+my-bucket-001024    my-bucket-001024    0                   Inactive
+```
+
+Utilisez cette valeur partout ci-dessous à la place de `my-bucket`. Un compartiment affichant
+`Inactive` avec zéro objet est normal tant que rien n'y a été écrit.
+
+:::note
+
+Les sous-commandes de compartiment de la CLI sont réparties en deux groupes. Celles qui passent par
+la passerelle S3 (`object …`, `bucket versioning`, `bucket policy`, `bucket lifecycle`,
+`bucket cors`, `bucket tag`, `bucket empty`) prennent le **nom** du compartiment, même si leur aide
+indique `<bucket-slug>`. Seule `bucket delete`, qui passe par le plan de contrôle, prend le slug. En
+pratique, le nom et le slug sont généralement la même chaîne suffixée.
+
+:::
+
 ### Se connecter et lister les compartiments
 
 Configurez votre client avec le point de terminaison régional et vos clés d'accès, puis listez vos
@@ -236,6 +266,27 @@ Activez toujours l'adressage path-style : `forcePathStyle` (JS/TS), `UsePathStyl
 `ForcePathStyle` (C#), `pathStyleAccessEnabled` (Java), `force_path_style` (Ruby) ou
 `use_path_style_endpoint` (PHP). Le stockage objet ZSoftly l'exige. Le style virtual-hosted n'est
 pas pris en charge.
+
+:::
+
+:::danger
+
+N'activez pas le chiffrement par défaut des compartiments (SSE-S3). La passerelle de stockage ne
+dispose pas encore de backend de clés de chiffrement, et un compartiment configuré avec le
+chiffrement par défaut rejette **tous** les téléversements suivants avec `InvalidArgument` jusqu'au
+retrait du paramètre. Cela vaut pour `PutBucketEncryption` depuis n'importe quel SDK ainsi que pour
+`aws s3api put-bucket-encryption`. Le chiffrement côté serveur est prévu avant la fin du T3 2026.
+
+Retirez le paramètre sur un compartiment déjà touché :
+
+```bash
+zcp object-storage bucket encryption status <storage-slug> <bucket-name>
+zcp object-storage bucket encryption disable <storage-slug> <bucket-name>
+```
+
+Pour chiffrer ce que vous stockez aujourd'hui, chiffrez côté client avant le téléversement. Voir
+[Sauvegarder Vaultwarden vers le stockage objet avec restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+pour un exemple complet.
 
 :::
 

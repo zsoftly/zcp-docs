@@ -15,6 +15,19 @@ Looking for a single feature instead of a full walkthrough? The
 
 ## Tutorials
 
+### [Configure Email Authentication DNS](/tutorials/configure-email-authentication-dns)
+
+Publish DKIM and DMARC records on an existing ZCP DNS zone with the CLI or Terraform/OpenTofu. Learn
+where SPF needs a separate, carefully reviewed change, how to keep a single owner for each record
+set, and how to verify both DNS and delivered mail.
+
+You learn how to:
+
+- Inventory senders and existing DNS record sets before a change
+- Publish a provider-issued DKIM TXT record or CNAME and a monitoring DMARC policy
+- Manage dedicated record sets through either the CLI or Terraform/OpenTofu
+- Test DNS answers and `Authentication-Results` for every sender before enforcement
+
 ### [Deploy a VPS and install Dokploy with the CLI](/tutorials/deploy-vps-dokploy-cli)
 
 Go from a fresh account to a public virtual machine running [Dokploy](https://dokploy.com), a
@@ -76,6 +89,20 @@ You learn how to:
 - Replace the default network ACL with one scoped to exactly what the tier needs
 - Deploy a self-hosted Headscale and Headplane server from the Marketplace
 - Enroll a subnet router and connect your own device to the mesh
+
+### [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+
+Deploy a Vaultwarden password manager with Terraform or OpenTofu, then back its database up to ZCP
+object storage every night with [restic](https://github.com/restic/restic). restic encrypts on the
+VM, so the bucket only ever holds ciphertext. That stays true whether or not server-side encryption
+ships. About 45 minutes.
+
+You learn how to:
+
+- Provision a VM, a public IP, firewall rules, and an object storage bucket in one configuration
+- Snapshot a live SQLite database without stopping the service
+- Run restic on a systemd timer with retention, pruning, and integrity checks
+- Read an object straight out of the bucket to confirm it is unreadable, then restore the vault
 
 ## Where to go next
 

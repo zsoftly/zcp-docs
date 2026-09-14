@@ -152,6 +152,31 @@ goes with your stack.
 
 :::
 
+:::caution
+
+A network you declare yourself starts with no egress rules and blocks all outbound traffic, so the
+VM above cannot reach package archives or any other internet host. A network auto-created through
+`network_plan` does not have this problem. Owning the network means owning its egress rules, so add
+what the workload needs:
+
+```hcl
+resource "zcp_egress_rule" "https_out" {
+  network    = zcp_network.app.id
+  protocol   = "tcp"
+  cidr       = "0.0.0.0/0"
+  start_port = "443"
+  end_port   = "443"
+}
+```
+
+Repeat for tcp/80 and udp/53 if the instance installs packages or resolves names. Each rule you add
+here is another resource, so the counts in Step 4 below go up accordingly. Inbound is a separate
+matter: see
+[Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+for the firewall and port-forward pair that opens a port on the network's source-NAT address.
+
+:::
+
 ## Step 4: Plan and apply
 
 <Tabs syncKey="iac-tool">
