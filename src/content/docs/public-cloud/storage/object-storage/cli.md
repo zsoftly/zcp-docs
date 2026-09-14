@@ -10,8 +10,8 @@ credentials) and **bucket creation/listing** go through the ZSoftly control plan
 fetches for you.
 
 The result: the CLI exposes the full S3 feature set of the platform: including many capabilities
-**not available in the portal UI** (lifecycle rules, CORS, bucket policies, default encryption,
-tagging, presigned URLs, server-side copy/move, object versioning workflows, and multipart cleanup).
+**not available in the portal UI** (lifecycle rules, CORS, bucket policies, tagging, presigned URLs,
+server-side copy/move, object versioning workflows, and multipart cleanup).
 
 Install and configure the CLI first; see [Installation](/public-cloud/cli/installation) and
 [Configuration](/public-cloud/cli/configuration). The cloud provider for object storage is selected
@@ -37,7 +37,7 @@ automatically; you only choose a **region** and **project**.
 | **Object stat** (HEAD: size, type, ETag, user metadata)  |     —     |    ✅     |      ✅      |
 | **Content-type & user metadata on upload**               |     —     |    ✅     |      ✅      |
 | **Bucket & object tagging**                              |     —     |    ✅     |      ✅      |
-| **Default encryption (SSE-S3)**                          |     —     |    ✅     |      ✅      |
+| **Default encryption (SSE-S3)**                          |     —     |    —²     |      —²      |
 | **Raw bucket policy** (get/set/delete)                   |     —     |    ✅     |      ✅      |
 | **Lifecycle / expiration rules**                         |     —     |    ✅     |      ✅      |
 | **CORS rules**                                           |     —     |    ✅     |      ✅      |
@@ -48,14 +48,20 @@ automatically; you only choose a **region** and **project**.
 support is planned (see the note at the end of this page). You can also enable it directly against
 the S3 endpoint with an SDK at bucket creation.
 
+² Default encryption is **not supported on this platform yet**, in any interface. See
+[Default encryption is not available](#default-encryption-is-not-available) below.
+
 Anything marked **CLI / S3 API only** is also available through any S3-compatible SDK. See
 [S3 API Usage](/public-cloud/storage/object-storage/s3-usage/) for language examples.
 
 ## Command reference
 
-`<storage>` is the object-storage instance slug, `<bucket>` a bucket slug, `<key>` an object key.
-Add `-o json` (or `-o yaml`) to any command for machine-readable output, and `-y` to skip
-confirmation prompts.
+`<storage>` is the object-storage instance slug, `<key>` an object key. `<bucket>` is the bucket
+**name** for every command that reaches the S3 gateway, and the bucket slug only for
+`bucket delete`. Print both with `zcp object-storage bucket list <storage>`. The platform appends a
+numeric suffix at creation, so neither is the name you originally typed. See
+[S3 API Usage](/public-cloud/storage/object-storage/s3-usage/#find-your-bucket-name). Add `-o json`
+(or `-o yaml`) to any command for machine-readable output, and `-y` to skip confirmation prompts.
 
 :::note
 
@@ -120,8 +126,7 @@ zcp object-storage bucket tag set    <storage> <bucket> --tag env=prod --tag tea
 zcp object-storage bucket tag get    <storage> <bucket>
 zcp object-storage bucket tag delete <storage> <bucket>
 
-# Default encryption (SSE-S3)
-zcp object-storage bucket encryption enable  <storage> <bucket>
+# Default encryption (SSE-S3) - 'enable' is refused, see the warning below
 zcp object-storage bucket encryption status  <storage> <bucket>
 zcp object-storage bucket encryption disable <storage> <bucket>
 
@@ -191,10 +196,42 @@ even on a private bucket.
 
 :::
 
+## Default encryption is not available
+
+The storage gateway has no encryption key backend yet, so default bucket encryption (SSE-S3) does
+not work in any interface. Setting it makes every subsequent upload to that bucket fail with
+`InvalidArgument` until the setting is removed, which is why `zcp` refuses the command outright:
+
+```bash
+zcp object-storage bucket encryption enable <storage> <bucket>
+```
+
+```
+Error: bucket encryption enable is not supported on this platform yet: the object storage
+gateway has no encryption key backend, and enabling default SSE-S3 makes every upload to the
+bucket fail with InvalidArgument until it is disabled again.
+```
+
+The S3 API accepts `PutBucketEncryption` without that guardrail, so an SDK or
+`aws s3api put-bucket-encryption` will break the bucket without warning. Do not set it. If a bucket
+is already affected, inspect and clear it:
+
+```bash
+zcp object-storage bucket encryption status  <storage> <bucket>
+zcp object-storage bucket encryption disable <storage> <bucket>
+```
+
+Support is planned to land before the end of Q3 2026. Until then, encrypt on the client before
+upload.
+[Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+walks through doing that with [restic](https://github.com/restic/restic), which encrypts and
+authenticates every object before it leaves the machine.
+
 ## Not yet in the CLI
 
 - **Object Lock (WORM)**: enable it when creating a bucket in the portal, or directly against the S3
   endpoint with an SDK. CLI support is planned.
 - **Auto-scaling** the instance: use the portal.
+- **Default encryption (SSE-S3)**: blocked platform-wide, see above.
 
 Everything else listed in the matrix above is fully supported in `zcp` today.

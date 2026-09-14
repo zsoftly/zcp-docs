@@ -45,6 +45,27 @@ costs.
 
 ![Create Bucket dialog with name, versioning, and object locking options](../../../../../assets/storage/object-storage/create-bucket-create-a-bucket.webp)
 
+:::caution
+
+The bucket you get is not named exactly what you typed. The platform appends a numeric suffix, so a
+bucket requested as `app-backups` is created as something like `app-backups-001024`. That suffixed
+value is the real S3 bucket name your tools must use. Read it back before you configure anything:
+
+```bash
+zcp object-storage bucket list <storage-slug> --region os-yul --project <project-slug>
+```
+
+```
+SLUG                 NAME                 OBJECTS  SIZE (GB)  STATUS
+app-backups-001024   app-backups-001024   0                   Inactive
+```
+
+Use the **NAME** column in endpoint URLs, SDK calls, and `aws s3` commands. A bucket showing
+`Inactive` with zero objects is normal until something is written to it. See
+[S3 API Usage](/public-cloud/storage/object-storage/s3-usage/#find-your-bucket-name).
+
+:::
+
 ### Manage Buckets
 
 - **Share**: Enable public sharing so anyone with the object URL can access it.

@@ -25,10 +25,23 @@ Le point de terminaison de votre instance correspond à la région choisie lors 
    - **ID de clé d'accès** : votre clé d'accès S3
    - **Clé d'accès secrète** : votre clé secrète S3 (traitez-la comme un mot de passe)
 
+Vous pouvez aussi lire les deux clés depuis la CLI à tout moment :
+
+```bash
+zcp object-storage get <storage-slug> --region os-yul --project <project-slug>
+```
+
+La sortie contient le point de terminaison S3, la clé d'accès et la clé secrète.
+
 :::caution
 
-Conservez votre clé secrète de façon sécuritaire. Elle est affichée une seule fois et ne peut pas
-être récupérée. Si elle est perdue, vous devez générer de nouveaux identifiants.
+La clé secrète n'est pas affichée une seule fois. Toute personne détenant un jeton d'API pour le
+projet peut l'afficher avec `zcp object-storage get`. Considérez donc un jeton d'API comme
+équivalent aux identifiants S3 qu'il permet de révéler. Limitez la portée des jetons en conséquence
+et effectuez une rotation des identifiants de stockage objet si un jeton est exposé.
+
+Conservez les clés de façon sécuritaire partout où vous les utilisez. Pour les invalider, générez de
+nouveaux identifiants pour l'instance.
 
 :::
 
