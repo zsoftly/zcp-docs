@@ -45,7 +45,7 @@ Votre VM a besoin d'un réseau. Pour une configuration simple, utilisez un rése
 3. Configurez l'instance :
    - **Emplacement** : le même que celui de votre réseau
    - **Image** : choisissez un système d'exploitation, par exemple Ubuntu 24.04
-   - **Type de CPU** : CPU partagé pour dev/test, CPU dédié pour prd
+   - **Type de CPU** : CPU partagé pour dev/test, CPU dédié pour les charges de travail prd
    - **Plan** : General Compute, avec la plus petite taille qui convient
    - **Projet** : assignez l'instance à votre projet
    - **Réseau** : sélectionnez le réseau public créé à l'étape précédente
@@ -64,7 +64,11 @@ Votre VM sera prête en 30 à 60 secondes.
 Lorsque la VM indique l'état **Running** :
 
 1. Ouvrez la page **Overview** de la VM pour trouver l'**Adresse IP publique**.
-2. Connectez-vous depuis votre terminal :
+2. Dans **VM Settings**, ajoutez une règle de [pare-feu](/fr/public-cloud/compute/settings/firewall)
+   pour le TCP **22**. Ajoutez ensuite une règle de
+   [redirection de ports](/fr/public-cloud/compute/settings/port-forwarding) associant le port 22 de
+   l'adresse IP publique au port 22 de la VM.
+3. Connectez-vous depuis votre terminal :
 
 ```bash
 ssh root@<public-ip-address>

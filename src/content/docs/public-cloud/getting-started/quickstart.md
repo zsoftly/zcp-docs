@@ -42,7 +42,7 @@ Your VM needs a network. For a simple setup, use a Public Network.
 3. Configure:
    - **Location**: same as your network
    - **Image**: choose an OS (e.g., Ubuntu 24.04)
-   - **CPU Type**: Shared CPU for dev/test, Dedicated for prd
+   - **CPU Type**: Shared CPU for dev/test, Dedicated CPU for prd workloads
    - **Plan**: General Compute, pick the smallest that fits
    - **Project**: assign to your project
    - **Network**: select the public network you just created
@@ -60,7 +60,10 @@ Your VM will be ready in 30–60 seconds.
 Once the VM shows as **Running**:
 
 1. Go to the VM's **Overview** page to find the **Public IP Address**
-2. Connect from your terminal:
+2. In **VM Settings**, add a [firewall](/public-cloud/compute/settings/firewall) rule for TCP
+   **22**. Then add a [port-forwarding](/public-cloud/compute/settings/port-forwarding) rule that
+   maps port 22 on the public IP to port 22 on the VM.
+3. Connect from your terminal:
 
 ```bash
 ssh root@<public-ip-address>
