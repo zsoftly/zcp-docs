@@ -12,24 +12,23 @@ Déployez une VM, connectez-vous avec SSH et attachez un volume de stockage bloc
 
 - Un compte ZSoftly Public Cloud ([s'inscrire](/fr/public-cloud/getting-started/account-signup))
 - Un client SSH, comme Terminal sur macOS/Linux ou PowerShell/Windows Terminal sur Windows
+- Une paire de clés SSH
 
-## Étape 1 : ajouter une clé SSH
-
-Avant de créer une VM, ajoutez votre clé SSH publique au portail pour pouvoir vous connecter sans
-mot de passe.
-
-1. Dans le portail, allez à **Profil → Clés SSH**.
-2. Cliquez sur **Ajouter une clé SSH**.
-3. Collez votre clé publique, par exemple depuis `~/.ssh/id_ed25519.pub` ou `~/.ssh/id_rsa.pub`.
-4. Donnez-lui un nom, puis cliquez sur **Soumettre**.
-
-Si vous n'avez pas encore de clé SSH :
+Si vous avez déjà une clé SSH, affichez le contenu de son fichier `.pub`. Sinon, générez une clé
+Ed25519 :
 
 ```bash
 ssh-keygen -t ed25519 -C "your@email.com"
 ```
 
-## Étape 2 : créer un réseau
+Copiez le contenu de votre clé publique pour l’étape 2. Pour afficher la clé Ed25519 générée
+ci-dessus, exécutez :
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+## Étape 1 : créer un réseau
 
 Votre VM a besoin d'un réseau. Pour une configuration simple, utilisez un réseau public.
 
@@ -39,31 +38,37 @@ Votre VM a besoin d'un réseau. Pour une configuration simple, utilisez un rése
 4. Assignez le réseau à un **Projet**, ou utilisez le projet par défaut.
 5. Donnez-lui un nom, puis cliquez sur **Créer**.
 
-## Étape 3 : créer une VM
+## Étape 2 : créer une VM
 
 1. Dans le portail, allez à **Instances**.
 2. Cliquez sur l'icône **+**.
 3. Configurez l'instance :
    - **Emplacement** : le même que celui de votre réseau
    - **Image** : choisissez un système d'exploitation, par exemple Ubuntu 24.04
-   - **Type de CPU** : CPU partagé pour les tests, CPU dédié pour la production
+   - **Type de CPU** : CPU partagé pour dev/test, CPU dédié pour les charges de travail prd
    - **Plan** : General Compute, avec la plus petite taille qui convient
    - **Projet** : assignez l'instance à votre projet
    - **Réseau** : sélectionnez le réseau public créé à l'étape précédente
    - **IPv4 publique** : activez cette option
-   - **Clé SSH** : sélectionnez la clé ajoutée à l'étape 1
+   - **Clé SSH** : dans **Server Settings**, cliquez sur **Add now** à côté de **Add SSH Key To Your
+     Instance**. Dans la boîte de dialogue, entrez un nom et collez votre clé publique, ou
+     sélectionnez une clé existante.
    - **Nom du serveur** : donnez un nom à votre VM
 4. Choisissez un **Cycle de facturation**, par exemple horaire pour les tests.
 5. Cliquez sur **Review & Deploy**.
 
 Votre VM sera prête en 30 à 60 secondes.
 
-## Étape 4 : se connecter avec SSH
+## Étape 3 : se connecter avec SSH
 
 Lorsque la VM indique l'état **Running** :
 
 1. Ouvrez la page **Overview** de la VM pour trouver l'**Adresse IP publique**.
-2. Connectez-vous depuis votre terminal :
+2. Dans **VM Settings**, ajoutez une règle de [pare-feu](/fr/public-cloud/compute/settings/firewall)
+   pour le TCP **22**. Ajoutez ensuite une règle de
+   [redirection de ports](/fr/public-cloud/compute/settings/port-forwarding) associant le port 22 de
+   l'adresse IP publique au port 22 de la VM.
+3. Connectez-vous depuis votre terminal :
 
 ```bash
 ssh root@<public-ip-address>
@@ -75,7 +80,7 @@ Si vous avez utilisé Ubuntu, le nom d'utilisateur par défaut est `ubuntu` :
 ssh ubuntu@<public-ip-address>
 ```
 
-## Étape 5 : attacher du stockage bloc (facultatif)
+## Étape 4 : attacher du stockage bloc (facultatif)
 
 Pour ajouter du stockage persistant séparé du disque racine :
 
