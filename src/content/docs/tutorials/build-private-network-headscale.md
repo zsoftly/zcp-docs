@@ -7,8 +7,6 @@ sidebar:
   label: 'Build a Private Network (CLI)'
 ---
 
-<!-- Depends on zsoftly/tools PR for zcp/build-private-network.sh and zcp/destroy-private-network.sh - do not merge this tutorial before that lands. -->
-
 This tutorial builds a private network on ZCP: a VPC with a network tier that has no public exposure
 by default, plus a self-hosted [Headscale](https://headscale.net) server that gives you
 WireGuard-based mesh access into it. It's the foundation for the rest of this series: private
@@ -523,7 +521,7 @@ portal, the same way described in the Clean up caution below.
 ## Clean up
 
 Hourly billing runs while resources exist. The teardown script removes the subnet router, the
-Headplane VM, and the VPC (which removes the tier automatically) for a given `--name` prefix.
+Headplane VM, the private tier, and the VPC, for a given `--name` prefix.
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-private-network.sh) \
