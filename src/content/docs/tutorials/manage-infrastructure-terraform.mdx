@@ -169,8 +169,9 @@ resource "zcp_egress_rule" "https_out" {
 }
 ```
 
-Repeat for tcp/80 and udp/53 if the instance installs packages or resolves names. Inbound is a
-separate matter: see
+Repeat for tcp/80 and udp/53 if the instance installs packages or resolves names. Each rule you add
+here is another resource, so the counts in Step 4 below go up accordingly. Inbound is a separate
+matter: see
 [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
 for the firewall and port-forward pair that opens a port on the network's source-NAT address.
 

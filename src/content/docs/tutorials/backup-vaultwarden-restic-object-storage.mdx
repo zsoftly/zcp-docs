@@ -770,15 +770,28 @@ back with the container stopped, so nothing writes underneath you:
 ```bash
 cd /data/vaultwarden
 docker compose stop
-cp /tmp/vault-restore/var/backups/vaultwarden/stage/data/db.sqlite3 ./data/db.sqlite3
-if [ -d /tmp/vault-restore/var/backups/vaultwarden/stage/data/attachments ]; then
-  rsync -a /tmp/vault-restore/var/backups/vaultwarden/stage/data/attachments/ ./data/attachments/
-fi
+rsync -a --delete \
+    --exclude 'ssl/' \
+    --exclude 'icon_cache/' \
+    --exclude 'tmp/' \
+    /tmp/vault-restore/var/backups/vaultwarden/stage/data/ ./data/
 chown -R root:root ./data
 docker compose start
 ```
 
-A vault with no attachments has no `attachments` directory, which is why the copy is guarded.
+`--delete` makes this a point-in-time restore rather than a merge, so attachments, sends, and
+`config.json` return to their state at the snapshot, and it removes anything created since. Copying
+only the database would leave those out of step with it.
+
+The three exclusions repeat the ones the backup script uses, which keeps `--delete` safe here. rsync
+does not delete a path it was told to exclude unless you add `--delete-excluded`, so the live `ssl/`
+directory survives. This matters: `ROCKET_TLS` in `vaultwarden.env` points at `/data/ssl/cert.pem`,
+the certificate is generated on the VM and never staged, and deleting it stops the container from
+starting. Vaultwarden regenerates `icon_cache/` and `tmp/`.
+
+`vaultwarden.env` is in the snapshot too, but leave it alone for a rollback on the same VM. A
+database restore does not change it, and overwriting it would discard any later edit to `DOMAIN` or
+the admin token. Restore it only when rebuilding on a different VM, as below.
 
 Reload the web vault and log in. The item you deleted is back. To check without a browser, read the
 database directly before and after:
