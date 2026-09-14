@@ -256,6 +256,10 @@ export default defineConfig({
             },
             { label: 'Host DNS on ZCP (CLI)', slug: 'tutorials/host-dns-on-zcp-cli' },
             {
+              label: 'Build a Private Network (CLI)',
+              slug: 'tutorials/build-private-network-headscale',
+            },
+            {
               label: 'Configure Email Authentication DNS',
               slug: 'tutorials/configure-email-authentication-dns',
             },
