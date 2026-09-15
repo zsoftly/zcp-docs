@@ -145,8 +145,12 @@ function translateSidebar(items) {
 }
 
 export default defineConfig({
-  // Prod builds (iaas play, no PUBLIC_SITE_URL) resolve to the canonical host;
-  // dev/stg Docker builds set PUBLIC_SITE_URL to their own host.
+  // Baked into the sitemap, every canonical link and every hreflang alternate. A
+  // build that picks up the wrong value still renders correctly but points every
+  // crawler at another host. prd (production) builds leave PUBLIC_SITE_URL unset
+  // and fall back to the canonical host below; dev and stg set it to their own.
+  // Never default it to anything else. .github/scripts/verify-sitemap.sh checks
+  // the built output against the host the build was meant for.
   site: process.env.PUBLIC_SITE_URL ?? 'https://docs.zcp.zsoftly.ca',
   // OS image pages moved from /compute/ to /operating-systems/; keep old URLs alive.
   redirects: {
