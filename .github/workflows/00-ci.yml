@@ -107,7 +107,12 @@ jobs:
             exit 1
           fi
 
-      - name: '05: Upload build artifact on failure'
+      - name: '05: Verify sitemap host'
+        # No PUBLIC_SITE_URL is set here, so the build must resolve to the
+        # canonical host from astro.config.mjs.
+        run: .github/scripts/verify-sitemap.sh https://docs.zcp.zsoftly.ca
+
+      - name: '06: Upload build artifact on failure'
         if: failure()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:

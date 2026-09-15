@@ -51,10 +51,13 @@ jobs:
           PUBLIC_SITE_URL: https://dev-docs.zcp.zsoftly.ca
         run: pnpm build
 
-      - name: '04: Package release artifact'
+      - name: '04: Verify sitemap host'
+        run: .github/scripts/verify-sitemap.sh https://dev-docs.zcp.zsoftly.ca
+
+      - name: '05: Package release artifact'
         run: tar -czf "$RUNNER_TEMP/zcp-docs-dev.tar.gz" -C dist .
 
-      - name: '05: Deploy release'
+      - name: '06: Deploy release'
         uses: ./.github/actions/deploy-release
         with:
           ssh-key: ${{ secrets.DEPLOY_SSH_KEY }}
@@ -63,5 +66,5 @@ jobs:
           releases-dir: /var/releases/zcp-docs-dev
           artifact-path: ${{ runner.temp }}/zcp-docs-dev.tar.gz
 
-      - name: '06: Smoke test live site'
+      - name: '07: Smoke test live site'
         run: .github/scripts/smoke-test.sh dev-docs.zcp.zsoftly.ca
