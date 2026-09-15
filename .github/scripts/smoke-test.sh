@@ -41,7 +41,9 @@ check_crawler_files() {
   local status body
 
   for path in "/robots.txt" "/sitemap-index.xml"; do
-    status=$(curl -s "${CURL_TLS[@]}" --max-time 15 -o /dev/null -w "%{http_code}" "https://${DOMAIN}${path}")
+    # curl writes 000 on a transport error; || true keeps set -e from killing
+    # the retry loop, matching the sitemap fetch below.
+    status=$(curl -s "${CURL_TLS[@]}" --max-time 15 -o /dev/null -w "%{http_code}" "https://${DOMAIN}${path}" || true)
     if [ "$status" = "200" ]; then
       echo "[OK] ${path} -> ${status}"
     else
@@ -65,7 +67,7 @@ check_crawler_files() {
 run_checks() {
   local fail=0
   for path in "${PATHS[@]}"; do
-    status=$(curl -s "${CURL_TLS[@]}" --max-time 15 -o /dev/null -w "%{http_code}" "https://${DOMAIN}${path}")
+    status=$(curl -s "${CURL_TLS[@]}" --max-time 15 -o /dev/null -w "%{http_code}" "https://${DOMAIN}${path}" || true)
     if [ "$status" = "200" ]; then
       echo "[OK] ${path} -> ${status}"
     else
