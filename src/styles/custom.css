@@ -7,14 +7,23 @@
   --sl-color-accent: #00198a;
   --sl-color-accent-high: #001170;
 
-  /* Promo bar height — bump nav so fixed header + bar don't overlap content */
-  --sl-announcement-height: 2.5rem;
+  /* Top bar heights. --sl-announcement-height is their total, and every layout
+     offset below is written against that total, so either bar can be present or
+     dismissed without the header or content overlapping. PageFrame sets
+     --zs-notice-height to a real height only while a notice is showing. */
+  --zs-promo-height: 2.5rem;
+  --zs-notice-height: 0rem;
+  --sl-announcement-height: calc(var(--zs-promo-height) + var(--zs-notice-height));
   --sl-nav-height: calc(3.5rem + var(--sl-announcement-height));
 }
 
-/* Remove bar offset once dismissed */
+/* Remove each bar's offset once it is dismissed */
 :root[data-promo-dismissed] {
-  --sl-announcement-height: 0rem;
+  --zs-promo-height: 0rem;
+}
+
+:root[data-notice-dismissed] {
+  --zs-notice-height: 0rem;
 }
 
 @media (min-width: 50rem) {
@@ -30,9 +39,6 @@
 .page > header.header {
   top: var(--sl-announcement-height) !important;
   height: calc(var(--sl-nav-height) - var(--sl-announcement-height)) !important;
-}
-:root[data-promo-dismissed] .page > header.header {
-  top: 0 !important;
 }
 
 @media (max-width: 49.999rem) {
@@ -522,6 +528,12 @@
   gap: 2rem;
   margin-top: 1rem;
   align-items: start;
+}
+
+/* Grid items default to min-width:auto, so a wide child such as the carousel
+   track would stretch this column and scroll the whole page sideways. */
+.home-main {
+  min-inline-size: 0;
 }
 @media (max-width: 900px) {
   .home-layout {
@@ -1225,3 +1237,127 @@ body,
     background-color: #ffffff;
   }
 }
+
+/* ── Marketplace highlights ─────────────────────────────────── */
+.section-lead {
+  color: var(--sl-color-gray-2);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin: -0.5rem 0 1rem;
+}
+
+.section-cta {
+  display: inline-block;
+  margin-top: 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  min-inline-size: 0;
+}
+
+/* Three columns need roughly 240px per card for the longest title and image
+   list to fit without clipping, so drop to two before they get narrower. */
+@media (max-width: 78rem) {
+  .app-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 34rem) {
+  .app-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Nine cards in three rows have to fit the height six took in two, so the card
+   is trimmed: a smaller badge, tighter type, and clamped description and image
+   lines. Clamping keeps every row the same height whatever the text length. */
+.app-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-inline-size: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 8px;
+  background: var(--sl-color-bg);
+  color: inherit;
+  text-decoration: none !important;
+  transition:
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.app-card:hover,
+.app-card:focus-visible {
+  border-color: var(--sl-color-accent);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.app-card .service-icon {
+  block-size: 26px;
+  border-radius: 6px;
+  inline-size: 26px;
+  margin-bottom: 0.1rem;
+}
+
+.app-card .service-icon svg {
+  block-size: 15px;
+  inline-size: 15px;
+}
+
+.app-card:is(:hover, :focus-visible) .service-icon {
+  background: var(--icon-bg, #00198a);
+  color: #ffffff;
+}
+
+.app-card__name {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--sl-color-accent);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+:root:not([data-theme='dark']) .app-card__name {
+  color: #00198a;
+}
+
+.app-card:is(:hover, :focus-visible) .app-card__name {
+  text-decoration: underline;
+}
+
+.app-card__desc {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--sl-color-gray-2);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.app-card__apps {
+  margin: auto 0 0;
+  padding-top: 0.3rem;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--sl-color-gray-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

@@ -1,0 +1,48 @@
+---
+// Renders a 24x24 stroked icon from structured shapes.
+//
+// Each shape is emitted through a real element with named attributes, so the
+// icon data is never injected as raw HTML and cannot carry markup.
+import type { IconShape } from '../data/marketplace-highlights';
+
+interface Props {
+  shapes: IconShape[];
+  size?: number;
+}
+
+const { shapes, size = 20 } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  {
+    shapes.map((shape) => {
+      switch (shape.tag) {
+        case 'path':
+          return <path d={shape.d} />;
+        case 'circle':
+          return <circle cx={shape.cx} cy={shape.cy} r={shape.r} />;
+        case 'rect':
+          return (
+            <rect width={shape.width} height={shape.height} x={shape.x} y={shape.y} rx={shape.rx} />
+          );
+        case 'ellipse':
+          return <ellipse cx={shape.cx} cy={shape.cy} rx={shape.rx} ry={shape.ry} />;
+        case 'polyline':
+          return <polyline points={shape.points} />;
+        case 'line':
+          return <line x1={shape.x1} y1={shape.y1} x2={shape.x2} y2={shape.y2} />;
+      }
+    })
+  }
+</svg>

@@ -7,27 +7,43 @@ hero:
   tagline:
     Find user guides, CLI references, API docs, and architecture guides for the ZSoftly Cloud
     Platform.
-  actions:
-    - text: Get started
-      link: /public-cloud/getting-started/quickstart
-      icon: right-arrow
-      variant: primary
-    - text: Browse all docs
-      link: /public-cloud/getting-started/introduction
-      icon: open-book
-      variant: secondary
-    - text: Tutorials
-      link: /tutorials
-      icon: open-book
-      variant: secondary
 ---
 
 import { PEERPUSH_BADGE_URL, PEERPUSH_LISTING_URL } from '../../data/peerpush';
 import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../data/site';
+import { marketplaceHighlights } from '../../data/marketplace-highlights';
+import PrinciplePanel from '../../components/PrinciplePanel.astro';
+import TutorialCards from '../../components/TutorialCards.astro';
+import ShapeIcon from '../../components/ShapeIcon.astro';
 
 <div class="home-layout">
 
   <div class="home-main">
+
+    <section class="home-section">
+      <h2 class="section-title">Own the managed layer</h2>
+      <p class="section-lead">Elsewhere, that layer is metered. Here it ships as 70 Marketplace images, pre-configured on an instance you own. Root access, one bill, no per-service premium.</p>
+
+      <div class="app-grid">
+        {
+          marketplaceHighlights.slice(0, 9).map((item) => (
+            <a href={item.href} class="app-card">
+              <div
+                class="service-icon"
+                style={`--icon-bg: ${item.color}; --icon-bg-dim: color-mix(in srgb, ${item.color} 15%, transparent);`}
+              >
+                <ShapeIcon shapes={item.icon} />
+              </div>
+              <p class="app-card__name">{item.title.en}</p>
+              <p class="app-card__desc">{item.desc.en}</p>
+              <p class="app-card__apps">{item.apps.join(' \u00b7 ')}</p>
+            </a>
+          ))
+        }
+      </div>
+
+      <a href="/public-cloud/marketplace" class="section-cta">Browse all 70 Marketplace images →</a>
+    </section>
 
     <section class="home-section">
       <h2 class="section-title">Featured services</h2>
@@ -129,44 +145,19 @@ import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../data/
           </div>
           <div>
             <p class="service-name">Marketplace</p>
-            <p class="service-desc">20 pre-configured VM images (databases, web stacks, VPN, and more) deployed in minutes.</p>
+            <p class="service-desc">70 pre-configured VM images (databases, web stacks, VPN, and more) deployed in minutes.</p>
           </div>
         </a>
 
       </div>
     </section>
 
+
     <section class="home-section">
       <h2 class="section-title">Tutorials</h2>
-      <div class="devtools-grid">
-        <a href="/tutorials/deploy-vps-dokploy-cli" class="devtool-card anim-5">
-          <div class="service-icon" style="--icon-bg: #f97316; --icon-bg-dim: rgba(249,115,22,0.15);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-          </div>
-          <div>
-            <p class="service-name">Deploy a VPS with Dokploy</p>
-            <p class="service-desc">From a brand-new account to a public VM running Dokploy, step by step with the CLI.</p>
-          </div>
-        </a>
-        <a href="/tutorials/deploy-openclaw-marketplace-cli" class="devtool-card anim-5">
-          <div class="service-icon" style="--icon-bg: #10b981; --icon-bg-dim: rgba(16,185,129,0.15);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          </div>
-          <div>
-            <p class="service-name">Deploy OpenClaw from the Marketplace</p>
-            <p class="service-desc">Launch a pre-built AI assistant image with the CLI, then connect and configure it.</p>
-          </div>
-        </a>
-        <a href="/tutorials" class="devtool-card anim-5">
-          <div class="service-icon" style="--icon-bg: #3b82f6; --icon-bg-dim: rgba(59,130,246,0.15);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          </div>
-          <div>
-            <p class="service-name">All tutorials</p>
-            <p class="service-desc">Hands-on, end-to-end walkthroughs that start from zero.</p>
-          </div>
-        </a>
-      </div>
+      <TutorialCards />
+
+      <a href="/tutorials" class="section-cta">All tutorials →</a>
     </section>
 
     <section class="home-section home-section--alt">
@@ -210,6 +201,8 @@ import { COMMUNITY_PAGE_URL, COMMUNITY_SLACK_URL, websiteUrl } from '../../data/
         </a>
       </div>
     </section>
+
+    <PrinciplePanel />
 
   </div>
 

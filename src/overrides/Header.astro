@@ -7,21 +7,32 @@ import Search from 'virtual:starlight/components/Search';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import type { Props } from '@astrojs/starlight/props';
-import { CLOUD_LOGIN_URL, CLOUD_REGISTER_URL, websiteUrl } from '../data/site';
+import {
+  CLOUD_LOGIN_URL,
+  CLOUD_REGISTER_URL,
+  docsNavLinks,
+  exploreLinks,
+  localePathPrefix,
+} from '../data/site';
 
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
 const { siteTitleHref } = Astro.locals.starlightRoute;
-const websiteLinks = [
-  { label: Astro.locals.t('zs.header.services'), href: `${websiteUrl}/services` },
-  { label: Astro.locals.t('zs.header.compare'), href: `${websiteUrl}/compare` },
-  { label: Astro.locals.t('zs.header.pricing'), href: `${websiteUrl}/pricing` },
-  {
-    label: Astro.locals.t('zs.header.pricingCalculator'),
-    href: `${websiteUrl}/pricing#calculator`,
-  },
-  { label: Astro.locals.t('zs.header.privateCloud'), href: `${websiteUrl}/services/private-cloud` },
-];
+const websiteLinks = exploreLinks.map((link) => ({
+  label: Astro.locals.t(link.labelKey),
+  note: Astro.locals.t(link.noteKey),
+  href: link.href,
+}));
+const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
+const currentPath = Astro.url.pathname.replace(/\/+$/, '');
+const docsLinks = docsNavLinks.map((link) => {
+  const href = `${localePrefix}${link.path}`;
+  return {
+    label: Astro.locals.t(link.labelKey),
+    href,
+    isCurrent: currentPath === href.replace(/\/+$/, ''),
+  };
+});
 ---
 
 <div class="header sl-flex">
@@ -31,6 +42,15 @@ const websiteLinks = [
       <span translate="no">ZSoftly Cloud Platform</span>
     </a>
   </div>
+  <nav class="header-docs-nav print:hidden" aria-label={Astro.locals.t('zs.header.docsNav')}>
+    {
+      docsLinks.map((link) => (
+        <a href={link.href} aria-current={link.isCurrent ? 'page' : undefined}>
+          {link.label}
+        </a>
+      ))
+    }
+  </nav>
   <div class="sl-flex print:hidden">
     {shouldRenderSearch && <Search {...Astro.props} />}
   </div>
@@ -38,36 +58,296 @@ const websiteLinks = [
     <div class="sl-flex social-icons">
       <SocialIcons {...Astro.props} />
     </div>
-    <details class="header-site-links">
-      <summary>{Astro.locals.t('zs.header.explore')}</summary>
-      <nav aria-label={Astro.locals.t('zs.header.websiteNav')}>
-        {
-          websiteLinks.map((link) => (
-            <a href={link.href} target="_blank" rel="noopener noreferrer">
-              {link.label}
-            </a>
-          ))
-        }
-      </nav>
-    </details>
-    <ThemeSelect {...Astro.props} />
-    <LanguageSelect {...Astro.props} />
-    <!--
-      Language / Preferences slots — activate when i18n or user preferences are configured.
-      Example future usage:
-        <button class="header-util-btn">English ▾</button>
-        <button class="header-util-btn">Preferences ▾</button>
-    -->
-    <div class="header-auth">
-      <a class="btn-login" href={CLOUD_LOGIN_URL} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.header.login')}</a
+    <div class="explore-menu" id="explore-menu">
+      <button
+        type="button"
+        class="explore-trigger"
+        aria-expanded="false"
+        aria-controls="explore-panel"
       >
-      <a class="btn-signup" href={CLOUD_REGISTER_URL} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.header.signup')}</a
-      >
+        {Astro.locals.t('zs.header.explore')}
+        <svg
+          class="explore-chevron"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M2 4l4 4 4-4"></path>
+        </svg>
+      </button>
+      {/* The wrapper's top padding is the hover bridge across the gap to the panel. */}
+      <div class="explore-dropdown">
+        <nav
+          id="explore-panel"
+          class="explore-panel"
+          aria-label={Astro.locals.t('zs.header.websiteNav')}
+        >
+          {
+            /* Shown only while the header has no room for the documentation nav,
+              so those links stay reachable at every width. */
+          }
+          <div class="explore-panel__docs">
+            <p class="explore-panel__heading">{Astro.locals.t('zs.header.docsNav')}</p>
+            {
+              docsLinks.map((link) => (
+                <a href={link.href} aria-current={link.isCurrent ? 'page' : undefined}>
+                  <span class="explore-link-label">{link.label}</span>
+                </a>
+              ))
+            }
+          </div>
+          {
+            websiteLinks.map((link) => (
+              <a href={link.href} target="_blank" rel="noopener noreferrer">
+                <span class="explore-link-label">{link.label}</span>
+                <span class="explore-link-note">{link.note}</span>
+              </a>
+            ))
+          }
+        </nav>
+      </div>
     </div>
+    {
+      /* The native select carries the correct per-page URLs, including fallbacks
+        for pages with no translation. The script upgrades it into a menu that
+        matches the others and leaves the select in place when it cannot. */
+    }
+    <div class="lang-menu" id="lang-menu" data-label={Astro.locals.t('zs.header.languageNav')}>
+      <LanguageSelect {...Astro.props} />
+    </div>
+
+    {
+      /* Account actions, matching the marketing site: one button that opens
+        Create account and Log in. */
+    }
+    <div class="account-menu" id="account-menu">
+      <a
+        class="account-trigger"
+        href={CLOUD_REGISTER_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-expanded="false"
+        aria-controls="account-panel"
+      >
+        {Astro.locals.t('zs.header.getStarted')}
+        <svg
+          class="account-chevron"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M2 4l4 4 4-4"></path>
+        </svg>
+      </a>
+      <div class="account-dropdown">
+        <nav
+          id="account-panel"
+          class="account-panel"
+          aria-label={Astro.locals.t('zs.header.accountNav')}
+        >
+          <a
+            class="account-item account-item--primary"
+            href={CLOUD_REGISTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="account-item__label">{Astro.locals.t('zs.header.createAccount')}</span>
+            <span class="account-item__note">{Astro.locals.t('zs.header.createAccountNote')}</span>
+          </a>
+          <a class="account-item" href={CLOUD_LOGIN_URL} target="_blank" rel="noopener noreferrer">
+            <span class="account-item__label">{Astro.locals.t('zs.header.logIn')}</span>
+            <span class="account-item__note">{Astro.locals.t('zs.header.logInNote')}</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    {/* The theme toggle sits last, as it does on the marketing site. */}
+    <ThemeSelect {...Astro.props} />
   </div>
 </div>
+
+<script>
+  // Hover and focus open the menu in CSS, so it still works before this runs.
+  // This only keeps aria-expanded honest and closes the menu on Escape.
+  const menu = document.getElementById('explore-menu');
+  const trigger = menu?.querySelector<HTMLButtonElement>('.explore-trigger');
+
+  // Same open/close contract for every hover menu in the header.
+  const wireMenu = (root: HTMLElement | null, control: HTMLElement | null | undefined) => {
+    if (!root || !control) return;
+
+    const sync = () => {
+      const open =
+        !root.hasAttribute('data-dismissed') &&
+        (root.matches(':hover') || root.contains(document.activeElement));
+      control.setAttribute('aria-expanded', String(open));
+    };
+
+    const release = () => {
+      root.removeAttribute('data-dismissed');
+      sync();
+    };
+
+    for (const event of ['mouseenter', 'mouseleave', 'focusin', 'focusout'] as const) {
+      root.addEventListener(event, () => window.setTimeout(sync, 0));
+    }
+
+    root.addEventListener('mouseenter', release);
+    root.addEventListener('mouseleave', release);
+    root.addEventListener('pointerdown', release);
+    root.addEventListener('focusout', (event) => {
+      if (!root.contains(event.relatedTarget as Node | null)) release();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      const focused = root.contains(document.activeElement);
+      // Escape also dismisses a menu opened by hover, but only a keyboard user
+      // needs focus moved back to the trigger.
+      if (!focused && !root.matches(':hover')) return;
+      root.setAttribute('data-dismissed', '');
+      if (focused) control.focus();
+      sync();
+    });
+  };
+
+  wireMenu(
+    document.getElementById('account-menu'),
+    document.querySelector<HTMLElement>('.account-trigger')
+  );
+
+  // The documentation links fit or they do not, depending on how long the
+  // labels are in the active language and how much room the search box and the
+  // utility controls leave. Rather than guess a breakpoint, show the nav, ask
+  // the browser whether its content is being clipped, and collapse it into the
+  // Explore panel when it is. Showing and re-measuring on every resize means
+  // widening the window brings the links back.
+  // Upgrade the native language select into a menu matching the others. The
+  // select already holds the correct target URL for this page in each locale,
+  // including the fallback when a page has no translation, so the options are
+  // the source of truth rather than a path built by hand. If this never runs,
+  // the select stays and remains fully usable.
+  const langMenu = document.getElementById('lang-menu');
+  const langSelect = langMenu?.querySelector('select');
+
+  if (langMenu && langSelect && langSelect.options.length > 0) {
+    const current = langSelect.options[langSelect.selectedIndex];
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'lang-trigger';
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-controls', 'lang-panel');
+    trigger.append(current?.textContent ?? '');
+    trigger.insertAdjacentHTML(
+      'beforeend',
+      '<svg class="lang-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>'
+    );
+
+    const panel = document.createElement('nav');
+    panel.id = 'lang-panel';
+    panel.className = 'lang-panel';
+    panel.setAttribute('aria-label', langMenu.dataset.label ?? 'Language');
+
+    for (const option of Array.from(langSelect.options)) {
+      const item = document.createElement('a');
+      item.className = 'lang-item';
+      item.href = option.value;
+      item.textContent = option.textContent;
+      if (option === current) item.setAttribute('aria-current', 'true');
+      panel.append(item);
+    }
+
+    const dropdown = document.createElement('div');
+    dropdown.className = 'lang-dropdown';
+    dropdown.append(panel);
+
+    langMenu.append(trigger, dropdown);
+    langMenu.setAttribute('data-enhanced', '');
+    // Wired here rather than above, because the trigger only exists once the
+    // select has been upgraded.
+    wireMenu(langMenu, trigger);
+  }
+
+  const docsNav = document.querySelector<HTMLElement>('.header-docs-nav');
+
+  if (docsNav && menu) {
+    let measuring = false;
+
+    const applyFit = () => {
+      if (measuring) return;
+      measuring = true;
+      docsNav.removeAttribute('data-collapsed');
+      // Read after the style change so the browser lays the nav out first.
+      const clipped = docsNav.scrollWidth > docsNav.clientWidth + 1;
+      if (clipped) docsNav.setAttribute('data-collapsed', '');
+      menu.toggleAttribute('data-show-docs', clipped);
+      measuring = false;
+    };
+
+    applyFit();
+
+    if ('ResizeObserver' in window) {
+      const observer = new ResizeObserver(() => applyFit());
+      if (docsNav.parentElement) observer.observe(docsNav.parentElement);
+    } else {
+      window.addEventListener('resize', applyFit);
+    }
+
+    // Fonts land after first paint and change how wide the labels are.
+    document.fonts?.ready.then(applyFit);
+  }
+
+  if (menu && trigger) {
+    const sync = () => {
+      const open =
+        !menu.hasAttribute('data-dismissed') &&
+        (menu.matches(':hover') || menu.contains(document.activeElement));
+      trigger.setAttribute('aria-expanded', String(open));
+    };
+
+    for (const event of ['mouseenter', 'mouseleave', 'focusin', 'focusout'] as const) {
+      menu.addEventListener(event, () => window.setTimeout(sync, 0));
+    }
+
+    // Escape has to close the menu while leaving focus somewhere sensible. The
+    // menu is held open by :focus-within, so returning focus to the trigger
+    // would reopen it; data-dismissed overrides that until the pointer or the
+    // focus actually leaves.
+    const release = () => {
+      menu.removeAttribute('data-dismissed');
+      sync();
+    };
+
+    // Releasing on mouseenter is what lets the pointer reopen the menu after a
+    // keyboard dismiss. Focus events deliberately do not release it, since the
+    // Escape handler moves focus to the trigger and that would reopen at once.
+    menu.addEventListener('mouseenter', release);
+    menu.addEventListener('mouseleave', release);
+    menu.addEventListener('pointerdown', release);
+    menu.addEventListener('focusout', (event) => {
+      if (!menu.contains(event.relatedTarget as Node | null)) release();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      const focused = menu.contains(document.activeElement);
+      if (!focused && !menu.matches(':hover')) return;
+      menu.setAttribute('data-dismissed', '');
+      if (focused) trigger.focus();
+      sync();
+    });
+  }
+</script>
 
 <style>
   @layer starlight.core {
@@ -132,69 +412,6 @@ const websiteLinks = [
       border-inline-end: 1px solid var(--sl-color-gray-5);
     }
 
-    .header-auth {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding-inline-start: 0.75rem;
-      border-inline-start: 1px solid var(--sl-color-gray-5);
-    }
-
-    .header-site-links {
-      position: relative;
-    }
-
-    .header-site-links summary {
-      color: var(--sl-color-text);
-      cursor: pointer;
-      font-size: var(--sl-text-sm);
-      font-weight: 600;
-      list-style: none;
-      white-space: nowrap;
-    }
-
-    .header-site-links summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .header-site-links summary::after {
-      content: '⌄';
-      margin-inline-start: 0.3rem;
-    }
-
-    .header-site-links nav {
-      background: var(--sl-color-bg-nav);
-      border: 1px solid var(--sl-color-gray-5);
-      border-radius: 0.5rem;
-      box-shadow: var(--sl-shadow-md);
-      display: none;
-      inset-block-start: calc(100% + 0.65rem);
-      inset-inline-end: 0;
-      min-inline-size: 12rem;
-      padding: 0.35rem;
-      position: absolute;
-      z-index: 20;
-    }
-
-    .header-site-links[open] nav {
-      display: grid;
-    }
-
-    .header-site-links a {
-      border-radius: 0.3rem;
-      color: var(--sl-color-text);
-      font-size: var(--sl-text-sm);
-      padding: 0.45rem 0.55rem;
-      text-decoration: none;
-    }
-
-    .header-site-links a:hover,
-    .header-site-links a:focus-visible,
-    .header-site-links summary:focus-visible {
-      background: var(--sl-color-gray-6);
-      outline: none;
-    }
-
     /* Utility button style for future Language / Preferences buttons */
     :global(.header-util-btn) {
       background: transparent;
@@ -213,6 +430,406 @@ const websiteLinks = [
     :global(.header-util-btn:hover) {
       color: var(--sl-color-gray-1);
       background-color: var(--sl-color-gray-6);
+    }
+
+    /* Whether the documentation links fit depends on how long the labels are in
+       the active language, so no width is hardcoded. The script measures the
+       nav against the space it has and sets data-collapsed when the labels
+       would be clipped, folding them into the Explore panel instead. */
+    .header-docs-nav {
+      align-items: center;
+      display: flex;
+      gap: 0.25rem;
+      min-inline-size: 0;
+    }
+
+    .header-docs-nav[data-collapsed] {
+      display: none;
+    }
+
+    .header-docs-nav a {
+      border-radius: 0.3rem;
+      color: var(--sl-color-text);
+      font-size: var(--sl-text-sm);
+      font-weight: 600;
+      padding: 0.35rem 0.5rem;
+      text-decoration: none;
+      transition: color 150ms ease;
+      white-space: nowrap;
+    }
+
+    .header-docs-nav a:hover,
+    .header-docs-nav a:focus-visible {
+      color: var(--sl-color-text-accent);
+    }
+
+    .header-docs-nav a[aria-current='page'] {
+      color: var(--sl-color-text-accent);
+    }
+
+    /* Explore menu. Mirrors the marketing site header: hover opens it, a padded
+       wrapper bridges the gap so the pointer does not fall out on the way down,
+       and the panel fades and lifts rather than snapping on. Colours are spelled
+       out as rgba because CSS cannot apply alpha to a hex custom property; they
+       are --sl-color-accent light and dark. */
+    .explore-menu,
+    .account-menu,
+    .lang-menu {
+      align-items: center;
+      display: flex;
+      position: relative;
+    }
+
+    .account-menu {
+      margin-inline-start: 0.25rem;
+    }
+
+    .explore-trigger {
+      align-items: center;
+      background: transparent;
+      border: 0;
+      border-radius: 0.3rem;
+      color: var(--sl-color-text);
+      cursor: pointer;
+      display: flex;
+      font-family: inherit;
+      font-size: var(--sl-text-sm);
+      font-weight: 600;
+      gap: 0.3rem;
+      padding: 0.35rem 0.5rem;
+      transition: color 150ms ease;
+      white-space: nowrap;
+    }
+
+    .explore-menu:hover .explore-trigger,
+    .explore-menu:focus-within .explore-trigger {
+      color: var(--sl-color-text-accent);
+    }
+
+    .explore-chevron {
+      block-size: 0.75rem;
+      inline-size: 0.75rem;
+      opacity: 0.5;
+      transition:
+        opacity 150ms ease,
+        transform 200ms ease;
+    }
+
+    .explore-menu:hover .explore-chevron,
+    .explore-menu:focus-within .explore-chevron {
+      opacity: 0.85;
+      transform: rotate(180deg);
+    }
+
+    .explore-dropdown,
+    .account-dropdown {
+      inset-block-start: 100%;
+      inset-inline-end: 0;
+      opacity: 0;
+      padding-block-start: 0.5rem;
+      position: absolute;
+      transform: translateY(-0.25rem);
+      transition:
+        opacity 160ms ease,
+        transform 160ms ease,
+        visibility 0s linear 160ms;
+      visibility: hidden;
+      z-index: 20;
+    }
+
+    .explore-menu:hover .explore-dropdown,
+    .explore-menu:focus-within .explore-dropdown,
+    .account-menu:hover .account-dropdown,
+    .account-menu:focus-within .account-dropdown {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0s;
+      visibility: visible;
+    }
+
+    /* Set by Escape so a menu stays shut while its trigger keeps focus. */
+    .explore-menu[data-dismissed] .explore-dropdown,
+    .account-menu[data-dismissed] .account-dropdown {
+      opacity: 0;
+      transform: translateY(-0.25rem);
+      visibility: hidden;
+    }
+
+    .explore-panel,
+    .account-panel {
+      background: var(--sl-color-bg-nav);
+      border: 1px solid rgba(0, 25, 138, 0.14);
+      border-radius: 0.5rem;
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.12),
+        0 4px 6px -4px rgba(0, 0, 0, 0.12);
+      display: grid;
+      gap: 0.125rem;
+      padding: 0.5rem;
+    }
+
+    .explore-panel {
+      min-inline-size: 18.5rem;
+    }
+
+    .account-panel {
+      min-inline-size: 15rem;
+    }
+
+    :global(:root[data-theme='dark']) .explore-panel,
+    :global(:root[data-theme='dark']) .account-panel {
+      border-color: rgba(218, 229, 250, 0.12);
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.45),
+        0 4px 6px -4px rgba(0, 0, 0, 0.45);
+    }
+
+    .explore-panel a,
+    .account-item {
+      border-radius: 0.375rem;
+      display: grid;
+      gap: 0.1rem;
+      padding: 0.5rem;
+      text-decoration: none !important;
+      transition: background-color 150ms ease;
+    }
+
+    .account-item {
+      padding: 0.5rem 0.65rem;
+    }
+
+    .explore-panel a:hover,
+    .explore-panel a:focus-visible,
+    .account-item:hover,
+    .account-item:focus-visible {
+      background: var(--sl-color-gray-6);
+      outline: none;
+    }
+
+    .explore-link-label,
+    .account-item__label {
+      color: var(--sl-color-white);
+      font-size: var(--sl-text-sm);
+      font-weight: 500;
+      transition: color 150ms ease;
+    }
+
+    .explore-panel a:hover .explore-link-label,
+    .explore-panel a:focus-visible .explore-link-label {
+      color: var(--sl-color-text-accent);
+    }
+
+    .explore-link-note,
+    .account-item__note {
+      color: var(--sl-color-gray-3);
+      font-size: var(--sl-text-xs);
+      line-height: 1.35;
+    }
+
+    /* The documentation links inside the Explore panel mirror the header nav's
+       collapsed state, so they are reachable at every width. */
+    .explore-panel__docs {
+      display: none;
+    }
+
+    .explore-menu[data-show-docs] .explore-panel__docs {
+      border-block-end: 1px solid var(--sl-color-gray-5);
+      display: grid;
+      gap: 0.125rem;
+      margin-block-end: 0.35rem;
+      padding-block-end: 0.35rem;
+    }
+
+    .explore-panel__heading {
+      color: var(--sl-color-gray-3);
+      font-size: var(--sl-text-xs);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin: 0.15rem 0 0.3rem;
+      padding-inline: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    /* Account actions, matching the marketing site. */
+    .account-trigger {
+      align-items: center;
+      background: var(--sl-color-accent);
+      border-radius: 0.375rem;
+      color: #ffffff !important;
+      display: flex;
+      font-size: var(--sl-text-sm);
+      font-weight: 600;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      text-decoration: none !important;
+      transition: background-color 150ms ease;
+      white-space: nowrap;
+    }
+
+    .account-trigger:hover,
+    .account-trigger:focus-visible {
+      background: var(--sl-color-accent-high);
+    }
+
+    .account-chevron {
+      block-size: 0.75rem;
+      inline-size: 0.75rem;
+      opacity: 0.75;
+      transition: transform 200ms ease;
+    }
+
+    .account-menu:hover .account-chevron,
+    .account-menu:focus-within .account-chevron {
+      transform: rotate(180deg);
+    }
+
+    .account-item--primary {
+      background: var(--sl-color-accent-low);
+    }
+
+    :global(:root[data-theme='dark']) .account-item--primary {
+      background: rgba(107, 142, 245, 0.14);
+    }
+
+    .account-item--primary .account-item__label {
+      color: var(--sl-color-text-accent);
+    }
+
+    /* The language trigger and panel are built by the script, so they carry no
+       scoped class. These rules address them globally; the root stays scoped. */
+    .lang-menu[data-enhanced] :global(starlight-lang-select) {
+      display: none;
+    }
+
+    .lang-menu :global(.lang-dropdown) {
+      inset-block-start: 100%;
+      inset-inline-end: 0;
+      opacity: 0;
+      padding-block-start: 0.5rem;
+      position: absolute;
+      transform: translateY(-0.25rem);
+      transition:
+        opacity 160ms ease,
+        transform 160ms ease,
+        visibility 0s linear 160ms;
+      visibility: hidden;
+      z-index: 20;
+    }
+
+    .lang-menu:hover :global(.lang-dropdown),
+    .lang-menu:focus-within :global(.lang-dropdown) {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0s;
+      visibility: visible;
+    }
+
+    .lang-menu[data-dismissed] :global(.lang-dropdown) {
+      opacity: 0;
+      transform: translateY(-0.25rem);
+      visibility: hidden;
+    }
+
+    .lang-menu :global(.lang-panel) {
+      background: var(--sl-color-bg-nav);
+      border: 1px solid rgba(0, 25, 138, 0.14);
+      border-radius: 0.5rem;
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.12),
+        0 4px 6px -4px rgba(0, 0, 0, 0.12);
+      display: grid;
+      gap: 0.125rem;
+      min-inline-size: 9rem;
+      padding: 0.5rem;
+    }
+
+    :global(:root[data-theme='dark']) .lang-menu :global(.lang-panel) {
+      border-color: rgba(218, 229, 250, 0.12);
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.45),
+        0 4px 6px -4px rgba(0, 0, 0, 0.45);
+    }
+
+    .lang-menu :global(.lang-item) {
+      border-radius: 0.375rem;
+      color: var(--sl-color-white);
+      font-size: var(--sl-text-sm);
+      font-weight: 500;
+      padding: 0.5rem 0.65rem;
+      text-decoration: none;
+      transition: background-color 150ms ease;
+    }
+
+    .lang-menu :global(.lang-item:hover),
+    .lang-menu :global(.lang-item:focus-visible) {
+      background: var(--sl-color-gray-6);
+      outline: none;
+    }
+
+    .lang-menu :global(.lang-item[aria-current='true']) {
+      color: var(--sl-color-text-accent);
+      font-weight: 600;
+    }
+
+    .lang-menu :global(.lang-trigger) {
+      align-items: center;
+      background: transparent;
+      border: 0;
+      border-radius: 0.3rem;
+      color: var(--sl-color-text);
+      cursor: pointer;
+      display: flex;
+      font-family: inherit;
+      font-size: var(--sl-text-sm);
+      font-weight: 600;
+      gap: 0.3rem;
+      padding: 0.35rem 0.5rem;
+      transition: color 150ms ease;
+      white-space: nowrap;
+    }
+
+    .lang-menu:hover :global(.lang-trigger),
+    .lang-menu:focus-within :global(.lang-trigger) {
+      color: var(--sl-color-text-accent);
+    }
+
+    .lang-menu :global(.lang-chevron) {
+      block-size: 0.75rem;
+      inline-size: 0.75rem;
+      opacity: 0.5;
+      transition:
+        opacity 150ms ease,
+        transform 200ms ease;
+    }
+
+    .lang-menu:hover :global(.lang-chevron),
+    .lang-menu:focus-within :global(.lang-chevron) {
+      opacity: 0.85;
+      transform: rotate(180deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .explore-dropdown,
+      .account-dropdown,
+      .explore-chevron,
+      .account-chevron,
+      .explore-panel a,
+      .account-item,
+      .explore-link-label,
+      .lang-menu :global(.lang-dropdown),
+      .lang-menu :global(.lang-chevron),
+      .lang-menu :global(.lang-item) {
+        transition: none;
+      }
+
+      .explore-menu:hover .explore-chevron,
+      .explore-menu:focus-within .explore-chevron,
+      .account-menu:hover .account-chevron,
+      .account-menu:focus-within .account-chevron,
+      .lang-menu:hover :global(.lang-chevron),
+      .lang-menu:focus-within :global(.lang-chevron) {
+        transform: none;
+      }
     }
 
     @media (min-width: 50rem) {

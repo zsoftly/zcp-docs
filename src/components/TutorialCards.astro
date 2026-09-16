@@ -1,0 +1,81 @@
+---
+// The newest tutorials, read from the content collection so the cards cannot
+// drift from the pages that exist. Ordering comes from the dates in
+// `src/data/tutorials.ts`, because CI checks out shallow and git dates are all
+// identical there.
+import { getCollection } from 'astro:content';
+import ShapeIcon from './ShapeIcon.astro';
+import {
+  HOME_TUTORIAL_COUNT,
+  defaultTutorialIcon,
+  tutorialIcons,
+  tutorialPublishedOn,
+} from '../data/tutorials';
+
+interface Props {
+  count?: number;
+}
+
+const { count = HOME_TUTORIAL_COUNT } = Astro.props;
+const locale = Astro.locals.starlightRoute.locale;
+const prefix = locale ? `${locale}/tutorials/` : 'tutorials/';
+
+const entries = (await getCollection('docs')).filter(
+  (entry) => entry.id.startsWith(prefix) && !entry.id.endsWith('/index')
+);
+
+const slugOf = (id: string) => id.slice(prefix.length);
+
+// Undated tutorials sort last rather than disappearing, and slug breaks ties so
+// the order does not shuffle between builds.
+const latest = entries
+  .sort((a, b) => {
+    const dateA = tutorialPublishedOn[slugOf(a.id)] ?? '';
+    const dateB = tutorialPublishedOn[slugOf(b.id)] ?? '';
+    if (dateA !== dateB) return dateB.localeCompare(dateA);
+    return slugOf(a.id).localeCompare(slugOf(b.id));
+  })
+  .slice(0, count);
+
+const cards = latest.map((entry) => {
+  const slug = slugOf(entry.id);
+  const badge = tutorialIcons[slug] ?? defaultTutorialIcon;
+  return {
+    href: `/${entry.id}`,
+    title: entry.data.sidebar?.label ?? entry.data.title,
+    description: entry.data.description ?? '',
+    ...badge,
+  };
+});
+---
+
+<div class="devtools-grid">
+  {
+    cards.map((card) => (
+      <a href={card.href} class="devtool-card anim-5">
+        <div
+          class="service-icon"
+          style={`--icon-bg: ${card.color}; --icon-bg-dim: color-mix(in srgb, ${card.color} 15%, transparent);`}
+        >
+          <ShapeIcon shapes={card.icon} size={18} />
+        </div>
+        <div>
+          <p class="service-name">{card.title}</p>
+          <p class="service-desc tutorial-desc">{card.description}</p>
+        </div>
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  /* Descriptions come from each page's frontmatter and vary in length, so clamp
+     them to keep every card in the row the same height. */
+  .tutorial-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+</style>

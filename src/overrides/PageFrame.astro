@@ -3,15 +3,27 @@
 // above Starlight's fixed nav header.
 import Default from '@astrojs/starlight/components/PageFrame.astro';
 import type { Props } from '@astrojs/starlight/props';
-import { CLOUD_REGISTER_URL } from '../data/site';
+import { CLOUD_REGISTER_URL, localePathPrefix } from '../data/site';
+import { getActiveNotice } from '../data/notices';
+
+const notice = getActiveNotice();
+const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
+const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
 ---
 
 {/* Prevent FOUC: runs synchronously before paint */}
-<script is:inline>
+<script is:inline define:vars={{ noticeId: notice?.id ?? null }}>
   if (sessionStorage.getItem('zs-promo-dismissed') === '1') {
     document.documentElement.setAttribute('data-promo-dismissed', '');
   }
+
+  if (noticeId && sessionStorage.getItem('zs-notice-dismissed') === noticeId) {
+    document.documentElement.setAttribute('data-notice-dismissed', '');
+  }
 </script>
+
+{/* Reserve layout space for the notice bar only while one is showing. */}
+{notice && <style is:inline set:html=":root { --zs-notice-height: 2.5rem; }" />}
 
 {/* Site-wide brand background — animated bokeh field (styles in custom.css) */}
 <div class="zs-bg" aria-hidden="true">
@@ -256,6 +268,53 @@ import { CLOUD_REGISTER_URL } from '../data/site';
   </button>
 </div>
 
+{
+  notice && (
+    <div
+      id="notice-bar"
+      class="notice-bar"
+      data-severity={notice.severity}
+      role="region"
+      aria-label={Astro.locals.t('zs.notice.label')}
+    >
+      <div class="notice-inner">
+        <span class="notice-label">{Astro.locals.t(notice.labelKey)}</span>
+        <span class="notice-sep" aria-hidden="true">
+          ·
+        </span>
+        <span class="notice-text">{Astro.locals.t(notice.textKey)}</span>
+        {noticeHref && notice.linkKey && (
+          <a href={noticeHref} class="notice-link">
+            {Astro.locals.t(notice.linkKey)}
+          </a>
+        )}
+      </div>
+      <button
+        id="notice-dismiss"
+        class="notice-dismiss"
+        type="button"
+        data-notice-id={notice.id}
+        aria-label={Astro.locals.t('zs.notice.dismiss')}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+  )
+}
+
 <Default {...Astro.props}>
   <slot name="header" slot="header" />
   <slot name="sidebar" slot="sidebar" />
@@ -286,6 +345,13 @@ import { CLOUD_REGISTER_URL } from '../data/site';
   document.getElementById('promo-dismiss')?.addEventListener('click', () => {
     sessionStorage.setItem('zs-promo-dismissed', '1');
     document.documentElement.setAttribute('data-promo-dismissed', '');
+  });
+
+  const noticeDismiss = document.getElementById('notice-dismiss');
+  noticeDismiss?.addEventListener('click', () => {
+    // Key the dismissal on the notice id so a revised notice shows again.
+    sessionStorage.setItem('zs-notice-dismissed', noticeDismiss.dataset.noticeId ?? '1');
+    document.documentElement.setAttribute('data-notice-dismissed', '');
   });
 
   // ── Resizable layout (left sidebar + right TOC) ─────────────
@@ -383,12 +449,123 @@ import { CLOUD_REGISTER_URL } from '../data/site';
 </script>
 
 <style>
+  /* The notice bar sits between the promo bar and the fixed header. Its height
+     feeds --sl-announcement-height in custom.css, which is what pushes the
+     header and content down, so both bars can be shown or dismissed freely. */
+  .notice-bar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-start: var(--zs-promo-height, 2.5rem);
+    z-index: 9998;
+    height: var(--zs-notice-height, 2.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 1rem 3rem;
+    gap: 0.75rem;
+    background-color: #92400e;
+    color: #ffffff;
+  }
+
+  .notice-bar[data-severity='danger'] {
+    background-color: #991b1b;
+  }
+
+  .notice-bar[data-severity='info'] {
+    background-color: #1e3a8a;
+  }
+
+  :root[data-notice-dismissed] .notice-bar {
+    display: none;
+  }
+
+  .notice-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    flex-wrap: nowrap;
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .notice-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .notice-label {
+    font-weight: 600;
+    white-space: nowrap;
+    color: #ffffff;
+  }
+
+  .notice-sep {
+    color: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+  }
+
+  .notice-text {
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .notice-link {
+    color: #ffffff !important;
+    font-weight: 600;
+    text-decoration: none !important;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+    padding-bottom: 1px;
+    transition: border-color 150ms ease;
+    flex-shrink: 0;
+  }
+
+  .notice-link:hover {
+    border-bottom-color: rgba(255, 255, 255, 0.95);
+    text-decoration: none !important;
+  }
+
+  .notice-dismiss {
+    position: absolute;
+    inset-inline-end: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    background: transparent;
+    border: 0;
+    border-radius: 0.25rem;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: color 150ms ease;
+  }
+
+  .notice-dismiss:hover {
+    color: #ffffff;
+  }
+
+  @media (max-width: 640px) {
+    .notice-bar {
+      justify-content: flex-start;
+      padding-inline: 1rem 2.75rem;
+    }
+
+    .notice-inner {
+      flex: 1 1 auto;
+    }
+  }
+
   .promo-bar {
     position: fixed;
     inset-inline: 0;
     inset-block-start: 0;
     z-index: 9999;
-    height: var(--sl-announcement-height, 2.5rem);
+    height: var(--zs-promo-height, 2.5rem);
     background-color: #00198a;
     display: flex;
     align-items: center;
