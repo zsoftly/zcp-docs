@@ -60,8 +60,9 @@ exist. Create the host on the Registry system before you assign it to a domain. 
 
 Il s'agit d'une étape d'enregistrement que nous devons effectuer auprès du registre `.ca` pour nos
 propres serveurs de noms, et elle ne concerne que les domaines en `.ca`. Réessayer le changement
-donnera la même erreur. Laissez le domaine sur ses serveurs de noms actuels et contactez le support
-ZSoftly pour être prévenu lorsque la délégation pourra avoir lieu.
+donnera la même erreur. Laissez le domaine sur ses serveurs de noms actuels et ouvrez un
+[billet de soutien](/fr/troubleshooting#ouvrir-un-billet-de-soutien) pour être prévenu lorsque la
+délégation pourra avoir lieu.
 
 ### La modification n'apparaît pas
 
@@ -78,20 +79,33 @@ Utilisez un enregistrement `A` ou `AAAA` pour la racine. Voir
 
 ### Corriger le refus d'un enregistrement MX
 
-Un enregistrement `MX` exige une **priorité** dans son propre champ. Dans le CLI, passez
+Un enregistrement `MX` exige une **priorité** dans son propre champ. Dans la CLI, passez
 `--priority`. Dans l'API, envoyez `priority` dans un champ distinct. Voir
 [Enregistrements MX](/fr/public-cloud/dns/records/mx).
 
-### L'enregistrement TXT semble incorrect
+### L'enregistrement TXT semble incorrect ou est refusé
 
-Le contenu `TXT` est une chaîne entre guillemets. Dans le CLI, protégez-la afin que l'interpréteur
-de commandes transmette les guillemets, par exemple `'"v=spf1 -all"'`. Voir
-[Enregistrements TXT](/fr/public-cloud/dns/records/txt).
+Le contenu `TXT` est une chaîne entre guillemets. Une valeur sans guillemets est une cause possible
+du message `DNS operation failed. Please try again or contact support.` La plateforme renvoie ce
+même message pour d'autres échecs, dont toute tentative de créer un enregistrement `SRV` ou `LOC`.
+Vérifiez d'abord les guillemets. Dans la CLI, protégez la valeur afin que l'interpréteur de
+commandes transmette les guillemets, par exemple `'"v=spf1 -all"'`. Voir
+[Enregistrements TXT](/fr/public-cloud/dns/records/txt) et
+[Limites connues](/fr/public-cloud/dns/records#limites-connues) pour les autres causes.
+
+### Un nouvel enregistrement en a remplacé un autre
+
+Un nom et un type contiennent une seule valeur. La création d'une deuxième valeur sous le même nom
+et le même type remplace la première, sans avertissement. Cette règle s'applique à tous les types
+d'enregistrement, y compris `A` et `AAAA` : un nom se résout vers une seule adresse IPv4 et une
+seule adresse IPv6. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
 
 ### Un enregistrement SRV ou LOC échoue
 
-Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles. Les autres types (`A`, `AAAA`,
-`CNAME`, `MX`, `TXT`, `CAA` et `NS`) fonctionnent.
+Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles, et les deux échouent avec le
+message `DNS operation failed. Please try again or contact support.` Les autres types (`A`, `AAAA`,
+`CNAME`, `MX`, `TXT`, `CAA` et `NS`) fonctionnent. Voir
+[Limites connues](/fr/public-cloud/dns/records#limites-connues).
 
 ### NXDOMAIN ou absence de réponse
 

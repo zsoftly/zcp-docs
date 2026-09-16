@@ -62,8 +62,9 @@ les autres domaines de premier niveau se délèguent normalement, et les domaine
 pointés vers ZSoftly continuent de se résoudre comme d'habitude.
 
 Si votre domaine se termine par `.ca`, laissez-le sur ses serveurs de noms actuels pour l'instant et
-ne réessayez pas le changement. Contactez le support ZSoftly pour être prévenu lorsque la délégation
-pourra avoir lieu.
+ne réessayez pas le changement. Ouvrez un
+[billet de soutien](/fr/troubleshooting#ouvrir-un-billet-de-soutien) pour être prévenu lorsque la
+délégation pourra avoir lieu.
 
 :::
 

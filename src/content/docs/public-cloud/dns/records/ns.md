@@ -18,21 +18,18 @@ records to **delegate a subdomain** to a different DNS provider.
 
 ## Delegate a Subdomain
 
-To hand `subzone.example.com` to another provider, add an `NS` record for `subzone` for every
-provider name server.
+To hand `subzone.example.com` to another provider, add an `NS` record for `subzone`.
 
 Console (zone-file view):
 
 ```text
 subzone NS ns1.other-dns.com. 3600
-subzone NS ns2.other-dns.com. 3600
 ```
 
 CLI:
 
 ```bash
 zcp dns record-create --domain examplecom --name subzone --type NS --content ns1.other-dns.com.
-zcp dns record-create --domain examplecom --name subzone --type NS --content ns2.other-dns.com.
 ```
 
 After this change, ZCP returns a referral to the delegated provider for `subzone.example.com`. The
@@ -43,8 +40,22 @@ delegated provider must host the `subzone.example.com` zone.
 ```bash
 dig NS subzone.example.com +short
 # ns1.other-dns.com.
-# ns2.other-dns.com.
 ```
+
+## One Name Server per Delegation
+
+A name and type hold one value, so `subzone` holds one `NS` record. A second `NS` record at the same
+name replaces the first, with no warning. See
+[Known limitations](/public-cloud/dns/records#known-limitations).
+
+:::caution
+
+A single `NS` record leaves the delegated subdomain with no redundancy. If that one name server
+stops answering, the subdomain stops resolving. Do not delegate a production subdomain from a ZCP
+zone. To delegate to two or more name servers, host the parent zone with a DNS provider that accepts
+several `NS` values at one name.
+
+:::
 
 ## Delegating to ZCP From Elsewhere
 
@@ -55,7 +66,8 @@ provider, add `NS` records for `dev` pointing at `ns1.zsoftly.ca` and `ns2.zsoft
 
 ## Notes
 
-- **Delegate to at least two name servers** for redundancy.
+- **A ZCP zone delegates to one name server.** Standard practice is two or more. ZCP cannot hold
+  more than one `NS` value at a name.
 - **The child provider must host the zone.** Delegation only forwards queries. The records live at
   the provider you delegate to.
 - **Do not delete the apex `NS` set.** ZCP manages your domain's own `ns1`/`ns2.zsoftly.ca` records.

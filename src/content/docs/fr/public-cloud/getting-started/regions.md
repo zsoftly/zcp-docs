@@ -12,6 +12,10 @@ leur région : une VM utilise des réseaux et des volumes dans la même région.
 | `YOW` | Ottawa      | Intel, AMD  | NVMe, HDD (budget)                       |
 | `YUL` | Montreal    | Intel, AMD  | Pro NVMe (`b2.g1`), Premium SSD (budget) |
 
+`YUL` et `YOW` sont les codes de région. La CLI, l'API et Terraform reçoivent la région sous forme
+de slug, `yul-1` ou `yow-1`. Exécutez `zcp region list` pour les consulter. Le chiffre d'un slug
+n'est pas le chiffre de région d'un ID de plan. YUL porte le slug `yul-1` et le chiffre de plan `2`.
+
 La région est encodée dans chaque ID de plan (`1` = YOW, `2` = YUL). Consultez
 [Noms des plans](/fr/public-cloud/compute/plan-names) pour le schéma de nommage et
 [Types d'instances](/fr/public-cloud/compute/instance-types) pour les caractéristiques et les

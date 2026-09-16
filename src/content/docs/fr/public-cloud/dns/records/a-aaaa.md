@@ -2,7 +2,7 @@
 title: Enregistrements A et AAAA
 description:
   Faites pointer un nom d'hôte vers une adresse IPv4 (A) ou IPv6 (AAAA) sur ZCP DNS, avec des
-  exemples pour la console, le CLI et l'API, ainsi que des commandes de vérification.
+  exemples pour la console, la CLI et l'API, ainsi que des commandes de vérification.
 ---
 
 Un enregistrement `A` associe un nom à une adresse **IPv4**. Un enregistrement `AAAA` associe un nom
@@ -51,11 +51,12 @@ dig AAAA ipv6.example.com +short   # 2001:db8::10
 - **Sommet et adresse IP.** Faites pointer le sommet (`@`) vers une adresse IP fixe avec un
   enregistrement `A` ou `AAAA`. N'utilisez pas de `CNAME` au sommet. Voir
   [CNAME](/fr/public-cloud/dns/records/cname).
-- **Plusieurs adresses.** Ajoutez plusieurs enregistrements `A` portant le même nom, mais des
-  adresses IP différentes, pour renvoyer plusieurs adresses. Cette configuration fournit une
-  distribution DNS simple, sans vérification d'intégrité.
+- **Une seule adresse par nom et par type.** Un nom se résout vers une seule adresse IPv4 et une
+  seule adresse IPv6. Un deuxième enregistrement `A` sous le même nom remplace le premier, sans
+  avertissement. Les enregistrements `A` en tourniquet sont donc impossibles. La même règle
+  s'applique à `AAAA`. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
 - **Double pile.** Publiez un enregistrement `A` et un enregistrement `AAAA` pour un même nom afin
-  de servir les clients IPv4 et IPv6.
+  de servir les clients IPv4 et IPv6. Les types diffèrent, donc les deux enregistrements coexistent.
 
 Voir aussi : [CNAME](/fr/public-cloud/dns/records/cname),
 [Exemples pratiques](/fr/public-cloud/dns/examples),

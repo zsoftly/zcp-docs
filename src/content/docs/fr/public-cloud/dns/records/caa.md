@@ -27,7 +27,6 @@ Console (affichage sous forme de fichier de zone) :
 
 ```text
 @ CAA 0 issue "letsencrypt.org"    14400
-@ CAA 0 iodef "mailto:security@example.com" 14400
 ```
 
 CLI (protégez la valeur afin que les guillemets parviennent à l'enregistrement) :
@@ -46,13 +45,22 @@ dig CAA example.com +short
 # 0 issue "letsencrypt.org"
 ```
 
+## Une seule valeur CAA par nom
+
+Un nom et un type contiennent une seule valeur. Le sommet contient donc un seul enregistrement
+`CAA`, et un deuxième enregistrement `CAA` sous `@` remplace le premier, sans avertissement. Vous ne
+pouvez pas énumérer une deuxième autorité de certification, ni publier une valeur `issue` et une
+valeur `iodef` sous le même nom. Voir
+[Limites connues](/fr/public-cloud/dns/records#limites-connues).
+
 ## Remarques
 
 - **`issue`** autorise une AC à émettre des certificats non génériques. **`issuewild`** couvre les
   certificats génériques. **`iodef`** définit un contact pour les signalements de violation de
   politique.
-- **Autorisez chaque AC employée.** Si vos certificats proviennent de plusieurs autorités, ajoutez
-  un enregistrement `issue` pour chacune. Les autorités absentes doivent refuser l'émission.
+- **Choisissez la seule valeur dont vous avez besoin.** Les autorités absentes doivent refuser
+  l'émission, donc une valeur `issue` pour une seule AC bloque toutes les autres. Ne publiez pas
+  d'enregistrement `CAA` si vos certificats proviennent de plusieurs autorités.
 - **Aucun enregistrement CAA signifie aucune restriction.** Sans enregistrement `CAA`, aucune
   politique ne limite l'émission de certificats.
 

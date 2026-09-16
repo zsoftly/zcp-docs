@@ -60,23 +60,18 @@ dig MX example.com +short
 # 10 mail.example.com.
 ```
 
-## Plusieurs serveurs de courrier
+## Un seul serveur de courrier par nom
 
-Ajoutez plusieurs enregistrements `MX` avec des priorités différentes pour définir un serveur
-principal et un serveur de secours :
-
-```bash
-zcp dns record-create --domain examplecom --name @ --type MX --content mail1.example.com. --priority 10
-zcp dns record-create --domain examplecom --name @ --type MX --content mail2.example.com. --priority 20
-```
-
-La livraison tente `mail1` en premier, puis passe à `mail2` si le serveur principal est
-inaccessible.
+Un nom et un type contiennent une seule valeur. Le sommet contient donc un seul enregistrement `MX`.
+La création d'un deuxième enregistrement `MX` sous `@` remplace le premier, sans avertissement.
+Ouvrez un [billet de soutien](/fr/troubleshooting#ouvrir-un-billet-de-soutien) si vous avez besoin
+d'un serveur principal et d'un serveur de secours sous le même nom. Voir
+[Limites connues](/fr/public-cloud/dns/records#limites-connues).
 
 ## Remarques
 
 - **La priorité est distincte.** N'insérez pas le nombre dans la valeur (`10 mail.example.com.`). La
-  console, le CLI et l'API reçoivent chacun la priorité dans son propre champ.
+  console, la CLI et l'API reçoivent chacun la priorité dans son propre champ.
 - **Le serveur de courrier exige une adresse.** La cible `MX` doit se résoudre en enregistrement `A`
   ou `AAAA`. Elle ne peut pas pointer vers un `CNAME`.
 - **Une priorité de `0` est valide** et est envoyée correctement.

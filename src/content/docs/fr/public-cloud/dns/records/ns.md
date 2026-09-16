@@ -22,20 +22,18 @@ autre fournisseur DNS.
 ## Déléguer un sous-domaine
 
 Pour confier `subzone.example.com` à un autre fournisseur, ajoutez un enregistrement `NS` portant le
-nom `subzone` pour chaque serveur de noms de ce fournisseur.
+nom `subzone`.
 
 Console (affichage sous forme de fichier de zone) :
 
 ```text
 subzone NS ns1.other-dns.com. 3600
-subzone NS ns2.other-dns.com. 3600
 ```
 
 CLI :
 
 ```bash
 zcp dns record-create --domain examplecom --name subzone --type NS --content ns1.other-dns.com.
-zcp dns record-create --domain examplecom --name subzone --type NS --content ns2.other-dns.com.
 ```
 
 Après cette modification, ZCP renvoie les résolveurs vers le fournisseur délégué pour
@@ -46,8 +44,22 @@ Après cette modification, ZCP renvoie les résolveurs vers le fournisseur dél�
 ```bash
 dig NS subzone.example.com +short
 # ns1.other-dns.com.
-# ns2.other-dns.com.
 ```
+
+## Un seul serveur de noms par délégation
+
+Un nom et un type contiennent une seule valeur. Le nom `subzone` contient donc un seul
+enregistrement `NS`, et un deuxième enregistrement `NS` sous le même nom remplace le premier, sans
+avertissement. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
+
+:::caution
+
+Un seul enregistrement `NS` prive le sous-domaine délégué de toute redondance. Si ce serveur de noms
+cesse de répondre, le sous-domaine ne se résout plus. Ne déléguez pas un sous-domaine de production
+depuis une zone ZCP. Pour déléguer vers deux serveurs de noms ou plus, hébergez la zone parente chez
+un fournisseur DNS qui accepte plusieurs valeurs `NS` sous un même nom.
+
+:::
 
 ## Déléguer vers ZCP depuis un autre fournisseur
 
@@ -58,7 +70,8 @@ Chez le fournisseur parent, ajoutez des enregistrements `NS` portant le nom `dev
 
 ## Remarques
 
-- **Déléguez vers au moins deux serveurs de noms** pour assurer la redondance.
+- **Une zone ZCP délègue vers un seul serveur de noms.** L'usage courant en prévoit deux ou plus.
+  ZCP ne peut pas conserver plus d'une valeur `NS` sous un même nom.
 - **Le fournisseur enfant doit héberger la zone.** La délégation achemine seulement les requêtes.
   Les enregistrements résident chez le fournisseur auquel vous déléguez.
 - **Ne supprimez pas l'ensemble `NS` du sommet.** ZCP gère les enregistrements `ns1` et

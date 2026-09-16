@@ -48,7 +48,8 @@ Point your domain at both. The exact values also appear in the console and in `z
 
 :::note
 
-`SRV` and `LOC` records are not available yet.
+`SRV` and `LOC` records are not available yet. See
+[Known limitations](/public-cloud/dns/records#known-limitations).
 
 :::
 
