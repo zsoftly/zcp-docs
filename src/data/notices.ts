@@ -44,8 +44,9 @@ export const siteNotices: SiteNotice[] = [
     textKey: 'zs.notice.caDelegation.text',
     linkKey: 'zs.notice.caDelegation.link',
     path: 'public-cloud/dns/troubleshooting/',
-    active: true,
+    active: false,
     startsAt: '2026-09-15T00:00:00Z',
+    endsAt: '2026-09-16T17:00:00Z',
   },
 ];
 

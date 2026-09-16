@@ -49,18 +49,6 @@ and pick the record type.
 
 ## Common Problems
 
-### A `.ca` Domain Will Not Delegate to ZSoftly
-
-Your registrar rejects the name server change with an error stating the name server host does not
-exist at the registry. The error reads: _"Object does not exist. Create the host on the Registry
-system before you assign it to a domain."_ Lookups of `ns1.zsoftly.ca` at the `.ca` registry return
-_nameserver not found_.
-
-This is a registration step we have to complete at the `.ca` registry for our own name servers, and
-it affects `.ca` domains only. Retrying the change will return the same error. Leave the domain on
-its current name servers. Open a [support ticket](/troubleshooting#raise-a-support-ticket) and we
-will tell you when the delegation is ready to retry.
-
 ### The Change Has Not Shown Up
 
 Resolvers cache records for the TTL. With the default `14400` (4 hours), a resolver holding the old

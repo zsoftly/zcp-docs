@@ -45,22 +45,6 @@ console displays different values, always use the ones shown there.
 
 :::
 
-:::caution
-
-**`.ca` domain delegations to ZSoftly are failing right now.** Registrars reject the name server
-change with an error stating the name server host does not exist at the registry. The error reads:
-_"Object does not exist. Create the host on the Registry system before you assign it to a domain."_
-
-This is a registration step we have to complete at the `.ca` registry for our own name servers. It
-is not a problem with your domain or your registrar. Every other top-level domain delegates
-normally, and `.ca` domains already pointed at ZSoftly keep resolving as usual.
-
-If your domain ends in `.ca`, leave it on its current name servers for now and do not retry the
-change. Open a [support ticket](/troubleshooting#raise-a-support-ticket) and we will tell you when
-the delegation is ready to retry.
-
-:::
-
 ## Update Name Servers at Your Registrar
 
 To make ZSoftly authoritative for your domain, replace the name servers at the registrar where you
