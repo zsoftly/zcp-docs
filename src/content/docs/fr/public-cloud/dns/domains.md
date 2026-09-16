@@ -49,6 +49,24 @@ sont indiquées.
 
 :::
 
+:::caution
+
+**Les délégations de domaines en `.ca` vers ZSoftly échouent pour le moment.** Les registraires
+refusent le changement de serveurs de noms avec une erreur indiquant que l'hôte du serveur de noms
+n'existe pas au registre. L'erreur affichée est la suivante : _« Object does not exist. Create the
+host on the Registry system before you assign it to a domain. »_
+
+Il s'agit d'une étape d'enregistrement que nous devons effectuer auprès du registre `.ca` pour nos
+propres serveurs de noms. Ce n'est pas un problème lié à votre domaine ni à votre registraire. Tous
+les autres domaines de premier niveau se délèguent normalement, et les domaines en `.ca` déjà
+pointés vers ZSoftly continuent de se résoudre comme d'habitude.
+
+Si votre domaine se termine par `.ca`, laissez-le sur ses serveurs de noms actuels pour l'instant et
+ne réessayez pas le changement. Contactez le support ZSoftly pour être prévenu lorsque la délégation
+pourra avoir lieu.
+
+:::
+
 ## Mettre à jour les serveurs de noms chez votre registraire
 
 Pour rendre ZSoftly faisant autorité pour votre domaine, remplacez les serveurs de noms chez le

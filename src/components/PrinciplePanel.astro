@@ -1,0 +1,185 @@
+---
+// The ZSoftly principle panel. It used to sit beside the hero; it now renders
+// further down the home page, so the top of the page can get to the content.
+---
+
+<section class="zs-principle" aria-label={Astro.locals.t('zs.hero.quoteLabel')}>
+  <div class="zs-hero__quote">
+    <div class="zs-hero__quote-inner">
+      <div class="zs-hero__quote-mark" aria-hidden="true">"</div>
+      <blockquote>{Astro.locals.t('zs.hero.quote')}</blockquote>
+      <div class="zs-hero__quote-meta">
+        <span class="zs-hero__quote-rule"></span>
+        <span class="zs-hero__quote-source">{Astro.locals.t('zs.hero.quoteSource')}</span>
+      </div>
+      <ul class="zs-hero__pillars">
+        <li>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg
+          >
+          {Astro.locals.t('zs.hero.pillarSovereignty')}
+        </li>
+        <li>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><circle cx="12" cy="12" r="10"></circle><path
+              d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"
+            ></path></svg
+          >
+          {Astro.locals.t('zs.hero.pillarLockIn')}
+        </li>
+        <li>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.25"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg
+          >
+          {Astro.locals.t('zs.hero.pillarInfrastructure')}
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .zs-principle {
+    margin-bottom: 1.5rem;
+  }
+
+  @media (min-width: 60rem) {
+    .zs-principle .zs-hero__quote-inner {
+      max-inline-size: none;
+    }
+  }
+
+  /* ── Right quote panel ────────────────────────────────────── */
+  .zs-hero__quote-inner {
+    position: relative;
+    padding: 1.75rem;
+    border-radius: 12px;
+    border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-bg-sidebar);
+    overflow: hidden;
+  }
+
+  /* Top-right glow accent */
+  .zs-hero__quote-inner::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(ellipse at top right, rgba(0, 25, 138, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  :root[data-theme='dark'] .zs-hero__quote-inner::before {
+    background: radial-gradient(
+      ellipse at top right,
+      rgba(107, 142, 245, 0.13) 0%,
+      transparent 70%
+    );
+  }
+
+  .zs-hero__quote-mark {
+    font-size: 4.5rem;
+    line-height: 0.75;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--sl-color-accent);
+    opacity: 0.2;
+    margin-bottom: 0.25rem;
+    user-select: none;
+  }
+
+  .zs-hero__quote-inner blockquote {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--sl-color-text);
+    font-style: italic;
+    margin: 0 0 1.125rem;
+    border: none;
+    padding: 0;
+    quotes: none;
+  }
+
+  :root[data-theme='dark'] .zs-hero__quote-inner blockquote {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .zs-hero__quote-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .zs-hero__quote-rule {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.5px;
+    background: var(--sl-color-accent);
+    border-radius: 1px;
+    flex-shrink: 0;
+  }
+
+  .zs-hero__quote-source {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--sl-color-accent);
+  }
+
+  .zs-hero__pillars {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-gray-6);
+  }
+
+  .zs-hero__pillars li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sl-color-gray-2);
+  }
+
+  .zs-hero__pillars svg {
+    flex-shrink: 0;
+    color: var(--sl-color-accent);
+    opacity: 0.75;
+  }
+</style>

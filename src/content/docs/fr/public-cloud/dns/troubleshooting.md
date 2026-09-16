@@ -51,6 +51,18 @@ Pour obtenir une carte mondiale, utilisez un outil en ligne comme
 
 ## Problèmes courants
 
+### Un domaine en `.ca` ne se délègue pas vers ZSoftly
+
+Votre registraire refuse le changement de serveurs de noms avec une erreur indiquant que l'hôte du
+serveur de noms n'existe pas au registre. L'erreur affichée est la suivante : _« Object does not
+exist. Create the host on the Registry system before you assign it to a domain. »_ Les recherches de
+`ns1.zsoftly.ca` auprès du registre `.ca` renvoient _nameserver not found_.
+
+Il s'agit d'une étape d'enregistrement que nous devons effectuer auprès du registre `.ca` pour nos
+propres serveurs de noms, et elle ne concerne que les domaines en `.ca`. Réessayer le changement
+donnera la même erreur. Laissez le domaine sur ses serveurs de noms actuels et contactez le support
+ZSoftly pour être prévenu lorsque la délégation pourra avoir lieu.
+
 ### La modification n'apparaît pas
 
 Les résolveurs conservent les enregistrements en cache pendant la durée du TTL. Avec la valeur par
