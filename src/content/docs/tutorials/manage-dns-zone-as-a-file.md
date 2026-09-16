@@ -27,6 +27,8 @@ You need:
 - The `zcp` CLI installed and authenticated. See [CLI installation](/public-cloud/cli/installation).
 - A project and a domain you control.
 - A git repository to keep the file in.
+- `jq`, which the script uses to read the zone slug out of the CLI's JSON output. Install it with
+  `brew install jq` on macOS, or `apt install jq` on Debian and Ubuntu.
 
 Read [Known limitations](/public-cloud/dns/records#known-limitations) before you start. A name and
 type hold one value today, which shapes what a file like this can express.
@@ -97,6 +99,10 @@ PROJECT="${3:?project slug required}"
 DRY_RUN="${4:-}"
 
 [ -f "$FILE" ] || { echo "records file not found: $FILE" >&2; exit 1; }
+case "$DRY_RUN" in
+  ''|--dry-run) ;;
+  *) echo "unknown option: $DRY_RUN (expected --dry-run or nothing)" >&2; exit 2 ;;
+esac
 
 run() {
   if [ "$DRY_RUN" = "--dry-run" ]; then
@@ -119,6 +125,8 @@ if [ -z "$SLUG" ]; then
 fi
 echo "Zone slug: ${SLUG:-<pending>}"
 
+FAILED=0
+
 # CONTENT is the last field and may contain spaces, so read the first four
 # fields and let the remainder fall into CONTENT.
 while read -r NAME TYPE TTL PRIO CONTENT; do
@@ -127,8 +135,16 @@ while read -r NAME TYPE TTL PRIO CONTENT; do
         --ttl "$TTL" --content "$CONTENT" --project "$PROJECT" --region default -y)
   [ "$PRIO" != "-" ] && ARGS+=(--priority "$PRIO")
   echo "-> $NAME $TYPE $CONTENT"
-  run "${ARGS[@]}" || echo "   [FAIL] $NAME $TYPE" >&2
+  if ! run "${ARGS[@]}"; then
+    echo "   [FAIL] $NAME $TYPE" >&2
+    FAILED=1
+  fi
 done < "$FILE"
+
+if [ "$FAILED" -ne 0 ]; then
+  echo "One or more records failed. The zone is partially applied." >&2
+  exit 1
+fi
 
 echo "Done. Verify with: dig NS $ZONE +short"
 ```
@@ -165,9 +181,11 @@ Check what the name servers actually serve, rather than what the console shows:
 
 ```bash
 zcp dns show <zone-slug> --project my-project --region default
-dig @ns1.example-dns.ca A example.ca +short
-dig @ns1.example-dns.ca MX example.ca +short
-dig @ns1.example-dns.ca TXT example.ca +short
+for ns in ns1.example-dns.ca ns2.example-dns.ca; do
+  dig @"$ns" A example.ca +short
+  dig @"$ns" MX example.ca +short
+  dig @"$ns" TXT example.ca +short
+done
 ```
 
 Query both name servers. A record that answers on one and not the other means the zone has not
@@ -184,6 +202,10 @@ finished propagating between them.
   did.
 - **Creating a record replaces an existing set.** Applying the whole file over a live zone rewrites
   every record it names. That is what makes it repeatable, and also why the dry run matters.
+- **The script adds and updates, it does not prune.** It applies the records the file names and
+  nothing else. Deleting a line from the file does not remove that record from the zone. Remove it
+  yourself with `zcp dns record-delete`, then delete the line, so the file and the zone stay in
+  step.
 
 ## Next Steps
 

@@ -81,6 +81,10 @@ What this rules out:
 A name can still hold one value of each type. An `A` record and an `AAAA` record coexist at the same
 name, because the types differ.
 
+A `CNAME` is the exception. A name holding a `CNAME` holds nothing else, so it cannot also carry an
+`A`, `MX`, or `TXT` record. Use a `CNAME` only on a name that serves no other purpose, and never at
+the zone apex.
+
 The console, the CLI, and the API offer no way around this today. Open a
 [support ticket](/troubleshooting#raise-a-support-ticket) if you need several values at one name and
 type.

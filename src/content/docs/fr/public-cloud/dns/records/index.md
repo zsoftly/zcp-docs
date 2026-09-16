@@ -86,6 +86,10 @@ Ce que cela exclut :
 Un nom peut toujours contenir une valeur par type. Un enregistrement `A` et un enregistrement `AAAA`
 coexistent sous le même nom, puisque les types diffèrent.
 
+Le `CNAME` fait exception. Un nom qui porte un `CNAME` ne porte rien d'autre, donc il ne peut pas
+contenir en plus un enregistrement `A`, `MX` ou `TXT`. N'utilisez un `CNAME` que sur un nom qui ne
+sert à rien d'autre, et jamais à l'apex de la zone.
+
 La console, la CLI et l'API n'offrent aujourd'hui aucun contournement. Ouvrez un
 [billet de soutien](/fr/troubleshooting#ouvrir-un-billet-de-soutien) si vous avez besoin de
 plusieurs valeurs sous un même nom et un même type.

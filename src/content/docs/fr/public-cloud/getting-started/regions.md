@@ -23,11 +23,13 @@ niveaux de stockage offerts dans chaque région.
 
 ## Choisir une région
 
+- **Type de charge** : exécutez les charges de production et les charges critiques pour l'entreprise
+  dans YUL. Utilisez YOW pour le développement, les tests et les démonstrations de nuage privé.
 - **Latence** : choisissez la région la plus proche de vos utilisateurs.
 - **Processeur** : YOW et YUL offrent Intel et AMD. La capacité Intel de YUL utilise les familles
   `ci2` et `cim2` avec le niveau de stockage `b2.g1`.
 - **Stockage** : les deux régions proposent un niveau économique pour les charges de travail
-  sensibles aux coûts. YUL offre Premium SSD; YOW offre HDD.
+  sensibles aux coûts. YUL offre Premium SSD et YOW offre HDD.
 - **Résidence des données** : les deux régions sont au Canada.
 
 ## Voir aussi
