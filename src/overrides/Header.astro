@@ -125,11 +125,15 @@ const docsLinks = docsNavLinks.map((link) => {
         Create account and Log in. */
     }
     <div class="account-menu" id="account-menu">
-      <a
+      {
+        /* A disclosure, not a link. As an anchor this navigated on activation,
+          which contradicted aria-expanded and left touch users no way to reach
+          Log in. Create account is the first item inside, so the register
+          destination is one tap away. */
+      }
+      <button
+        type="button"
         class="account-trigger"
-        href={CLOUD_REGISTER_URL}
-        target="_blank"
-        rel="noopener noreferrer"
         aria-expanded="false"
         aria-controls="account-panel"
       >
@@ -146,7 +150,7 @@ const docsLinks = docsNavLinks.map((link) => {
         >
           <path d="M2 4l4 4 4-4"></path>
         </svg>
-      </a>
+      </button>
       <div class="account-dropdown">
         <nav
           id="account-panel"
@@ -654,6 +658,9 @@ const docsLinks = docsNavLinks.map((link) => {
     .account-trigger {
       align-items: center;
       background: var(--sl-color-accent);
+      border: 0;
+      cursor: pointer;
+      font-family: inherit;
       border-radius: 0.375rem;
       color: #ffffff !important;
       display: flex;

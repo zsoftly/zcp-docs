@@ -4,6 +4,11 @@
  * A notice renders as a bar under the promo bar on every page, so customers see
  * service-affecting information without having to find the page it applies to.
  *
+ * The window is evaluated when the site builds, because it builds statically.
+ * A notice starts appearing at the first deploy after `startsAt`, so schedule a
+ * deploy if the exact start time matters. `endsAt` is also re-checked in the
+ * browser, so an expired notice stops showing without waiting for a deploy.
+ *
  * To publish one, add an entry below and the matching `zs.notice.*` strings to
  * `src/content/i18n/en.json` and `src/content/i18n/fr.json`. To retire one, set
  * `active: false` or let `endsAt` pass. Only the first notice that is currently

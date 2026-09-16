@@ -11,13 +11,26 @@ const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
 const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
 ---
 
-{/* Prevent FOUC: runs synchronously before paint */}
-<script is:inline define:vars={{ noticeId: notice?.id ?? null }}>
+{
+  /* Prevent FOUC: runs synchronously before paint.
+    The notice window is evaluated at build time, since the site builds
+    statically. A notice that has not started yet is simply not rendered, so it
+    cannot leak early. One that has ended would otherwise keep showing until the
+    next deploy, so endsAt is re-checked here against the visitor's clock. */
+}
+<script
+  is:inline
+  define:vars={{ noticeId: notice?.id ?? null, noticeEndsAt: notice?.endsAt ?? null }}
+>
   if (sessionStorage.getItem('zs-promo-dismissed') === '1') {
     document.documentElement.setAttribute('data-promo-dismissed', '');
   }
 
   if (noticeId && sessionStorage.getItem('zs-notice-dismissed') === noticeId) {
+    document.documentElement.setAttribute('data-notice-dismissed', '');
+  }
+
+  if (noticeEndsAt && Date.now() > Date.parse(noticeEndsAt)) {
     document.documentElement.setAttribute('data-notice-dismissed', '');
   }
 </script>
