@@ -64,6 +64,9 @@ zcp dns record-create --domain examplecom --name @ --type TXT --content '"provid
 dig TXT example.com +short
 ```
 
+A name holds one `TXT` value, so this record replaces an SPF record already at `@`. See
+[Known limitations](/public-cloud/dns/records#known-limitations).
+
 ## Restrict Certificate Issuance
 
 Allow only your certificate authority to issue certificates.
@@ -82,12 +85,23 @@ Hand `subzone.example.com` to another DNS provider.
 
 ```bash
 zcp dns record-create --domain examplecom --name subzone --type NS --content ns1.other-dns.com.
-zcp dns record-create --domain examplecom --name subzone --type NS --content ns2.other-dns.com.
 ```
 
 ```bash
 dig NS subzone.example.com +short
 ```
+
+A name and type hold one value, so `subzone` holds one `NS` record. A second `NS` record at the same
+name replaces the first. See [Known limitations](/public-cloud/dns/records#known-limitations).
+
+:::caution
+
+A single `NS` record leaves the delegated subdomain with no redundancy. If that one name server
+stops answering, the subdomain stops resolving. Do not use this recipe for a production subdomain.
+To delegate to two or more name servers, host the parent zone with a DNS provider that accepts
+several `NS` values at one name.
+
+:::
 
 ## Change a Record
 

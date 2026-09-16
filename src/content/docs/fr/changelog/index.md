@@ -198,7 +198,7 @@ n'envoyait jamais la priorité de l'enregistrement. Chaque création d'un `MX` �
 erreur d'API. La commande reçoit maintenant l'option `--priority` (de 0 à 65535, obligatoire pour
 `MX`). Placez le serveur de courrier dans `--content` et le nombre de préférence dans `--priority`.
 Une préférence de `0` est envoyée correctement. Le CLI refuse `--priority` pour les autres types et
-affiche un message clair. Voir [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli).
+affiche un message clair. Voir [Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli).
 
 ```bash
 zcp dns record-create --domain examplecom --name @ --type MX --content mail.example.com. --priority 10

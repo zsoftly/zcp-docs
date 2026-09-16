@@ -6,7 +6,7 @@ description:
   vérification pour chaque cas.
 ---
 
-Voici des exemples pratiques pour les tâches DNS courantes. Chacun utilise le CLI `zcp` avec une
+Voici des exemples pratiques pour les tâches DNS courantes. Chacun utilise la CLI `zcp` avec une
 zone dont le slug est `examplecom`, puis vérifie le résultat avec `dig`. Obtenez votre slug avec
 `zcp dns list`. Les mêmes enregistrements fonctionnent depuis la
 [console](/fr/public-cloud/dns/records) et l'[API](/fr/public-cloud/dns/api/).
@@ -67,6 +67,9 @@ zcp dns record-create --domain examplecom --name @ --type TXT --content '"provid
 dig TXT example.com +short
 ```
 
+Un nom contient une seule valeur `TXT`. Cet enregistrement remplace donc un enregistrement SPF déjà
+présent sous `@`. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
+
 ## Limiter l'émission de certificats
 
 Autorisez uniquement votre autorité de certification à émettre des certificats.
@@ -85,12 +88,24 @@ Confiez `subzone.example.com` à un autre fournisseur DNS.
 
 ```bash
 zcp dns record-create --domain examplecom --name subzone --type NS --content ns1.other-dns.com.
-zcp dns record-create --domain examplecom --name subzone --type NS --content ns2.other-dns.com.
 ```
 
 ```bash
 dig NS subzone.example.com +short
 ```
+
+Un nom et un type contiennent une seule valeur. Le nom `subzone` contient donc un seul
+enregistrement `NS`, et un deuxième enregistrement `NS` sous le même nom remplace le premier. Voir
+[Limites connues](/fr/public-cloud/dns/records#limites-connues).
+
+:::caution
+
+Un seul enregistrement `NS` prive le sous-domaine délégué de toute redondance. Si ce serveur de noms
+cesse de répondre, le sous-domaine ne se résout plus. N'appliquez pas cet exemple à un sous-domaine
+de production. Pour déléguer vers deux serveurs de noms ou plus, hébergez la zone parente chez un
+fournisseur DNS qui accepte plusieurs valeurs `NS` sous un même nom.
+
+:::
 
 ## Modifier un enregistrement
 
@@ -117,5 +132,5 @@ zcp dns record-delete --domain examplecom --name subzone --type NS
 Ajoutez `--yes` pour ignorer la demande de confirmation dans un script.
 
 Voir aussi : [Types d'enregistrements](/fr/public-cloud/dns/records),
-[Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli),
+[Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli),
 [Dépannage](/fr/public-cloud/dns/troubleshooting)

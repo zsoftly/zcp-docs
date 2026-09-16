@@ -8,7 +8,7 @@ description:
 
 Hébergez le DNS faisant autorité de votre domaine sur ZCP. Ajoutez un domaine, faites pointer votre
 registraire vers les serveurs de noms ZSoftly, puis gérez tous vos enregistrements depuis la
-console, le CLI ou l'API.
+console, la CLI ou l'API.
 
 ## Fonctionnement
 
@@ -52,7 +52,8 @@ console et dans la sortie de `zcp dns show`.
 
 :::note
 
-Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles.
+Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles. Voir
+[Limites connues](/fr/public-cloud/dns/records#limites-connues).
 
 :::
 
@@ -60,7 +61,7 @@ Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles.
 
 - **Console** : la section DNS du portail. Consultez [Enregistrements](/fr/public-cloud/dns/records)
   pour la référence de chaque type.
-- **CLI** : [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli).
+- **CLI** : [Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli).
 - **API** : [Gérer le DNS avec l'API](/fr/public-cloud/dns/api/).
 - **Infrastructure en tant que code** : la ressource `zcp_dns_record` du
   [fournisseur Terraform / OpenTofu](/tutorials/manage-infrastructure-terraform/) (en anglais).
@@ -76,6 +77,6 @@ elles n'exigent ni région ni projet. Seule la création d'un domaine exige un p
   courriels, vérifiez la propriété d'un domaine, limitez l'émission de certificats et déléguez un
   sous-domaine.
 
-Voir aussi : [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli),
+Voir aussi : [Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli),
 [Gérer le DNS avec l'API](/fr/public-cloud/dns/api/),
 [Dépannage](/fr/public-cloud/dns/troubleshooting)

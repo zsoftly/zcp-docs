@@ -56,7 +56,8 @@ is not a problem with your domain or your registrar. Every other top-level domai
 normally, and `.ca` domains already pointed at ZSoftly keep resolving as usual.
 
 If your domain ends in `.ca`, leave it on its current name servers for now and do not retry the
-change. Contact ZSoftly support and we will tell you when the delegation is ready to retry.
+change. Open a [support ticket](/troubleshooting#raise-a-support-ticket) and we will tell you when
+the delegation is ready to retry.
 
 :::
 

@@ -1,19 +1,19 @@
 ---
-title: Gérer le DNS avec le CLI
+title: Gérer le DNS avec la CLI
 description:
   Créez des zones DNS, ajoutez ou supprimez des enregistrements et déléguez votre domaine à ZSoftly
-  depuis le terminal avec le CLI zcp.
+  depuis le terminal avec la CLI zcp.
 ---
 
-Le CLI `zcp` gère vos zones et enregistrements DNS depuis le terminal. Cette page couvre chaque
+La CLI `zcp` gère vos zones et enregistrements DNS depuis le terminal. Cette page couvre chaque
 étape : créer une zone, consulter les serveurs de noms auxquels la déléguer, ajouter ou supprimer
 des enregistrements, puis vérifier le résultat.
 
 ## Avant de commencer
 
-- Le CLI `zcp` doit être installé et authentifié. Consultez le
-  [guide d'installation du CLI](/fr/public-cloud/cli/installation) et le
-  [démarrage rapide du CLI](/fr/public-cloud/cli/quickstart).
+- La CLI `zcp` doit être installée et authentifiée. Consultez le
+  [guide d'installation de la CLI](/fr/public-cloud/cli/installation) et le
+  [démarrage rapide de la CLI](/fr/public-cloud/cli/quickstart).
 - Vous devez contrôler un domaine chez son registraire.
 
 :::note
@@ -124,7 +124,7 @@ Règles relatives aux enregistrements :
 - Terminez une cible `CNAME` par un point (`www.example.com.`) afin qu'elle reste pleinement
   qualifiée.
 - Un enregistrement `MX` exige `--priority`. Placez le serveur de courrier dans `--content` et le
-  nombre de préférence dans `--priority`, par exemple `--priority 10`. Le CLI renvoie une erreur si
+  nombre de préférence dans `--priority`, par exemple `--priority 10`. La CLI renvoie une erreur si
   cette option manque.
 - Les types pris en charge sont `A`, `AAAA`, `CNAME`, `MX`, `TXT`, `CAA` et `NS`. `SRV` et `LOC` ne
   sont pas encore disponibles.
@@ -214,4 +214,4 @@ Voir aussi : [Vue d'ensemble du DNS](/fr/public-cloud/dns/overview),
 [Exemples pratiques](/fr/public-cloud/dns/examples),
 [Gérer le DNS avec l'API](/fr/public-cloud/dns/api/),
 [Dépannage](/fr/public-cloud/dns/troubleshooting),
-[Référence du CLI](/fr/public-cloud/cli/reference)
+[Référence de la CLI](/fr/public-cloud/cli/reference)

@@ -122,7 +122,7 @@ les commandes IAM `sub-user`/`role`/`permission`) sont exemptées. Voir
 ### Réseau : DNS
 
 De niveau compte. Aucun `--region`/`--project` requis, sauf pour `zcp dns create`, qui reçoit
-`--project`. Voir [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli).
+`--project`. Voir [Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli).
 
 | Commande                  | Description                                        |
 | ------------------------- | -------------------------------------------------- |

@@ -58,8 +58,8 @@ _nameserver not found_.
 
 This is a registration step we have to complete at the `.ca` registry for our own name servers, and
 it affects `.ca` domains only. Retrying the change will return the same error. Leave the domain on
-its current name servers. Contact ZSoftly support and we will tell you when the delegation is ready
-to retry.
+its current name servers. Open a [support ticket](/troubleshooting#raise-a-support-ticket) and we
+will tell you when the delegation is ready to retry.
 
 ### The Change Has Not Shown Up
 
@@ -77,15 +77,28 @@ A `CNAME` cannot sit at the apex (`@`) and cannot share a name with any other re
 An `MX` record needs a **priority** in its own field. From the CLI, pass `--priority`. From the API,
 send `priority` as a separate field. See [MX records](/public-cloud/dns/records/mx).
 
-### TXT Record Looks Wrong
+### TXT Record Looks Wrong or Is Rejected
 
-`TXT` content is a quoted string. On the CLI, wrap it so the shell passes the quotes through, for
-example `'"v=spf1 -all"'`. See [TXT records](/public-cloud/dns/records/txt).
+`TXT` content is a quoted string. An unquoted value is one cause of the message
+`DNS operation failed. Please try again or contact support.` The platform returns that same message
+for other failures, including any attempt to create an `SRV` or `LOC` record. Check the quoting
+first. On the CLI, wrap the value so the shell passes the quotes through, for example
+`'"v=spf1 -all"'`. See [TXT records](/public-cloud/dns/records/txt), and
+[Known limitations](/public-cloud/dns/records#known-limitations) for the other causes.
+
+### A New Record Replaced an Existing One
+
+A name and type hold one value. Creating a second value at the same name and type replaces the
+first, with no warning. This applies to every record type, including `A` and `AAAA`, so a name
+resolves to one IPv4 address and one IPv6 address. See
+[Known limitations](/public-cloud/dns/records#known-limitations).
 
 ### SRV or LOC Record Fails
 
-`SRV` and `LOC` records are not available yet. The other types (`A`, `AAAA`, `CNAME`, `MX`, `TXT`,
-`CAA`, `NS`) work.
+`SRV` and `LOC` records are not available yet, and both fail with the message
+`DNS operation failed. Please try again or contact support.` The other types (`A`, `AAAA`, `CNAME`,
+`MX`, `TXT`, `CAA`, `NS`) work. See
+[Known limitations](/public-cloud/dns/records#known-limitations).
 
 ### NXDOMAIN Versus No Answer
 

@@ -58,16 +58,12 @@ dig MX example.com +short
 # 10 mail.example.com.
 ```
 
-## Multiple Mail Servers
+## One Mail Server per Name
 
-Add several `MX` records with different priorities for a primary and a backup:
-
-```bash
-zcp dns record-create --domain examplecom --name @ --type MX --content mail1.example.com. --priority 10
-zcp dns record-create --domain examplecom --name @ --type MX --content mail2.example.com. --priority 20
-```
-
-Mail delivers to `mail1` first, then falls back to `mail2` if the primary is unreachable.
+A name and type hold one value, so the apex holds one `MX` record. Creating a second `MX` record at
+`@` replaces the first, with no warning. Open a
+[support ticket](/troubleshooting#raise-a-support-ticket) if you need a primary and a backup mail
+server on the same name. See [Known limitations](/public-cloud/dns/records#known-limitations).
 
 ## Notes
 

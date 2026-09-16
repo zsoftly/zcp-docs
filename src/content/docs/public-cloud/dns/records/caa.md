@@ -26,7 +26,6 @@ Console (zone-file view):
 
 ```text
 @ CAA 0 issue "letsencrypt.org"    14400
-@ CAA 0 iodef "mailto:security@example.com" 14400
 ```
 
 CLI (wrap the value so the quotes reach the record):
@@ -45,12 +44,20 @@ dig CAA example.com +short
 # 0 issue "letsencrypt.org"
 ```
 
+## One CAA Value per Name
+
+A name and type hold one value, so the apex holds one `CAA` record. A second `CAA` record at `@`
+replaces the first, with no warning. You cannot list a second certificate authority, and you cannot
+publish an `issue` value and an `iodef` value at the same name. See
+[Known limitations](/public-cloud/dns/records#known-limitations).
+
 ## Notes
 
 - **`issue`** allows a CA to issue non-wildcard certificates. **`issuewild`** covers wildcard
   certificates. **`iodef`** sets a contact for policy-violation reports.
-- **Allow every CA you use.** If you get certificates from more than one CA, add an `issue` record
-  for each. Unlisted certificate authorities must refuse issuance.
+- **Pick the one value you need.** Unlisted certificate authorities must refuse issuance, so an
+  `issue` value for a single CA blocks every other CA. Do not publish a `CAA` record if you get
+  certificates from more than one CA.
 - **No CAA record means no restriction.** Without a `CAA` record, no policy restricts certificate
   issuance.
 

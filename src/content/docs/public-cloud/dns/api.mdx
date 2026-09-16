@@ -209,7 +209,9 @@ func main() {
 </TabItem>
 </Tabs>
 
-The API groups records by name and type. A record set holds one or more values under `contents`:
+The API groups records by name and type and returns the values under `contents`. A name and type
+hold one value, so `contents` carries a single entry for the records you create. See
+[Known limitations](/public-cloud/dns/records#known-limitations).
 
 ```json
 {

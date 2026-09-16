@@ -13,7 +13,7 @@ Gérez les enregistrements DNS avec l'API REST. Chaque requête emploie l'URL de
 
 :::note
 
-Créez d'abord la zone dans le [portail](/fr/public-cloud/dns/domains) ou avec le CLI
+Créez d'abord la zone dans le [portail](/fr/public-cloud/dns/domains) ou avec la CLI
 (`zcp dns create`). Gérez ensuite ses enregistrements avec les appels ci-dessous. Chaque zone
 possède un **slug** employé par tous les appels d'enregistrement. Obtenez-le avec `zcp dns list` ou
 l'appel de liste ci-dessous.
@@ -211,8 +211,10 @@ func main() {
 </TabItem>
 </Tabs>
 
-L'API regroupe les enregistrements par nom et par type. Un ensemble d'enregistrements contient une
-ou plusieurs valeurs sous `contents` :
+L'API regroupe les enregistrements par nom et par type, et renvoie les valeurs sous `contents`. Un
+nom et un type contiennent une seule valeur, donc `contents` porte une seule entrée pour les
+enregistrements que vous créez. Voir
+[Limites connues](/fr/public-cloud/dns/records#limites-connues).
 
 ```json
 {
@@ -455,6 +457,6 @@ L'interface Swagger fournit la référence interactive complète :
 Voir aussi : [Vue d'ensemble du DNS](/fr/public-cloud/dns/overview),
 [Domaines](/fr/public-cloud/dns/domains), [Enregistrements DNS](/fr/public-cloud/dns/records),
 [Exemples pratiques](/fr/public-cloud/dns/examples),
-[Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli),
+[Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli),
 [Dépannage](/fr/public-cloud/dns/troubleshooting),
 [Démarrage rapide de l'API](/fr/public-cloud/api/quickstart/)
