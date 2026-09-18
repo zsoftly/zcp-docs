@@ -260,6 +260,10 @@ export default defineConfig({
               slug: 'tutorials/build-private-network-headscale',
             },
             {
+              label: 'Deploy Private Storage (CLI)',
+              slug: 'tutorials/deploy-private-shared-storage',
+            },
+            {
               label: 'Configure Email Authentication DNS',
               slug: 'tutorials/configure-email-authentication-dns',
             },
