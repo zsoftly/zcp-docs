@@ -90,6 +90,17 @@ You learn how to:
 - Deploy a self-hosted Headscale and Headplane server from the Marketplace
 - Enroll a subnet router and connect your own device to the mesh
 
+### [Deploy Private Shared Storage](/tutorials/deploy-private-shared-storage)
+
+Deploy an NFS file share on a VM inside the private tier from Build a Private Network with
+Headscale, reachable only through the mesh and never exposed publicly. About 20 minutes.
+
+You learn how to:
+
+- Deploy a VM with a separate data disk inside an existing private tier
+- Format and mount the data disk, then export it over NFS to the tier and mesh
+- Verify the share from a mesh client, then confirm it is unreachable from anywhere else
+
 ### [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
 
 Deploy a Vaultwarden password manager with Terraform or OpenTofu, then back its database up to ZCP
