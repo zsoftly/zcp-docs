@@ -10,6 +10,11 @@ an application based on the systems you need to monitor or the workflows you nee
 
 - [Grafana](/public-cloud/marketplace/grafana)
 - [n8n](/public-cloud/marketplace/n8n)
+- [Prometheus](/public-cloud/marketplace/prometheus)
+- [Zabbix](/public-cloud/marketplace/zabbix)
+- [Uptime Kuma](/public-cloud/marketplace/uptime-kuma)
+- [Beszel](/public-cloud/marketplace/beszel)
+- [Gatus](/public-cloud/marketplace/gatus)
 
 Review each application page for included software, configuration, and access instructions before
 deployment.

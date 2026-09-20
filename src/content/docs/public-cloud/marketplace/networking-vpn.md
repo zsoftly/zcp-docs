@@ -10,6 +10,10 @@ Choose an application based on your access and network-management requirements.
 
 - [Tailscale](/public-cloud/marketplace/tailscale)
 - [NetBird](/public-cloud/marketplace/netbird)
+- [Headplane](/public-cloud/marketplace/headplane)
+- [OPNsense](/public-cloud/marketplace/opnsense)
+- [Technitium DNS Server](/public-cloud/marketplace/technitium-dns-server)
+- [WG-Easy](/public-cloud/marketplace/wg-easy)
 
 Review each application page for included software, configuration, and access instructions before
 deployment.

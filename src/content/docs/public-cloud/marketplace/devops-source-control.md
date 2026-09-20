@@ -8,6 +8,12 @@ DevOps and source control applications support code collaboration and delivery w
 ## Available applications
 
 - [GitLab CE 19.1](/public-cloud/marketplace/gitlab)
+- [Jenkins](/public-cloud/marketplace/jenkins)
+- [Forgejo](/public-cloud/marketplace/forgejo)
+- [Nexus](/public-cloud/marketplace/nexus)
+- [Artifactory](/public-cloud/marketplace/artifactory)
+- [Harbor](/public-cloud/marketplace/harbor)
+- [Gitea](/public-cloud/marketplace/gitea)
 
-Review the application page for included software, configuration, and access instructions before
+Review each application page for included software, configuration, and access instructions before
 deployment.

@@ -9,6 +9,8 @@ configuration.
 ## Available applications
 
 - [cPanel](/public-cloud/marketplace/cpanel)
+- [Pterodactyl](/public-cloud/marketplace/pterodactyl)
+- [Pelican Panel](/public-cloud/marketplace/pelican-panel)
 
-Review the application page for included software, configuration, and access instructions before
+Review each application page for included software, configuration, and access instructions before
 deployment.
