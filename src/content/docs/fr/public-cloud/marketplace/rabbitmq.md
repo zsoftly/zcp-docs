@@ -16,13 +16,14 @@ HTTP pour surveiller les files d'attente, les échanges et les connexions.
 
 ## Variables d'environnement
 
-Définissez-les facultativement lors du déploiement depuis la marketplace. Laissez un champ vide pour
-qu'une valeur sécurisée soit générée.
+Définissez-les facultativement lors du déploiement depuis la marketplace. Si vous laissez
+`RABBITMQ_ADMIN_USER` vide, sa valeur par défaut est `admin`. Laissez `RABBITMQ_ADMIN_PASSWORD` vide
+pour générer un mot de passe sécurisé.
 
-| Variable                | Description                                                                                                                                                                                                                        |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RABBITMQ_DEFAULT_USER` | Nom d'utilisateur administrateur. Ne peut pas être `guest` ; au premier démarrage, l'image supprime l'utilisateur `guest` par défaut et crée cet administrateur afin qu'un administrateur configuré et utilisable reste disponible |
-| `RABBITMQ_DEFAULT_PASS` | Mot de passe de l'utilisateur RabbitMQ par défaut                                                                                                                                                                                  |
+| Variable                  | Description                                                                                                                                                                                                                                                                             |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RABBITMQ_ADMIN_USER`     | Nom d'utilisateur administrateur. La valeur par défaut est `admin` lorsqu'il est omis. Ne peut pas être `guest` ; au premier démarrage, l'image supprime l'utilisateur `guest` par défaut et crée cet administrateur afin qu'un administrateur configuré et utilisable reste disponible |
+| `RABBITMQ_ADMIN_PASSWORD` | Mot de passe de l'administrateur RabbitMQ. Généré de manière sécurisée lorsqu'il est omis                                                                                                                                                                                               |
 
 ## Démarrage
 
@@ -61,8 +62,8 @@ sudo cat /etc/rabbitmq/credentials.txt
 
 | Champ             | Valeur                                                                                  |
 | ----------------- | --------------------------------------------------------------------------------------- |
-| Nom d'utilisateur | Valeur de `RABBITMQ_DEFAULT_USER`, ou générée de manière sécurisée au premier démarrage |
-| Mot de passe      | Valeur de `RABBITMQ_DEFAULT_PASS`, ou générée de manière sécurisée au premier démarrage |
+| Nom d'utilisateur | Valeur de `RABBITMQ_ADMIN_USER`, ou `admin` lorsqu'il est omis                          |
+| Mot de passe      | Valeur de `RABBITMQ_ADMIN_PASSWORD`, ou générée de manière sécurisée lorsqu'il est omis |
 | Hôte virtuel      | `/`                                                                                     |
 
 ### 4. Accéder à RabbitMQ
