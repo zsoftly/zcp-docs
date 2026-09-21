@@ -87,23 +87,34 @@ rotation, afin d'éviter l'épuisement de l'espace disque.
 
 ## Sécurité
 
-Aucun port d'application n'est ouvert par défaut. UFW est activé et n'autorise que SSH (port 22).
+UFW n'est pas activé par défaut dans l'image Marketplace actuelle.
 
-Lorsque vous publiez des ports de conteneur avec `-p` ou `ports:` dans Compose, Docker gère ses
-propres règles iptables. Ces règles contournent UFW; un port publié (par exemple `-p 80:80`) est
-donc accessible depuis l'extérieur, quelle que soit votre configuration UFW.
-
-**Pour limiter un port publié à une adresse IP précise**, liez-le explicitement:
+Le [pare-feu ZCP](/fr/public-cloud/compute/settings/firewall/) et les règles de
+[redirection de ports](/fr/public-cloud/compute/settings/port-forwarding/) restent une composante du
+contrôle de l'exposition. Avant d'exposer des ports d'application, activez et configurez UFW ou un
+autre pare-feu hôte. Pour utiliser UFW, autorisez SSH avant de l'activer :
 
 ```bash
-docker run -p <trusted-ip>:80:80 <image>
+sudo ufw allow 22/tcp
+sudo ufw enable
+sudo ufw status
+```
+
+Lorsque vous publiez des ports de conteneur avec `-p` ou `ports:` dans Compose, Docker gère ses
+propres règles iptables. Ces règles peuvent contourner UFW, alors ne vous fiez pas uniquement à UFW
+pour limiter un port publié.
+
+**Pour rendre un port publié accessible uniquement sur la VM**, liez-le à l'interface de bouclage :
+
+```bash
+docker run -p 127.0.0.1:80:80 <image>
 ```
 
 Ou dans `docker-compose.yml`:
 
 ```yaml
 ports:
-  - '<trusted-ip>:80:80'
+  - '127.0.0.1:80:80'
 ```
 
 ## Prochaines étapes

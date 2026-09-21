@@ -84,23 +84,33 @@ exhaustion.
 
 ## Security
 
-No application ports are open by default. UFW is enabled and allows SSH (port 22) only.
+UFW is not enabled by default in the current marketplace image.
 
-When you publish container ports with `-p` or `ports:` in Compose, Docker manages its own iptables
-rules. These rules bypass UFW, so a published port (e.g. `-p 80:80`) is accessible externally
-regardless of your UFW configuration.
-
-**To restrict a published port to a specific IP**, bind it explicitly:
+The [ZCP firewall](/public-cloud/compute/settings/firewall/) and
+[port-forwarding](/public-cloud/compute/settings/port-forwarding/) rules remain part of exposure
+control. Before you expose application ports, enable and configure UFW or another host firewall. To
+use UFW, allow SSH before you enable it:
 
 ```bash
-docker run -p <trusted-ip>:80:80 <image>
+sudo ufw allow 22/tcp
+sudo ufw enable
+sudo ufw status
+```
+
+When you publish container ports with `-p` or `ports:` in Compose, Docker manages its own iptables
+rules. These rules can bypass UFW, so do not rely on UFW alone to restrict a published port.
+
+**To make a published port available only on the VM**, bind it to the loopback interface:
+
+```bash
+docker run -p 127.0.0.1:80:80 <image>
 ```
 
 Or in `docker-compose.yml`:
 
 ```yaml
 ports:
-  - '<trusted-ip>:80:80'
+  - '127.0.0.1:80:80'
 ```
 
 ## Next steps

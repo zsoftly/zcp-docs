@@ -16,13 +16,13 @@ connections.
 
 ## Environment variables
 
-Set these optionally when you deploy from the marketplace. Leave a field blank to have a secure
-value generated.
+Set these optionally when you deploy from the marketplace. If you leave `RABBITMQ_ADMIN_USER` blank,
+it defaults to `admin`. Leave `RABBITMQ_ADMIN_PASSWORD` blank to generate a secure password.
 
-| Variable                | Description                                                                                                                                                                      |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RABBITMQ_DEFAULT_USER` | Administrator username. Cannot be `guest`; on first boot, the image removes the default `guest` user and creates this administrator so a usable configured administrator remains |
-| `RABBITMQ_DEFAULT_PASS` | RabbitMQ default user password                                                                                                                                                   |
+| Variable                  | Description                                                                                                                                                                                                        |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `RABBITMQ_ADMIN_USER`     | Administrator username. Defaults to `admin` when omitted. Cannot be `guest`; on first boot, the image removes the default `guest` user and creates this administrator so a usable configured administrator remains |
+| `RABBITMQ_ADMIN_PASSWORD` | RabbitMQ administrator password. Generated securely when omitted                                                                                                                                                   |
 
 ## Getting started
 
@@ -56,11 +56,11 @@ The generated credentials and connection details are stored in a root-only file:
 sudo cat /etc/rabbitmq/credentials.txt
 ```
 
-| Field        | Value                                                                 |
-| ------------ | --------------------------------------------------------------------- |
-| Username     | Value of `RABBITMQ_DEFAULT_USER`, or generated securely on first boot |
-| Password     | Value of `RABBITMQ_DEFAULT_PASS`, or generated securely on first boot |
-| Virtual host | `/`                                                                   |
+| Field        | Value                                                                  |
+| ------------ | ---------------------------------------------------------------------- |
+| Username     | Value of `RABBITMQ_ADMIN_USER`, or `admin` when omitted                |
+| Password     | Value of `RABBITMQ_ADMIN_PASSWORD`, or generated securely when omitted |
+| Virtual host | `/`                                                                    |
 
 ### 4. Access RabbitMQ
 
