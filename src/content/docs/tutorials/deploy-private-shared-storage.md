@@ -2,14 +2,14 @@
 title: 'Deploy Private Shared Storage on ZCP'
 description:
   Deploy an NFS file share inside your private tier from Build a Private Network with Headscale,
-  reachable only through the mesh and never exposed publicly, with the zcp CLI.
+  reachable only from the tier and the mesh, never exposed publicly, with the zcp CLI.
 sidebar:
   label: 'Deploy Private Storage (CLI)'
 ---
 
 This tutorial deploys an NFS file share on a VM inside the private tier from
-[Build a Private Network with Headscale](/tutorials/build-private-network-headscale), reachable only
-from the mesh network that tutorial built, never exposed publicly.
+[Build a Private Network with Headscale](/tutorials/build-private-network-headscale), reachable from
+the tier and the mesh network that tutorial built, never exposed publicly.
 
 By the end you have:
 
@@ -131,9 +131,11 @@ own CIDR, and `100.64.0.0/10`, Headscale's mesh address range (the same constant
 A VM physically on the tier connects with a tier-address source. Tailscale's subnet router SNATs
 forwarded traffic by default, so an employee connecting over Tailscale from anywhere else also
 arrives with a tier-address source today, not their real mesh-range address (`100.64.0.0/10`). The
-mesh CIDR export covers the alternative: if that default ever changes (a subnet router started with
-`--snat-subnet-routes=false`), the same connection arrives with its original mesh-range source
-instead. Exporting to only the tier CIDR would break the moment that flag changes.
+mesh CIDR export exists for the alternative case (a subnet router started with
+`--snat-subnet-routes=false`), but that flag isn't a supported configuration on its own: without
+SNAT, this VM also needs its own route back to `100.64.0.0/10`, which nothing here sets up, so that
+combination would still hang rather than work. Don't disable SNAT on the subnet router unless you've
+solved that separately.
 
 :::
 
@@ -243,6 +245,16 @@ bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destr
 It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. Pass
 `--region`/`--project` explicitly if you didn't export them. The script hard-errors without one or
 the other.
+
+:::note
+
+The `zcp` CLI has no way to check that a volume actually belongs to a given VM, so the deploy script
+records the exact resources it created to `~/.zcp-private-storage-state/` on the machine you ran it
+from. Run the teardown from that same machine and it resolves the volume from that record instead of
+a name guess. From a different machine, or after that file is gone, it falls back to matching by
+name and warns you it's doing so.
+
+:::
 
 :::caution
 
