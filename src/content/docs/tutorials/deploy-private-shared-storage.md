@@ -254,11 +254,14 @@ The `zcp` CLI has no way to check whether a volume belongs to a given VM, so the
 records the exact resources it created to `~/.zcp-private-storage-state/` on the machine you ran it
 from, keyed by `--name`, `--region`, and `--project` together. Run the teardown from that same
 machine, with the same `--region`/`--project`, and it resolves the volume from that record instead
-of a name guess. From a different machine, after a region or project change, or once that record is
-gone (the teardown deletes its own record after a fully successful run), it falls back to matching
-by name and warns you it's doing so. The record itself is written once the disk-setup checks in Step
-2 pass, not as soon as the VM and volume exist, so a deploy that fails before then leaves nothing to
-record.
+of a name guess. The record itself is written once the disk-setup checks in Step 2 pass, not as soon
+as the VM and volume exist, so a deploy that fails before then leaves nothing to record.
+
+From a different machine, after a region or project change, or once that record is gone (the
+teardown deletes its own record after a fully successful run), the volume is left alone rather than
+deleted on a bare name match: the VM still gets deleted, but the script exits non-zero and tells you
+to pass `--allow-unverified-volume-delete` if you've checked `zcp volume list` yourself and want it
+deleted anyway.
 
 :::
 
