@@ -19,13 +19,6 @@ By the end you have:
 
 Plan for about 20 minutes.
 
-:::note
-
-As in the previous tutorial, the slugs in this tutorial are examples from one account. Yours will
-differ. Every step shows the `list` command that prints the right value for your account.
-
-:::
-
 ## Before you start
 
 - [Build a Private Network with Headscale](/tutorials/build-private-network-headscale) complete: a
@@ -86,7 +79,8 @@ any flag explicitly to pin a specific value instead. Run the script with `--help
 
 ### The storage VM
 
-**A public IP is allocated deliberately, then locked down to nothing but SSH.**
+**A VM (`my-storage`, named from the `--name` prefix you pass) gets a public IP allocated
+deliberately, then locked down to nothing but SSH.**
 
 A VM with no public network footprint sounds like the most private option. But it creates a real
 problem: there's no way to reach it, not even for the one-time setup that brings the tier network
@@ -115,12 +109,13 @@ The platform hot-adds the tier's network interface, but the operating system doe
 automatically. The script writes a netplan file for it and applies it, identical to how
 `build-private-network.sh` handles the subnet router's tier NIC.
 
-The script identifies the data disk as "the whole disk that isn't the root disk", rather than
-assuming a fixed device name. Device naming can vary by platform, and a script that guesses wrong on
-this step risks formatting the wrong disk. Formatting is idempotent: if the disk is already
-formatted (a rerun), the script skips `mkfs` rather than reformatting and destroying data. The share
-directory is created **after** mounting, not before. A directory created before the mount lands on
-the root disk. The moment the data disk is mounted on top of it, that directory gets hidden.
+The data disk is the volume (`my-storage-data`) created alongside the VM. The script identifies it
+as "the whole disk that isn't the root disk", rather than assuming a fixed device name. Device
+naming can vary by platform, and a script that guesses wrong on this step risks formatting the wrong
+disk. Formatting is idempotent: if the disk is already formatted (a rerun), the script skips `mkfs`
+rather than reformatting and destroying data. The share directory is created **after** mounting, not
+before. A directory created before the mount lands on the root disk. The moment the data disk is
+mounted on top of it, that directory gets hidden.
 
 ### NFS export
 
@@ -199,6 +194,13 @@ cat /mnt/company-share/test.txt
 `<storage-vm-tier-ip>` is printed in the script's final summary. `company-share` is the default
 `--share-name`. Use your own value if you passed something different.
 
+:::note
+
+The `apt-get` command above assumes a Debian/Ubuntu client. Use your own OS's NFS client package and
+mount tooling if you're on something else.
+
+:::
+
 :::caution
 
 If this hangs instead of failing cleanly, check `tailscale status` on both the client and the subnet
@@ -217,12 +219,13 @@ nc -zv -w 3 <storage-vm-public-ip> 2049
 ```
 
 This fails (connection refused or timeout). The storage VM's public IP has SSH open and nothing
-else. NFS is reachable exclusively through the private tier.
+else. NFS is reachable only through the private tier.
 
 :::note
 
-`nc` (`sudo apt-get install -y netcat-openbsd` if you don't have it) works the same way in any
-shell. `/dev/tcp/<host>/<port>` is a bash-only feature and errors outright in shells like zsh.
+`nc` (`sudo apt-get install -y netcat-openbsd` or `brew install netcat` if you don't have it) works
+the same way in any shell. `/dev/tcp/<host>/<port>` is a bash-only feature and errors outright in
+shells like zsh.
 
 :::
 
@@ -234,11 +237,11 @@ tutorial.
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-private-storage.sh) \
-  --name my-storage --region yul-1 --project default-9
+  --name my-storage
 ```
 
 It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. Pass
-`--region`/`--project` explicitly if you didn't export them, the script hard-errors without one or
+`--region`/`--project` explicitly if you didn't export them. The script hard-errors without one or
 the other.
 
 :::caution
@@ -257,8 +260,8 @@ detects and reports a leftover the same way `destroy-private-network.sh` does. C
 one appears, remove it from the CMP web portal (search by the network ID it prints). A confirmed
 leftover makes the script exit non-zero, so check `$?` after running it. A delete that was issued
 but never confirmed (a `[WARN]` line, not necessarily a leftover network) also exits non-zero for
-the same reason: don't assume a non-zero exit always means a leftover network specifically, check
-the `[WARN]` lines above it too.
+the same reason. Don't assume a non-zero exit always means a leftover network. Check the `[WARN]`
+lines above it too.
 
 :::
 
