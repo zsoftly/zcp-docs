@@ -2,20 +2,21 @@
 title: 'Deploy Private Shared Storage on ZCP'
 description:
   Deploy an NFS file share inside your private tier from Build a Private Network with Headscale,
-  reachable only from the tier and the mesh, never exposed publicly, with the zcp CLI.
+  using the zcp CLI. The share is reachable only from the tier and the mesh, never exposed publicly.
 sidebar:
   label: 'Deploy Private Storage (CLI)'
 ---
 
 This tutorial deploys an NFS file share on a VM inside the private tier from
-[Build a Private Network with Headscale](/tutorials/build-private-network-headscale), reachable from
-the tier and the mesh network that tutorial built, never exposed publicly.
+[Build a Private Network with Headscale](/tutorials/build-private-network-headscale). The share is
+reachable from the tier and the mesh network that tutorial built, and never exposed publicly.
 
 By the end you have:
 
 - A VM inside your existing private tier, with a separate data disk for storage
 - An NFS share exported to the tier and the mesh, never on the public side
-- Confirmation that the share works from a mesh client and is unreachable from anywhere else
+- Confirmation that the share works from a mesh client and that its public IP has nothing but SSH
+  reachable on it
 
 Plan for about 20 minutes.
 
@@ -79,8 +80,8 @@ any flag explicitly to pin a specific value instead. Run the script with `--help
 
 ### The storage VM
 
-**A VM (`my-storage`, named from the `--name` prefix you pass) gets a public IP allocated
-deliberately, then locked down to nothing but SSH.**
+**The script deliberately allocates a public IP to the VM (`my-storage`, named from the `--name`
+prefix you pass), then locks it down to nothing but SSH.**
 
 A VM with no public network footprint sounds like the most private option. But it creates a real
 problem: there's no way to reach it, not even for the one-time setup that brings the tier network
@@ -113,14 +114,14 @@ The data disk is the volume (`my-storage-data`) created alongside the VM. The sc
 as "the whole disk that isn't the root disk", rather than assuming a fixed device name. Device
 naming can vary by platform, and a script that guesses wrong on this step risks formatting the wrong
 disk. Formatting is idempotent: if the disk is already formatted (a rerun), the script skips `mkfs`
-rather than reformatting and destroying data. The share directory is created **after** mounting, not
-before. A directory created before the mount lands on the root disk. The moment the data disk is
-mounted on top of it, that directory gets hidden.
+rather than reformatting and destroying data. The script creates the share directory **after**
+mounting, not before. A directory created before the mount lands on the root disk. The moment the
+data disk is mounted on top of it, that directory gets hidden.
 
 ### NFS export
 
-**Exported to both the tier CIDR and the mesh CIDR, so it survives a change to the subnet router's
-SNAT setting.**
+**Exported to both the tier CIDR and the mesh CIDR: the server accepts either source address, even
+though only one of them is actually reachable with today's default configuration.**
 
 The script installs `nfs-kernel-server` and exports the share directory to two ranges: the tier's
 own CIDR, and `100.64.0.0/10`, Headscale's mesh address range (the same constant
@@ -131,11 +132,11 @@ own CIDR, and `100.64.0.0/10`, Headscale's mesh address range (the same constant
 A VM physically on the tier connects with a tier-address source. Tailscale's subnet router SNATs
 forwarded traffic by default, so an employee connecting over Tailscale from anywhere else also
 arrives with a tier-address source today, not their real mesh-range address (`100.64.0.0/10`). The
-mesh CIDR export exists for the alternative case (a subnet router started with
-`--snat-subnet-routes=false`), but that flag isn't a supported configuration on its own: without
-SNAT, this VM also needs its own route back to `100.64.0.0/10`, which nothing here sets up, so that
-combination would still hang rather than work. Don't disable SNAT on the subnet router unless you've
-solved that separately.
+mesh CIDR export exists for the alternative case: a subnet router started with
+`--snat-subnet-routes=false`. That flag alone isn't a supported configuration. Without SNAT, this VM
+also needs its own route back to `100.64.0.0/10`, and nothing here sets that up, so the combination
+would still hang rather than work. Don't disable SNAT on the subnet router unless you've solved that
+separately.
 
 :::
 
@@ -148,9 +149,10 @@ root-equivalent access to the share.
 
 :::note
 
-The share directory itself is `chmod 1777`. Every mesh client can read and write anything on it. The
-sticky bit stops one user from deleting another's files, but there's no other per-user permission
-model. Treat the share as a trusted, team-wide area, not one with individual access control.
+The share directory itself is `chmod 1777`. Every client on the tier or the mesh can read and write
+anything on it. The sticky bit stops one user from deleting another's files, but there's no other
+per-user permission model. Treat the share as a trusted, team-wide area, not one with individual
+access control.
 
 :::
 
@@ -216,18 +218,18 @@ previous tutorial.
 ## Verify isolation
 
 ```bash
-# from anywhere outside the mesh:
+# from the public internet:
 nc -zv -w 3 <storage-vm-public-ip> 2049
 ```
 
 This fails (connection refused or timeout). The storage VM's public IP has SSH open and nothing
-else. NFS is reachable only through the private tier.
+else. NFS is reachable only from inside the tier or over the mesh, never from the public internet.
 
 :::note
 
-`nc` (`sudo apt-get install -y netcat-openbsd` or `brew install netcat` if you don't have it) works
-the same way in any shell. `/dev/tcp/<host>/<port>` is a bash-only feature and errors outright in
-shells like zsh.
+`nc` (`sudo apt-get install -y netcat-openbsd` on Debian/Ubuntu if you don't have it; macOS ships
+its own `nc` already) works the same way in any shell. `/dev/tcp/<host>/<port>` is a bash-only
+feature and errors outright in shells like zsh.
 
 :::
 
@@ -248,11 +250,15 @@ the other.
 
 :::note
 
-The `zcp` CLI has no way to check that a volume actually belongs to a given VM, so the deploy script
+The `zcp` CLI has no way to check whether a volume belongs to a given VM, so the deploy script
 records the exact resources it created to `~/.zcp-private-storage-state/` on the machine you ran it
-from. Run the teardown from that same machine and it resolves the volume from that record instead of
-a name guess. From a different machine, or after that file is gone, it falls back to matching by
-name and warns you it's doing so.
+from, keyed by `--name`, `--region`, and `--project` together. Run the teardown from that same
+machine, with the same `--region`/`--project`, and it resolves the volume from that record instead
+of a name guess. From a different machine, after a region or project change, or once that record is
+gone (the teardown deletes its own record after a fully successful run), it falls back to matching
+by name and warns you it's doing so. The record itself is written once the disk-setup checks in Step
+2 pass, not as soon as the VM and volume exist, so a deploy that fails before then leaves nothing to
+record.
 
 :::
 
@@ -270,7 +276,7 @@ Like every VM in this series deployed with its own public IP, the storage VM als
 standalone network and pinned source-NAT IP. `instance delete` won't remove either one. The script
 detects and reports a leftover the same way `destroy-private-network.sh` does. Check its output. If
 one appears, remove it from the CMP web portal (search by the network ID it prints). A confirmed
-leftover makes the script exit non-zero, so check `$?` after running it. A delete that was issued
+leftover makes the script exit non-zero, so check `$?` after running it. A delete the script issued
 but never confirmed (a `[WARN]` line, not necessarily a leftover network) also exits non-zero for
 the same reason. Don't assume a non-zero exit always means a leftover network. Check the `[WARN]`
 lines above it too.

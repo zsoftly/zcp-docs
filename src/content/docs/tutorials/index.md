@@ -93,13 +93,14 @@ You learn how to:
 ### [Deploy Private Shared Storage](/tutorials/deploy-private-shared-storage)
 
 Deploy an NFS file share on a VM inside the private tier from Build a Private Network with
-Headscale, reachable only through the mesh and never exposed publicly. About 20 minutes.
+Headscale, reachable only from the tier and the mesh, never exposed publicly. About 20 minutes.
 
 You learn how to:
 
 - Deploy a VM with a separate data disk inside an existing private tier
 - Format and mount the data disk, then export it over NFS to the tier and mesh
-- Verify the share from a mesh client, then confirm it is unreachable from anywhere else
+- Verify the share from a mesh client, then confirm its public IP has nothing but SSH reachable on
+  it
 
 ### [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
 

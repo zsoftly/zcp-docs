@@ -567,6 +567,6 @@ Remove the flagged network from the CMP web portal (search by the network ID the
 ## Next steps
 
 - [Deploy Private Shared Storage](/tutorials/deploy-private-shared-storage): an NFS share inside the
-  tier you just built, reachable only through the mesh
+  tier you just built, reachable from the tier and the mesh
 - [CLI reference](/public-cloud/cli/reference): every command and flag
 - [Tutorials overview](/tutorials): the full list of available tutorials
