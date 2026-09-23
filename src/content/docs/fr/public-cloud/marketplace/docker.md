@@ -87,7 +87,7 @@ rotation, afin d'éviter l'épuisement de l'espace disque.
 
 ## Sécurité
 
-UFW n'est pas activé par défaut dans l'image Marketplace actuelle.
+UFW n'est pas activé par défaut dans l'image Docker de la Marketplace.
 
 Le [pare-feu ZCP](/fr/public-cloud/compute/settings/firewall/) et les règles de
 [redirection de ports](/fr/public-cloud/compute/settings/port-forwarding/) restent une composante du
