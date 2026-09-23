@@ -263,6 +263,15 @@ deleted on a bare name match: the VM still gets deleted, but the script exits no
 to pass `--allow-unverified-volume-delete` if you've checked `zcp volume list` yourself and want it
 deleted anyway.
 
+This record confirms which volume the deploy run used. It doesn't confirm the volume is still
+attached to that VM at teardown time. The `zcp` CLI can't check current attachment either. If you
+manually reattach this exact volume elsewhere between running the two scripts, the teardown won't
+notice and still deletes it based on the recorded match.
+
+It prints a warning at that point instead of deleting silently. It doesn't stop and ask for
+confirmation, since requiring that on every ordinary teardown, for a case this tutorial never asks
+you to create, would train you to click past it.
+
 :::
 
 :::caution
