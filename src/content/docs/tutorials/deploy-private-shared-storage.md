@@ -241,7 +241,7 @@ tutorial.
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-private-storage.sh) \
-  --name my-storage
+  --name my-storage --allow-unverified-volume-delete
 ```
 
 It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. Pass
@@ -250,27 +250,21 @@ the other.
 
 :::note
 
-The `zcp` CLI has no way to check whether a volume belongs to a given VM, so the deploy script
-records the exact resources it created to `~/.zcp-private-storage-state/` on the machine you ran it
-from, keyed by `--name`, `--region`, and `--project` together. Run the teardown from that same
-machine, with the same `--region`/`--project`, and it resolves the volume from that record instead
-of a name guess. The record itself is written once the disk-setup checks in Step 2 pass, not as soon
-as the VM and volume exist, so a deploy that fails before then leaves nothing to record.
+The `zcp` CLI has no way to check whether a volume belongs to a given VM, or whether it's currently
+attached to anything at all, so the deploy script records the exact resources it created to
+`~/.zcp-private-storage-state/` on the machine you ran it from, keyed by `--name`, `--region`, and
+`--project` together. Run the teardown from that same machine, with the same `--region`/`--project`,
+and it resolves the volume from that record instead of a name guess. The record itself is written
+once the disk-setup checks in Step 2 pass, not as soon as the VM and volume exist, so a deploy that
+fails before then leaves nothing to record.
 
-From a different machine, after a region or project change, or once that record is gone (the
-teardown deletes its own record after a fully successful run), the volume is left alone rather than
-deleted on a bare name match: the VM still gets deleted, but the script exits non-zero and tells you
-to pass `--allow-unverified-volume-delete` if you've checked `zcp volume list` yourself and want it
-deleted anyway.
-
-This record confirms which volume the deploy run used. It doesn't confirm the volume is still
-attached to that VM at teardown time. The `zcp` CLI can't check current attachment either. If you
-manually reattach this exact volume elsewhere between running the two scripts, the teardown won't
-notice and still deletes it based on the recorded match.
-
-It prints a warning at that point instead of deleting silently. It doesn't stop and ask for
-confirmation, since requiring that on every ordinary teardown, for a case this tutorial never asks
-you to create, would train you to click past it.
+The script resolves the volume from that record, or falls back to a bare name match on a different
+machine. Either way, it can tell you which volume it would delete. It cannot confirm the volume is
+still attached to this VM right now. Someone could have manually reattached it elsewhere since
+deploy ran, and this CLI would not show that. Deleting the volume always requires
+`--allow-unverified-volume-delete` in every case, including when the script resolves the volume from
+its own state record. Leave it off and the VM still gets deleted, but the data volume is left alone
+(and still billable) with a non-zero exit and a printed reason.
 
 :::
 
@@ -304,8 +298,8 @@ lines above it too.
    firewall.
 3. Mount the share from a device already connected to the mesh, verify read/write, then confirm the
    storage VM's public IP has nothing but SSH reachable on it.
-4. Run `destroy-private-storage.sh --name <prefix>` when you're done, then check for a leftover
-   network the same way the previous tutorial's teardown does.
+4. Run `destroy-private-storage.sh --name <prefix> --allow-unverified-volume-delete` when you're
+   done, then check for a leftover network the same way the previous tutorial's teardown does.
 
 ## Next steps
 
