@@ -268,6 +268,10 @@ export default defineConfig({
               slug: 'tutorials/deploy-private-shared-storage',
             },
             {
+              label: 'Deploy Employee Desktops (CLI)',
+              slug: 'tutorials/deploy-ubuntu-employee-desktops',
+            },
+            {
               label: 'Configure Email Authentication DNS',
               slug: 'tutorials/configure-email-authentication-dns',
             },

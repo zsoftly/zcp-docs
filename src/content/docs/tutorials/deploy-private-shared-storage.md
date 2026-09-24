@@ -303,9 +303,8 @@ lines above it too.
 
 ## Next steps
 
-The next parts of this series (Ubuntu employee desktops, then connecting them to this share) are
-still in progress. In the meantime:
-
+- [Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops): a full desktop for
+  one employee inside the same tier, connecting them to this share is still in progress
 - [Build a Private Network with Headscale](/tutorials/build-private-network-headscale): the tier and
   mesh this tutorial builds on
 - [CLI reference](/public-cloud/cli/reference): every command and flag
