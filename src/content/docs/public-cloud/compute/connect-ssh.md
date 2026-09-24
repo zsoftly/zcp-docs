@@ -91,8 +91,10 @@ ssh username@ip_address
 Example:
 
 ```bash
-ssh root@192.168.1.1
+ssh ubuntu@203.0.113.10
 ```
+
+Replace `203.0.113.10` with the public IP address from the portal.
 
 ![Connecting to a VM over SSH from a terminal](../../../../assets/compute/connect-ssh-connecting.webp)
 
