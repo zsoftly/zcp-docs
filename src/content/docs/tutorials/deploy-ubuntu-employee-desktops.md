@@ -30,7 +30,7 @@ network interface.
   doesn't depend on the storage tutorial.
 - `ZCP_REGION` and `ZCP_PROJECT` still exported from an earlier tutorial, or re-export them.
 - The same SSH key name from that tutorial's Step 4.
-- `jq`, `ssh`, and `curl` installed. `curl` fetches the script itself below either way; the deploy
+- `jq`, `ssh`, and `curl` installed. `curl` fetches the script itself below either way. The deploy
   script also uses it internally for `ifconfig.me` public-IP detection, unless you pass `--my-ip`
   explicitly. The teardown script further down only needs `jq`, same as the earlier tutorials.
 - An RDP client: the built-in Remote Desktop Connection on Windows, Windows App (formerly Microsoft
@@ -138,7 +138,7 @@ tutorials' scripts use.
 
 :::note
 
-4 vCPU / 16GB is a comfortable baseline for a smooth desktop experience. 4 vCPU/8GB is usable but
+4 vCPU/16GB is a comfortable baseline for a smooth desktop experience. 4 vCPU/8GB is usable but
 noticeably less responsive. If you leave `--vm-plan` out, the script selects the smallest plan
 meeting that 4 vCPU/16GB baseline automatically, and errors if none exists in your account or
 region. Pass `--vm-plan` explicitly to pin a specific one instead.
@@ -181,13 +181,13 @@ account.
 :::caution
 
 Without `--password`, the script generates a strong random alphanumeric password locally and prints
-it before creating the VM, and again in the final summary - if the create call itself reports
-failure but the VM was actually created anyway, the password was already shown before that call ran,
-so it's never lost. Save it then. Passing `--password` explicitly opts out of that generation. The
-value then appears in your shell history or process list. An explicit password must be at least 8
-characters, using only letters, digits, and `!#%+,./:=?@^_-`. The template's first-boot script
-sources the cloud-init file above with shell semantics, so characters outside that set break or run
-as part of that file.
+it before creating the VM, and again in the final summary. If the create call itself reports failure
+but the VM was created anyway, the password was already shown before that call ran, so it's never
+lost. Save it then. Passing `--password` explicitly opts out of that generation. The value then
+appears in your shell history or process list. An explicit password must be at least 8 characters,
+using only letters, digits, and `!#%+,./:=?@^_-`. The template's first-boot script sources the
+cloud-init file above with shell semantics, so characters outside that set break or run as part of
+that file.
 
 :::
 
@@ -231,7 +231,7 @@ The script first polls for SSH itself to come up, for up to 3 minutes by default
 before trying anything else. First-boot KDE provisioning (installing and configuring the desktop,
 xrdp, and creating the employee's login) often continues for several minutes after SSH becomes
 reachable. The script then waits for the username to exist with a human UID (1000 or higher), for up
-to 30 minutes by default (`--cloud-init-wait`), rather than erroring on a deploy that's simply still
+to 30 minutes by default (`--cloud-init-wait`), rather than erroring on a deploy that's still
 finishing.
 
 If either wait times out, the script errors rather than hanging indefinitely, and raising the
@@ -255,9 +255,9 @@ zcp ip list
 
 ## Give this desktop a unique identity on shared storage
 
-Only relevant if you plan to also mount private shared storage on this desktop, and it's a manual,
-SSH-based step you do yourself, not something the deploy script automates. It's cross-referenced
-from the script's own final summary. Do it now, before the employee's first login: it's the only
+This step matters only if you plan to also mount private shared storage on this desktop. It's a
+manual, SSH-based step you do yourself, not something the deploy script automates, and the script's
+own final summary points back to it. Do it now, before the employee's first login: it's the only
 point where it's cheap and safe to act on.
 
 NFS, if you use it, does raw UID-number mapping, not username mapping. `useradd`, used by the
@@ -426,7 +426,7 @@ the `[WARN]` lines above it too.
 
 ## Next steps
 
-The next part of this series (connecting these desktops to private shared storage, and making the
+The next part of this series (connecting these desktops to private shared storage and making the
 setup operational for a team) is still in progress. In the meantime:
 
 - [Build a Private Network with Headscale](/tutorials/build-private-network-headscale): the tier and
