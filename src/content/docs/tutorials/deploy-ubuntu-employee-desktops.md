@@ -30,9 +30,9 @@ network interface.
   doesn't depend on the storage tutorial.
 - `ZCP_REGION` and `ZCP_PROJECT` still exported from an earlier tutorial, or re-export them.
 - The same SSH key name from that tutorial's Step 4.
-- `jq` and `ssh` installed, plus `curl` if you don't pass `--my-ip` explicitly (the deploy script
-  uses it for `ifconfig.me` public-IP detection). The teardown script further down only needs `jq`,
-  same as the earlier tutorials.
+- `jq`, `ssh`, and `curl` installed. `curl` fetches the script itself below either way; the deploy
+  script also uses it internally for `ifconfig.me` public-IP detection, unless you pass `--my-ip`
+  explicitly. The teardown script further down only needs `jq`, same as the earlier tutorials.
 - An RDP client: the built-in Remote Desktop Connection on Windows, Windows App (formerly Microsoft
   Remote Desktop) from the macOS App Store, or Remmina or FreeRDP on Linux, running on a device
   already connected to the mesh from the previous tutorial. The desktop's tier IP is reachable only
@@ -49,7 +49,7 @@ Linux. On Windows, run it from WSL or Git Bash, same as the earlier tutorials.
 
 Deploying the desktop VM, its cloud-init login, and the tier network interface is one script:
 `zcp/deploy-employee-desktop.sh` from the [zsoftly/tools](https://github.com/zsoftly/tools)
-repository. It runs through the same phases explained in the next section, in order.
+repository. It runs through the phases explained in the next section.
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/deploy-employee-desktop.sh) \
@@ -60,31 +60,31 @@ This tutorial uses `jane-doe-desktop` as `--name`, `janedoe` as `--username`, an
 `my-workspace-tier` as the tier from the previous tutorial's `my-workspace` example. Your own values
 will differ.
 
-Leave `--password` out and the script generates a strong random password locally and prints it once
-in the final summary. Save it then. It isn't shown again on a rerun. Pass `--password` explicitly
-only if you need a specific value.
+Leave `--password` out and the script generates a strong random password locally and prints it
+before creating the VM, and again in the final summary. Save it then. It isn't shown again on a
+rerun. Pass `--password` explicitly only if you need a specific value.
 
 The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them. Pass
 `--region`/`--project` instead if you didn't.
 
-| Flag                 | Purpose                                       | Default / requirement                                         |
-| -------------------- | --------------------------------------------- | ------------------------------------------------------------- |
-| `--name`             | Exact name for the desktop VM                 | Required                                                      |
-| `--tier-name`        | The existing private tier to attach to        | Required                                                      |
-| `--username`         | The desktop login, provisioned via cloud-init | Required                                                      |
-| `--ssh-key`          | Key name, used for the desktop VM             | Required                                                      |
-| `--password`         | The desktop login's password                  | Auto-generated locally and printed once if omitted            |
-| `--region`           | zcp region slug                               | Required (flag or env var)                                    |
-| `--project`          | zcp project slug                              | Required (flag or env var)                                    |
-| `--my-ip`            | Your public IP as a `/32`, scopes SSH access  | Auto-detected via `ifconfig.me`                               |
-| `--vm-template`      | ubuntukde marketplace template slug           | Auto-discovered, must be version 1.0.2 or later               |
-| `--vm-plan`          | Compute plan for the desktop VM               | Auto-selects the smallest plan meeting a 4 vCPU/16GB baseline |
-| `--network-plan`     | Network plan for the VM's public IP           | Auto-discovered                                               |
-| `--storage-category` | Storage category for the VM's root disk       | Auto-discovered                                               |
-| `--billing-cycle`    | `hourly` or `monthly`                         | `hourly`                                                      |
-| `--ssh-wait`         | Seconds to wait for SSH to come up            | `180`                                                         |
-| `--cloud-init-wait`  | Seconds to wait for the desktop user to exist | `1800`                                                        |
-| `-y`/`--yes`         | Skip the confirmation prompt                  | Off                                                           |
+| Flag                 | Purpose                                        | Default / requirement                                                |
+| -------------------- | ---------------------------------------------- | -------------------------------------------------------------------- |
+| `--name`             | Exact name for the desktop VM                  | Required                                                             |
+| `--tier-name`        | The existing private tier to attach to         | Required                                                             |
+| `--username`         | The desktop login, provisioned via cloud-init  | Required                                                             |
+| `--ssh-key`          | Key name, used for the desktop VM              | Required                                                             |
+| `--password`         | The desktop login's password                   | Auto-generated locally, printed before creation and again at the end |
+| `--region`           | zcp region slug                                | Required (flag or env var)                                           |
+| `--project`          | zcp project slug                               | Required (flag or env var)                                           |
+| `--my-ip`            | Your public IP in CIDR form, scopes SSH access | Auto-detected via `ifconfig.me`, appended with `/32`                 |
+| `--vm-template`      | ubuntukde marketplace template slug            | Auto-discovered, must be version 1.0.2 or later                      |
+| `--vm-plan`          | Compute plan for the desktop VM                | Auto-selects the smallest plan meeting a 4 vCPU/16GB baseline        |
+| `--network-plan`     | Network plan for the VM's public IP            | Auto-discovered                                                      |
+| `--storage-category` | Storage category for the VM's root disk        | Auto-discovered                                                      |
+| `--billing-cycle`    | `hourly` or `monthly`                          | `hourly`                                                             |
+| `--ssh-wait`         | Seconds to wait for SSH to come up             | `180`                                                                |
+| `--cloud-init-wait`  | Seconds to wait for the desktop user to exist  | `1800`                                                               |
+| `-y`/`--yes`         | Skip the confirmation prompt                   | Off                                                                  |
 
 `--tier-name` is not auto-discovered, the same as the earlier tutorials' scripts. An account can
 hold more than one private tier from earlier testing, and guessing which one to attach to is a real
@@ -181,18 +181,20 @@ account.
 :::caution
 
 Without `--password`, the script generates a strong random alphanumeric password locally and prints
-it once right after creating the VM, and again in the final summary. Save it then. Passing
-`--password` explicitly opts out of that generation. The value then appears in your shell history or
-process list. An explicit password must be at least 8 characters, using only letters, digits, and
-`!#%+,./:=?@^_-`. The template's first-boot script sources the cloud-init file above with shell
-semantics, so characters outside that set break or run as part of that file.
+it before creating the VM, and again in the final summary - if the create call itself reports
+failure but the VM was actually created anyway, the password was already shown before that call ran,
+so it's never lost. Save it then. Passing `--password` explicitly opts out of that generation. The
+value then appears in your shell history or process list. An explicit password must be at least 8
+characters, using only letters, digits, and `!#%+,./:=?@^_-`. The template's first-boot script
+sources the cloud-init file above with shell semantics, so characters outside that set break or run
+as part of that file.
 
 :::
 
 ### SSH lockdown
 
-**The template's own default SSH firewall rule, open to any address, is found and removed
-automatically. Only your own IP keeps access.**
+**The script automatically finds and removes the template's own default SSH firewall rule, which is
+open to any address. Only your own IP keeps access.**
 
 Marketplace App templates like this one get a default SSH firewall rule at deploy time, open to any
 address (`0.0.0.0/0`, both TCP and UDP port 22), not something you created and not scoped to you.
@@ -201,8 +203,8 @@ rule and confirms nothing on `0.0.0.0/0` remains on port 22, the same lockdown
 `build-private-network.sh` applies to its own VMs.
 
 On a rerun, the script also removes any port-22 rule scoped to a different IP than the current
-run's, with a printed `[WARN]`. If your public IP changed since the last run, that old IP's SSH
-access is revoked in favor of the new one.
+run's, with a printed `[WARN]`. If your public IP changed since the last run, the script revokes
+that old IP's SSH access in favor of the new one.
 
 ### Tier network interface
 
