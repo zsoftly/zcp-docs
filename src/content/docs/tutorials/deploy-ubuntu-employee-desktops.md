@@ -30,13 +30,13 @@ network interface.
   doesn't depend on the storage tutorial.
 - `ZCP_REGION` and `ZCP_PROJECT` still exported from an earlier tutorial, or re-export them.
 - The same SSH key name from that tutorial's Step 4.
-- `jq`, `ssh`, and `curl` installed. The deploy script requires all three (`curl` for its
-  `ifconfig.me` public-IP detection). The teardown script further down only needs `jq`, same as the
-  earlier tutorials.
-- An RDP client: the built-in Remote Desktop Connection on Windows, Microsoft Remote Desktop from
-  the macOS App Store, or Remmina or FreeRDP on Linux, running on a device already connected to the
-  mesh from the previous tutorial. The desktop's tier IP is reachable only from inside the tier or
-  over the mesh.
+- `jq` and `ssh` installed, plus `curl` if you don't pass `--my-ip` explicitly (the deploy script
+  uses it for `ifconfig.me` public-IP detection). The teardown script further down only needs `jq`,
+  same as the earlier tutorials.
+- An RDP client: the built-in Remote Desktop Connection on Windows, Windows App (formerly Microsoft
+  Remote Desktop) from the macOS App Store, or Remmina or FreeRDP on Linux, running on a device
+  already connected to the mesh from the previous tutorial. The desktop's tier IP is reachable only
+  from inside the tier or over the mesh.
 
 :::note
 
@@ -67,31 +67,33 @@ only if you need a specific value.
 The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them. Pass
 `--region`/`--project` instead if you didn't.
 
-| Flag                 | Purpose                                        | Default / requirement                                         |
-| -------------------- | ---------------------------------------------- | ------------------------------------------------------------- |
-| `--name`             | Exact name for the desktop VM                  | Required                                                      |
-| `--tier-name`        | The existing private tier to attach to         | Required                                                      |
-| `--username`         | The desktop login, provisioned via cloud-init  | Required                                                      |
-| `--ssh-key`          | Key name, used for the desktop VM              | Required                                                      |
-| `--password`         | The desktop login's password                   | Auto-generated locally and printed once if omitted            |
-| `--region`           | zcp region slug                                | Required (flag or env var)                                    |
-| `--project`          | zcp project slug                               | Required (flag or env var)                                    |
-| `--my-ip`            | Your public IP in CIDR form, scopes SSH access | Auto-detected via `ifconfig.me`                               |
-| `--vm-template`      | ubuntukde marketplace template slug            | Auto-discovered, must be version 1.0.2 or later               |
-| `--vm-plan`          | Compute plan for the desktop VM                | Auto-selects the smallest plan meeting a 4 vCPU/16GB baseline |
-| `--network-plan`     | Network plan for the VM's public IP            | Auto-discovered                                               |
-| `--storage-category` | Storage category for the VM's root disk        | Auto-discovered                                               |
-| `--billing-cycle`    | `hourly` or `monthly`                          | `hourly`                                                      |
-| `-y`/`--yes`         | Skip the confirmation prompt                   | Off                                                           |
+| Flag                 | Purpose                                       | Default / requirement                                         |
+| -------------------- | --------------------------------------------- | ------------------------------------------------------------- |
+| `--name`             | Exact name for the desktop VM                 | Required                                                      |
+| `--tier-name`        | The existing private tier to attach to        | Required                                                      |
+| `--username`         | The desktop login, provisioned via cloud-init | Required                                                      |
+| `--ssh-key`          | Key name, used for the desktop VM             | Required                                                      |
+| `--password`         | The desktop login's password                  | Auto-generated locally and printed once if omitted            |
+| `--region`           | zcp region slug                               | Required (flag or env var)                                    |
+| `--project`          | zcp project slug                              | Required (flag or env var)                                    |
+| `--my-ip`            | Your public IP as a `/32`, scopes SSH access  | Auto-detected via `ifconfig.me`                               |
+| `--vm-template`      | ubuntukde marketplace template slug           | Auto-discovered, must be version 1.0.2 or later               |
+| `--vm-plan`          | Compute plan for the desktop VM               | Auto-selects the smallest plan meeting a 4 vCPU/16GB baseline |
+| `--network-plan`     | Network plan for the VM's public IP           | Auto-discovered                                               |
+| `--storage-category` | Storage category for the VM's root disk       | Auto-discovered                                               |
+| `--billing-cycle`    | `hourly` or `monthly`                         | `hourly`                                                      |
+| `--ssh-wait`         | Seconds to wait for SSH to come up            | `180`                                                         |
+| `--cloud-init-wait`  | Seconds to wait for the desktop user to exist | `1800`                                                        |
+| `-y`/`--yes`         | Skip the confirmation prompt                  | Off                                                           |
 
 `--tier-name` is not auto-discovered, the same as the earlier tutorials' scripts. An account can
 hold more than one private tier from earlier testing, and guessing which one to attach to is a real
 isolation risk. The script hard-errors if the name you pass doesn't resolve to exactly one tier.
 
 `--username` must match `^[a-z][a-z0-9_]*$` (lowercase letters, digits, and underscores only,
-starting with a letter), max 32 characters, and is checked before anything gets created. The script
-also rejects a fixed list of reserved system account names outright, `ubuntu` among them: it's this
-script's own SSH admin user, a guaranteed collision if picked as the desktop login too. Run the
+starting with a letter), max 32 characters. The script checks it before creating anything. It also
+rejects a fixed list of reserved system account names outright, `ubuntu` among them. `ubuntu` is
+this script's own SSH admin user, so picking it as the desktop login guarantees a collision. Run the
 script with `--help` for the full list of overrides.
 
 ## What the script builds
@@ -99,23 +101,23 @@ script with `--help` for the full list of overrides.
 ### Template selection and version check
 
 **The script finds the ubuntukde template for you, and refuses to deploy anything older than the
-version this tutorial was validated against.**
+version validated for this tutorial.**
 
 Without `--vm-template`, the script auto-discovers the ubuntukde template.
 `zcp template list | grep -i ubuntukde` shows the idea, but the script itself runs
-`zcp template list -o json | jq '.[] | select(.name | test("ubuntukde";"i")) | .slug' | head -1` to
-pick the first match programmatically. It then parses the app version out of the template's name
+`zcp template list -o json | jq -r '.[] | select(.name | test("ubuntukde";"i")) | .slug' | head -1`
+to pick the first match programmatically. It then parses the app version out of the template's name
 (the `.version` field in the API is the OS version, e.g. `24.04 LTS`, not the app version) and
 requires at least `1.0.2`.
 
 :::note
 
 Version `1.0.2` fixes a real bug: snap-confined apps such as Firefox and Chromium silently failing
-to launch over RDP because of a missing environment variable. An older template is refused outright,
-with an explanation, rather than silently deployed. `--vm-template` only lets you pin a specific
-1.0.2-or-later template, for example if more than one qualifies. It doesn't bypass the version
-check: an explicitly passed template still has to meet the same 1.0.2 floor, and the script still
-refuses it otherwise.
+to launch over RDP because of a missing environment variable. The script refuses an older template
+outright, with an explanation, instead of deploying it silently. `--vm-template` only lets you pin a
+specific 1.0.2-or-later template, for example if more than one qualifies. It doesn't bypass the
+version check: an explicitly passed template still has to meet the same 1.0.2 floor, and the script
+still refuses it otherwise.
 
 :::
 
@@ -124,15 +126,15 @@ refuses it otherwise.
 **The script deliberately allocates a public IP to the VM, for the one-time setup below only, then
 locks it down to nothing but SSH. RDP is never opened on the public side at all.**
 
-A VM with no public network footprint sounds like the most private option. But there's no
-console/recovery access on this platform, so a VM that can't be reached at all can't be recovered if
-the one-time tier-interface setup below goes wrong. The script deploys normally instead. It
-allocates a public IP, then locks SSH down to your own IP. RDP is never opened on the public side at
-any point, so the desktop ends up just as unreachable over RDP publicly as a no-public-IP VM would
-be. The public IP exists only for tightly scoped admin access.
+A VM with no public network footprint sounds like the most private option. But this platform has no
+console or recovery access. If the one-time tier-interface setup below goes wrong, an unreachable VM
+stays unreachable. The script deploys normally instead. It allocates a public IP, then locks SSH
+down to your own IP. RDP is never opened on the public side at any point, so the desktop ends up
+just as unreachable over RDP publicly as a no-public-IP VM would be. The public IP exists only for
+tightly scoped admin access.
 
-The VM is attached to the tier you named with `add-network`, the same step the earlier tutorials'
-scripts use.
+The script attaches the VM to the tier you named with `add-network`, the same step the earlier
+tutorials' scripts use.
 
 :::note
 
@@ -146,7 +148,7 @@ region. Pass `--vm-plan` explicitly to pin a specific one instead.
 ### The cloud-init desktop user
 
 **Each employee gets a named login provisioned via cloud-init, not the template's own generated
-default user, with the username and password validated before anything is created.**
+default user. The script validates the username and password before creating anything.**
 
 The script writes a small cloud-config to a local temp file (kept out of the VM-create command's
 process arguments, restricted to owner-only, and removed when the script exits) and passes it with
@@ -156,6 +158,8 @@ process arguments, restricted to owner-only, and removed when the script exits) 
 #cloud-config
 write_files:
   - path: /etc/zmi/deploy.env
+    permissions: '0600'
+    owner: root:root
     content: |
       UBUNTUKDE_USERNAME=janedoe
       UBUNTUKDE_PASSWORD=<generated-or-provided-password>
@@ -164,23 +168,24 @@ write_files:
 :::caution
 
 The template's own first-boot script rejects some usernames outright. Testing confirmed this live: a
-dotted username failed with `invalid desktop username` and never created the user at all. The script
-checks `--username` against `^[a-z][a-z0-9_]*$` before creating anything, rather than letting a bad
-value waste a full VM deploy. It also rejects a fixed list of reserved and default system account
-names, including `ubuntu`, `nobody`, and `root`. `ubuntu` in particular is both this script's own
-SSH admin user and the cloud image's own pre-existing default account: picking it as the desktop
-login would be a guaranteed collision, silently reporting success with a password that was never set
-on that account.
+dotted username failed with `invalid desktop username` and never created the user. The script checks
+`--username` against `^[a-z][a-z0-9_]*$` before creating anything, rather than letting a bad value
+waste a full VM deploy. It also rejects a fixed list of reserved and default system account names,
+including `ubuntu`, `nobody`, and `root`. `ubuntu` in particular is both this script's own SSH admin
+user and the cloud image's pre-existing default account. Picking it as the desktop login guarantees
+a collision: the deploy would silently report success with a password the script never sets on that
+account.
 
 :::
 
 :::caution
 
 Without `--password`, the script generates a strong random alphanumeric password locally and prints
-it once in the final summary. Save it then. Passing `--password` explicitly opts out of that
-generation, and the value may then be visible in your shell history or process list. An explicit
-password must be at least 8 characters, using only letters, digits, and `!#%&()*+,./:;<=>?@^_~-`,
-since it's written into the cloud-init file above verbatim.
+it once right after creating the VM, and again in the final summary. Save it then. Passing
+`--password` explicitly opts out of that generation. The value then appears in your shell history or
+process list. An explicit password must be at least 8 characters, using only letters, digits, and
+`!#%+,./:=?@^_-`. The template's first-boot script sources the cloud-init file above with shell
+semantics, so characters outside that set break or run as part of that file.
 
 :::
 
@@ -197,7 +202,7 @@ rule and confirms nothing on `0.0.0.0/0` remains on port 22, the same lockdown
 
 On a rerun, the script also removes any port-22 rule scoped to a different IP than the current
 run's, with a printed `[WARN]`. If your public IP changed since the last run, that old IP's SSH
-access is silently revoked in favor of the new one.
+access is revoked in favor of the new one.
 
 ### Tier network interface
 
@@ -220,15 +225,24 @@ here. The config still applies.
 **The script polls for the cloud-init login to exist, rather than assuming first-boot provisioning
 finished the moment SSH answered.**
 
-The script first polls for SSH itself to come up, for up to 3 minutes, before trying anything else.
-First-boot KDE provisioning (installing and configuring the desktop, xrdp, and creating the
-employee's login) can legitimately still be running for several minutes after SSH becomes reachable.
-The script then waits for the username to exist with a human UID (1000 or higher), for up to 5
-minutes, rather than erroring on a deploy that's simply still finishing.
+The script first polls for SSH itself to come up, for up to 3 minutes by default (`--ssh-wait`),
+before trying anything else. First-boot KDE provisioning (installing and configuring the desktop,
+xrdp, and creating the employee's login) often continues for several minutes after SSH becomes
+reachable. The script then waits for the username to exist with a human UID (1000 or higher), for up
+to 30 minutes by default (`--cloud-init-wait`), rather than erroring on a deploy that's simply still
+finishing.
 
-If either wait times out, the script errors rather than hanging indefinitely. Check
-`sudo journalctl -u cloud-final` directly on the VM, the same check the script's own error message
-points at.
+If either wait times out, the script errors rather than hanging indefinitely, and raising the
+relevant timeout is one option before re-running. For the cloud-init wait specifically, the error
+also points you at `sudo journalctl -u cloud-final` on the VM to see what first-boot did.
+
+:::caution
+
+If the desktop user exists but you've lost its password to a failure between VM creation and the
+final summary, `sudo passwd <username>` over SSH resets it. The script also suggests this in its
+cloud-init timeout error.
+
+:::
 
 ## Inspect what was created
 
@@ -246,9 +260,9 @@ point where it's cheap and safe to act on.
 
 NFS, if you use it, does raw UID-number mapping, not username mapping. `useradd`, used by the
 template's first-boot script, assigns sequential UIDs starting at 1000. Each desktop VM only ever
-creates one custom employee user, so every employee's desktop user will almost certainly get the
-same UID by default, regardless of username. On shared storage, that means every employee's desktop
-user is, by default, the same identity as far as the filesystem is concerned.
+creates one custom employee user, so every employee's desktop user gets the same UID by default in
+practice, typically `1001`, regardless of username. On shared storage, that means every employee's
+desktop user is, by default, the same identity as far as the filesystem is concerned.
 
 :::note
 
@@ -311,7 +325,7 @@ your RDP client rather than relying on auto-negotiation.
 
 The template deliberately disables the KWin compositor and lowers the RDP color depth by default.
 The compositor fights RDP's non-GPU rendering path, and a lower color depth cuts bandwidth, so both
-trade some visual polish for performance. No action needed, this is intentional tuning, not a
+trade some visual polish for performance. No action needed. This is intentional tuning, not a
 rendering problem.
 
 :::
@@ -347,9 +361,9 @@ mesh, never from the public internet, since it's never opened on the public side
 :::note
 
 On Debian/Ubuntu, install `nc` first if you don't have it
-(`sudo apt-get install -y netcat-openbsd`). macOS ships its own `nc` already. Either way it works
-the same way in any shell. `/dev/tcp/<host>/<port>` is a bash-only feature and errors outright in
-shells like zsh.
+(`sudo apt-get install -y netcat-openbsd`). macOS ships its own `nc` already. Either way, it works
+the same in any shell. `/dev/tcp/<host>/<port>` is a bash-only feature and errors outright in shells
+like zsh.
 
 :::
 
@@ -359,10 +373,12 @@ Optionally, confirm the same thing from the firewall's own side:
 zcp firewall list --ip <ip-slug>
 ```
 
-`<ip-slug>` is printed by `zcp ip list`. The only rule you should see on the desktop's public IP is
-the scoped SSH rule from the lockdown above, not an open one. There's no RDP port-forward rule to
-compare it against: RDP was never opened on the public side, so there's nothing there that needs
-changing.
+`<ip-slug>` is printed by `zcp ip list`. The only firewall rule you should see on the desktop's
+public IP is the scoped SSH rule from the lockdown above, not an open one.
+
+`zcp portforward list --ip <ip-slug>` still shows the template's own tcp and udp port-22 forwards,
+Active, even after the lockdown. That's expected. A port-forward rule with no matching firewall rule
+routes nothing, so the firewall above is the actual gate. There's nothing to change here.
 
 ## Clean up
 
