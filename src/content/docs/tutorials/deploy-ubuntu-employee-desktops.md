@@ -67,24 +67,24 @@ rerun. Pass `--password` explicitly only if you need a specific value.
 The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them. Pass
 `--region`/`--project` instead if you didn't.
 
-| Flag                 | Purpose                                        | Default / requirement                                                |
-| -------------------- | ---------------------------------------------- | -------------------------------------------------------------------- |
-| `--name`             | Exact name for the desktop VM                  | Required                                                             |
-| `--tier-name`        | The existing private tier to attach to         | Required                                                             |
-| `--username`         | The desktop login, provisioned via cloud-init  | Required                                                             |
-| `--ssh-key`          | Key name, used for the desktop VM              | Required                                                             |
-| `--password`         | The desktop login's password                   | Auto-generated locally, printed before creation and again at the end |
-| `--region`           | zcp region slug                                | Required (flag or env var)                                           |
-| `--project`          | zcp project slug                               | Required (flag or env var)                                           |
-| `--my-ip`            | Your public IP in CIDR form, scopes SSH access | Auto-detected via `ifconfig.me`, appended with `/32`                 |
-| `--vm-template`      | ubuntukde marketplace template slug            | Auto-discovered, must be version 1.0.2 or later                      |
-| `--vm-plan`          | Compute plan for the desktop VM                | Auto-selects the smallest plan meeting a 4 vCPU/16GB baseline        |
-| `--network-plan`     | Network plan for the VM's public IP            | Auto-discovered                                                      |
-| `--storage-category` | Storage category for the VM's root disk        | Auto-discovered                                                      |
-| `--billing-cycle`    | `hourly` or `monthly`                          | `hourly`                                                             |
-| `--ssh-wait`         | Seconds to wait for SSH to come up             | `180`                                                                |
-| `--cloud-init-wait`  | Seconds to wait for the desktop user to exist  | `1800`                                                               |
-| `-y`/`--yes`         | Skip the confirmation prompt                   | Off                                                                  |
+| Flag                 | Purpose                                              | Default / requirement                                                |
+| -------------------- | ---------------------------------------------------- | -------------------------------------------------------------------- |
+| `--name`             | Exact name for the desktop VM                        | Required                                                             |
+| `--tier-name`        | The existing private tier to attach to               | Required                                                             |
+| `--username`         | The desktop login, provisioned via cloud-init        | Required                                                             |
+| `--ssh-key`          | Key name, used for the desktop VM                    | Required                                                             |
+| `--password`         | The desktop login's password                         | Auto-generated locally, printed before creation and again at the end |
+| `--region`           | zcp region slug                                      | Required (flag or env var)                                           |
+| `--project`          | zcp project slug                                     | Required (flag or env var)                                           |
+| `--my-ip`            | Your public IP in CIDR form, scopes SSH access       | Auto-detected via `ifconfig.me`, appended with `/32`                 |
+| `--vm-template`      | ubuntukde marketplace template slug                  | Auto-discovered, must be version 1.0.2 or later                      |
+| `--vm-plan`          | Compute plan for the desktop VM                      | Auto-selects the smallest plan meeting a 4 vCPU/16GB baseline        |
+| `--network-plan`     | Network plan for the VM's public IP                  | Auto-discovered                                                      |
+| `--storage-category` | Storage category for the VM's root disk              | Auto-discovered                                                      |
+| `--billing-cycle`    | `hourly` or `monthly`                                | `hourly`                                                             |
+| `--ssh-wait`         | Seconds to wait for SSH to come up                   | `180`                                                                |
+| `--cloud-init-wait`  | Seconds to wait for desktop provisioning to complete | `1800`                                                               |
+| `-y`/`--yes`         | Skip the confirmation prompt                         | Off                                                                  |
 
 `--tier-name` is not auto-discovered, the same as the earlier tutorials' scripts. An account can
 hold more than one private tier from earlier testing, and guessing which one to attach to is a real
@@ -92,10 +92,10 @@ isolation risk. The script hard-errors if the name you pass doesn't resolve to e
 
 `--username` must match `^[a-z][a-z0-9_]*$` (lowercase letters, digits, and underscores only,
 starting with a letter), max 32 characters. The script checks it before creating anything. It also
-rejects a fixed list of reserved system account names outright, `ubuntu`, `xrdp`, and `sddm` among
-them. `ubuntu` is this script's own SSH admin user, and `xrdp`/`sddm` already exist as system
-accounts on the desktop image, so picking any of them as the desktop login guarantees a collision.
-Run the script with `--help` for the full list of overrides.
+rejects a fixed list of reserved system account names outright, `ubuntu`, `xrdp`, `sddm`, and `sshd`
+among them. `ubuntu` is this script's own SSH admin user, and `xrdp`/`sddm`/`sshd` already exist as
+system accounts on the desktop image, so picking any of them as the desktop login guarantees a
+collision. Run the script with `--help` for the full list of overrides.
 
 ## What the script builds
 
@@ -172,15 +172,14 @@ The template's own first-boot script rejects some usernames outright. Testing co
 dotted username failed with `invalid desktop username` and never created the user. The script checks
 `--username` against `^[a-z][a-z0-9_]*$` before creating anything, rather than letting a bad value
 waste a full VM deploy. It also rejects a fixed list of reserved and default system account names,
-including `ubuntu`, `xrdp`, `sddm`, `nobody`, and `root`. `ubuntu` in particular is both this
-script's own SSH admin user and the cloud image's pre-existing default account. Picking it as the
-desktop login guarantees a collision, and a worse one than a silently missing user. The template's
-first-boot script creates a new account only if the username doesn't already exist, but it sets the
-password unconditionally either way. That resets the SSH admin account's own password to the desktop
-password. `xrdp` and `sddm` collide the same way, since both already exist as system accounts on
-this template. The symptom differs: their system UID is below 1000, so the script's own readiness
-check (which requires a human UID) never succeeds. The deploy then times out after the full
-`--cloud-init-wait`, on a VM that's already billing.
+including `ubuntu`, `xrdp`, `sddm`, `sshd`, `nobody`, and `root`. All of them collide with an
+account the image already has, so picking one guarantees a broken deploy that only fails after the
+full `--cloud-init-wait` timeout, on a VM that's already billing. `ubuntu` is the worse case: it's
+this script's own SSH admin user, and the first-boot script sets its password unconditionally,
+whether or not the account already existed, so it silently resets the SSH admin account's own
+password to the desktop password. `xrdp`, `sddm`, and `sshd` fail differently: none of them has a
+home directory under `/home`, so the first-boot script's own setup for that directory fails outright
+and stops the rest of provisioning, including the password and desktop.
 
 :::
 
