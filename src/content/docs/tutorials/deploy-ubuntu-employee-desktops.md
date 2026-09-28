@@ -92,11 +92,11 @@ isolation risk. The script hard-errors if the name you pass doesn't resolve to e
 
 `--username` must match `^[a-z][a-z0-9_]*$` (lowercase letters, digits, and underscores only,
 starting with a letter), max 32 characters. The script checks it before creating anything. It also
-rejects a fixed list of reserved system account names outright, `ubuntu`, `xrdp`, `sddm`, `sshd`,
-and `polkitd` among them. `ubuntu` is this script's own SSH admin user, and
-`xrdp`/`sddm`/`sshd`/`polkitd` already exist as system accounts on the desktop image, so picking any
-of them as the desktop login guarantees a collision. Run the script with `--help` for the full list
-of overrides.
+rejects a fixed list of reserved system account names outright, `ubuntu` among them. The rest of the
+list (`xrdp`, `sddm`, `sshd`, `polkitd`, and several others) is every account confirmed present on
+the desktop image itself, not just a guess: verified by deploying a real ubuntukde VM and reading
+its own account list directly. Picking any of them as the desktop login guarantees a collision. Run
+the script with `--help` for the full list of overrides.
 
 ## What the script builds
 
@@ -173,16 +173,17 @@ The template's own first-boot script rejects some usernames outright. Testing co
 dotted username failed with `invalid desktop username` and never created the user. The script checks
 `--username` against `^[a-z][a-z0-9_]*$` before creating anything, rather than letting a bad value
 waste a full VM deploy. It also rejects a fixed list of reserved and default system account names,
-including `ubuntu`, `xrdp`, `sddm`, `sshd`, `polkitd`, `nobody`, and `root`. This isn't checked
-against every account the image happens to carry, only the collisions found by review and confirmed
-against the template's own source so far. All of them collide with an account the image already has,
-but not the same way. `ubuntu` is this script's own SSH admin user, and the first-boot script sets
-its password unconditionally, whether or not the account already existed, so picking `ubuntu`
-silently resets the SSH admin account's own password to the desktop password, without ever failing
-the script's readiness check. `xrdp`, `sddm`, `sshd`, and `polkitd` fail differently: none of them
-has a home directory under `/home`, so the first-boot script's own setup for that directory fails
-outright and stops the rest of provisioning, including the password and desktop. That failure
-surfaces only after the full `--cloud-init-wait` timeout, on a VM that's already billing.
+`ubuntu` and `root` among them, plus every other account confirmed present on the image itself:
+deploying a real ubuntukde VM and reading its own account list directly turned up over a dozen more
+(`xrdp`, `sddm`, `sshd`, `polkitd`, and others), not just the ones found by earlier review rounds.
+All of them collide with an account the image already has, but not the same way. `ubuntu` is this
+script's own SSH admin user, and the first-boot script sets its password unconditionally, whether or
+not the account already existed, so picking `ubuntu` silently resets the SSH admin account's own
+password to the desktop password, without ever failing the script's readiness check. The rest fail
+differently: none of them has a home directory under `/home`, so the first-boot script's own setup
+for that directory fails outright and stops the rest of provisioning, including the password and
+desktop. That failure surfaces only after the full `--cloud-init-wait` timeout, on a VM that's
+already billing.
 
 :::
 
