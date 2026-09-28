@@ -92,9 +92,10 @@ isolation risk. The script hard-errors if the name you pass doesn't resolve to e
 
 `--username` must match `^[a-z][a-z0-9_]*$` (lowercase letters, digits, and underscores only,
 starting with a letter), max 32 characters. The script checks it before creating anything. It also
-rejects a fixed list of reserved system account names outright, `ubuntu` among them. `ubuntu` is
-this script's own SSH admin user, so picking it as the desktop login guarantees a collision. Run the
-script with `--help` for the full list of overrides.
+rejects a fixed list of reserved system account names outright, `ubuntu`, `xrdp`, and `sddm` among
+them. `ubuntu` is this script's own SSH admin user, and `xrdp`/`sddm` already exist as system
+accounts on the desktop image, so picking any of them as the desktop login guarantees a collision.
+Run the script with `--help` for the full list of overrides.
 
 ## What the script builds
 
@@ -171,23 +172,27 @@ The template's own first-boot script rejects some usernames outright. Testing co
 dotted username failed with `invalid desktop username` and never created the user. The script checks
 `--username` against `^[a-z][a-z0-9_]*$` before creating anything, rather than letting a bad value
 waste a full VM deploy. It also rejects a fixed list of reserved and default system account names,
-including `ubuntu`, `nobody`, and `root`. `ubuntu` in particular is both this script's own SSH admin
-user and the cloud image's pre-existing default account. Picking it as the desktop login guarantees
-a collision: the deploy would silently report success with a password the script never sets on that
-account.
+including `ubuntu`, `xrdp`, `sddm`, `nobody`, and `root`. `ubuntu` in particular is both this
+script's own SSH admin user and the cloud image's pre-existing default account. Picking it as the
+desktop login guarantees a collision, and a worse one than a silently missing user. The template's
+first-boot script creates a new account only if the username doesn't already exist, but it sets the
+password unconditionally either way. That resets the SSH admin account's own password to the desktop
+password. `xrdp` and `sddm` collide the same way, since both already exist as system accounts on
+this template. The symptom differs: their system UID is below 1000, so the script's own readiness
+check (which requires a human UID) never succeeds. The deploy then times out after the full
+`--cloud-init-wait`, on a VM that's already billing.
 
 :::
 
 :::caution
 
 Without `--password`, the script generates a strong random alphanumeric password locally and prints
-it before creating the VM, and again in the final summary. If the create call itself reports failure
-but the VM was created anyway, the password was already shown before that call ran, so it's never
-lost. Save it then. Passing `--password` explicitly opts out of that generation. The value then
-appears in your shell history or process list. An explicit password must be at least 8 characters,
-using only letters, digits, and `!#%+,./:=?@^_-`. The template's first-boot script sources the
-cloud-init file above with shell semantics, so characters outside that set break or run as part of
-that file.
+it before creating the VM, and again in the final summary. If the create call reports failure but
+still creates the VM, you already saw the password before that call ran. It's never lost. Save it
+then. Passing `--password` explicitly opts out of that generation. The value then appears in your
+shell history or process list. An explicit password must be at least 8 characters, using only
+letters, digits, and `!#%+,./:=?@^_-`. The template's first-boot script sources the cloud-init file
+above with shell semantics, so characters outside that set break or run as part of that file.
 
 :::
 
@@ -230,13 +235,17 @@ finished the moment SSH answered.**
 The script first polls for SSH itself to come up, for up to 3 minutes by default (`--ssh-wait`),
 before trying anything else. First-boot KDE provisioning (installing and configuring the desktop,
 xrdp, and creating the employee's login) often continues for several minutes after SSH becomes
-reachable. The script then waits for the username to exist with a human UID (1000 or higher), for up
-to 30 minutes by default (`--cloud-init-wait`), rather than erroring on a deploy that's still
-finishing.
+reachable. A UID alone isn't a reliable enough signal that provisioning finished. The template's
+first-boot script creates the user before it sets the password and starts xrdp. So the script also
+waits for the first-boot script's own completion marker and for xrdp to be active, in addition to
+the username existing with a human UID (1000 or higher). All three are required, for up to 30
+minutes by default (`--cloud-init-wait`), rather than erroring on a deploy that's still finishing.
 
-If either wait times out, the script errors rather than hanging indefinitely, and raising the
-relevant timeout is one option before re-running. For the cloud-init wait specifically, the error
-also points you at `sudo journalctl -u cloud-final` on the VM to see what first-boot did.
+If either wait times out, the script errors instead of hanging indefinitely. Raise the relevant
+timeout and re-run if needed. For the cloud-init wait specifically, the error also points you at
+`sudo journalctl -u ubuntukde-first-boot` on the VM. That's the unit that creates the user, sets the
+password, and starts xrdp. It runs after cloud-init's own `cloud-final` finishes, not as part of it.
+So checking `cloud-final` alone won't show what went wrong here.
 
 :::caution
 
