@@ -176,14 +176,15 @@ waste a full VM deploy. It also rejects a fixed list of reserved and default sys
 `ubuntu` and `root` among them, plus every other account confirmed present on the image itself:
 deploying a real ubuntukde VM and reading its own account list directly turned up over a dozen more
 (`xrdp`, `sddm`, `sshd`, `polkitd`, and others), not just the ones found by earlier review rounds.
-All of them collide with an account the image already has, but not the same way. `ubuntu` is this
-script's own SSH admin user, and the first-boot script sets its password unconditionally, whether or
-not the account already existed, so picking `ubuntu` silently resets the SSH admin account's own
-password to the desktop password, without ever failing the script's readiness check. The rest fail
-differently: none of them has a home directory under `/home`, so the first-boot script's own setup
-for that directory fails outright and stops the rest of provisioning, including the password and
-desktop. That failure surfaces only after the full `--cloud-init-wait` timeout, on a VM that's
-already billing.
+All of them collide with an account the image already has, but not the same way, and the script
+rejects every one of them before creating anything, so neither outcome below actually happens to you
+in practice. Without that check: `ubuntu` is this script's own SSH admin user, and the first-boot
+script sets its password unconditionally, whether or not the account already existed, so picking
+`ubuntu` would silently reset the SSH admin account's own password to the desktop password, without
+ever failing the script's readiness check. The rest would fail differently: none of them has a home
+directory under `/home`, so the first-boot script's own setup for that directory would fail outright
+and stop the rest of provisioning, including the password and desktop. That failure would surface
+only after the full `--cloud-init-wait` timeout, on a VM that's already billing.
 
 :::
 
