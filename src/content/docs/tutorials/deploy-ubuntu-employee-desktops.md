@@ -106,7 +106,7 @@ rejects a fixed list of reserved system account names outright, `ubuntu` among t
 list (`xrdp`, `sddm`, `sshd`, `polkitd`, and several others) is every account confirmed present on
 the desktop image itself, not just a guess: verified by deploying a real ubuntukde VM and reading
 its own account list directly. Picking any of them as the desktop login guarantees a collision. Run
-the script with `--help` for the full list of overrides.
+the script with `--help` to see every flag name; this tutorial covers what each one does.
 
 ## What the script builds
 
@@ -135,8 +135,8 @@ still refuses it otherwise.
 
 ### The desktop VM
 
-**The script deliberately allocates a public IP to the VM, for the one-time setup below only, then
-locks it down to nothing but SSH. RDP is never opened on the public side at all.**
+**The script deliberately allocates a public IP to the VM, then locks it down to nothing but SSH,
+scoped to your own address. RDP is never opened on the public side at all.**
 
 A VM with no public network footprint sounds like the most private option. But this platform has no
 console or recovery access. If the one-time tier-interface setup below goes wrong, an unreachable VM
@@ -186,9 +186,9 @@ waste a full VM deploy. It also rejects a fixed list of reserved and default sys
 `ubuntu` and `root` among them, plus every other account confirmed present on the image itself:
 deploying a real ubuntukde VM and reading its own account list directly turned up over a dozen more
 (`xrdp`, `sddm`, `sshd`, `polkitd`, and others), not just the ones found by earlier review rounds.
-All of them collide with an account the image already has, but not the same way, and the script
-rejects every one of them before creating anything, so neither outcome below actually happens to you
-in practice. Without that check: `ubuntu` is this script's own SSH admin user, and the first-boot
+All of them collide with an account the image already has, but not the same way. The script rejects
+every one of them before creating anything, so neither outcome below actually happens to you in
+practice. Without that check: `ubuntu` is this script's own SSH admin user, and the first-boot
 script sets its password unconditionally, whether or not the account already existed, so picking
 `ubuntu` would silently reset the SSH admin account's own password to the desktop password, without
 ever failing the script's readiness check. The rest would fail differently: none of them has a home
@@ -359,11 +359,11 @@ rendering problem.
 
 ## Verify the desktop works end to end
 
-Launch Firefox or Chromium from the KDE application launcher. On any image older than `1.0.2`, this
-step fails: the app flashes and closes immediately with no window (the bug the script's version
-check above exists to catch before it ever gets this far). Open a terminal too. It confirms the
-desktop is a usable work environment, not a browser demo. Confirm internet access works from inside
-the session.
+Launch Firefox or Chromium from the KDE application launcher. This is why the script's version check
+above refuses anything older than `1.0.2`: on those images, the app flashes and closes immediately
+with no window, and the script's own check means you won't hit that bug here. Open a terminal too.
+It confirms the desktop is a usable work environment, not a browser demo. Confirm internet access
+works from inside the session.
 
 :::note
 
@@ -424,14 +424,14 @@ tutorials.
 
 :::caution
 
-Like every VM in this series deployed with its own public IP, this desktop also created its own
-standalone network and pinned source-NAT IP. `instance delete` won't remove either one. The script
-detects and reports a leftover the same way the earlier tutorials' teardown scripts do. Check its
-output. If one appears, remove it from the CMP web portal (search by the network ID it prints). A
-confirmed leftover makes the script exit non-zero, so check `$?` after running it. A delete the
-script issued but never confirmed (a `[WARN]` line, not necessarily a leftover network) also exits
-non-zero for the same reason. Don't assume a non-zero exit always means a leftover network. Check
-the `[WARN]` lines above it too.
+This desktop VM has its own public IP, same as every other VM in this series, so it also created its
+own standalone network and pinned source-NAT IP when it deployed. `instance delete` won't remove
+either one. The script detects and reports a leftover the same way the earlier tutorials' teardown
+scripts do. Check its output. If one appears, remove it from the CMP web portal (search by the
+network ID it prints). A confirmed leftover makes the script exit non-zero, so check `$?` after
+running it. A delete the script issued but never confirmed (a `[WARN]` line, not necessarily a
+leftover network) also exits non-zero for the same reason. Don't assume a non-zero exit always means
+a leftover network. Check the `[WARN]` lines above it too.
 
 :::
 
