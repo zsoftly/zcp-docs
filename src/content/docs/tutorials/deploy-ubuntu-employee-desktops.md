@@ -275,7 +275,7 @@ zcp ip list
 
 ## Give this desktop a unique identity on shared storage
 
-Only relevant if you also plan to mount private shared storage on this desktop, and only doable
+Only relevant if you also plan to mount private shared storage on this desktop, and cheapest to do
 before the employee's first login: it's a manual, SSH-based step, not something the deploy script
 automates. NFS does raw UID-number mapping, not username mapping, and `useradd` assigns sequential
 UIDs starting at 1000 - since each desktop VM only ever creates one custom user, every employee's
