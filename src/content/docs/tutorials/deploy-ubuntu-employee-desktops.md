@@ -186,9 +186,10 @@ list above collides the same way, but not identically. `ubuntu` is this script's
 The first-boot script resets its password unconditionally, so picking `ubuntu` passes readiness but
 changes the SSH administrator's password to the desktop password. The rest (`xrdp`, `sddm`, `sshd`,
 `polkitd`, and others) fail differently: none has a home directory under `/home`, so first-boot
-setup fails outright and the desktop never gets provisioned. That failure surfaces only after the
-full `--cloud-init-wait` timeout, on a VM that's already billing. Preflight rejects every listed
-reserved name before VM creation, so none of this actually happens to you in practice.
+setup fails outright and the desktop never gets provisioned. Only this second group's failure
+surfaces after the full `--cloud-init-wait` timeout, on a VM that's already billing - `ubuntu`
+doesn't time out, since it passes readiness. Preflight rejects every listed reserved name before VM
+creation either way, so none of this actually happens to you in practice.
 
 :::
 
