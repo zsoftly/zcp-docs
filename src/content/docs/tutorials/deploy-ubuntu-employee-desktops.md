@@ -106,7 +106,7 @@ rejects a fixed list of reserved system account names outright, `ubuntu` among t
 list (`xrdp`, `sddm`, `sshd`, `polkitd`, and several others) is every account confirmed present on
 the desktop image itself, not just a guess: verified by deploying a real ubuntukde VM and reading
 its own account list directly. Picking any of them as the desktop login guarantees a collision. Run
-the script with `--help` to see every flag name; this tutorial covers what each one does.
+the script with `--help` to see every flag name. This tutorial covers what each one does.
 
 ## What the script builds
 
@@ -180,21 +180,15 @@ write_files:
 :::caution
 
 The template's own first-boot script rejects some usernames outright. Testing confirmed this live: a
-dotted username failed with `invalid desktop username` and never created the user. The script checks
-`--username` against `^[a-z][a-z0-9_]*$` before creating anything, rather than letting a bad value
-waste a full VM deploy. It also rejects a fixed list of reserved and default system account names,
-`ubuntu` and `root` among them, plus every other account confirmed present on the image itself:
-deploying a real ubuntukde VM and reading its own account list directly turned up over a dozen more
-(`xrdp`, `sddm`, `sshd`, `polkitd`, and others), not just the ones found by earlier review rounds.
-All of them collide with an account the image already has, but not the same way. The script rejects
-every one of them before creating anything, so neither outcome below actually happens to you in
-practice. Without that check: `ubuntu` is this script's own SSH admin user, and the first-boot
-script sets its password unconditionally, whether or not the account already existed, so picking
-`ubuntu` would silently reset the SSH admin account's own password to the desktop password, without
-ever failing the script's readiness check. The rest would fail differently: none of them has a home
-directory under `/home`, so the first-boot script's own setup for that directory would fail outright
-and stop the rest of provisioning, including the password and desktop. That failure would surface
-only after the full `--cloud-init-wait` timeout, on a VM that's already billing.
+dotted username failed with `invalid desktop username` and never created the user, which is why
+`--username` is checked against `^[a-z][a-z0-9_]*$` before anything is created. The reserved-name
+list above collides the same way, but not identically: `ubuntu` is this script's own SSH admin user,
+and the first-boot script resets its password unconditionally, so picking it silently overwrites the
+SSH admin account's own password. The rest (`xrdp`, `sddm`, `sshd`, `polkitd`, and others) fail
+differently - none has a home directory under `/home`, so first-boot setup fails outright and the
+desktop never gets provisioned. Either way, the script rejects all of them before creating anything,
+so neither outcome actually happens to you in practice. Without that check, this would otherwise
+only surface after the full `--cloud-init-wait` timeout, on a VM that's already billing.
 
 :::
 
@@ -280,16 +274,12 @@ zcp ip list
 
 ## Give this desktop a unique identity on shared storage
 
-This step matters only if you plan to also mount private shared storage on this desktop. It's a
-manual, SSH-based step you do yourself, not something the deploy script automates, and the script's
-own final summary points back to it. Do it now, before the employee's first login: it's the only
-point where it's cheap and safe to act on.
-
-NFS, if you use it, does raw UID-number mapping, not username mapping. `useradd`, used by the
-template's first-boot script, assigns sequential UIDs starting at 1000. Each desktop VM only ever
-creates one custom employee user, so every employee's desktop user gets the same UID by default in
-practice, typically `1001`, regardless of username. On shared storage, that means every employee's
-desktop user is, by default, the same identity as far as the filesystem is concerned.
+Only relevant if you also plan to mount private shared storage on this desktop, and only doable
+before the employee's first login: it's a manual, SSH-based step, not something the deploy script
+automates. NFS does raw UID-number mapping, not username mapping, and `useradd` assigns sequential
+UIDs starting at 1000 - since each desktop VM only ever creates one custom user, every employee's
+desktop login gets the same UID by default (typically `1001`), making them the same filesystem
+identity on shared storage regardless of username.
 
 :::note
 
@@ -298,9 +288,8 @@ your organization, no action needed.
 
 :::
 
-To give this employee a unique identity instead, `usermod` and `groupmod` let you reassign the UID
-and GID, as long as it happens before the employee's first login. The desktop's public IP is printed
-in the script's final summary (or `zcp ip list`):
+To assign a unique identity instead, `usermod` and `groupmod` reassign the UID and GID before first
+login. The desktop's public IP is in the script's final summary (or `zcp ip list`):
 
 ```bash
 ssh ubuntu@<desktop-public-ip>
@@ -315,10 +304,9 @@ Pick a unique value per employee across your whole fleet.
 
 :::caution
 
-Track which UID belongs to which employee somewhere durable once you start doing this across a
-fleet. There's no template-level bookkeeping for it. If the employee has already logged in at least
-once before you get to this step, `usermod` refuses while their session is active, and closing the
-RDP client does not end it. Reboot the VM or end the session on the VM directly before retrying.
+Track which UID belongs to which employee somewhere durable - there's no template-level bookkeeping.
+If the employee has already logged in, `usermod` refuses while their session is active, and closing
+the RDP client doesn't end it. Reboot the VM or end the session directly before retrying.
 
 :::
 
@@ -336,34 +324,22 @@ was never opened on the public side at all, only SSH, and that's locked to your 
 
 :::note
 
-On first login, KDE may show a PolicyKit prompt: "System policy prevents control of network
-connections." Entering the employee's own password lets the session continue normally.
-
-:::
-
-:::note
-
-If everything looks tiny despite the RDP window filling the screen, set an explicit resolution in
-your RDP client rather than relying on auto-negotiation.
-
-:::
-
-:::note
-
-The template deliberately disables the KWin compositor and lowers the RDP color depth by default.
-The compositor fights RDP's non-GPU rendering path, and a lower color depth cuts bandwidth, so both
-trade some visual polish for performance. No action needed. This is intentional tuning, not a
-rendering problem.
+- On first login, KDE may show a PolicyKit prompt: "System policy prevents control of network
+  connections." Entering the employee's own password lets the session continue normally.
+- If everything looks tiny despite the RDP window filling the screen, set an explicit resolution in
+  your RDP client rather than relying on auto-negotiation.
+- The template deliberately disables the KWin compositor and lowers the RDP color depth by default,
+  trading visual polish for performance over RDP's non-GPU rendering path. No action needed.
 
 :::
 
 ## Verify the desktop works end to end
 
 Launch Firefox or Chromium from the KDE application launcher. This is why the script's version check
-above refuses anything older than `1.0.2`: on those images, the app flashes and closes immediately
-with no window, and the script's own check means you won't hit that bug here. Open a terminal too.
-It confirms the desktop is a usable work environment, not a browser demo. Confirm internet access
-works from inside the session.
+rejects anything older than `1.0.2` before deployment ever starts: on those images, the app flashes
+and closes immediately with no window, and that upfront check means you won't hit the bug here. Open
+a terminal too. It confirms the desktop is a usable work environment, not a browser demo. Confirm
+internet access works from inside the session.
 
 :::note
 
@@ -424,8 +400,8 @@ tutorials.
 
 :::caution
 
-This desktop VM has its own public IP, same as every other VM in this series, so it also created its
-own standalone network and pinned source-NAT IP when it deployed. `instance delete` won't remove
+This desktop VM has its own public IP, same as every other VM in this series, so deploying it also
+created a standalone network and a pinned source-NAT IP alongside it. `instance delete` won't remove
 either one. The script detects and reports a leftover the same way the earlier tutorials' teardown
 scripts do. Check its output. If one appears, remove it from the CMP web portal (search by the
 network ID it prints). A confirmed leftover makes the script exit non-zero, so check `$?` after
