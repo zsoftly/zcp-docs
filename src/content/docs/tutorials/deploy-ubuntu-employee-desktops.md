@@ -96,7 +96,9 @@ If a VM named `--name` already exists, the script stops and shows its slug rathe
 the one from an earlier run of this same script. A name match alone doesn't prove that: it could
 just as easily be someone else's unrelated VM. Check the slug against `zcp instance list` first. If
 it's genuinely the right VM, re-run with `--adopt-existing` to let the script attach the tier, lock
-down SSH, and continue against it.
+down SSH, and continue against it. Cloud-init doesn't re-run on an adopted VM, so `--password` is
+ignored (its real password stays whatever was set at first boot) and `--username` must match the
+login that VM already has, not a new one you want created.
 
 `--username` must match `^[a-z][a-z0-9_]*$` (lowercase letters, digits, and underscores only,
 starting with a letter), max 32 characters. The script checks it before creating anything. It also
@@ -253,8 +255,10 @@ waits for the first-boot script's own completion marker and for xrdp to be activ
 the username existing with a human UID (1000 or higher). All three are required, for up to 30
 minutes by default (`--cloud-init-wait`), rather than erroring on a deploy that's still finishing.
 
-If either wait times out, the script errors instead of hanging indefinitely. Raise the relevant
-timeout and re-run if needed. For the cloud-init wait specifically, the error also points you at
+If either wait times out, the script errors instead of hanging indefinitely. The VM already exists
+at that point, so re-running needs `--adopt-existing`; check `zcp instance get <slug>` first to
+confirm it's genuinely the right VM before adding that flag. Raise the relevant timeout too if
+needed. For the cloud-init wait specifically, the error also points you at
 `sudo journalctl -u ubuntukde-first-boot` on the VM. That's the unit that creates the user, sets the
 password, and starts xrdp. It runs after cloud-init's own `cloud-final` finishes, not as part of it.
 So checking `cloud-final` alone won't show what went wrong here.
