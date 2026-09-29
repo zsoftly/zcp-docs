@@ -84,11 +84,18 @@ The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you export
 | `--billing-cycle`    | `hourly` or `monthly`                                | `hourly`                                                             |
 | `--ssh-wait`         | Seconds to wait for SSH to come up                   | `180`                                                                |
 | `--cloud-init-wait`  | Seconds to wait for desktop provisioning to complete | `1800`                                                               |
+| `--adopt-existing`   | Proceed if a VM named `--name` already exists        | Off                                                                  |
 | `-y`/`--yes`         | Skip the confirmation prompt                         | Off                                                                  |
 
 `--tier-name` is not auto-discovered, the same as the earlier tutorials' scripts. An account can
 hold more than one private tier from earlier testing, and guessing which one to attach to is a real
 isolation risk. The script hard-errors if the name you pass doesn't resolve to exactly one tier.
+
+If a VM named `--name` already exists, the script stops and shows its slug rather than assuming it's
+the one from an earlier run of this same script. A name match alone doesn't prove that: it could
+just as easily be someone else's unrelated VM. Check the slug against `zcp instance list` first. If
+it's genuinely the right VM, re-run with `--adopt-existing` to let the script attach the tier, lock
+down SSH, and continue against it.
 
 `--username` must match `^[a-z][a-z0-9_]*$` (lowercase letters, digits, and underscores only,
 starting with a letter), max 32 characters. The script checks it before creating anything. It also
