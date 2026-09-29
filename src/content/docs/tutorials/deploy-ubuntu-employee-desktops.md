@@ -182,13 +182,14 @@ write_files:
 The template's own first-boot script rejects some usernames outright. Testing confirmed this live: a
 dotted username failed with `invalid desktop username` and never created the user, which is why
 `--username` is checked against `^[a-z][a-z0-9_]*$` before anything is created. The reserved-name
-list above collides the same way, but not identically: `ubuntu` is this script's own SSH admin user,
+list above collides the same way, but not identically. `ubuntu` is this script's own SSH admin user,
 and the first-boot script resets its password unconditionally, so picking it silently overwrites the
-SSH admin account's own password. The rest (`xrdp`, `sddm`, `sshd`, `polkitd`, and others) fail
-differently - none has a home directory under `/home`, so first-boot setup fails outright and the
-desktop never gets provisioned. Either way, the script rejects all of them before creating anything,
-so neither outcome actually happens to you in practice. Without that check, this would otherwise
-only surface after the full `--cloud-init-wait` timeout, on a VM that's already billing.
+SSH admin account's own password and still passes the script's readiness check - no error, no
+timeout, just a corrupted admin login. The rest (`xrdp`, `sddm`, `sshd`, `polkitd`, and others) fail
+differently: none has a home directory under `/home`, so first-boot setup fails outright and the
+desktop never gets provisioned. That failure surfaces only after the full `--cloud-init-wait`
+timeout, on a VM that's already billing. Either way, the script rejects all of them before creating
+anything, so neither outcome actually happens to you in practice.
 
 :::
 
