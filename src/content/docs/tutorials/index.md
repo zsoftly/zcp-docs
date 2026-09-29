@@ -102,6 +102,19 @@ You learn how to:
 - Verify the share from a mesh client, then confirm its public IP has nothing but SSH reachable on
   it
 
+### [Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops)
+
+Deploy a full Ubuntu KDE remote desktop for one employee on a VM inside the private tier from Build
+a Private Network with Headscale, reached only through the mesh over RDP, never exposed publicly.
+About 30 minutes.
+
+You learn how to:
+
+- Deploy a desktop VM with a named cloud-init login, not the template's default account
+- Lock down the marketplace template's default-open SSH rule and bring up the tier network interface
+- Connect over RDP and verify the desktop works end to end, then confirm its public IP has nothing
+  but SSH reachable on it
+
 ### [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
 
 Deploy a Vaultwarden password manager with Terraform or OpenTofu, then back its database up to ZCP
