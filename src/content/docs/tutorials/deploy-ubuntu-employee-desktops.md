@@ -183,13 +183,12 @@ The template's own first-boot script rejects some usernames outright. Testing co
 dotted username failed with `invalid desktop username` and never created the user, which is why
 `--username` is checked against `^[a-z][a-z0-9_]*$` before anything is created. The reserved-name
 list above collides the same way, but not identically. `ubuntu` is this script's own SSH admin user.
-The first-boot script resets its password unconditionally, so picking `ubuntu` silently overwrites
-the SSH admin account's own password. It still passes the script's readiness check: no error, no
-timeout, just a corrupted admin login. The rest (`xrdp`, `sddm`, `sshd`, `polkitd`, and others) fail
-differently: none has a home directory under `/home`, so first-boot setup fails outright and the
-desktop never gets provisioned. That failure surfaces only after the full `--cloud-init-wait`
-timeout, on a VM that's already billing. Preflight rejects all of them before VM creation, so none
-of this actually happens to you in practice.
+The first-boot script resets its password unconditionally, so picking `ubuntu` passes readiness but
+changes the SSH administrator's password to the desktop password. The rest (`xrdp`, `sddm`, `sshd`,
+`polkitd`, and others) fail differently: none has a home directory under `/home`, so first-boot
+setup fails outright and the desktop never gets provisioned. That failure surfaces only after the
+full `--cloud-init-wait` timeout, on a VM that's already billing. Preflight rejects every listed
+reserved name before VM creation, so none of this actually happens to you in practice.
 
 :::
 
