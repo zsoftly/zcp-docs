@@ -30,9 +30,10 @@ network interface.
   doesn't depend on the storage tutorial.
 - `ZCP_REGION` and `ZCP_PROJECT` still exported from an earlier tutorial, or re-export them.
 - The same SSH key name from that tutorial's Step 4.
-- `jq`, `ssh`, and `curl` installed. `curl` fetches the script itself below either way. The deploy
-  script also uses it internally for `ifconfig.me` public-IP detection, unless you pass `--my-ip`
-  explicitly. The teardown script further down only needs `jq`, same as the earlier tutorials.
+- `jq`, `ssh`, and `curl` installed. `curl` fetches the script itself below, and the deploy script
+  also uses it internally to fetch its own helper files and, unless you pass `--my-ip` explicitly,
+  for `ifconfig.me` public-IP detection. The teardown script further down only needs `jq`, same as
+  the earlier tutorials.
 - An RDP client: the built-in Remote Desktop Connection on Windows, Windows App (formerly Microsoft
   Remote Desktop) from the macOS App Store, or Remmina or FreeRDP on Linux, running on a device
   already connected to the mesh from the previous tutorial. The desktop's tier IP is reachable only
