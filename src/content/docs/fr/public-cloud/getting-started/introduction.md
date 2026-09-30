@@ -47,5 +47,5 @@ Dans cette documentation :
    votre courriel et configurez la facturation.
 2. [Configurer votre profil](/fr/public-cloud/getting-started/profile-setup) : renseignements
    personnels, 2FA et rôles d'utilisateur.
-3. [Démarrage rapide](/fr/public-cloud/getting-started/quickstart) : déployez votre première VM de
-   bout en bout en moins de 10 minutes.
+3. [Démarrage rapide](/fr/public-cloud/getting-started/quickstart) : déployez votre première VM,
+   connectez-vous avec SSH et attachez un volume de stockage bloc.

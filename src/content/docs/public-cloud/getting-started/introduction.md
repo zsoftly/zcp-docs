@@ -43,5 +43,5 @@ Throughout these docs:
    up billing
 2. [Set up your profile](/public-cloud/getting-started/profile-setup): personal info, 2FA, user
    roles
-3. [Quickstart](/public-cloud/getting-started/quickstart): deploy your first VM end-to-end in under
-   10 minutes
+3. [Quickstart](/public-cloud/getting-started/quickstart): deploy your first VM, connect via SSH,
+   and attach a block storage volume

@@ -9,66 +9,80 @@ Block storage volumes provide local NVMe SSD, local SATA SSD, or replicated shar
 attaches to virtual machines, depending on the selected region and plan. Once attached, format and
 mount the volume to extend your VM's storage.
 
-### Create a Block Storage Volume
+### Create Volumes
 
-- From the left-hand menu, click **Block Storages**.
-- Click **Create Block Storage** or the **+** icon.
+- From the left-hand menu, click **Volumes**.
+- Click the **+** icon.
 
-![Block Storages page with the Create Block Storage (+) button](../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
+![Volumes page with the plus icon](../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
 
-### Assign to a Project
+### Choose Project
 
-Assign the volume to a project.
+Under **Choose Project**, assign the volume to a project.
 
-![Create Block Storage: assign to a project](../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
+![Create Volumes: Choose Project](../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
 
-### Choose a Location
+### Select Location
 
-Select the data center location.
+Under **Select Location**, choose the data center location.
 
-![Create Block Storage: choose a location](../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
+![Create Volumes: Select Location](../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
 
-### Choose Instance
+### Select Instance to attach Volumes
 
-Select the VM instance to attach this volume to.
+Under **Select Instance to attach Volumes**, choose the VM instance.
 
-![Create Block Storage: choose the instance to attach to](../../../../../assets/storage/block-storage/create-volume-choose-instance.webp)
+![Create Volumes: Select Instance to attach Volumes](../../../../../assets/storage/block-storage/create-volume-choose-instance.webp)
 
-### Select Volume Size
+### Choose Storage Type and Select Volumes Size
 
-Select storage type and size. Custom volumes are available.
+Under **Choose Storage Type**, select a storage type. Under **Select Volumes Size**, select the
+volume size. Custom volumes are available.
 
-![Create Block Storage: select volume storage type and size](../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
+The published wizard screenshot shows the text `Minimum 8GB storage is required`. This screenshot is
+for reference only. We have not yet verified the required fields in CMP while signed in. Use the
+current value shown for the selected storage plan in the portal.
 
-### Name
+![Create Volumes: Choose Storage Type and Select Volumes Size](../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
 
-Provide a unique Volume Name.
+### Choose Name
 
-![Create Block Storage: name the volume](../../../../../assets/storage/block-storage/create-volume-name.webp)
+Select **Choose Name** and provide a unique **Volumes Name**.
+
+![Create Volumes: Choose Name and Volumes Name](../../../../../assets/storage/block-storage/create-volume-name.webp)
 
 ### Create
 
-- **Billing Cycles**: Hourly, Monthly, or Yearly.
-- Review and click **Create Volume**.
-
-![Create Block Storage: billing options and Create Volume](../../../../../assets/storage/block-storage/create-volume-create.webp)
-
-After creation, format and mount the volume inside the VM:
+Connect to the target VM over SSH before creating the volume. Never run these commands on your local
+workstation. Run `hostname` and confirm that it matches the VM's **Server Hostname** in the portal.
+Then run the first `lsblk` command below before creating the volume and record its output.
 
 ```bash
-# Find the new disk (usually /dev/vdb)
-lsblk
+# Confirm that this is the target VM before recording its disks.
+hostname
 
-# Format
-sudo mkfs.ext4 /dev/vdb
-
-# Mount
-sudo mkdir -p /data
-sudo mount /dev/vdb /data
-
-# Persist across reboots
-echo '/dev/vdb /data ext4 defaults 0 2' | sudo tee -a /etc/fstab
+# Before creating and attaching the volume, record the current devices.
+lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
 ```
+
+- **Billing Cycle**: Hourly, Monthly, or Yearly.
+- Click **Review & Deploy**, review the summary, then click **Create Volumes**.
+
+![Create Volumes: Review & Deploy and Create Volumes](../../../../../assets/storage/block-storage/create-volume-create.webp)
+
+After attachment, run this command on the target VM over SSH and compare its output with the
+baseline you recorded before creating the volume.
+
+```bash
+lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
+```
+
+The volume steps on this page end after attachment verification. Do not format a disk based only on
+its device name or a manual selection. Creating a filesystem, mounting the volume, and adding
+persistent mount configuration require a separately tested procedure that identifies the volume by a
+stable identifier. If the attached disk is not unambiguous, stop and open
+[Support](/troubleshooting#raise-a-support-ticket) with the project, location, exact error, and
+non-sensitive resource details.
 
 See also: [Storage Types and Resilience](/public-cloud/storage/block-storage/storage-types),
 [Volume Snapshots](/public-cloud/storage/block-storage/snapshots),

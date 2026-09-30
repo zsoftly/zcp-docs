@@ -9,66 +9,83 @@ Les volumes de stockage bloc fournissent des volumes SSD NVMe locaux, des volume
 des volumes de stockage partagé répliqué pour les machines virtuelles, selon la région et le plan
 choisis. Une fois le volume attaché, formatez-le et montez-le pour étendre le stockage de votre VM.
 
-### Créer un volume de stockage bloc
+### Create Volumes
 
-- Dans le menu de gauche, cliquez sur **Stockage blocs**.
-- Cliquez sur **Créer Stockage bloc** ou sur l'icône **+**.
+- Dans le menu de gauche, cliquez sur **Volumes**.
+- Cliquez sur l'icône **+**.
 
-![Page Stockages blocs avec le bouton Créer Stockage bloc (+)](../../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
+![Page Volumes avec l'icône plus](../../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
 
-### Choisir un emplacement
+### Choose Project
 
-Sélectionnez l'emplacement du centre de données.
+Sous **Choose Project**, attribuez le volume à un projet.
 
-![Créer Stockage bloc : choisir un emplacement](../../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
+![Create Volumes : Choose Project](../../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
 
-### Assigner à un projet
+### Select Location
 
-Assignez le volume à un projet.
+Sous **Select Location**, choisissez l'emplacement du centre de données.
 
-![Créer Stockage bloc : assigner à un projet](../../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
+![Create Volumes : Select Location](../../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
 
-### Choisir une instance
+### Select Instance to attach Volumes
 
-Sélectionnez l'instance VM à laquelle attacher ce volume.
+Sous **Select Instance to attach Volumes**, choisissez l'instance virtuelle.
 
-![Créer Stockage bloc : choisir l'instance à laquelle attacher le volume](../../../../../../assets/storage/block-storage/create-volume-choose-instance.webp)
+![Create Volumes : Select Instance to attach Volumes](../../../../../../assets/storage/block-storage/create-volume-choose-instance.webp)
 
-### Sélectionner la taille du volume
+### Choose Storage Type and Select Volumes Size
 
-Sélectionnez le type et la taille de stockage. Des volumes personnalisés sont disponibles.
+Dans **Choose Storage Type**, sélectionnez un type de stockage. Dans **Select Volumes Size**,
+sélectionnez la taille du volume. Des volumes personnalisés sont disponibles.
 
-![Créer Stockage bloc : sélectionner le type et la taille de stockage du volume](../../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
+La capture d'écran publiée affiche le texte « Minimum 8GB storage is required ». Cette capture
+d’écran est fournie à titre indicatif. Nous n’avons pas encore vérifié, après connexion, les champs
+obligatoires dans l’interface CMP. Utilisez la valeur actuelle affichée pour le plan de stockage
+sélectionné dans le portail.
 
-### Nom
+![Create Volumes : Choose Storage Type and Select Volumes Size](../../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
 
-Fournissez un nom de volume unique.
+### Choose Name
 
-![Créer Stockage bloc : nommer le volume](../../../../../../assets/storage/block-storage/create-volume-name.webp)
+Sélectionnez **Choose Name** et fournissez un **Volumes Name** unique.
+
+![Create Volumes : Choose Name and Volumes Name](../../../../../../assets/storage/block-storage/create-volume-name.webp)
 
 ### Créer
 
-- **Cycles de facturation** : horaire, mensuel ou annuel.
-- Passez en revue, puis cliquez sur **Créer un volume**.
-
-![Créer Stockage bloc : options de facturation et Créer un volume](../../../../../../assets/storage/block-storage/create-volume-create.webp)
-
-Après la création, formatez et montez le volume dans la VM :
+Connectez-vous à l'instance virtuelle cible avec SSH avant de créer le volume. N'exécutez jamais ces
+commandes sur votre poste de travail local. Exécutez `hostname` et vérifiez qu'il correspond au
+**Server Hostname** de l'instance dans le portail. Ensuite, exécutez la première commande `lsblk`
+ci-dessous avant de créer le volume et enregistrez sa sortie.
 
 ```bash
-# Find the new disk (usually /dev/vdb)
-lsblk
+# Confirm that this is the target VM before recording its disks.
+hostname
 
-# Format
-sudo mkfs.ext4 /dev/vdb
-
-# Mount
-sudo mkdir -p /data
-sudo mount /dev/vdb /data
-
-# Persist across reboots
-echo '/dev/vdb /data ext4 defaults 0 2' | sudo tee -a /etc/fstab
+# Before creating and attaching the volume, record the current devices.
+lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
 ```
+
+- **Billing Cycle** : **Hourly**, **Monthly** ou **Yearly**.
+- Cliquez sur **Review & Deploy**, examinez le résumé, puis cliquez sur **Create Volumes**.
+
+![Étapes Review & Deploy et Create Volumes](../../../../../../assets/storage/block-storage/create-volume-create.webp)
+
+Après avoir attaché le volume, exécutez cette commande via SSH sur l’instance virtuelle cible, puis
+comparez sa sortie à celle enregistrée avant la création du volume.
+
+```bash
+lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
+```
+
+Les étapes de gestion du volume s’arrêtent après la vérification de l’attachement. Ne formatez pas
+un disque en vous fondant uniquement sur son nom de périphérique ou sur une sélection manuelle. La
+création d’un système de fichiers, le montage du volume et l’ajout d’une configuration de montage
+persistante exigent une procédure testée séparément qui identifie le volume à l’aide d’un
+identifiant stable. Si vous ne pouvez pas identifier clairement le disque attaché, arrêtez-vous et
+ouvrez [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le projet, l’emplacement,
+l’erreur exacte et les détails non sensibles de la ressource.
 
 Voir aussi :
 [Types de stockage et résilience](/fr/public-cloud/storage/block-storage/storage-types),
