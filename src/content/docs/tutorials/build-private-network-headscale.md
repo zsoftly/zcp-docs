@@ -570,5 +570,7 @@ Remove the flagged network from the CMP web portal (search by the network ID the
   tier you just built, reachable from the tier and the mesh
 - [Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops): a full desktop for
   one employee inside the same tier, reachable only over the mesh
+- [Connect Desktops to Storage](/tutorials/connect-desktops-to-storage): mount the share on a
+  desktop, once you have both
 - [CLI reference](/public-cloud/cli/reference): every command and flag
 - [Tutorials overview](/tutorials): the full list of available tutorials

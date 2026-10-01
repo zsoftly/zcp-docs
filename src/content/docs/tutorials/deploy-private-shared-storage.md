@@ -304,7 +304,9 @@ lines above it too.
 ## Next steps
 
 - [Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops): a full desktop for
-  one employee inside the same tier. Connecting it to this share is still in progress.
+  one employee inside the same tier
+- [Connect Desktops to Storage](/tutorials/connect-desktops-to-storage): mount this share on that
+  desktop
 - [Build a Private Network with Headscale](/tutorials/build-private-network-headscale): the tier and
   mesh this tutorial builds on
 - [CLI reference](/public-cloud/cli/reference): every command and flag

@@ -428,9 +428,9 @@ a leftover network. Check the `[WARN]` lines above it too.
 
 ## Next steps
 
-The next part of this series (connecting these desktops to private shared storage and making the
-setup operational for a team) is still in progress. In the meantime:
-
+- [Connect Your Ubuntu Desktops to Private Storage](/tutorials/connect-desktops-to-storage): mount
+  the NFS share from Deploy Private Shared Storage, before handing this desktop's RDP credentials to
+  the employee
 - [Build a Private Network with Headscale](/tutorials/build-private-network-headscale): the tier and
   mesh this tutorial builds on
 - [Deploy Private Shared Storage](/tutorials/deploy-private-shared-storage): an NFS share inside the
