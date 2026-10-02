@@ -2,14 +2,14 @@
 title: 'Gérer une zone DNS sous forme de fichier dans le contrôle de version'
 description:
   Conservez chaque enregistrement DNS d’un domaine dans un fichier révisable, appliquez-le avec un
-  court script et le CLI zcp, puis recréez la zone à partir de ce fichier lorsque nécessaire.
+  court script et la CLI zcp, puis recréez la zone à partir de ce fichier lorsque nécessaire.
 sidebar:
   label: 'Gérer une zone sous forme de fichier'
 ---
 
 Ajouter des enregistrements dans une console fonctionne jusqu’au jour où vous devez savoir ce qui a
 changé ou recréer une zone ailleurs. Ce tutoriel conserve chaque enregistrement d’un domaine dans un
-fichier texte, l’applique avec un court script et le CLI `zcp`, puis place ce fichier dans le
+fichier texte, l’applique avec un court script et la CLI `zcp`, puis place ce fichier dans le
 contrôle de version avec le reste de votre infrastructure.
 
 À la fin, vous disposez de :
@@ -24,14 +24,14 @@ Prévoyez environ 20 minutes.
 
 Vous avez besoin de :
 
-- Le CLI `zcp` installé et authentifié. Consultez
-  l’[installation du CLI](/fr/public-cloud/cli/installation).
+- La CLI `zcp` installée et authentifiée. Consultez
+  l’[installation de la CLI](/fr/public-cloud/cli/installation).
 - Un projet et un domaine que vous contrôlez.
 - Remplacez `example.ca` par un domaine que vous contrôlez. Utilisez vos vraies adresses d’entrée et
   vos serveurs de noms.
 - Un dépôt Git pour conserver le fichier.
-- `jq`, utilisé par le script pour lire le slug de la zone dans la sortie JSON du CLI. Installez-le
-  avec `brew install jq` sur macOS ou `apt install jq` sur Debian et Ubuntu.
+- `jq`, utilisé par le script pour lire le slug de la zone dans la sortie JSON de la CLI.
+  Installez-le avec `brew install jq` sur macOS ou `apt install jq` sur Debian et Ubuntu.
 
 Lisez les [limitations connues](/fr/public-cloud/dns/records#limites-connues) avant de commencer.
 Chaque combinaison de nom et de type ne peut aujourd’hui contenir qu’une seule valeur, ce qui limite
@@ -270,5 +270,5 @@ signifie que la zone n’a pas fini de se propager entre eux.
 ## Prochaines étapes
 
 - [Types d’enregistrements DNS](/fr/public-cloud/dns/records)
-- [Héberger un domaine sur ZCP DNS avec le CLI](/fr/tutorials/host-dns-on-zcp-cli)
+- [Héberger un domaine sur ZCP DNS avec la CLI](/fr/tutorials/host-dns-on-zcp-cli)
 - [Gérer l’infrastructure avec Terraform ou OpenTofu](/tutorials/manage-infrastructure-terraform)

@@ -3,7 +3,7 @@ title: 'Déployer des postes Ubuntu pour les employés sur ZCP'
 description:
   Déployez un bureau distant Ubuntu KDE complet pour un employé dans votre niveau privé créé avec le
   tutoriel « Créer un réseau privé avec Headscale », accessible uniquement par le maillage via RDP
-  avec le CLI zcp.
+  avec la CLI zcp.
 sidebar:
   label: 'Déployer des postes employés (CLI)'
 ---
@@ -17,8 +17,8 @@ bureau est accessible uniquement par le maillage via RDP. RDP n'est jamais expos
 - Une VM dans votre niveau privé existant exécutant un bureau Ubuntu KDE complet
 - Une connexion nommée pour l'employé, provisionnée par cloud-init, et non le compte par défaut du
   modèle
-- La confirmation que le bureau fonctionne de bout en bout avec RDP et que seule SSH est accessible
-  sur son IP publique
+- La confirmation que le bureau fonctionne de bout en bout avec RDP et que seul le service SSH est
+  accessible sur son IP publique
 
 Prévoyez environ 30 minutes pour le déploiement de l'image, le provisionnement KDE au premier
 démarrage et l'activation de l'interface réseau du niveau.
@@ -31,7 +31,8 @@ démarrage et l'activation de l'interface réseau du niveau.
   vous avez utilisé `--name my-workspace`. Ce tutoriel ne dépend pas du tutoriel de stockage.
 - Gardez `ZCP_REGION` et `ZCP_PROJECT` exportés depuis un tutoriel précédent ou exportez-les de
   nouveau.
-- Utilisez le même nom de clé SSH que dans l'étape 4 de ce tutoriel.
+- Utilisez le même nom de clé SSH que celui créé à l'étape 4 du
+  [tutoriel sur le réseau privé avec Headscale](/fr/tutorials/build-private-network-headscale).
 - Installez `jq`, `ssh` et `curl`. `curl` récupère le script ci-dessous. Le script de déploiement
   l'utilise aussi pour récupérer ses fichiers d'aide et, sauf si vous passez `--my-ip`, pour
   détecter l'IP publique avec `ifconfig.me`. Le script de suppression n'a besoin que de `jq`.
@@ -299,8 +300,8 @@ Redémarrez la VM ou terminez directement la session avant de recommencer.
 
 Exécutez le client RDP depuis un appareil déjà connecté au maillage. L'IP du niveau du bureau n'est
 accessible que depuis le niveau ou le maillage. Connectez-vous à l'IP du niveau imprimée dans le
-résumé, jamais à l'IP publique. RDP n'a jamais été ouvert publiquement. Seul SSH y est ouvert, et il
-est limité à votre IP.
+résumé, jamais à l'IP publique. RDP n'a jamais été ouvert publiquement. Seul le service SSH est
+ouvert sur cette IP, et il est limité à votre IP.
 
 - Adresse : l'IP du niveau dans le résumé, par exemple `10.20.1.57`
 - Nom d'utilisateur et mot de passe : la valeur de `--username` et le mot de passe du résumé
@@ -396,8 +397,8 @@ produit aussi une sortie non nulle. Examinez les lignes `[WARN]` avant de conclu
 3. Réattribuez facultativement l'UID de la connexion par SSH avant la première connexion de
    l'employé si ce bureau montera le stockage partagé.
 4. Connectez-vous par RDP depuis le maillage à l'IP du niveau du résumé, jamais à l'IP publique.
-   Vérifiez Firefox ou Chromium et un terminal, puis confirmez que seule SSH est accessible sur l'IP
-   publique.
+   Vérifiez Firefox ou Chromium et un terminal, puis confirmez que seul le service SSH est
+   accessible sur l'IP publique.
 5. Exécutez `destroy-employee-desktop.sh --name <name>` à la fin et cherchez un réseau résiduel.
 
 ## Étapes suivantes

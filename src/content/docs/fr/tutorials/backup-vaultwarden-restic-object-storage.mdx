@@ -35,8 +35,7 @@ Prévoyez environ 45 minutes.
 Le chiffrement côté serveur n’est pas encore disponible dans le stockage objet ZCP.
 `zcp object-storage bucket encryption enable` refuse de s’exécuter, car la passerelle de stockage ne
 dispose pas de serveur principal de chiffrement et l’activation de SSE-S3 par défaut fait échouer
-chaque envoi ultérieur dans ce compartiment avec `InvalidArgument`. La prise en charge est prévue
-avant la fin du troisième trimestre 2026.
+chaque envoi ultérieur dans ce compartiment avec `InvalidArgument`.
 
 restic ne l’attend pas. Il chiffre côté client, donc le compartiment ne reçoit que du texte chiffré.
 Le chiffrement côté serveur, lorsqu’il sera disponible, protège les données écrites par des clients
@@ -66,7 +65,7 @@ compte. Utilisez-les au lieu de recopier les exemples.
 ## Étape 1 : Exporter votre jeton d’API
 
 Dans la [console](https://cloud.zcp.zsoftly.ca), allez à **Compte → Clés d’API**, créez un jeton et
-exportez-le. Le fournisseur et le CLI lisent la même variable :
+exportez-le. Le fournisseur et la CLI lisent la même variable :
 
 ```bash
 export ZCP_BEARER_TOKEN="<your-token>"
@@ -286,7 +285,7 @@ ni le dépôt de paquets, ni GitHub, ni le point de terminaison du stockage obje
 destination. Restreignez les CIDR de destination lorsque vous connaissez les hôtes nécessaires.
 
 Cela concerne la gestion directe de votre réseau. Un réseau créé automatiquement par la VM, via
-`network_plan` ou l’option `--network-plan` du CLI, est provisionné avec un accès sortant
+`network_plan` ou l’option `--network-plan` de la CLI, est provisionné avec un accès sortant
 fonctionnel. Prendre la responsabilité du réseau pour un `destroy` propre implique aussi de prendre
 la responsabilité de ses règles de sortie.
 

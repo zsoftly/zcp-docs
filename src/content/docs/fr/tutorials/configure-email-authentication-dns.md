@@ -11,8 +11,8 @@ les messages envoyés par vos systèmes autorisés de ceux qui prétendent seule
 domaine. Ce tutoriel configure des ensembles d'enregistrements DKIM et DMARC dédiés dans une zone
 DNS ZCP existante. Il explique aussi comment gérer SPF de façon sûre.
 
-Choisissez un seul responsable pour chaque ensemble d'enregistrements : le CLI `zcp` ou
-Terraform/OpenTofu. N'utilisez pas les deux outils pour gérer le même nom et le même type. Le CLI
+Choisissez un seul responsable pour chaque ensemble d'enregistrements : la CLI `zcp` ou
+Terraform/OpenTofu. N'utilisez pas les deux outils pour gérer le même nom et le même type. La CLI
 accepte une valeur de contenu à chaque création et supprime les enregistrements selon leur nom et
 leur type complets. Terraform modélise les enregistrements comme des ensembles nommés et typés.
 
@@ -41,7 +41,7 @@ pas que chaque expéditeur le réussit. Testez les e-mails reçus après chaque 
 Vous avez besoin de :
 
 - Une zone DNS ZCP pour un domaine que vous contrôlez
-- Le [CLI `zcp`](/fr/public-cloud/cli/installation) authentifié avec un jeton, ou Terraform ou
+- La [CLI `zcp`](/fr/public-cloud/cli/installation) authentifiée avec un jeton, ou Terraform ou
   OpenTofu avec `ZCP_BEARER_TOKEN` défini dans votre shell
 - L'accès à chaque système qui envoie des e-mails avec le domaine, notamment les livraisons
   d'applications, notifications, assistance, facturation, marketing et alertes d'appareils ou de
@@ -92,10 +92,10 @@ actif.
 
 :::
 
-Le CLI ZCP actuel crée ou supprime un ensemble d'enregistrements complet, défini par nom et type. Il
-ne dispose pas de commande de mise à jour sur place. Le fournisseur Terraform actuel remplace aussi
-un `zcp_dns_record` lorsque son contenu, nom, type ou TTL change. Pour un SPF existant ou un autre
-ensemble `TXT` à plusieurs valeurs, utilisez le processus DNS établi qui préserve l'ensemble
+La CLI ZCP actuelle crée ou supprime un ensemble complet d'enregistrements défini par nom et type.
+Elle ne dispose pas de commande de mise à jour sur place. Le fournisseur Terraform actuel remplace
+aussi un `zcp_dns_record` lorsque son contenu, nom, type ou TTL change. Pour un SPF existant ou un
+autre ensemble `TXT` à plusieurs valeurs, utilisez le processus DNS établi qui préserve l'ensemble
 complet. Ne créez pas une seconde ressource `TXT` racine et ne supprimez pas puis recréez pendant
 une livraison normale.
 
@@ -124,14 +124,14 @@ Pour la norme sur la sélection des enregistrements SPF et les limites de recher
 
 ## Choisir une méthode de gestion
 
-Utilisez le CLI pour une petite modification examinée sur un nom d'enregistrement dédié et
+Utilisez la CLI pour une petite modification examinée sur un nom d'enregistrement dédié et
 inutilisé. Utilisez Terraform ou OpenTofu quand votre équipe gère déjà cette zone comme du code et
 examine les plans. Les exemples ci-dessous créent uniquement les ensembles d'enregistrements DKIM et
 DMARC dédiés après confirmation que chaque nom est absent.
 
 N'appliquez pas les commandes CLI si Terraform ou OpenTofu possède le même ensemble
 d'enregistrements. N'appliquez pas la configuration Terraform si une personne modifie le même
-ensemble par le CLI ou la console. Consignez le responsable avec votre inventaire des expéditeurs.
+ensemble par la CLI ou la console. Consignez le responsable avec votre inventaire des expéditeurs.
 
 Si l'apex de la zone est le domaine de l'expéditeur d'enveloppe et qu'il n'a aucun ensemble
 d'enregistrements `TXT`, utilisez une seule méthode de gestion pour créer une politique SPF unique
@@ -140,7 +140,7 @@ vérifié chaque expéditeur et les recherches DNS de cette valeur. Un domaine d
 ensemble `TXT` racine existant exige un changement distinct et examiné, car ce tutoriel ne peut pas
 fusionner ni mettre à jour cet ensemble partagé de façon sûre.
 
-## Publier DKIM et DMARC avec le CLI
+## Publier DKIM et DMARC avec la CLI
 
 Définissez les variables de votre zone et les instructions fournies par un système expéditeur. La
 valeur DKIM ci-dessous est lue depuis votre terminal pour éviter son inscription dans l'historique
@@ -429,7 +429,7 @@ seulement lorsque les échecs restants sont compris et acceptés. Les messages s
 transférés ou modifiés par des systèmes intermédiaires. Incluez donc ces chemins dans votre examen
 avant de resserrer la politique.
 
-Utilisez la même méthode de gestion qui possède `_dmarc` pour chaque changement. Avec le CLI,
+Utilisez la même méthode de gestion qui possède `_dmarc` pour chaque changement. Avec la CLI,
 consignez le contenu précédent de l'enregistrement avant la modification de maintenance approuvée,
 puis restaurez exactement ce contenu si les tests de livraison échouent. Avec Terraform ou OpenTofu,
 conservez la configuration précédente examinée et utilisez un plan examiné pour y revenir.
@@ -462,7 +462,7 @@ Pour les décisions de politique et de responsabilité qui sous-tendent ce trava
 
 - [Héberger un domaine sur ZCP (CLI)](/fr/tutorials/host-dns-on-zcp-cli/) pour créer et déléguer une
   zone.
-- [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli) pour les commandes DNS prises en charge.
+- [Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli) pour les commandes DNS prises en charge.
 - [Enregistrements TXT](/fr/public-cloud/dns/records/txt) pour les exemples de guillemets et de
   recherche directe.
 - [Dépannage DNS](/fr/public-cloud/dns/troubleshooting) pour les vérifications DNS faisant autorité

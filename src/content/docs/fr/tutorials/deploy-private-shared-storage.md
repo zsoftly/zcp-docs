@@ -2,8 +2,8 @@
 title: 'Déployer un stockage partagé privé sur ZCP'
 description:
   Déployez un partage de fichiers NFS dans le niveau privé créé avec le tutoriel « Créer un réseau
-  privé avec Headscale » à l'aide du CLI zcp. Le partage n'est accessible que depuis le niveau et le
-  maillage.
+  privé avec Headscale » à l'aide de la CLI zcp. Le partage n'est accessible que depuis le niveau et
+  le maillage.
 sidebar:
   label: 'Déployer le stockage privé (CLI)'
 ---
@@ -16,8 +16,8 @@ accessible depuis ce niveau et le réseau maillé construit dans ce tutoriel, ja
 
 - Une VM dans votre niveau privé existant, avec un disque de données séparé
 - Un partage NFS exporté vers le niveau et le maillage, jamais vers le réseau public
-- La confirmation que le partage fonctionne depuis un client du maillage et que seule SSH répond sur
-  son IP publique
+- La confirmation que le partage fonctionne depuis un client du maillage et que seul le service SSH
+  est accessible sur son IP publique
 
 Prévoyez environ 20 minutes.
 
@@ -218,9 +218,9 @@ problème, comme dans le tutoriel précédent.
 nc -zv -w 3 <storage-vm-public-ip> 2049
 ```
 
-Cette commande échoue (connexion refusée ou délai dépassé). L'IP publique de la VM de stockage ne
-laisse SSH accessible que depuis votre IP. NFS est joignable uniquement dans le niveau ou par le
-maillage.
+Cette commande échoue (connexion refusée ou délai dépassé). L'IP publique de la VM de stockage
+n'autorise l'accès SSH que depuis votre adresse IP. NFS est joignable uniquement dans le niveau ou
+par le maillage.
 
 :::note
 
@@ -246,7 +246,7 @@ passez `--region` et `--project`. Le script échoue sans l'un ou l'autre.
 
 :::note
 
-Le CLI `zcp` ne permet pas de vérifier qu'un volume appartient à une VM ou qu'il est attaché. Le
+La CLI `zcp` ne permet pas de vérifier qu'un volume appartient à une VM ou qu'il est attaché. Le
 script de déploiement enregistre donc les ressources exactes qu'il crée dans
 `~/.zcp-private-storage-state/` sur la machine où vous l'exécutez, indexées ensemble par `--name`,
 `--region` et `--project`. Exécutez la suppression depuis cette même machine avec les mêmes valeurs.
@@ -287,7 +287,7 @@ Examinez les lignes `[WARN]` avant de conclure qu'il s'agit d'un réseau résidu
    données, puis l'exporte par NFS vers les CIDR du niveau et du maillage avec un pare-feu
    correspondant.
 3. Montez le partage depuis un appareil connecté au maillage, vérifiez lecture et écriture, puis
-   confirmez que seule SSH répond sur l'IP publique.
+   confirmez que seul le service SSH est accessible sur l'IP publique.
 4. Exécutez `destroy-private-storage.sh --name <prefix> --allow-unverified-volume-delete` à la fin
    et cherchez un réseau résiduel.
 

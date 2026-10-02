@@ -2,7 +2,7 @@
 title: 'Créer un réseau privé avec Headscale sur ZCP'
 description:
   Créez un VPC et un niveau réseau privés ZCP, puis déployez un serveur Headscale auto-hébergé
-  depuis le Marketplace afin d'y accéder par un réseau maillé WireGuard, avec le CLI zcp.
+  depuis le Marketplace afin d'y accéder par un réseau maillé WireGuard, avec la CLI zcp.
 sidebar:
   label: 'Créer un réseau privé (CLI)'
 ---
@@ -50,7 +50,7 @@ l'interface d'administration. Consultez « Ce que le script crée » ci-dessous.
 
 :::
 
-## Étape 1 : Installer le CLI
+## Étape 1 : Installer la CLI
 
 ```bash
 # macOS and Linux
@@ -73,8 +73,8 @@ Confirmez son fonctionnement avec `zcp version`.
 zcp profile add default
 ```
 
-Le CLI demande le **jeton Bearer** copié, puis une **région par défaut** et un **projet par défaut**
-(consultez la note ci-dessous pour les trouver si vous ne les connaissez pas). Il ne demande pas
+La CLI demande le **jeton Bearer** copié, puis une **région par défaut** et un **projet par défaut**
+(consultez la note ci-dessous pour les trouver si vous ne les connaissez pas). Elle ne demande pas
 l'URL de l'API. Elle utilise une valeur par défaut fixe, sauf remplacement avec
 `--api-url-override`. Vérifiez ensuite :
 
@@ -575,7 +575,7 @@ portail web CMP en recherchant l'ID réseau imprimé par le script.
 
 ## Récapitulatif
 
-1. Installez le CLI, authentifiez-vous, trouvez les slugs des ressources de votre compte et importez
+1. Installez la CLI, authentifiez-vous, trouvez les slugs des ressources de votre compte et importez
    une clé SSH (étapes 1 à 4).
 2. Exécutez `build-private-network.sh --ssh-key <name> --name my-workspace`. Le script crée le VPC,
    le niveau privé, l'ACL limitée, Headplane et le routeur de sous-réseau, puis affiche une commande
