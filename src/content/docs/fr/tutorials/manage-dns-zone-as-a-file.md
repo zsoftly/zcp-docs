@@ -25,7 +25,7 @@ Prévoyez environ 20 minutes.
 Vous avez besoin de :
 
 - Le CLI `zcp` installé et authentifié. Consultez
-  l’[installation du CLI](/public-cloud/cli/installation).
+  l’[installation du CLI](/fr/public-cloud/cli/installation).
 - Un projet et un domaine que vous contrôlez.
 - Remplacez `example.ca` par un domaine que vous contrôlez. Utilisez vos vraies adresses d’entrée et
   vos serveurs de noms.
@@ -33,9 +33,9 @@ Vous avez besoin de :
 - `jq`, utilisé par le script pour lire le slug de la zone dans la sortie JSON du CLI. Installez-le
   avec `brew install jq` sur macOS ou `apt install jq` sur Debian et Ubuntu.
 
-Lisez les [limitations connues](/public-cloud/dns/records#known-limitations) avant de commencer. Un
-nom et un type ne contiennent aujourd’hui qu’une valeur, ce qui limite ce qu’un fichier de ce type
-peut exprimer.
+Lisez les [limitations connues](/fr/public-cloud/dns/records#limites-connues) avant de commencer.
+Chaque combinaison de nom et de type ne peut aujourd’hui contenir qu’une seule valeur, ce qui limite
+ce qu’un fichier de ce type peut exprimer.
 
 ## Étape 1 : Choisir une disposition
 
@@ -269,6 +269,6 @@ signifie que la zone n’a pas fini de se propager entre eux.
 
 ## Prochaines étapes
 
-- [Types d’enregistrements DNS](/public-cloud/dns/records)
-- [Héberger un domaine sur ZCP DNS avec le CLI](/tutorials/host-dns-on-zcp-cli)
+- [Types d’enregistrements DNS](/fr/public-cloud/dns/records)
+- [Héberger un domaine sur ZCP DNS avec le CLI](/fr/tutorials/host-dns-on-zcp-cli)
 - [Gérer l’infrastructure avec Terraform ou OpenTofu](/tutorials/manage-infrastructure-terraform)

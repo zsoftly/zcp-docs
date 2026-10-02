@@ -9,7 +9,7 @@ sidebar:
 ---
 
 Ce tutoriel déploie un partage de fichiers NFS sur une VM du niveau privé créé avec
-[Créer un réseau privé avec Headscale](/tutorials/build-private-network-headscale). Il est
+[Créer un réseau privé avec Headscale](/fr/tutorials/build-private-network-headscale). Il est
 accessible depuis ce niveau et le réseau maillé construit dans ce tutoriel, jamais depuis Internet.
 
 À la fin, vous aurez :
@@ -23,8 +23,8 @@ Prévoyez environ 20 minutes.
 
 ## Avant de commencer
 
-- Terminez [Créer un réseau privé avec Headscale](/tutorials/build-private-network-headscale) : vous
-  devez disposer d'un VPC avec un niveau privé, d'un serveur Headscale et d'un routeur de
+- Terminez [Créer un réseau privé avec Headscale](/fr/tutorials/build-private-network-headscale) :
+  vous devez disposer d'un VPC avec un niveau privé, d'un serveur Headscale et d'un routeur de
   sous-réseau qui annonce et sert déjà la route du niveau. Ce tutoriel nécessite le nom exact du
   niveau créé, par exemple `my-workspace-tier` si vous avez utilisé `--name my-workspace`.
 - Gardez `ZCP_REGION` et `ZCP_PROJECT` exportés depuis le tutoriel précédent ou exportez-les de
@@ -293,10 +293,10 @@ Examinez les lignes `[WARN]` avant de conclure qu'il s'agit d'un réseau résidu
 
 ## Étapes suivantes
 
-- [Déployer des postes Ubuntu pour les employés](/tutorials/deploy-ubuntu-employee-desktops) : un
+- [Déployer des postes Ubuntu pour les employés](/fr/tutorials/deploy-ubuntu-employee-desktops) : un
   bureau complet pour un employé dans le même niveau. La connexion de ce bureau à ce partage est
   toujours en cours.
-- [Créer un réseau privé avec Headscale](/tutorials/build-private-network-headscale) : le niveau et
-  le maillage
-- [Référence CLI](/public-cloud/cli/reference) : chaque commande et indicateur
-- [Vue d'ensemble des tutoriels](/tutorials) : la liste complète
+- [Créer un réseau privé avec Headscale](/fr/tutorials/build-private-network-headscale) : le niveau
+  et le maillage
+- [Référence CLI](/fr/public-cloud/cli/reference) : chaque commande et indicateur
+- [Vue d'ensemble des tutoriels](/fr/tutorials) : la liste complète

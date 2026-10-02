@@ -55,11 +55,11 @@ compte. Utilisez-les au lieu de recopier les exemples.
 
 ## Avant de commencer
 
-- Un compte ZSoftly Public Cloud. [Créez-en un](/public-cloud/getting-started/account-signup) si
+- Un compte ZSoftly Public Cloud. [Créez-en un](/fr/public-cloud/getting-started/account-signup) si
   vous n’en avez pas.
 - [Terraform](https://developer.hashicorp.com/terraform/install) 1.0 ou version ultérieure, ou
   [OpenTofu](https://opentofu.org/docs/intro/install/) 1.6 ou version ultérieure.
-- Le [CLI `zcp`](/public-cloud/cli/installation), pour rechercher les slugs et inspecter le
+- Le [CLI `zcp`](/fr/public-cloud/cli/installation), pour rechercher les slugs et inspecter le
   compartiment.
 - Une paire de clés SSH. Générez-en une avec `ssh-keygen -t ed25519` si nécessaire.
 
@@ -94,9 +94,9 @@ zcp plan object-storage --region os-yul              # object storage sizes
 zcp storage-category list --region os-yul            # object storage categories
 ```
 
-L’image Vaultwarden est une [application Marketplace](/public-cloud/marketplace/vaultwarden). Elle
-fournit Vaultwarden dans Docker Compose sur Ubuntu 24.04, génère un certificat autosigné et un jeton
-administrateur au premier démarrage, puis sert le coffre web sur le port 8000.
+L’image Vaultwarden est une [application Marketplace](/fr/public-cloud/marketplace/vaultwarden).
+Elle fournit Vaultwarden dans Docker Compose sur Ubuntu 24.04, génère un certificat autosigné et un
+jeton administrateur au premier démarrage, puis sert le coffre web sur le port 8000.
 
 ## Étape 3 : Écrire la configuration
 
@@ -937,13 +937,13 @@ le réglage actuel avec `encryption status`.
 
 ## Étapes suivantes
 
-- [Clés d'accès au stockage d'objets](/public-cloud/storage/object-storage/access-keys) et
-  [Utilisation de l'API S3](/public-cloud/storage/object-storage/s3-usage/)
+- [Clés d'accès au stockage d'objets](/fr/public-cloud/storage/object-storage/access-keys) et
+  [Utilisation de l'API S3](/fr/public-cloud/storage/object-storage/s3-usage/)
 - [Gérer ZCP avec Terraform ou OpenTofu](/tutorials/manage-infrastructure-terraform/) pour le cycle
   de vie du fournisseur de façon isolée
-- [Vaultwarden sur le Marketplace](/public-cloud/marketplace/vaultwarden) pour la configuration de
-  l'image et les notes de renforcement pour la production
-- [Sauvegardes et instantanés d'instances](/public-cloud/backups-snapshots/backups) pour la
+- [Vaultwarden sur le Marketplace](/fr/public-cloud/marketplace/vaultwarden) pour la configuration
+  de l'image et les notes de renforcement pour la production
+- [Sauvegardes et instantanés d'instances](/fr/public-cloud/backups-snapshots/backups) pour la
   récupération d'une VM entière en complément de cette approche au niveau des fichiers
 - [Documentation restic](https://restic.readthedocs.io/en/stable/) pour les politiques, les dépôts
   distants et le montage d'un dépôt comme système de fichiers

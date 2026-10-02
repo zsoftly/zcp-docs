@@ -34,7 +34,7 @@ les exemples tels quels.
 
 ## Avant de commencer
 
-- Un compte ZSoftly Public Cloud. [Créez-en un](/public-cloud/getting-started/account-signup) si
+- Un compte ZSoftly Public Cloud. [Créez-en un](/fr/public-cloud/getting-started/account-signup) si
   vous n'en avez pas.
 - Un terminal avec un client SSH.
 - `jq` installé. Les scripts de création et de suppression de ce tutoriel l'exigent
@@ -587,9 +587,9 @@ portail web CMP en recherchant l'ID réseau imprimé par le script.
 
 ## Prochaines étapes
 
-- [Déployer un stockage partagé privé](/tutorials/deploy-private-shared-storage) : un partage NFS
+- [Déployer un stockage partagé privé](/fr/tutorials/deploy-private-shared-storage) : un partage NFS
   dans le niveau que vous venez de créer, accessible depuis le niveau et le maillage
-- [Déployer des postes Ubuntu pour les employés](/tutorials/deploy-ubuntu-employee-desktops) : un
+- [Déployer des postes Ubuntu pour les employés](/fr/tutorials/deploy-ubuntu-employee-desktops) : un
   bureau complet pour un employé dans le même niveau, accessible uniquement via le maillage
-- [Référence CLI](/public-cloud/cli/reference) : chaque commande et indicateur
-- [Vue d'ensemble des tutoriels](/tutorials) : la liste complète des tutoriels
+- [Référence CLI](/fr/public-cloud/cli/reference) : chaque commande et indicateur
+- [Vue d'ensemble des tutoriels](/fr/tutorials) : la liste complète des tutoriels

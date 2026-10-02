@@ -9,8 +9,8 @@ sidebar:
 ---
 
 Ce tutoriel déploie un bureau Ubuntu KDE complet pour un employé sur une VM du niveau privé créé
-avec [Créer un réseau privé avec Headscale](/tutorials/build-private-network-headscale). Le bureau
-est accessible uniquement par le maillage via RDP. RDP n'est jamais exposé publiquement.
+avec [Créer un réseau privé avec Headscale](/fr/tutorials/build-private-network-headscale). Le
+bureau est accessible uniquement par le maillage via RDP. RDP n'est jamais exposé publiquement.
 
 À la fin, vous aurez :
 
@@ -25,10 +25,10 @@ démarrage et l'activation de l'interface réseau du niveau.
 
 ## Avant de commencer
 
-- Terminez [Créer un réseau privé avec Headscale](/tutorials/build-private-network-headscale) : vous
-  avez besoin d'un VPC avec un niveau privé, d'un serveur Headscale et d'un routeur de sous-réseau
-  qui annonce et sert déjà la route de ce niveau, par exemple `my-workspace-tier` si vous avez
-  utilisé `--name my-workspace`. Ce tutoriel ne dépend pas du tutoriel de stockage.
+- Terminez [Créer un réseau privé avec Headscale](/fr/tutorials/build-private-network-headscale) :
+  vous avez besoin d'un VPC avec un niveau privé, d'un serveur Headscale et d'un routeur de
+  sous-réseau qui annonce et sert déjà la route de ce niveau, par exemple `my-workspace-tier` si
+  vous avez utilisé `--name my-workspace`. Ce tutoriel ne dépend pas du tutoriel de stockage.
 - Gardez `ZCP_REGION` et `ZCP_PROJECT` exportés depuis un tutoriel précédent ou exportez-les de
   nouveau.
 - Utilisez le même nom de clé SSH que dans l'étape 4 de ce tutoriel.
@@ -108,7 +108,7 @@ toute création. Il refuse aussi les noms réservés, dont `ubuntu`, `xrdp`, `sd
 
 ## Ce que construit le script
 
-### Sélection du modèle et contrôle de version
+### Sélection du modèle et vérification de la version
 
 **Le script trouve le modèle ubuntukde et refuse toute version plus ancienne que celle validée pour
 ce tutoriel.**
@@ -318,9 +318,9 @@ est limité à votre IP.
 
 ## Vérifier le bureau de bout en bout
 
-Lancez Firefox ou Chromium depuis le lanceur KDE, puis ouvrez un terminal. Le contrôle de version
-rejette les images antérieures à `1.0.2` parce que les applications y clignotent et se ferment
-immédiatement via RDP. Vérifiez aussi l'accès Internet depuis la session.
+Lancez Firefox ou Chromium depuis le lanceur KDE, puis ouvrez un terminal. La vérification de la
+version rejette les images antérieures à `1.0.2` parce que les applications y clignotent et se
+ferment immédiatement via RDP. Vérifiez aussi l'accès Internet depuis la session.
 
 :::note
 
@@ -405,9 +405,9 @@ produit aussi une sortie non nulle. Examinez les lignes `[WARN]` avant de conclu
 La prochaine partie de cette série, qui consiste à connecter ces bureaux au stockage partagé privé
 et à rendre la configuration opérationnelle pour une équipe, est toujours en cours. En attendant :
 
-- [Créer un réseau privé avec Headscale](/tutorials/build-private-network-headscale) : le niveau et
-  le maillage
-- [Déployer un stockage partagé privé](/tutorials/deploy-private-shared-storage) : un partage NFS
+- [Créer un réseau privé avec Headscale](/fr/tutorials/build-private-network-headscale) : le niveau
+  et le maillage
+- [Déployer un stockage partagé privé](/fr/tutorials/deploy-private-shared-storage) : un partage NFS
   dans le même niveau
-- [Référence CLI](/public-cloud/cli/reference) : chaque commande et indicateur
-- [Vue d'ensemble des tutoriels](/tutorials) : la liste complète des tutoriels
+- [Référence CLI](/fr/public-cloud/cli/reference) : chaque commande et indicateur
+- [Vue d'ensemble des tutoriels](/fr/tutorials) : la liste complète des tutoriels

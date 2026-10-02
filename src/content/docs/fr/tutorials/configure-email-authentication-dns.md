@@ -25,7 +25,8 @@ leur type complets. Terraform modélise les enregistrements comme des ensembles 
 - Une routine de vérification du DNS et des e-mails authentifiés de chaque expéditeur
 
 Ce guide suppose que ZCP héberge déjà la zone faisant autorité. Pour créer une zone et la déléguer
-chez votre registraire, suivez [Héberger un domaine sur ZCP (CLI)](/tutorials/host-dns-on-zcp-cli/).
+chez votre registraire, suivez
+[Héberger un domaine sur ZCP (CLI)](/fr/tutorials/host-dns-on-zcp-cli/).
 
 :::caution
 
@@ -40,8 +41,8 @@ pas que chaque expéditeur le réussit. Testez les e-mails reçus après chaque 
 Vous avez besoin de :
 
 - Une zone DNS ZCP pour un domaine que vous contrôlez
-- Le [CLI `zcp`](/public-cloud/cli/installation) authentifié avec un jeton, ou Terraform ou OpenTofu
-  avec `ZCP_BEARER_TOKEN` défini dans votre shell
+- Le [CLI `zcp`](/fr/public-cloud/cli/installation) authentifié avec un jeton, ou Terraform ou
+  OpenTofu avec `ZCP_BEARER_TOKEN` défini dans votre shell
 - L'accès à chaque système qui envoie des e-mails avec le domaine, notamment les livraisons
   d'applications, notifications, assistance, facturation, marketing et alertes d'appareils ou de
   services
@@ -459,10 +460,10 @@ Pour les décisions de politique et de responsabilité qui sous-tendent ce trava
 
 ## Prochaines étapes
 
-- [Héberger un domaine sur ZCP (CLI)](/tutorials/host-dns-on-zcp-cli/) pour créer et déléguer une
+- [Héberger un domaine sur ZCP (CLI)](/fr/tutorials/host-dns-on-zcp-cli/) pour créer et déléguer une
   zone.
-- [Gérer le DNS avec le CLI](/public-cloud/dns/cli) pour les commandes DNS prises en charge.
-- [Enregistrements TXT](/public-cloud/dns/records/txt) pour les exemples de guillemets et de
+- [Gérer le DNS avec le CLI](/fr/public-cloud/dns/cli) pour les commandes DNS prises en charge.
+- [Enregistrements TXT](/fr/public-cloud/dns/records/txt) pour les exemples de guillemets et de
   recherche directe.
-- [Dépannage DNS](/public-cloud/dns/troubleshooting) pour les vérifications DNS faisant autorité et
-  récursives.
+- [Dépannage DNS](/fr/public-cloud/dns/troubleshooting) pour les vérifications DNS faisant autorité
+  et récursives.
