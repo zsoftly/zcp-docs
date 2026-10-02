@@ -18,11 +18,15 @@ About 10 minutes per desktop.
 
 :::note
 
-By default this is a trusted, team-wide share, not per-employee isolated storage. If your
-organization needs real per-employee isolation, that's decided in
+By default this is a trusted, team-wide share: every desktop's employee login gets the same UID
+unless you act, so they're the same filesystem identity here, able to overwrite or delete each
+other's files. If your organization needs separate ownership per employee, that's decided in
 [Give this desktop a unique identity on shared storage](/tutorials/deploy-ubuntu-employee-desktops#give-this-desktop-a-unique-identity-on-shared-storage),
-before the employee's first login. Nothing to pass to this script for that. See Troubleshooting at
-the end of this tutorial if a desktop already had a login before that step was applied.
+before the employee's first login. Nothing to pass to this script for that. A unique UID stops
+employees from overwriting or deleting each other's files, but the share's default permissions (mode
+`1777`, files typically created `0644`) still leave files readable by anyone else with access to
+it - a unique UID is ownership separation, not read confidentiality. See Troubleshooting at the end
+of this tutorial if a desktop already had a login before the identity step was applied.
 
 :::
 
@@ -138,9 +142,12 @@ ls -la /srv/nfs/company-share/
 ```
 
 A file written under an employee's UID shows correctly by name when viewed from the desktop, but
-shows as a bare number when viewed from the storage server or any other machine, since no local user
-with that UID exists there. That part is harmless, cosmetic only. The UID match or mismatch between
-desktops is what matters, not whether the storage VM can resolve a name.
+shows as a bare number when viewed from the storage server specifically, since it has no local user
+at that UID. That part is harmless, cosmetic only. A different desktop is not the same case: if it
+has its own local user at that same UID (likely, since every desktop gets the same UID by default
+unless you assigned unique ones), the file shows under that user's name there too, even though it's
+a different employee. The UID match or mismatch between desktops is what matters, not whether any
+one machine can resolve a name for it.
 
 ### Verifies the mount works, as the employee
 
@@ -199,8 +206,8 @@ and check **Places → Remote** before handing the login over to the employee.
 
 Run the script again for the next desktop, with that desktop's own `--desktop-name` and
 `--username`. This becomes a step in the standard onboarding flow, before handing off RDP
-credentials each time. If your organization needs per-employee isolation, that decision still
-happens in
+credentials each time. If your organization needs separate ownership per employee, that decision
+still happens in
 [Give this desktop a unique identity on shared storage](/tutorials/deploy-ubuntu-employee-desktops#give-this-desktop-a-unique-identity-on-shared-storage),
 before the employee's first login.
 
