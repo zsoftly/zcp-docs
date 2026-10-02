@@ -115,6 +115,19 @@ You learn how to:
 - Connect over RDP and verify the desktop works end to end, then confirm its public IP has nothing
   but SSH reachable on it
 
+### [Connect Your Ubuntu Desktops to Private Storage](/tutorials/connect-desktops-to-storage)
+
+Mount the file share from Deploy Private Shared Storage on the desktop from Deploy Ubuntu Employee
+Desktops, over SSH, before handing the employee their RDP login. About 10 minutes per desktop.
+
+You learn how to:
+
+- Mount the NFS share on a desktop through your existing SSH admin access, before RDP credentials go
+  out
+- Confirm the mount in Dolphin and persist it across reboots via `fstab`
+- Understand NFS's raw-UID permission model, and recover a desktop where an RDP login already
+  happened before an identity fix was applied
+
 ### [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
 
 Deploy a Vaultwarden password manager with Terraform or OpenTofu, then back its database up to ZCP

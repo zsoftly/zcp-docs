@@ -272,6 +272,10 @@ export default defineConfig({
               slug: 'tutorials/deploy-ubuntu-employee-desktops',
             },
             {
+              label: 'Connect Desktops to Storage (CLI)',
+              slug: 'tutorials/connect-desktops-to-storage',
+            },
+            {
               label: 'Configure Email Authentication DNS',
               slug: 'tutorials/configure-email-authentication-dns',
             },
