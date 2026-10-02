@@ -17,6 +17,37 @@ couvrent ces cas.
 
 ## Tutoriels
 
+### [Configurer le DNS d'authentification des e-mails](/fr/tutorials/configure-email-authentication-dns)
+
+Publiez les enregistrements DKIM et DMARC d'une zone DNS ZCP existante avec le CLI ou
+Terraform/OpenTofu. Vérifiez les expéditeurs, les réponses DNS et les e-mails reçus avant
+d'appliquer une politique stricte.
+
+### [Créer un réseau privé avec Headscale](/fr/tutorials/build-private-network-headscale)
+
+Créez un VPC et un niveau privé, appliquez une ACL réseau dédiée, puis déployez Headscale et
+Headplane pour accéder au réseau via un maillage privé.
+
+### [Déployer un stockage partagé privé](/fr/tutorials/deploy-private-shared-storage)
+
+Déployez un partage NFS dans un niveau privé existant. Le partage reste accessible uniquement depuis
+le niveau et le maillage.
+
+### [Déployer des postes Ubuntu pour les employés](/fr/tutorials/deploy-ubuntu-employee-desktops)
+
+Déployez un bureau distant Ubuntu KDE pour un employé dans votre niveau privé. RDP reste accessible
+uniquement depuis le maillage.
+
+### [Gérer une zone DNS sous forme de fichier](/fr/tutorials/manage-dns-zone-as-a-file)
+
+Gérez les enregistrements d'une zone DNS ZCP dans un fichier versionné, validez-les et appliquez les
+changements avec le CLI.
+
+### [Sauvegarder Vaultwarden dans le stockage d'objets avec restic](/fr/tutorials/backup-vaultwarden-restic-object-storage/)
+
+Déployez Vaultwarden puis sauvegardez chaque nuit sa base de données vers le stockage d'objets ZCP
+avec restic. Les données sont chiffrées sur la VM avant leur envoi dans le compartiment.
+
 ### [Déployer un VPS et installer Dokploy avec le CLI](/fr/tutorials/deploy-vps-dokploy-cli)
 
 Passez d'un compte neuf à une machine virtuelle publique exécutant [Dokploy](https://dokploy.com),
