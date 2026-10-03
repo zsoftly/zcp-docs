@@ -25,6 +25,9 @@ Le point de terminaison de votre instance correspond à la région choisie lors 
 
 Utilisez le CLI pour lister les métadonnées des clés, créer une clé et révoquer une clé :
 
+Remplacez `<storage-slug>` par le slug de votre instance de stockage et `<key-id>` par l'identifiant
+de la clé.
+
 ```bash
 zcp object-storage keys list <storage-slug>
 zcp object-storage keys create <storage-slug>
@@ -47,12 +50,15 @@ marque comme révoquée dans le plan de contrôle.
 
 ### Utiliser les identifiants avec AWS CLI
 
+`<ACCESS_KEY_ID>` représente votre clé d’accès et `<SECRET_ACCESS_KEY>` sa clé secrète. Remplacez
+ces valeurs dans les exemples ci-dessous.
+
 Configurez un profil nommé pour votre stockage objet ZSoftly :
 
 ```bash
 aws configure --profile zsoftly
-# AWS Access Key ID: <your access key>
-# AWS Secret Access Key: <your secret key>
+# AWS Access Key ID: <ACCESS_KEY_ID>
+# AWS Secret Access Key: <SECRET_ACCESS_KEY>
 # Default region name: (leave blank)
 # Default output format: json
 ```
@@ -70,8 +76,8 @@ aws s3 ls --profile zsoftly --endpoint-url https://objects.yow.zcp.zsoftly.ca
 ### Utiliser les identifiants avec des variables d'environnement
 
 ```bash
-export AWS_ACCESS_KEY_ID="<your access key>"
-export AWS_SECRET_ACCESS_KEY="<your secret key>"
+export AWS_ACCESS_KEY_ID="<ACCESS_KEY_ID>"
+export AWS_SECRET_ACCESS_KEY="<SECRET_ACCESS_KEY>"
 
 # Set the endpoint for your region
 export AWS_ENDPOINT_URL="https://objects.yul.zcp.zsoftly.ca"
@@ -81,8 +87,8 @@ Pour les commandes S3 directes avec `zcp`, enregistrez les nouveaux identifiants
 :
 
 ```bash
-export ZCP_S3_ACCESS_KEY="<your access key>"
-export ZCP_S3_SECRET_KEY="<your secret key>"
+export ZCP_S3_ACCESS_KEY="<ACCESS_KEY_ID>"
+export ZCP_S3_SECRET_KEY="<SECRET_ACCESS_KEY>"
 ```
 
 Le CLI vérifie que `ZCP_S3_ACCESS_KEY` est active pour l'espace de stockage sélectionné avant de se

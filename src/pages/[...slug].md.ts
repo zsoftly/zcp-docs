@@ -1,7 +1,7 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 
-// Serve a plain-Markdown version of every docs page at `<page-path>.md`
+// Serve a plain-Markdown version of published docs pages at `<page-path>.md`
 // (e.g. /changelog/ -> /changelog.md). Used by the "Ask AI about this page"
 // links so assistants ingest clean source instead of rendered HTML, and by the
 // "Copy as Markdown" action. The Starlight entry `id` is the page's URL path
@@ -9,8 +9,9 @@ import { getCollection } from 'astro:content';
 // 1:1 to the rendered route.
 export const getStaticPaths: GetStaticPaths = async () => {
   const docs = await getCollection('docs');
+  // Exclude drafts and splash-page layout markup from Markdown output.
   return docs
-    .filter((entry) => entry.id && entry.data.template !== 'splash' && !entry.data.draft) // splash pages are layout markup, not prose
+    .filter((entry) => entry.id && entry.data.template !== 'splash' && !entry.data.draft)
     .map((entry) => ({
       params: { slug: entry.id },
       props: { title: entry.data.title, body: entry.body ?? '' },

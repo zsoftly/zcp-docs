@@ -54,7 +54,7 @@ repository. It runs through the phases explained in the next section.
 Download the deployment tree at the reviewed commit:
 
 ```bash
-git clone --no-checkout https://github.com/zsoftly/tools.git employee-desktop-tools
+git clone --filter=blob:none --no-checkout https://github.com/zsoftly/tools.git employee-desktop-tools
 git -C employee-desktop-tools checkout --detach a0939bc0389380266cd4d071c6cc152bb596f68e
 ```
 
