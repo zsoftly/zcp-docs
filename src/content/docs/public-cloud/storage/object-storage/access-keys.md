@@ -17,41 +17,46 @@ S3-compatible tool or SDK.
 
 The endpoint for your instance matches the region you selected when creating it.
 
-### View your credentials
+### Create and rotate access keys
 
 1. From the **Object Storage** list, find your instance.
 2. Click the **Credentials** icon (key icon in the actions row).
-3. The panel shows:
-   - **Access Key ID**: your S3 access key
-   - **Secret Access Key**: your S3 secret key (treat this like a password)
+3. Create an access key and copy its secret within five minutes.
 
-You can also read both keys from the CLI at any time:
+Use the CLI to list key metadata, create a key, and revoke a key:
+
+Replace `<storage-slug>` with your storage instance's slug and `<key-id>` with the key's identifier.
 
 ```bash
-zcp object-storage get <storage-slug> --region os-yul --project <project-slug>
+zcp object-storage keys list <storage-slug>
+zcp object-storage keys create <storage-slug>
+zcp object-storage keys delete <storage-slug> <key-id> -y
 ```
 
-The output includes the S3 endpoint, the access key, and the secret key.
+Each store supports one or two active keys. To rotate a key, create a second key, update every
+application that uses the old key, then revoke the old key. You cannot revoke the last active key.
 
 :::caution
 
-The secret key is not write-once. Any holder of an API token for the project can print it with
-`zcp object-storage get`, so treat an API token as equivalent to the S3 credentials it can reveal.
-Scope tokens accordingly, and rotate the object storage credentials if a token is exposed.
+The secret is available only for five minutes after key creation. The CLI never decrypts or recovers
+an earlier secret. Save it securely when you create the key.
 
-Store the keys securely wherever you use them. If you need to invalidate them, generate new
-credentials for the instance.
+Hiding a secret does not revoke it. Revocation disables the key in object storage and marks it
+revoked in the control plane.
 
 :::
 
 ### Use credentials with AWS CLI
 
+`<ACCESS_KEY_ID>` represents your access key and `<SECRET_ACCESS_KEY>` its secret key. Replace these
+values in the examples below.
+
 Configure a named profile for your ZSoftly object storage:
 
 ```bash
 aws configure --profile zsoftly
-# AWS Access Key ID: <your access key>
-# AWS Secret Access Key: <your secret key>
+# AWS Access Key ID: <ACCESS_KEY_ID>
+# AWS Secret Access Key: <SECRET_ACCESS_KEY>
 # Default region name: (leave blank)
 # Default output format: json
 ```
@@ -69,12 +74,21 @@ aws s3 ls --profile zsoftly --endpoint-url https://objects.yow.zcp.zsoftly.ca
 ### Use credentials with environment variables
 
 ```bash
-export AWS_ACCESS_KEY_ID="<your access key>"
-export AWS_SECRET_ACCESS_KEY="<your secret key>"
+export AWS_ACCESS_KEY_ID="<ACCESS_KEY_ID>"
+export AWS_SECRET_ACCESS_KEY="<SECRET_ACCESS_KEY>"
 
 # Set the endpoint for your region
 export AWS_ENDPOINT_URL="https://objects.yul.zcp.zsoftly.ca"
 ```
+
+For direct S3 commands through `zcp`, save the new credentials in these variables:
+
+```bash
+export ZCP_S3_ACCESS_KEY="<ACCESS_KEY_ID>"
+export ZCP_S3_SECRET_KEY="<SECRET_ACCESS_KEY>"
+```
+
+The CLI checks that `ZCP_S3_ACCESS_KEY` is active for the selected store before it connects.
 
 See also: [Create Bucket](/public-cloud/storage/object-storage/create-bucket),
 [S3 Usage](/public-cloud/storage/object-storage/s3-usage/)

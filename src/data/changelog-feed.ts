@@ -15,6 +15,13 @@ export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:0
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'CLI v0.0.30: custom VM plans and object storage keys',
+    description:
+      'The zcp CLI supports custom VM plans, load balancer rule listings, and S3-compatible object storage key rotation. New S3 credentials are visible for five minutes and direct S3 commands validate the saved access key for the selected store.',
+    pubDate: '2026-10-03',
+    slug: 'cli-v0.0.30',
+  },
+  {
     title: 'Terraform / OpenTofu provider v0.2.0',
     description:
       'The provider adds object storage bucket configuration resources, VPC and multi-network instances, and volume lookups. It also fixes volume-backup reads, VM-backup destruction, interval validation, and volume-list pagination.',
