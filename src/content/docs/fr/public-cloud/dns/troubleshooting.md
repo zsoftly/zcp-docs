@@ -83,29 +83,27 @@ Un enregistrement `MX` exige une **priorité** dans son propre champ. Dans la CL
 `--priority`. Dans l'API, envoyez `priority` dans un champ distinct. Voir
 [Enregistrements MX](/fr/public-cloud/dns/records/mx).
 
-### L'enregistrement TXT semble incorrect ou est refusé
+### Un CNAME est refusé
 
-Le contenu `TXT` est une chaîne entre guillemets. Une valeur sans guillemets est une cause possible
-du message `DNS operation failed. Please try again or contact support.` La plateforme renvoie ce
-même message pour d'autres échecs, dont toute tentative de créer un enregistrement `SRV` ou `LOC`.
-Vérifiez d'abord les guillemets. Dans la CLI, protégez la valeur afin que l'interpréteur de
-commandes transmette les guillemets, par exemple `'"v=spf1 -all"'`. Voir
-[Enregistrements TXT](/fr/public-cloud/dns/records/txt) et
-[Limites connues](/fr/public-cloud/dns/records#limites-connues) pour les autres causes.
+La création d'un `CNAME` sous un nom qui contient déjà d'autres enregistrements échoue avec une
+erreur du type `RRset www IN CNAME: Conflicts with pre-existing RRset`. Un `CNAME` ne peut pas
+partager un nom avec un autre enregistrement. Supprimez d'abord les autres enregistrements sous ce
+nom, ou utilisez un autre nom. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
 
-### Un nouvel enregistrement en a remplacé un autre
+### Un nouvel enregistrement a été ajouté au lieu d'en remplacer un
 
-Un nom et un type contiennent une seule valeur. La création d'une deuxième valeur sous le même nom
-et le même type remplace la première, sans avertissement. Cette règle s'applique à tous les types
-d'enregistrement, y compris `A` et `AAAA` : un nom se résout vers une seule adresse IPv4 et une
-seule adresse IPv6. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
+Un nom et un type peuvent contenir plusieurs valeurs. La création d'un enregistrement sous un nom et
+un type qui contiennent déjà des valeurs ajoute la nouvelle valeur à l'ensemble. Pour retirer une
+valeur indésirable, supprimez-la dans la console, qui retire uniquement cette valeur.
+`zcp dns record-delete` retire l'ensemble complet sous un nom et un type, donc recréez ensuite les
+valeurs à conserver. Voir
+[Plusieurs valeurs par nom et par type](/fr/public-cloud/dns/records#plusieurs-valeurs-par-nom-et-par-type).
 
-### Un enregistrement SRV ou LOC échoue
+### Une valeur TXT apparaît avec des guillemets
 
-Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles, et les deux échouent avec le
-message `DNS operation failed. Please try again or contact support.` Les autres types (`A`, `AAAA`,
-`CNAME`, `MX`, `TXT`, `CAA` et `NS`) fonctionnent. Voir
-[Limites connues](/fr/public-cloud/dns/records#limites-connues).
+La plateforme stocke une valeur `TXT` entre guillemets et la renvoie entre guillemets, que vous les
+ayez saisis ou non. `dig` affiche les guillemets. Voir
+[Enregistrements TXT](/fr/public-cloud/dns/records/txt).
 
 ### NXDOMAIN ou absence de réponse
 

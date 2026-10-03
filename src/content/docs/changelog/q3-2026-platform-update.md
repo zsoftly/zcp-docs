@@ -3,17 +3,11 @@ title: Q3 2026 Platform Update
 description:
   The Q3 2026 release for the ZSoftly Cloud Platform, covering backup schedules and backup billing,
   Kubernetes billing, the Store, and Marketplace deployment emails.
-draft: true
 ---
 
-This draft covers backup schedules and billing, managed Kubernetes billing, Store purchasing, and
-Marketplace deployment email. Items released earlier in the quarter are listed under
+This release covers backup schedules and billing, managed Kubernetes billing, Store purchasing, and
+Marketplace deployment emails. Items released earlier in the quarter are listed under
 [Also Shipped in Q3 2026](#also-shipped-in-q3-2026).
-
-## Release Status
-
-This draft is not published customer documentation. Release completion and migration status require
-confirmation before publication.
 
 ## Summary
 

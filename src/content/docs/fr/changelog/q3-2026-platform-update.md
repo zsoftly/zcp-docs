@@ -4,18 +4,12 @@ description:
   La version du T3 2026 de la plateforme infonuagique ZSoftly, qui couvre les calendriers et la
   facturation des sauvegardes, la facturation de Kubernetes, la boutique et les courriels de
   déploiement de la place de marché.
-draft: true
 ---
 
-Cette ébauche couvre les calendriers et la facturation des sauvegardes, la facturation de
+Cette version couvre les calendriers et la facturation des sauvegardes, la facturation de
 Kubernetes, les achats dans la boutique et les courriels de déploiement de la place de marché. Les
 éléments livrés plus tôt dans le trimestre sont listés dans
 [Aussi livré au T3 2026](#aussi-livré-au-t3-2026).
-
-## État de la version
-
-Cette ébauche n'est pas de la documentation client publiée. La publication exige la confirmation de
-l'état de la version et de la migration.
 
 ## Sommaire
 
@@ -132,7 +126,7 @@ Le CLI prend en charge la configuration personnalisée de VM, les listes de règ
 charge et les clés d'accès S3 compatibles du stockage objet. Consultez
 [CLI v0.0.30](#suivi-doctobre).
 
-## Clés d'accès au stockage objet {#object-storage-access-keys}
+## Clés d'accès au stockage objet
 
 Chaque espace de stockage objet prend en charge une ou deux clés d'accès actives. Copiez le nouveau
 secret dans les cinq minutes suivant la création de la clé. Masquer un secret ne le révoque pas.
@@ -149,7 +143,7 @@ au CLI :
 - Listez les identifiants des règles d'équilibrage de charge avec
   `zcp loadbalancer list-rule <load-balancer-slug>`.
 - Gérez les clés d'accès S3 compatibles du stockage objet avec `zcp object-storage keys`. Consultez
-  [Clés d'accès au stockage objet](#object-storage-access-keys).
+  [Clés d'accès au stockage objet](#clés-daccès-au-stockage-objet).
 
 ## Aussi livré au T3 2026
 

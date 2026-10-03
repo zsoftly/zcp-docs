@@ -22,7 +22,8 @@ and constraints.
 
 :::note
 
-`SRV` and `LOC` records are not available yet. See [Known limitations](#known-limitations).
+Create `SRV` and `LOC` records in the console or through the API. The `zcp` CLI does not create them
+yet.
 
 :::
 
@@ -44,57 +45,42 @@ The **TTL** (time to live) is how long, in seconds, resolvers cache the record. 
 `14400` (4 hours). Lower it to `300` a day or two before you plan to change a record, so the change
 propagates quickly. Raise it again once the record is stable.
 
+## Several Values per Name and Type
+
+A name and type hold several values. Creating a record at a name and type with existing values adds
+the new value to the set. The existing values stay. For example, add a second `A` record, a second
+`MX` record, or a third `TXT` record at the same name. You do not need a support ticket for this.
+
+![Four TXT values at the apex of example.ca in the DNS console](../../../../../assets/dns/dns-several-txt-values.webp)
+
+Creating an exact copy of an existing value does not create a second copy, and it does not remove
+the other values.
+
+Deleting a value in the console removes only that value. The other values stay.
+
+Enter a `TXT` value with or without double quotes. The platform stores it quoted and returns it
+quoted.
+
 ## Known Limitations
 
-These limits apply to the console, the CLI, and the API alike.
+The first two limits apply to the console, the CLI, and the API alike. The last applies to the CLI.
 
-### TXT Values Need Double Quotes
+### CNAME Cannot Share a Name
 
-Wrap a `TXT` value in double quotes. The platform rejects an unquoted value with the message
-`DNS operation failed. Please try again or contact support.`
+A name holding a `CNAME` holds nothing else, so it cannot also carry an `A`, `MX`, or `TXT` record.
+Creating a `CNAME` at a name with other records fails with an error like
+`RRset www IN CNAME: Conflicts with pre-existing RRset`. Use a `CNAME` only on a name with no other
+records, and never at the zone apex.
 
-Wrap the value in double quotes, for example `"v=spf1 include:example.net ~all"`. In a shell, put
-single quotes around the double quotes so the shell passes them through to the record:
+### No In-Place Update
 
-```bash
-zcp dns record-create --domain examplecom --name @ --type TXT \
-  --content '"v=spf1 include:example.net ~all"'
-```
+There is no update action. To change a value, delete it and create it again with the new value.
 
-### One Value per Name and Type
+### CLI Delete Removes the Whole Set
 
-A name and type hold one value. Creating a second value at the same name and type replaces the
-first, with no warning. This applies to every record type, including `A` and `AAAA`. It is not
-limited to `TXT` and `MX`.
-
-What this rules out:
-
-- **Round-robin `A` records.** A name resolves to one IPv4 address. A second `A` record at that name
-  replaces the first.
-- **Several IPv6 addresses.** A name resolves to one IPv6 address.
-- **A backup mail server.** A zone apex holds one `MX` record.
-- **SPF and a verification value together.** A zone apex holds either an SPF record or a
-  verification `TXT` record, not both.
-- **A redundant delegation.** A delegated subdomain holds one `NS` record, so it has one name
-  server.
-
-A name can still hold one value of each type. An `A` record and an `AAAA` record coexist at the same
-name, because the types differ.
-
-A `CNAME` is the exception. A name holding a `CNAME` holds nothing else, so it cannot also carry an
-`A`, `MX`, or `TXT` record. Use a `CNAME` only on a name that serves no other purpose, and never at
-the zone apex.
-
-The console, the CLI, and the API offer no way around this today. Open a
-[support ticket](/troubleshooting#raise-a-support-ticket) if you need several values at one name and
-type.
-
-### SRV and LOC Records Fail
-
-You cannot create `SRV` or `LOC` records. Both fail with the message
-`DNS operation failed. Please try again or contact support.` Every other type works: `A`, `AAAA`,
-`CNAME`, `MX`, `TXT`, `CAA`, and `NS`. Open a
-[support ticket](/troubleshooting#raise-a-support-ticket) if you need an `SRV` or `LOC` record.
+`zcp dns record-delete` deletes the record set at a name and type, which removes every value in it.
+To remove one value with the CLI, delete the set and create the values you want to keep again. The
+console removes a single value.
 
 ## How to Manage Records
 

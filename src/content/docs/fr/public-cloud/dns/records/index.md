@@ -22,8 +22,8 @@ de chaque type présente ses champs, des exemples et ses contraintes.
 
 :::note
 
-Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles. Voir
-[Limites connues](#limites-connues).
+Vous pouvez créer des enregistrements `SRV` et `LOC` dans la console et avec l'API. La CLI `zcp` ne
+les crée pas encore.
 
 :::
 
@@ -48,59 +48,48 @@ l'enregistrement en cache. Sa valeur par défaut est `14400`, soit 4 heures. Ré
 ou deux jours avant une modification prévue afin de propager rapidement le changement. Augmentez-la
 de nouveau lorsque l'enregistrement est stable.
 
+## Plusieurs valeurs par nom et par type
+
+Un nom et un type peuvent contenir plusieurs valeurs. La création d'un enregistrement sous un nom et
+un type qui contiennent déjà des valeurs ajoute la nouvelle valeur à l'ensemble. Les valeurs
+existantes restent. Par exemple, vous pouvez ajouter un deuxième enregistrement `A`, un deuxième
+enregistrement `MX` ou un troisième enregistrement `TXT` sous le même nom. Aucun billet de soutien
+n'est nécessaire.
+
+![Quatre valeurs TXT au sommet de example.ca dans la console DNS](../../../../../../assets/dns/dns-several-txt-values.webp)
+
+La création d'une copie exacte d'une valeur existante ne crée pas de seconde copie et ne supprime
+pas les autres valeurs.
+
+La suppression d'une valeur dans la console retire uniquement cette valeur. Les autres valeurs
+restent.
+
+Saisissez une valeur `TXT` avec ou sans guillemets doubles. La plateforme la stocke et la renvoie
+entre guillemets.
+
 ## Limites connues
 
-Ces limites s'appliquent autant à la console qu'à la CLI et à l'API.
+Les deux premières limites s'appliquent autant à la console qu'à la CLI et à l'API. La dernière
+s'applique à la CLI.
 
-### Les valeurs TXT exigent des guillemets doubles
+### Un CNAME ne peut pas partager un nom
 
-Entourez la valeur d'un enregistrement `TXT` de guillemets doubles. La plateforme refuse une valeur
-sans guillemets avec le message `DNS operation failed. Please try again or contact support.`
-
-Entourez la valeur de guillemets doubles, par exemple `"v=spf1 include:example.net ~all"`. Dans un
-interpréteur de commandes, placez des guillemets simples autour des guillemets doubles afin que ces
-derniers parviennent à l'enregistrement :
-
-```bash
-zcp dns record-create --domain examplecom --name @ --type TXT \
-  --content '"v=spf1 include:example.net ~all"'
-```
-
-### Une seule valeur par nom et par type
-
-Un nom et un type contiennent une seule valeur. La création d'une deuxième valeur sous le même nom
-et le même type remplace la première, sans avertissement. Cette règle s'applique à tous les types
-d'enregistrement, y compris `A` et `AAAA`. Elle ne se limite pas à `TXT` et `MX`.
-
-Ce que cela exclut :
-
-- **Les enregistrements `A` en tourniquet.** Un nom se résout vers une seule adresse IPv4. Un
-  deuxième enregistrement `A` sous ce nom remplace le premier.
-- **Plusieurs adresses IPv6.** Un nom se résout vers une seule adresse IPv6.
-- **Un serveur de courrier de secours.** Le sommet d'une zone contient un seul enregistrement `MX`.
-- **Un SPF et une valeur de vérification à la fois.** Le sommet d'une zone contient soit un
-  enregistrement SPF, soit un enregistrement `TXT` de vérification, mais pas les deux.
-- **Une délégation redondante.** Un sous-domaine délégué contient un seul enregistrement `NS`, donc
-  un seul serveur de noms.
-
-Un nom peut toujours contenir une valeur par type. Un enregistrement `A` et un enregistrement `AAAA`
-coexistent sous le même nom, puisque les types diffèrent.
-
-Le `CNAME` fait exception. Un nom qui porte un `CNAME` ne porte rien d'autre, donc il ne peut pas
-contenir en plus un enregistrement `A`, `MX` ou `TXT`. N'utilisez un `CNAME` que sur un nom qui ne
+Un nom qui porte un `CNAME` ne porte rien d'autre, donc il ne peut pas contenir en plus un
+enregistrement `A`, `MX` ou `TXT`. La création d'un `CNAME` sous un nom qui contient déjà d'autres
+enregistrements échoue avec une erreur du type
+`RRset www IN CNAME: Conflicts with pre-existing RRset`. N'utilisez un `CNAME` que sur un nom qui ne
 sert à rien d'autre, et jamais à l'apex de la zone.
 
-La console, la CLI et l'API n'offrent aujourd'hui aucun contournement. Ouvrez un
-[billet de soutien](/fr/troubleshooting#ouvrir-un-billet-de-soutien) si vous avez besoin de
-plusieurs valeurs sous un même nom et un même type.
+### Aucune mise à jour sur place
 
-### Les enregistrements SRV et LOC échouent
+Il n'existe aucune action de mise à jour. Pour modifier une valeur, supprimez-la, puis recréez-la
+avec la nouvelle valeur.
 
-Vous ne pouvez pas créer d'enregistrement `SRV` ni `LOC`. Les deux échouent avec le message
-`DNS operation failed. Please try again or contact support.` Tous les autres types fonctionnent :
-`A`, `AAAA`, `CNAME`, `MX`, `TXT`, `CAA` et `NS`. Ouvrez un
-[billet de soutien](/fr/troubleshooting#ouvrir-un-billet-de-soutien) si vous avez besoin d'un
-enregistrement `SRV` ou `LOC`.
+### La suppression par la CLI retire l'ensemble complet
+
+`zcp dns record-delete` supprime l'ensemble d'enregistrements sous un nom et un type, donc toutes
+les valeurs qu'il contient. Pour retirer une seule valeur avec la CLI, supprimez l'ensemble, puis
+recréez les valeurs à conserver. La console retire une seule valeur.
 
 ## Gérer les enregistrements
 

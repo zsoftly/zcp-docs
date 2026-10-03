@@ -121,8 +121,10 @@ Record rules:
 - End a `CNAME` target with a trailing dot (`www.example.com.`) to keep it fully qualified.
 - An `MX` record needs `--priority`. Put the mail server in `--content` and the preference number in
   `--priority`, for example `--priority 10`. The CLI stops with an error if you leave it off.
-- Supported types are `A`, `AAAA`, `CNAME`, `MX`, `TXT`, `CAA`, and `NS`. `SRV` and `LOC` are not
-  available yet.
+- Creating a record at a name and type with existing values adds the new value to the set.
+- Supported types are `A`, `AAAA`, `CNAME`, `MX`, `TXT`, and `NS`. The CLI does not create `SRV` or
+  `LOC` records yet. Create them in the DNS section of the
+  [console](https://cloud.zcp.zsoftly.ca/login) or with the [API](/public-cloud/dns/api/).
 
 :::note
 
@@ -168,7 +170,8 @@ zcp dns record-create --domain examplecom --name www --type A --content 203.0.11
 
 ## Delete a Record
 
-Address the record set by name and type.
+Address the record set by name and type. The command deletes the whole set, which removes every
+value at that name and type.
 
 ```bash
 zcp dns record-delete --domain examplecom --name www --type A
