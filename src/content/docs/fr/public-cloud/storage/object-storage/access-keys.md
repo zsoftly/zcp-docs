@@ -17,31 +17,31 @@ programmatique avec tout outil ou SDK compatible S3.
 
 Le point de terminaison de votre instance correspond à la région choisie lors de sa création.
 
-### Afficher vos identifiants
+### Créer et faire la rotation des clés d'accès
 
 1. Dans la liste **Stockage objet**, trouvez votre instance.
 2. Cliquez sur l'icône **Identifiants** (icône de clé dans la rangée d'actions).
-3. Le panneau affiche :
-   - **ID de clé d'accès** : votre clé d'accès S3
-   - **Clé d'accès secrète** : votre clé secrète S3 (traitez-la comme un mot de passe)
+3. Créez une clé d'accès et copiez son secret dans les cinq minutes.
 
-Vous pouvez aussi lire les deux clés depuis la CLI à tout moment :
+Utilisez le CLI pour lister les métadonnées des clés, créer une clé et révoquer une clé :
 
 ```bash
-zcp object-storage get <storage-slug> --region os-yul --project <project-slug>
+zcp object-storage keys list <storage-slug>
+zcp object-storage keys create <storage-slug>
+zcp object-storage keys delete <storage-slug> <key-id> -y
 ```
 
-La sortie contient le point de terminaison S3, la clé d'accès et la clé secrète.
+Chaque espace de stockage prend en charge une ou deux clés actives. Pour faire la rotation d'une
+clé, créez une seconde clé, mettez à jour chaque application qui utilise l'ancienne clé, puis
+révoquez l'ancienne clé. Vous ne pouvez pas révoquer la dernière clé active.
 
 :::caution
 
-La clé secrète n'est pas affichée une seule fois. Toute personne détenant un jeton d'API pour le
-projet peut l'afficher avec `zcp object-storage get`. Considérez donc un jeton d'API comme
-équivalent aux identifiants S3 qu'il permet de révéler. Limitez la portée des jetons en conséquence
-et effectuez une rotation des identifiants de stockage objet si un jeton est exposé.
+Le secret est disponible seulement cinq minutes après la création de la clé. Le CLI ne déchiffre ni
+ne récupère un ancien secret. Enregistrez-le de façon sécuritaire lorsque vous créez la clé.
 
-Conservez les clés de façon sécuritaire partout où vous les utilisez. Pour les invalider, générez de
-nouveaux identifiants pour l'instance.
+Masquer un secret ne le révoque pas. La révocation désactive la clé dans le stockage objet et la
+marque comme révoquée dans le plan de contrôle.
 
 :::
 
@@ -76,6 +76,17 @@ export AWS_SECRET_ACCESS_KEY="<your secret key>"
 # Set the endpoint for your region
 export AWS_ENDPOINT_URL="https://objects.yul.zcp.zsoftly.ca"
 ```
+
+Pour les commandes S3 directes avec `zcp`, enregistrez les nouveaux identifiants dans ces variables
+:
+
+```bash
+export ZCP_S3_ACCESS_KEY="<your access key>"
+export ZCP_S3_SECRET_KEY="<your secret key>"
+```
+
+Le CLI vérifie que `ZCP_S3_ACCESS_KEY` est active pour l'espace de stockage sélectionné avant de se
+connecter.
 
 Voir aussi : [Créer un compartiment](/fr/public-cloud/storage/object-storage/create-bucket),
 [Utilisation de S3](/fr/public-cloud/storage/object-storage/s3-usage/)

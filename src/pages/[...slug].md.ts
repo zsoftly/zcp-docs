@@ -10,7 +10,7 @@ import { getCollection } from 'astro:content';
 export const getStaticPaths: GetStaticPaths = async () => {
   const docs = await getCollection('docs');
   return docs
-    .filter((entry) => entry.id && entry.data.template !== 'splash') // splash pages are layout markup, not prose
+    .filter((entry) => entry.id && entry.data.template !== 'splash' && !entry.data.draft) // splash pages are layout markup, not prose
     .map((entry) => ({
       params: { slug: entry.id },
       props: { title: entry.data.title, body: entry.body ?? '' },

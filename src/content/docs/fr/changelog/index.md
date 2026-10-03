@@ -140,8 +140,8 @@ L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous 
 ### v0.0.30 : 3 octobre 2026 <!-- changelog-id: cli-v0.0.30 -->
 
 **Forfaits de VM personnalisés, listes de règles d'équilibrage de charge et clés d'accès au stockage
-objet.** Les notes de version seront disponibles dans la page des
-[versions du CLI](https://github.com/zsoftly/zcp-cli/releases) lorsque cette version sera publiée.
+objet.** Consultez la [version v0.0.30](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.30) sur
+GitHub.
 
 - **Créez une VM personnalisée sans forfait catalogue.** Omettez `--plan`, fournissez un nombre de
   processeurs avec `--cpu`, puis la mémoire et le disque en Go avec `--memory` et `--disk`.

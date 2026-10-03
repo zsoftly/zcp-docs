@@ -6,36 +6,26 @@ description:
 draft: true
 ---
 
-The release that closes Q3 2026 changes how you schedule and pay for backups, how you pay for
-managed Kubernetes clusters, and how you find and buy products in the Store. It also adds a
-deployment email for Marketplace applications and several smaller platform changes. Items released
-earlier in the quarter are listed under [Also Shipped in Q3 2026](#also-shipped-in-q3-2026).
+This draft covers backup schedules and billing, managed Kubernetes billing, Store purchasing, and
+Marketplace deployment email. Items released earlier in the quarter are listed under
+[Also Shipped in Q3 2026](#also-shipped-in-q3-2026).
 
-Two of these are billing changes that apply to resources you already run. Read
-[Backup Billing](#backup-billing), [Kubernetes Billing](#kubernetes-billing), and
-[Migration Behavior](#migration-behavior) before the effective date.
+## Release Status
 
-## Effective Date
-
-| Item           | Value                                                            |
-| -------------- | ---------------------------------------------------------------- |
-| Effective      | By September 30, 2026                                            |
-| Regions        | YUL-1 and YOW-1                                                  |
-| Downtime       | None expected                                                    |
-| Action needed  | None to migrate. Review retention and cluster sizing beforehand. |
-| Billing impact | Yes. Backup billing and Kubernetes billing both change.          |
+This draft is not published customer documentation. Release completion and migration status require
+confirmation before publication.
 
 ## Summary
 
-| Area                | Change                                                                                   | Billing impact                   |
-| ------------------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| Backups             | Create, edit, pause, resume, and run schedules now. Per-schedule timezone and retention. | Yes. Storage-based billing.      |
-| Backups             | Activity logs for runs, failures, and retention cleanup.                                 | No                               |
-| Kubernetes          | Billing moves from a cluster charge to the resources provisioned for the cluster.        | Yes. Resource-based billing.     |
-| Kubernetes          | Separate CPU and memory sizing for control-plane and worker nodes.                       | Indirect. Node sizing sets cost. |
-| Store               | Product search, categories, card layout, per-product billing cycle and quantity.         | No                               |
-| Marketplace         | Deployment email with application credentials and the values supplied during setup.      | No                               |
-| Accounts and access | Low infrastructure-credit notifications, VM password management, tighter rate limiting.  | No                               |
+| Area                | Change                                                                                  | Billing impact                   |
+| ------------------- | --------------------------------------------------------------------------------------- | -------------------------------- |
+| Backups             | Create, edit, pause, resume, and run schedules. Per-schedule timezone and retention.    | Yes. Storage-based billing.      |
+| Backups             | Activity logs for schedule changes, runs, failures, and retention cleanup.              | No                               |
+| Kubernetes          | Billing moves from a cluster charge to the resources provisioned for the cluster.       | Yes. Resource-based billing.     |
+| Kubernetes          | Separate CPU and memory sizing for control-plane and worker nodes.                      | Indirect. Node sizing sets cost. |
+| Store               | Search, category counts, product cards, details, billing cycle, and quantity.           | No                               |
+| Marketplace         | Deployment email with application credentials and the values supplied during setup.     | No                               |
+| Accounts and access | Low infrastructure-credit notifications, VM password management, tighter rate limiting. | No                               |
 
 ## Backup Schedules
 
@@ -48,8 +38,7 @@ carries its own settings:
 - **Retention policy.** Each schedule keeps backups for the period you set. Retention cleanup
   removes expired backups.
 
-Activity logs record each run against the schedule. Use them to confirm a successful backup,
-investigate a failure, and follow the retention cleanup that removes expired backups.
+Activity logs record schedule creation and updates, runs, failures, and retention cleanup.
 
 ### Backup Billing
 
@@ -62,13 +51,12 @@ consume.
 - A paused schedule creates no new backups. Backups already taken continue to bill for the storage
   they hold until they are deleted.
 
-Your total moves with the number of backups you keep and the size of the instances behind them.
-Retention is now the setting that controls backup cost.
+Backup cost depends on the actual stored backup size and the retention period.
 
 :::caution
 
 Retention and cost are linked. A long retention period on a large instance holds more backup storage
-and costs more. Review the retention on each schedule before the effective date.
+and costs more.
 
 :::
 
@@ -86,9 +74,8 @@ charging a single cluster fee:
 - Public IP addresses
 - Load balancers
 
-The Kubernetes cluster itself no longer carries a separate charge. The platform bills each resource
-at the same rate as the equivalent resource elsewhere and lists it as its own entry under **Billing
-→ Subscriptions**.
+The Kubernetes cluster itself no longer carries a separate charge. The platform lists the resources
+under **Billing → Subscriptions**.
 
 ### Node Sizing
 
@@ -96,42 +83,29 @@ Cluster configurations support different CPU and memory sizes for control-plane 
 nodes. Size the control plane for the API server and etcd, and size workers for the workloads you
 run on them. See [Create Kubernetes Cluster](/public-cloud/kubernetes/create-cluster).
 
-## Migration Behavior
+## Existing Resources
 
-Existing backup schedules and existing Kubernetes clusters move to the new billing models. You do
-not need to recreate anything.
-
-| Resource                     | What happens                                                                                                                                                                        |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Existing backup schedules    | The schedule keeps running. Billing moves to the storage the backups consume. Each backup gets its own subscription.                                                                |
-| Existing backups             | The platform retains them. Each one bills for its storage until you or retention cleanup deletes it.                                                                                |
-| Existing Kubernetes clusters | The cluster keeps running. The cluster charge stops. The platform bills the control-plane VMs, worker VMs, volumes, networks, IPs, and load balancers it already uses individually. |
-| Running workloads            | No restart, no reschedule, no downtime expected.                                                                                                                                    |
-
-:::caution
-
-This changes how the platform calculates charges, not how it presents them. Your invoice can go up
-or down after the effective date depending on your backup storage, your retention settings, and the
-resources in your clusters. Compare **Billing → Summary** before and after the change.
-
-:::
+Existing backup billing is being migrated. Existing Kubernetes clusters need a billing configuration
+update. Review **Billing → Subscriptions** and contact support to confirm the migration for your
+resources.
 
 ## Other Changes
 
 - **Low infrastructure-credit notifications.** The platform notifies you when account credit for
   infrastructure runs low, before it affects your services.
 - **VM password management.** The portal changes how you manage instance passwords.
-- **Rate limiting.** Tighter limits on login and password-reset requests. The platform throttles
-  repeated attempts in a short window.
+- **Rate limiting.** Tighter limits on ticket, feedback, login, and password-reset requests.
+- **API tokens.** API token expiration settings have been added.
+- **Storage-driver integration.** Kubernetes CSI storage-driver integration is not included in this
+  release.
 - **Marketplace deployment email.** Every successful Marketplace application deployment sends you an
   email with the application credentials. When the application takes configuration values, the email
   also lists the values you supplied. See [Marketplace](/public-cloud/marketplace).
 
 :::caution
 
-The Marketplace deployment email contains working credentials, and they stay valid for as long as
-the message sits in a mailbox. Change them at your first sign-in, then delete the message. Do not
-forward it.
+Deleting the email does not revoke its credentials. Keep the email private and change credentials or
+secrets where the application supports it. Do not forward it.
 
 :::
 
@@ -140,20 +114,30 @@ forward it.
 The Store adds search and browsing:
 
 - Search products by name.
-- Browse by category.
-- Open a product to see its details, select an available billing cycle and a quantity, and see the
-  total price before you confirm the purchase.
+- Browse categories with product counts.
+- Open a product to see vendor information, billing cycles, quantity, dynamic pricing, and contract
+  terms before purchase.
 
-## API Changes
+## CLI Automation
 
-<!-- TODO: Replace this section with the confirmed API changes before publishing.
-     Cover: new or changed backup schedule endpoints and fields (timezone, retention, pause,
-     resume, run-now), Kubernetes cluster payload changes for per-role node sizing, subscription
-     and billing response changes for backups and clusters, and any deprecated or breaking
-     behavior with its removal date. Then set draft: false. -->
+The CLI supports custom VM configuration, load-balancer rule listing, and S3-compatible
+object-storage access keys. See [CLI v0.0.30](#october-follow-up).
 
-We are confirming the API changes for this release. We will update this section before the effective
-date.
+## Object Storage Access Keys
+
+Each object store supports one or two active access keys. Copy the new secret within five minutes of
+creating the key. Hiding a secret does not revoke it. After updating consumers, revoke the old key.
+Revocation disables it in object storage and marks it revoked in the control plane. You cannot
+revoke the last active key.
+
+## October Follow-Up
+
+[CLI v0.0.30](/changelog/#cli-v0.0.30), released October 3, adds three confirmed CLI changes:
+
+- Create a custom VM by omitting `--plan` and supplying `--cpu`, `--memory`, and `--disk`.
+- List load balancer rule IDs with `zcp loadbalancer list-rule <load-balancer-slug>`.
+- Manage S3-compatible object-storage access keys with `zcp object-storage keys`. See
+  [Object Storage Access Keys](#object-storage-access-keys).
 
 ## Also Shipped in Q3 2026
 
@@ -172,12 +156,10 @@ These changes are already live. Each links to its changelog entry.
 
 ## What To Do
 
-1. Review the retention period on each backup schedule. Retention now drives backup cost.
+1. Review the retention period on each backup schedule.
 2. Delete backups you no longer need. Deleting a backup ends its subscription.
-3. Review the size and count of your Kubernetes control-plane nodes, worker nodes, volumes, public
-   IPs, and load balancers.
-4. Record your current monthly spend from **Billing → Summary** so you can compare after the
-   effective date.
+3. Review **Billing → Subscriptions** for Kubernetes resources and contact support to confirm the
+   billing migration.
 
 ## Related Documentation
 

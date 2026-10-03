@@ -7,7 +7,7 @@ Le CLI `zcp` gère le stockage objet de bout en bout. Le cycle de vie de l'insta
 redimensionnement, suppression, identifiants) et la **création/liste des compartiments** passent par
 le plan de contrôle ZSoftly ; tout ce qui concerne le **niveau compartiment et objet** est effectué
 directement contre le point de terminaison S3 (`https://objects.<région>.zcp.zsoftly.ca`) au moyen
-des clés d'accès/secrètes de votre instance, que le CLI récupère pour vous.
+des clés d'accès que vous enregistrez lors de leur création.
 
 Résultat : le CLI expose l'ensemble des fonctionnalités S3 de la plateforme — y compris de
 nombreuses capacités **non disponibles dans l'interface du portail** (règles de cycle de vie, CORS,
@@ -23,7 +23,7 @@ objet est sélectionné automatiquement ; vous choisissez seulement une **régio
 | Capacité                                                        | Portail | CLI `zcp` | API / SDK S3 |
 | --------------------------------------------------------------- | :-----: | :-------: | :----------: |
 | Créer / lister / redimensionner / supprimer une instance        |   ✅    |    ✅     |      —       |
-| Afficher la clé d'accès et la clé secrète S3                    |   ✅    |    ✅     |      —       |
+| Gérer les clés d'accès S3                                       |   ✅    |    ✅     |      —       |
 | Bascule de mise à l'échelle automatique                         |   ✅    |     —     |      —       |
 | Créer / lister / supprimer un compartiment                      |   ✅    |    ✅     |      ✅      |
 | Téléverser / télécharger / supprimer des objets                 |   ✅    |    ✅     |      ✅      |
@@ -84,8 +84,10 @@ commandes ci-dessous.
 
 ```bash
 zcp object-storage list                       # lister les instances
-zcp object-storage get <storage>              # détails + point de terminaison S3 + clés
-zcp object-storage credentials <storage>      # clé d'accès + clé secrète S3 uniquement
+zcp object-storage get <storage>              # détails + point de terminaison S3
+zcp object-storage keys list <storage>        # métadonnées des clés d'accès
+zcp object-storage keys create <storage>      # copiez le secret dans les cinq minutes
+zcp object-storage keys delete <storage> <key-id> -y  # révoquez une clé active non finale
 zcp object-storage resize <storage> --size 200
 zcp object-storage delete <storage> -y
 

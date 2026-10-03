@@ -6,8 +6,7 @@ sidebar_position: 4
 The `zcp` CLI manages object storage end to end. Instance lifecycle (create, resize, delete,
 credentials) and **bucket creation/listing** go through the ZSoftly control plane; everything at the
 **bucket and object level** is performed directly against the S3 endpoint
-(`https://objects.<region>.zcp.zsoftly.ca`) using your instance's access/secret keys, which the CLI
-fetches for you.
+(`https://objects.<region>.zcp.zsoftly.ca`) using access keys that you save when creating them.
 
 The result: the CLI exposes the full S3 feature set of the platform: including many capabilities
 **not available in the portal UI** (lifecycle rules, CORS, bucket policies, tagging, presigned URLs,
@@ -22,7 +21,7 @@ automatically; you only choose a **region** and **project**.
 | Capability                                               | Portal UI | `zcp` CLI | S3 API / SDK |
 | -------------------------------------------------------- | :-------: | :-------: | :----------: |
 | Create / list / resize / delete instance                 |    ✅     |    ✅     |      —       |
-| View S3 access key & secret                              |    ✅     |    ✅     |      —       |
+| Manage S3 access keys                                    |    ✅     |    ✅     |      —       |
 | Auto-scaling toggle                                      |    ✅     |     —     |      —       |
 | Create / list / delete bucket                            |    ✅     |    ✅     |      ✅      |
 | Upload / download / delete objects                       |    ✅     |    ✅     |      ✅      |
@@ -76,8 +75,10 @@ Object-storage commands require a **region** and a **project**. Object storage u
 
 ```bash
 zcp object-storage list                       # list instances
-zcp object-storage get <storage>              # details + S3 endpoint + keys
-zcp object-storage credentials <storage>      # S3 access key + secret only
+zcp object-storage get <storage>              # details + S3 endpoint
+zcp object-storage keys list <storage>        # access-key metadata
+zcp object-storage keys create <storage>      # copy the secret within five minutes
+zcp object-storage keys delete <storage> <key-id> -y  # revoke a non-final active key
 zcp object-storage resize <storage> --size 200
 zcp object-storage delete <storage> -y
 
