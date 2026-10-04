@@ -231,7 +231,7 @@ zcp object-storage bucket encryption disable <storage> <bucket>
 ```
 
 Le chiffrement côté serveur reste indisponible. Chiffrez côté client avant le téléversement.
-[Sauvegarder Vaultwarden vers le stockage objet avec restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+[Sauvegarder Vaultwarden vers le stockage objet avec restic](/fr/tutorials/backup-vaultwarden-restic-object-storage/)
 détaille cette approche avec [restic](https://github.com/restic/restic), qui chiffre et authentifie
 chaque objet avant qu'il ne quitte la machine.
 
