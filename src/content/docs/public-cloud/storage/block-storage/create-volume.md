@@ -5,9 +5,9 @@ sidebar_position: 1
 
 ## Block Storage Volumes
 
-Block storage volumes provide local NVMe SSD, local SATA SSD, or replicated shared storage that
-attaches to virtual machines, depending on the selected region and plan. Once attached, format and
-mount the volume to extend your VM's storage.
+Block storage volumes add persistent storage to virtual machines. They provide local NVMe SSD, local
+SATA SSD, or replicated shared storage, depending on the selected region and plan. This page ends
+after attachment verification. Follow a separately tested procedure for formatting and mounting.
 
 ### Create Volumes
 
@@ -40,8 +40,7 @@ Under **Choose Storage Type**, select a storage type. Under **Select Volumes Siz
 volume size. Custom volumes are available.
 
 The published wizard screenshot shows the text `Minimum 8GB storage is required`. This screenshot is
-for reference only. We have not yet verified the required fields in CMP while signed in. Use the
-current value shown for the selected storage plan in the portal.
+for reference only. Use the current value shown for the selected storage plan in the portal.
 
 ![Create Volumes: Choose Storage Type and Select Volumes Size](../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
 

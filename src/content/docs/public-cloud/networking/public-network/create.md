@@ -33,7 +33,7 @@ Enter a **Network Name**.
 
 ### Choose Network Plan
 
-Select **Choose Network Plan**.
+Under **Choose Network Plan**, select a network plan.
 
 ### Network Configuration
 

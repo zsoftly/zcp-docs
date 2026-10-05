@@ -33,7 +33,7 @@ Saisissez un **Network Name**.
 
 ### Choose Network Plan
 
-Sélectionnez **Choose Network Plan**.
+Dans **Choose Network Plan**, sélectionnez un plan réseau.
 
 ### Network Configuration
 

@@ -275,7 +275,7 @@ N'activez pas le chiffrement par défaut des compartiments (SSE-S3). La passerel
 dispose pas encore de backend de clés de chiffrement, et un compartiment configuré avec le
 chiffrement par défaut rejette **tous** les téléversements suivants avec `InvalidArgument` jusqu'au
 retrait du paramètre. Cela vaut pour `PutBucketEncryption` depuis n'importe quel SDK ainsi que pour
-`aws s3api put-bucket-encryption`. Le chiffrement SSE-S3 par défaut reste non pris en charge.
+`aws s3api put-bucket-encryption`.
 
 Retirez le paramètre sur un compartiment déjà touché :
 
@@ -285,7 +285,7 @@ zcp object-storage bucket encryption disable <storage-slug> <bucket-name>
 ```
 
 Pour chiffrer ce que vous stockez aujourd'hui, chiffrez côté client avant le téléversement. Voir
-[Sauvegarder Vaultwarden vers le stockage objet avec restic](/tutorials/backup-vaultwarden-restic-object-storage/)
+[Sauvegarder Vaultwarden vers le stockage objet avec restic](/fr/tutorials/backup-vaultwarden-restic-object-storage/)
 pour un exemple complet.
 
 :::

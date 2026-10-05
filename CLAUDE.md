@@ -96,6 +96,8 @@ These are Starlight-specific and easy to get wrong:
   for terminal or editor chrome.
 - Multi-language examples (API/SDK) go in `<Tabs>` with `syncKey` so the language choice syncs
   across sections. CLI/shell/portal-UI examples stay single-language.
+- Use `.ca` for fictional example domains. Preserve real vendor, service, customer, and incident
+  domains when they are necessary context. See `docs/content-standards.md`.
 
 ### Vendor neutrality (Public vs Private cloud)
 

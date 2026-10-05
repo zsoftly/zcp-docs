@@ -49,10 +49,10 @@ dig AAAA ipv6.example.com +short   # 2001:db8::10
 
 - **Apex and IP address.** Point the apex (`@`) at a fixed IP with an `A` or `AAAA` record. Do not
   use a `CNAME` at the apex. See [CNAME](/public-cloud/dns/records/cname).
-- **One address per name and type.** A name resolves to one IPv4 address and one IPv6 address. A
-  second `A` record at the same name replaces the first, with no warning, so round-robin `A` records
-  are not possible. The same applies to `AAAA`. See
-  [Known limitations](/public-cloud/dns/records#known-limitations).
+- **Several addresses per name.** A name holds several `A` records and several `AAAA` records.
+  Creating a second `A` record at the same name adds it to the set. Publish round-robin `A` records
+  this way. The same applies to `AAAA`. See
+  [Several values per name and type](/public-cloud/dns/records#several-values-per-name-and-type).
 - **Dual stack.** Publish both an `A` and an `AAAA` record for a name to serve IPv4 and IPv6
   clients. The types differ, so the two records coexist.
 

@@ -5,9 +5,10 @@ sidebar_position: 1
 
 ## Volumes de stockage bloc
 
-Les volumes de stockage bloc fournissent des volumes SSD NVMe locaux, des volumes SSD SATA locaux ou
-des volumes de stockage partagé répliqué pour les machines virtuelles, selon la région et le plan
-choisis. Une fois le volume attaché, formatez-le et montez-le pour étendre le stockage de votre VM.
+Les volumes de stockage bloc ajoutent du stockage persistant aux machines virtuelles. Ils
+fournissent des volumes SSD NVMe locaux, des volumes SSD SATA locaux ou des volumes de stockage
+partagé répliqué, selon la région et le plan choisis. Cette page s’arrête après la vérification de
+l’attachement. Suivez une procédure testée séparément pour formater et monter le volume.
 
 ### Create Volumes
 
@@ -40,8 +41,7 @@ Dans **Choose Storage Type**, sélectionnez un type de stockage. Dans **Select V
 sélectionnez la taille du volume. Des volumes personnalisés sont disponibles.
 
 La capture d'écran publiée affiche le texte « Minimum 8GB storage is required ». Cette capture
-d’écran est fournie à titre indicatif. Nous n’avons pas encore vérifié, après connexion, les champs
-obligatoires dans l’interface CMP. Utilisez la valeur actuelle affichée pour le plan de stockage
+d’écran est fournie à titre indicatif. Utilisez la valeur actuelle affichée pour le plan de stockage
 sélectionné dans le portail.
 
 ![Create Volumes : Choose Storage Type and Select Volumes Size](../../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)

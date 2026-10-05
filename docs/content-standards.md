@@ -102,7 +102,9 @@ Content jammed onto the `:::type` line, or a closing `:::` on a content line, do
 - For multi-language API or SDK examples, use `<Tabs syncKey="lang">` so the language choice syncs
   across the page. Keep CLI, shell, and portal-UI examples single-language.
 - Do not put real credentials, internal IPs, or hostnames in examples. Use placeholders such as
-  `your-token`, `<access-key>`, `example.com`.
+  `your-token`, `<access-key>`, `example.ca`.
+- Use `.ca` for fictional example domains. Preserve real vendor, service, customer, and incident
+  domains when they are necessary context.
 
 ---
 

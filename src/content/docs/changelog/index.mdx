@@ -127,6 +127,24 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v0.0.30: October 3, 2026 {/* changelog-id: cli-v0.0.30 */}
+
+**Custom VM plans, load balancer rule lists, and object-storage access keys.** See the
+[v0.0.30 release](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.30) on GitHub.
+
+- **Create a custom VM without a catalogue plan.** Omit `--plan`, supply a CPU count with `--cpu`,
+  and supply memory and disk in GB with `--memory` and `--disk`.
+- **List load balancer rules.** `zcp loadbalancer list-rule <load-balancer-slug>` displays rule IDs
+  for use with VM attachment commands.
+- **Rotate object-storage access keys.** `zcp object-storage keys` lists, creates, and revokes
+  S3-compatible access keys. Keep the new secret when you create the key, update your consumers,
+  then revoke the old key. A store supports one or two active keys.
+- **Use saved S3 credentials for direct S3 commands.** A plaintext secret is visible for five
+  minutes after key creation. Save it, then set `ZCP_S3_ACCESS_KEY` and `ZCP_S3_SECRET_KEY`. The CLI
+  checks that the access key is active for the selected store before it connects.
+- **Object-storage output follows the current API response.** Allocation, usage, and unknown status
+  values now display correctly. Debug output also redacts object-storage secrets.
+
 ### v0.0.29: September 7, 2026 {/* changelog-id: cli-v0.0.29 */}
 
 **Complete volume listings and clearer VPC quota errors.** See the

@@ -212,9 +212,9 @@ func main() {
 </Tabs>
 
 L'API regroupe les enregistrements par nom et par type, et renvoie les valeurs sous `contents`. Un
-nom et un type contiennent une seule valeur, donc `contents` porte une seule entrée pour les
-enregistrements que vous créez. Voir
-[Limites connues](/fr/public-cloud/dns/records#limites-connues).
+nom et un type peuvent contenir plusieurs valeurs, donc `contents` peut porter plus d'une entrée.
+Voir
+[Plusieurs valeurs par nom et par type](/fr/public-cloud/dns/records#plusieurs-valeurs-par-nom-et-par-type).
 
 ```json
 {
@@ -232,8 +232,9 @@ zone. Envoyez `www`, et non `www.example.com`. Utilisez `@` pour la racine de la
 
 :::note
 
-Les types pris en charge sont `A`, `AAAA`, `CNAME`, `MX`, `TXT`, `CAA` et `NS`. `SRV` et `LOC` ne
-sont pas encore disponibles.
+Les types pris en charge sont `A`, `AAAA`, `CNAME`, `MX`, `TXT`, `NS`, `SRV` et `LOC`. Un `POST`
+vers un nom et un type qui contiennent déjà des valeurs ajoute la nouvelle valeur à l'ensemble. Vous
+pouvez envoyer une valeur `TXT` avec ou sans guillemets doubles.
 
 :::
 

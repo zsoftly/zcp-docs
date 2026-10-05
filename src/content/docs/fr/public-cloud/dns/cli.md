@@ -126,8 +126,11 @@ Règles relatives aux enregistrements :
 - Un enregistrement `MX` exige `--priority`. Placez le serveur de courrier dans `--content` et le
   nombre de préférence dans `--priority`, par exemple `--priority 10`. La CLI renvoie une erreur si
   cette option manque.
-- Les types pris en charge sont `A`, `AAAA`, `CNAME`, `MX`, `TXT`, `CAA` et `NS`. `SRV` et `LOC` ne
-  sont pas encore disponibles.
+- La création d'un enregistrement sous un nom et un type qui contiennent déjà des valeurs ajoute la
+  nouvelle valeur à l'ensemble.
+- Les types pris en charge sont `A`, `AAAA`, `CNAME`, `MX`, `TXT` et `NS`. La CLI ne crée pas encore
+  d'enregistrements `SRV` ni `LOC`. Créez-les dans la section DNS de la
+  [console](https://cloud.zcp.zsoftly.ca/login) ou avec l'[API](/fr/public-cloud/dns/api/).
 
 :::note
 
@@ -174,7 +177,8 @@ zcp dns record-create --domain examplecom --name www --type A --content 203.0.11
 
 ## Supprimer un enregistrement
 
-Désignez l'ensemble d'enregistrements par son nom et son type.
+Désignez l'ensemble d'enregistrements par son nom et son type. La commande supprime l'ensemble
+complet, donc toutes les valeurs sous ce nom et ce type.
 
 ```bash
 zcp dns record-delete --domain examplecom --name www --type A

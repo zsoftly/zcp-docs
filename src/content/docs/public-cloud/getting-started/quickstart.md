@@ -122,14 +122,13 @@ lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
 9. Review the summary, then click **Create Volumes**
 
 If the wizard rejects an input, record the exact field and error message.
-[Create Volume](/public-cloud/storage/block-storage/create-volume) confirms the current wizard
-steps, visible labels, and screenshots. If the message is unclear or the portal still rejects the
-value, open [Support](/troubleshooting#raise-a-support-ticket) with the project, location,
-non-sensitive resource details, and exact message.
+[Create Volume](/public-cloud/storage/block-storage/create-volume) documents the published
+screenshots and visible labels. If the message is unclear or the portal still rejects the value,
+open [Support](/troubleshooting#raise-a-support-ticket) with the project, location, non-sensitive
+resource details, and exact message.
 
 The published wizard screenshot shows the text `Minimum 8GB storage is required`. This screenshot is
-for reference only. We have not yet verified the required fields in CMP while signed in. Use the
-current value shown for the selected storage plan in the portal.
+for reference only. Use the current value shown for the selected storage plan in the portal.
 
 After attachment, run this command on the target VM over SSH and compare its output with the
 baseline you recorded before creating the volume.

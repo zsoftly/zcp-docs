@@ -46,20 +46,12 @@ dig NS subzone.example.com +short
 # ns1.other-dns.com.
 ```
 
-## Un seul serveur de noms par délégation
+## Plusieurs serveurs de noms par délégation
 
-Un nom et un type contiennent une seule valeur. Le nom `subzone` contient donc un seul
-enregistrement `NS`, et un deuxième enregistrement `NS` sous le même nom remplace le premier, sans
-avertissement. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
-
-:::caution
-
-Un seul enregistrement `NS` prive le sous-domaine délégué de toute redondance. Si ce serveur de noms
-cesse de répondre, le sous-domaine ne se résout plus. Ne déléguez pas un sous-domaine de production
-depuis une zone ZCP. Pour déléguer vers deux serveurs de noms ou plus, hébergez la zone parente chez
-un fournisseur DNS qui accepte plusieurs valeurs `NS` sous un même nom.
-
-:::
+Un nom et un type peuvent contenir plusieurs valeurs. La création d'un deuxième enregistrement `NS`
+sous `subzone` l'ajoute à l'ensemble, ce qui permet de déléguer le sous-domaine à deux serveurs de
+noms ou plus pour la redondance. Voir
+[Plusieurs valeurs par nom et par type](/fr/public-cloud/dns/records#plusieurs-valeurs-par-nom-et-par-type).
 
 ## Déléguer vers ZCP depuis un autre fournisseur
 

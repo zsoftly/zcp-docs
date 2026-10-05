@@ -133,14 +133,13 @@ lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
 9. Examinez le résumé, puis cliquez sur **Create Volumes**.
 
 Si l'assistant refuse une entrée, notez le champ et le message d'erreur exacts. La page
-[Créer un volume](/fr/public-cloud/storage/block-storage/create-volume) confirme les étapes,
-libellés visibles et captures d'écran actuels de l'assistant. Si le message n'est pas clair ou si le
-portail refuse toujours la valeur, ouvrez [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien)
-avec le projet, l'emplacement, les détails non sensibles de la ressource et le message exact.
+[Créer un volume](/fr/public-cloud/storage/block-storage/create-volume) documente les captures
+d'écran publiées et les libellés visibles. Si le message n'est pas clair ou si le portail refuse
+toujours la valeur, ouvrez [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le
+projet, l'emplacement, les détails non sensibles de la ressource et le message exact.
 
 La capture d'écran publiée affiche le texte « Minimum 8GB storage is required ». Cette capture
-d’écran est fournie à titre indicatif. Nous n’avons pas encore vérifié, après connexion, les champs
-obligatoires dans l’interface CMP. Utilisez la valeur actuelle affichée pour le plan de stockage
+d’écran est fournie à titre indicatif. Utilisez la valeur actuelle affichée pour le plan de stockage
 sélectionné dans le portail.
 
 Après avoir attaché le volume, exécutez cette commande via SSH sur l’instance virtuelle cible, puis

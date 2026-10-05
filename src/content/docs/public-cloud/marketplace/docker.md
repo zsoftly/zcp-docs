@@ -84,7 +84,7 @@ exhaustion.
 
 ## Security
 
-UFW is not enabled by default in the current marketplace image.
+UFW is not enabled by default in the Docker marketplace image.
 
 The [ZCP firewall](/public-cloud/compute/settings/firewall/) and
 [port-forwarding](/public-cloud/compute/settings/port-forwarding/) rules remain part of exposure

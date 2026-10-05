@@ -60,13 +60,13 @@ dig MX example.com +short
 # 10 mail.example.com.
 ```
 
-## Un seul serveur de courrier par nom
+## Plusieurs serveurs de courrier par nom
 
-Un nom et un type contiennent une seule valeur. Le sommet contient donc un seul enregistrement `MX`.
-La création d'un deuxième enregistrement `MX` sous `@` remplace le premier, sans avertissement.
-Ouvrez un [billet de soutien](/fr/troubleshooting#ouvrir-un-billet-de-soutien) si vous avez besoin
-d'un serveur principal et d'un serveur de secours sous le même nom. Voir
-[Limites connues](/fr/public-cloud/dns/records#limites-connues).
+Un nom et un type peuvent contenir plusieurs valeurs. La création d'un deuxième enregistrement `MX`
+sous `@` l'ajoute à l'ensemble, ce qui permet de publier un serveur principal et un serveur de
+secours sous le même nom. Donnez à chacun sa propre priorité. Le nombre le plus bas est préféré.
+Voir
+[Plusieurs valeurs par nom et par type](/fr/public-cloud/dns/records#plusieurs-valeurs-par-nom-et-par-type).
 
 ## Remarques
 
