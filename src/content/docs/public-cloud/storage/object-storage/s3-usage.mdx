@@ -270,8 +270,7 @@ Always enable path-style addressing: `forcePathStyle` (JS/TS), `UsePathStyle` (G
 Do not set default bucket encryption (SSE-S3). The storage gateway has no encryption key backend
 yet, and a bucket with default encryption configured rejects **every** subsequent upload with
 `InvalidArgument` until the setting is removed. This applies to `PutBucketEncryption` from any SDK
-or `aws s3api put-bucket-encryption`. Server-side encryption is planned to land before the end of
-Q3 2026.
+or `aws s3api put-bucket-encryption`. Default SSE-S3 remains unsupported.
 
 Clear the setting on a bucket that already has it:
 

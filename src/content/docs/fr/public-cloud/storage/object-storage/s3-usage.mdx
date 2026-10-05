@@ -275,7 +275,7 @@ N'activez pas le chiffrement par défaut des compartiments (SSE-S3). La passerel
 dispose pas encore de backend de clés de chiffrement, et un compartiment configuré avec le
 chiffrement par défaut rejette **tous** les téléversements suivants avec `InvalidArgument` jusqu'au
 retrait du paramètre. Cela vaut pour `PutBucketEncryption` depuis n'importe quel SDK ainsi que pour
-`aws s3api put-bucket-encryption`. Le chiffrement côté serveur est prévu avant la fin du T3 2026.
+`aws s3api put-bucket-encryption`. Le chiffrement SSE-S3 par défaut reste non pris en charge.
 
 Retirez le paramètre sur un compartiment déjà touché :
 

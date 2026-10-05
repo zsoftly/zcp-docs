@@ -34,7 +34,7 @@ Plan for about 45 minutes.
 Server-side encryption is not available on ZCP object storage yet.
 `zcp object-storage bucket encryption enable` refuses to run, because the storage gateway has no
 encryption key backend and setting default SSE-S3 makes every later upload to that bucket fail with
-`InvalidArgument`. Support is planned to land before the end of Q3 2026.
+`InvalidArgument`. Default SSE-S3 remains unsupported.
 
 restic does not wait for it. It encrypts on the client, so the bucket only ever receives ciphertext.
 Server-side encryption, once it arrives, protects data written by clients that do not encrypt. It
