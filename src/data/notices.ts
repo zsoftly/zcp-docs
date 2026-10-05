@@ -38,6 +38,17 @@ export interface SiteNotice {
 
 export const siteNotices: SiteNotice[] = [
   {
+    id: 'q3-2026-backup-kubernetes-billing',
+    severity: 'caution',
+    labelKey: 'zs.notice.q3Billing.label',
+    textKey: 'zs.notice.q3Billing.text',
+    linkKey: 'zs.notice.q3Billing.link',
+    path: 'changelog/q3-2026-platform-update/',
+    active: true,
+    startsAt: '2026-10-05T00:00:00Z',
+    endsAt: '2026-11-04T00:00:00Z',
+  },
+  {
     id: 'ca-delegation-2026-09',
     severity: 'caution',
     labelKey: 'zs.notice.caDelegation.label',
