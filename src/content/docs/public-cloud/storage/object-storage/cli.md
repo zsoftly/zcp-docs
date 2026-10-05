@@ -222,8 +222,7 @@ zcp object-storage bucket encryption status  <storage> <bucket>
 zcp object-storage bucket encryption disable <storage> <bucket>
 ```
 
-Support is planned to land before the end of Q3 2026. Until then, encrypt on the client before
-upload.
+Server-side encryption remains unavailable. Encrypt on the client before upload.
 [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
 walks through doing that with [restic](https://github.com/restic/restic), which encrypts and
 authenticates every object before it leaves the machine.

@@ -13,6 +13,12 @@ const frSidebarLabels = {
   Community: 'Communauté',
   'Join the ZCP Community': 'Rejoindre la communauté ZCP',
   Tutorials: 'Tutoriels',
+  'Build a Private Network (CLI)': 'Créer un réseau privé (CLI)',
+  'Deploy Private Storage (CLI)': 'Déployer un stockage privé (CLI)',
+  'Deploy Employee Desktops (CLI)': 'Déployer des postes de travail (CLI)',
+  'Configure Email Authentication DNS': 'Configurer le DNS d’authentification des e-mails',
+  'Vaultwarden Backups with restic': 'Sauvegardes Vaultwarden avec restic',
+  'Manage a Zone as a File': 'Gérer une zone sous forme de fichier',
   'Deploy a VPS with Dokploy (CLI)': 'Déployer un VPS avec Dokploy (CLI)',
   'Host DNS on ZCP (CLI)': 'Héberger le DNS sur ZCP (CLI)',
   'Ollama Chat and Inference': 'Ollama : chat et inférence',
@@ -282,6 +288,10 @@ export default defineConfig({
             {
               label: 'Vaultwarden Backups with restic',
               slug: 'tutorials/backup-vaultwarden-restic-object-storage',
+            },
+            {
+              label: 'Manage a Zone as a File',
+              slug: 'tutorials/manage-dns-zone-as-a-file',
             },
           ],
         },
