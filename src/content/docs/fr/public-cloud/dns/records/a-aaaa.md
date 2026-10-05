@@ -51,10 +51,11 @@ dig AAAA ipv6.example.com +short   # 2001:db8::10
 - **Sommet et adresse IP.** Faites pointer le sommet (`@`) vers une adresse IP fixe avec un
   enregistrement `A` ou `AAAA`. N'utilisez pas de `CNAME` au sommet. Voir
   [CNAME](/fr/public-cloud/dns/records/cname).
-- **Une seule adresse par nom et par type.** Un nom se résout vers une seule adresse IPv4 et une
-  seule adresse IPv6. Un deuxième enregistrement `A` sous le même nom remplace le premier, sans
-  avertissement. Les enregistrements `A` en tourniquet sont donc impossibles. La même règle
-  s'applique à `AAAA`. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
+- **Plusieurs adresses par nom.** Un nom peut contenir plusieurs enregistrements `A` et plusieurs
+  enregistrements `AAAA`. La création d'un deuxième enregistrement `A` sous le même nom l'ajoute à
+  l'ensemble, ce qui permet de publier des enregistrements `A` en tourniquet. La même règle
+  s'applique à `AAAA`. Voir
+  [Plusieurs valeurs par nom et par type](/fr/public-cloud/dns/records#plusieurs-valeurs-par-nom-et-par-type).
 - **Double pile.** Publiez un enregistrement `A` et un enregistrement `AAAA` pour un même nom afin
   de servir les clients IPv4 et IPv6. Les types diffèrent, donc les deux enregistrements coexistent.
 

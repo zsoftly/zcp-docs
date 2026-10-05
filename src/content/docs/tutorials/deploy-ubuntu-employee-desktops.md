@@ -30,10 +30,9 @@ network interface.
   doesn't depend on the storage tutorial.
 - `ZCP_REGION` and `ZCP_PROJECT` still exported from an earlier tutorial, or re-export them.
 - The same SSH key name from that tutorial's Step 4.
-- `jq`, `ssh`, and `curl` installed. `curl` fetches the script itself below, and the deploy script
-  also uses it internally to fetch its own helper files and, unless you pass `--my-ip` explicitly,
-  for `ifconfig.me` public-IP detection. The teardown script further down only needs `jq`, same as
-  the earlier tutorials.
+- `git`, `jq`, `ssh`, and `curl` installed. `git` downloads the reviewed deployment tree. Unless you
+  pass `--my-ip` explicitly, the deploy script uses `curl` for `ifconfig.me` public-IP detection.
+  The teardown script further down only needs `jq`, same as the earlier tutorials.
 - An RDP client: the built-in Remote Desktop Connection on Windows, Windows App (formerly Microsoft
   Remote Desktop) from the macOS App Store, or Remmina or FreeRDP on Linux, running on a device
   already connected to the mesh from the previous tutorial. The desktop's tier IP is reachable only
@@ -52,8 +51,27 @@ Deploying the desktop VM, its cloud-init login, and the tier network interface i
 `zcp/deploy-employee-desktop.sh` from the [zsoftly/tools](https://github.com/zsoftly/tools)
 repository. It runs through the phases explained in the next section.
 
+Download the deployment tree at the reviewed commit:
+
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/deploy-employee-desktop.sh) \
+git clone --filter=blob:none --no-checkout https://github.com/zsoftly/tools.git employee-desktop-tools
+git -C employee-desktop-tools checkout --detach a0939bc0389380266cd4d071c6cc152bb596f68e
+```
+
+Review the downloaded script and its helper files before you run it:
+
+```bash
+less employee-desktop-tools/zcp/deploy-employee-desktop.sh \
+  employee-desktop-tools/zcp/lib/deploy-employee-desktop/01-validate.sh \
+  employee-desktop-tools/zcp/lib/deploy-employee-desktop/02-resolve.sh \
+  employee-desktop-tools/zcp/lib/deploy-employee-desktop/03-create.sh \
+  employee-desktop-tools/zcp/lib/deploy-employee-desktop/04-finish.sh
+```
+
+Then run it:
+
+```bash
+bash employee-desktop-tools/zcp/deploy-employee-desktop.sh \
   --name jane-doe-desktop --tier-name my-workspace-tier --username janedoe --ssh-key my-key
 ```
 
@@ -389,9 +407,23 @@ routes nothing, so the firewall above is the actual gate. There's nothing to cha
 Hourly billing runs while this VM exists. Unlike the storage tutorial, there's no companion volume
 to clean up here: this desktop VM has none.
 
+Download the teardown script at the reviewed commit:
+
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-employee-desktop.sh) \
-  --name jane-doe-desktop
+curl --fail --show-error --location --output destroy-employee-desktop.sh \
+  https://raw.githubusercontent.com/zsoftly/tools/a0939bc0389380266cd4d071c6cc152bb596f68e/zcp/destroy-employee-desktop.sh
+```
+
+Review the downloaded script before you run it:
+
+```bash
+less destroy-employee-desktop.sh
+```
+
+Then run it:
+
+```bash
+bash destroy-employee-desktop.sh --name jane-doe-desktop
 ```
 
 It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. Pass

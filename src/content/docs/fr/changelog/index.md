@@ -33,6 +33,8 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [CLI v0.0.30 : forfaits personnalisés et clés de stockage objet](/fr/changelog/#cli-v0.0.30) (3
+  octobre 2026)
 - [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0) (7 septembre 2026)
 - [CLI v0.0.29 : listes de volumes complètes](/fr/changelog/#cli-v0.0.29) (7 septembre 2026)
 - [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit) (7 septembre 2026)
@@ -134,6 +136,28 @@ Images d'applications en un clic pour les instances de calcul.
 
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
+
+### v0.0.30 : 3 octobre 2026 <!-- changelog-id: cli-v0.0.30 -->
+
+**Forfaits de VM personnalisés, listes de règles d'équilibrage de charge et clés d'accès au stockage
+objet.** Consultez la [version v0.0.30](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.30) sur
+GitHub.
+
+- **Créez une VM personnalisée sans forfait catalogue.** Omettez `--plan`, fournissez un nombre de
+  processeurs avec `--cpu`, puis la mémoire et le disque en Go avec `--memory` et `--disk`.
+- **Listez les règles d'équilibrage de charge.** `zcp loadbalancer list-rule <load-balancer-slug>`
+  affiche les identifiants de règles nécessaires aux commandes qui attachent des VM.
+- **Faites la rotation des clés du stockage objet.** `zcp object-storage keys` liste, crée et
+  révoque les clés d'accès S3 compatibles. Conservez le nouveau secret à la création, mettez à jour
+  vos consommateurs, puis révoquez l'ancienne clé. Chaque espace de stockage prend en charge une ou
+  deux clés actives.
+- **Utilisez les identifiants S3 enregistrés pour les commandes S3 directes.** Un secret en clair
+  reste visible cinq minutes après la création de la clé. Enregistrez-le, puis définissez
+  `ZCP_S3_ACCESS_KEY` et `ZCP_S3_SECRET_KEY`. Le CLI vérifie que la clé d'accès est active pour
+  l'espace de stockage sélectionné avant de se connecter.
+- **La sortie du stockage objet suit la réponse actuelle de l'API.** L'allocation, l'utilisation et
+  les états inconnus s'affichent maintenant correctement. La sortie de débogage masque aussi les
+  secrets du stockage objet.
 
 ### v0.0.29 : 7 septembre 2026 <!-- changelog-id: cli-v0.0.29 -->
 

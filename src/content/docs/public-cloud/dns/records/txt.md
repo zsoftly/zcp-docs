@@ -50,13 +50,15 @@ dig TXT example.com +short
 
 ## Notes
 
-- **Quoting.** The value is a quoted string, and the platform rejects an unquoted value. On the CLI,
-  wrap it so the shell passes the quotes through, for example `'"v=spf1 -all"'`.
+- **Quoting.** Enter the value with or without double quotes. The platform stores it quoted and
+  returns it quoted. On the CLI, to send the quotes yourself, wrap the value so the shell passes
+  them through, for example `'"v=spf1 -all"'`.
 - **One string per record.** For a long DKIM key, keep it as a single record. The platform stores it
   as given.
-- **One value per name.** A name holds one `TXT` value. Creating a second `TXT` value at the same
-  name replaces the first, so an apex holds either an SPF record or a verification record, not both.
-  See [Known limitations](/public-cloud/dns/records#known-limitations).
+- **Several values per name.** A name holds several `TXT` values. Creating another `TXT` record at
+  the same name adds it to the set. The apex then carries an SPF record and a verification record
+  together. See
+  [Several values per name and type](/public-cloud/dns/records#several-values-per-name-and-type).
 
 See also: [MX records](/public-cloud/dns/records/mx), [Worked examples](/public-cloud/dns/examples),
 [Record types](/public-cloud/dns/records)

@@ -48,8 +48,8 @@ Point your domain at both. The exact values also appear in the console and in `z
 
 :::note
 
-`SRV` and `LOC` records are not available yet. See
-[Known limitations](/public-cloud/dns/records#known-limitations).
+Create `SRV` and `LOC` records in the console or through the API. The `zcp` CLI does not create them
+yet.
 
 :::
 

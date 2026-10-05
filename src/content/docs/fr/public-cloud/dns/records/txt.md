@@ -54,15 +54,16 @@ dig TXT example.com +short
 
 ## Remarques
 
-- **Guillemets.** La valeur est une chaîne entre guillemets, et la plateforme refuse une valeur sans
-  guillemets. Dans la CLI, protégez-la afin que l'interpréteur de commandes transmette les
-  guillemets, par exemple `'"v=spf1 -all"'`.
+- **Guillemets.** Vous pouvez saisir la valeur avec ou sans guillemets doubles. La plateforme la
+  stocke et la renvoie entre guillemets. Dans la CLI, pour transmettre vous-même les guillemets,
+  protégez la valeur afin que l'interpréteur de commandes les transmette, par exemple
+  `'"v=spf1 -all"'`.
 - **Une chaîne par enregistrement.** Conservez une longue clé DKIM dans un seul enregistrement. La
   plateforme la stocke telle quelle.
-- **Une seule valeur par nom.** Un nom contient une seule valeur `TXT`. La création d'une deuxième
-  valeur `TXT` sous le même nom remplace la première. Le sommet contient donc soit un enregistrement
-  SPF, soit un enregistrement de vérification, mais pas les deux. Voir
-  [Limites connues](/fr/public-cloud/dns/records#limites-connues).
+- **Plusieurs valeurs par nom.** Un nom peut contenir plusieurs valeurs `TXT`. La création d'un
+  autre enregistrement `TXT` sous le même nom l'ajoute à l'ensemble, donc le sommet peut contenir à
+  la fois un enregistrement SPF et un enregistrement de vérification. Voir
+  [Plusieurs valeurs par nom et par type](/fr/public-cloud/dns/records#plusieurs-valeurs-par-nom-et-par-type).
 
 Voir aussi : [Enregistrements MX](/fr/public-cloud/dns/records/mx),
 [Exemples pratiques](/fr/public-cloud/dns/examples),

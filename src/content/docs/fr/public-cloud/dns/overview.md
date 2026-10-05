@@ -52,8 +52,8 @@ console et dans la sortie de `zcp dns show`.
 
 :::note
 
-Les enregistrements `SRV` et `LOC` ne sont pas encore disponibles. Voir
-[Limites connues](/fr/public-cloud/dns/records#limites-connues).
+Vous pouvez créer des enregistrements `SRV` et `LOC` dans la console et avec l'API. La CLI `zcp` ne
+les crée pas encore.
 
 :::
 

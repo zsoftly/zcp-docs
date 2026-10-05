@@ -67,8 +67,9 @@ zcp dns record-create --domain examplecom --name @ --type TXT --content '"provid
 dig TXT example.com +short
 ```
 
-Un nom contient une seule valeur `TXT`. Cet enregistrement remplace donc un enregistrement SPF déjà
-présent sous `@`. Voir [Limites connues](/fr/public-cloud/dns/records#limites-connues).
+Un nom peut contenir plusieurs valeurs `TXT`, donc cet enregistrement s'ajoute à un enregistrement
+SPF déjà présent sous `@`. Voir
+[Plusieurs valeurs par nom et par type](/fr/public-cloud/dns/records#plusieurs-valeurs-par-nom-et-par-type).
 
 ## Limiter l'émission de certificats
 
@@ -94,16 +95,15 @@ zcp dns record-create --domain examplecom --name subzone --type NS --content ns1
 dig NS subzone.example.com +short
 ```
 
-Un nom et un type contiennent une seule valeur. Le nom `subzone` contient donc un seul
-enregistrement `NS`, et un deuxième enregistrement `NS` sous le même nom remplace le premier. Voir
-[Limites connues](/fr/public-cloud/dns/records#limites-connues).
+Un nom et un type peuvent contenir plusieurs valeurs, donc un deuxième enregistrement `NS` sous le
+même nom ajoute un deuxième serveur de noms. Voir
+[Plusieurs valeurs par nom et par type](/fr/public-cloud/dns/records#plusieurs-valeurs-par-nom-et-par-type).
 
 :::caution
 
 Un seul enregistrement `NS` prive le sous-domaine délégué de toute redondance. Si ce serveur de noms
-cesse de répondre, le sous-domaine ne se résout plus. N'appliquez pas cet exemple à un sous-domaine
-de production. Pour déléguer vers deux serveurs de noms ou plus, hébergez la zone parente chez un
-fournisseur DNS qui accepte plusieurs valeurs `NS` sous un même nom.
+cesse de répondre, le sous-domaine ne se résout plus. Pour un sous-domaine de production, ajoutez un
+deuxième enregistrement `NS` sous le même nom.
 
 :::
 

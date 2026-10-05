@@ -15,7 +15,7 @@ Looking for a single feature instead of a full walkthrough? The
 
 ## Tutorials
 
-### [Configure Email Authentication DNS](/tutorials/configure-email-authentication-dns)
+### [Configure Email Authentication DNS](/tutorials/configure-email-authentication-dns/)
 
 Publish DKIM and DMARC records on an existing ZCP DNS zone with the CLI or Terraform/OpenTofu. Learn
 where SPF needs a separate, carefully reviewed change, how to keep a single owner for each record
@@ -28,7 +28,7 @@ You learn how to:
 - Manage dedicated record sets through either the CLI or Terraform/OpenTofu
 - Test DNS answers and `Authentication-Results` for every sender before enforcement
 
-### [Deploy a VPS and install Dokploy with the CLI](/tutorials/deploy-vps-dokploy-cli)
+### [Deploy a VPS and install Dokploy with the CLI](/tutorials/deploy-vps-dokploy-cli/)
 
 Go from a fresh account to a public virtual machine running [Dokploy](https://dokploy.com), a
 self-hosted app platform. You install and authenticate the CLI, create a VPS with a public IP and
@@ -41,7 +41,7 @@ You learn how to:
 - Create an internet-facing VM with a public IP
 - Connect over SSH and install Dokploy
 
-### [Deploy OpenClaw from the Marketplace with the CLI](/tutorials/deploy-openclaw-marketplace-cli)
+### [Deploy OpenClaw from the Marketplace with the CLI](/tutorials/deploy-openclaw-marketplace-cli/)
 
 Deploy [OpenClaw](https://openclaw.ai), a self-hosted personal AI assistant, straight from the
 ZSoftly Marketplace. It comes pre-installed on the image, so you deploy and connect, with no manual
@@ -53,7 +53,7 @@ You learn how to:
 - Deploy it in one command with your SSH key
 - Open SSH and confirm the app is ready to configure
 
-### [Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference)
+### [Run Ollama Chat and Inference on ZCP](/tutorials/ollama-chat-and-inference/)
 
 Deploy the Ollama Marketplace image on an Intel VM, pull a model, and use it from the CLI and REST
 API. The reference path uses an 8B model. Deployment time depends on image startup and model
@@ -66,7 +66,7 @@ You learn how to:
 - Compare the 8B and 70B CPU workload profiles
 - Record timings, resource usage, and failure signals during a bounded test
 
-### [Run Open WebUI With Ollama on ZCP](/tutorials/open-webui-with-ollama)
+### [Run Open WebUI With Ollama on ZCP](/tutorials/open-webui-with-ollama/)
 
 Add Open WebUI to an existing Ollama VM. Run the browser client on the same machine, connect it to
 the host Ollama service, and keep access private with an encrypted SSH tunnel.
@@ -78,7 +78,7 @@ You learn how to:
 - Select models from the browser without changing their compute path
 - Remove the container, network rules, VM, and any orphaned source-NAT IP
 
-### [Build a Private Network with Headscale](/tutorials/build-private-network-headscale)
+### [Build a Private Network with Headscale](/tutorials/build-private-network-headscale/)
 
 Create a private VPC and tier, lock it down with a custom network ACL, and deploy a self-hosted
 Headscale server from the Marketplace to give yourself mesh access into it. About 30 minutes.
@@ -90,7 +90,7 @@ You learn how to:
 - Deploy a self-hosted Headscale and Headplane server from the Marketplace
 - Enroll a subnet router and connect your own device to the mesh
 
-### [Deploy Private Shared Storage](/tutorials/deploy-private-shared-storage)
+### [Deploy Private Shared Storage](/tutorials/deploy-private-shared-storage/)
 
 Deploy an NFS file share on a VM inside the private tier from Build a Private Network with
 Headscale, reachable only from the tier and the mesh, never exposed publicly. About 20 minutes.
@@ -102,7 +102,7 @@ You learn how to:
 - Verify the share from a mesh client, then confirm its public IP has nothing but SSH reachable on
   it
 
-### [Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops)
+### [Deploy Ubuntu Employee Desktops](/tutorials/deploy-ubuntu-employee-desktops/)
 
 Deploy a full Ubuntu KDE remote desktop for one employee on a VM inside the private tier from Build
 a Private Network with Headscale, reached only through the mesh over RDP, never exposed publicly.

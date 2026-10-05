@@ -65,28 +65,25 @@ A `CNAME` cannot sit at the apex (`@`) and cannot share a name with any other re
 An `MX` record needs a **priority** in its own field. From the CLI, pass `--priority`. From the API,
 send `priority` as a separate field. See [MX records](/public-cloud/dns/records/mx).
 
-### TXT Record Looks Wrong or Is Rejected
+### A CNAME Is Refused
 
-`TXT` content is a quoted string. An unquoted value is one cause of the message
-`DNS operation failed. Please try again or contact support.` The platform returns that same message
-for other failures, including any attempt to create an `SRV` or `LOC` record. Check the quoting
-first. On the CLI, wrap the value so the shell passes the quotes through, for example
-`'"v=spf1 -all"'`. See [TXT records](/public-cloud/dns/records/txt), and
-[Known limitations](/public-cloud/dns/records#known-limitations) for the other causes.
-
-### A New Record Replaced an Existing One
-
-A name and type hold one value. Creating a second value at the same name and type replaces the
-first, with no warning. This applies to every record type, including `A` and `AAAA`, so a name
-resolves to one IPv4 address and one IPv6 address. See
+Creating a `CNAME` at a name with other records fails with an error like
+`RRset www IN CNAME: Conflicts with pre-existing RRset`. A `CNAME` cannot share a name with any
+other record. Delete the other records at that name first, or use a different name. See
 [Known limitations](/public-cloud/dns/records#known-limitations).
 
-### SRV or LOC Record Fails
+### A New Record Was Added Instead of Replacing One
 
-`SRV` and `LOC` records are not available yet, and both fail with the message
-`DNS operation failed. Please try again or contact support.` The other types (`A`, `AAAA`, `CNAME`,
-`MX`, `TXT`, `CAA`, `NS`) work. See
-[Known limitations](/public-cloud/dns/records#known-limitations).
+A name and type hold several values. Creating a record at a name and type with existing values adds
+the new value to the set. To remove a value you no longer want, delete it in the console, which
+removes only that value. `zcp dns record-delete` removes the whole set at a name and type, so create
+the values you want to keep again afterward. See
+[Several values per name and type](/public-cloud/dns/records#several-values-per-name-and-type).
+
+### A TXT Value Appears With Quotes
+
+The platform stores a `TXT` value quoted and returns it quoted, whether or not you typed the quotes.
+`dig` shows the quotes. See [TXT records](/public-cloud/dns/records/txt).
 
 ### NXDOMAIN Versus No Answer
 
