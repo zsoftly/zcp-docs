@@ -10,11 +10,24 @@ contre les suppressions accidentelles, les défaillances logicielles ou les mena
 ZSoftly Public Cloud fournit des sauvegardes automatisées quotidiennes, hebdomadaires ou
 personnalisées.
 
-:::note
+### Facturation des sauvegardes
 
-Les sauvegardes automatiques coûtent 20 % du prix de la machine virtuelle.
+La plateforme facture chaque sauvegarde en fonction de l'espace de stockage qu'elle utilise. Chaque
+sauvegarde est associée à son propre abonnement. Celui-ci prend fin lorsque vous supprimez la
+sauvegarde ou que le processus de rétention la supprime.
 
-:::
+- Mettre un calendrier en pause arrête la création de nouvelles sauvegardes. Les sauvegardes
+  existantes continuent d'entraîner des frais de stockage jusqu'à leur suppression.
+- Le coût des sauvegardes dépend de la quantité de données stockées et de la durée de rétention.
+- Les journaux d'activité enregistrent les changements de calendrier, les exécutions, les échecs et
+  le nettoyage de rétention. Ils n'ont aucune incidence sur la facturation.
+
+La mise à jour de la plateforme du T3 2026 indique que la facturation des sauvegardes existantes est
+toujours en cours de migration. Consultez **Billing → Abonnements** et contactez le support pour
+confirmer si la migration de la facturation de vos sauvegardes est terminée.
+
+Pour en savoir plus, consultez la
+[mise à jour de la plateforme du T3 2026](/fr/changelog/q3-2026-platform-update).
 
 ### Créer un calendrier de sauvegarde
 

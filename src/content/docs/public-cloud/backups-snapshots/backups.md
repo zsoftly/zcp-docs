@@ -9,11 +9,23 @@ Backups create copies of your instance's data on a scheduled basis to protect ag
 deletions, software failures, or security threats. ZSoftly Public Cloud provides automated daily,
 weekly, or custom schedule backups.
 
-:::note
+### Backup Billing
 
-Automatic backups cost 20% of the virtual machine's price.
+The platform bills each backup based on the storage it occupies. Each backup has its own
+subscription. The subscription ends when you delete the backup or retention cleanup removes it.
 
-:::
+- Pausing a schedule stops new backups. Existing backups continue to incur storage charges until you
+  delete them.
+- Backup cost depends on the stored size and the retention period.
+- Activity logs record schedule changes, runs, failures, and retention cleanup. They do not affect
+  billing.
+
+The Q3 2026 Platform Update says existing backup billing is still being migrated. Review **Billing →
+Subscriptions** and contact support to confirm whether the migration of your backup billing is
+complete.
+
+For details about this change, see the
+[Q3 2026 Platform Update](/changelog/q3-2026-platform-update).
 
 ### Create a Backup Schedule
 
