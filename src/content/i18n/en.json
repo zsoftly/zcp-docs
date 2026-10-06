@@ -62,7 +62,7 @@
   "zs.notice.caDelegation.text": ".ca domain delegations to ZSoftly are failing right now. Every other top-level domain is unaffected.",
   "zs.notice.caDelegation.link": "What to do",
   "zs.notice.q3Billing.label": "Billing notice",
-  "zs.notice.q3Billing.text": "Existing backup and managed Kubernetes customers: review changes to billing and retention.",
+  "zs.notice.q3Billing.text": "If you use backup services or managed Kubernetes, review the billing and retention changes.",
   "zs.notice.q3Billing.link": "Review release notes",
   "zs.header.exploreNav": "Explore ZCP",
   "zs.header.servicesNote": "Managed cloud and professional services",

@@ -45,8 +45,8 @@ export const siteNotices: SiteNotice[] = [
     linkKey: 'zs.notice.q3Billing.link',
     path: 'changelog/q3-2026-platform-update/',
     active: true,
-    startsAt: '2026-10-05T00:00:00Z',
-    endsAt: '2026-11-04T00:00:00Z',
+    startsAt: '2026-10-06T00:00:00Z',
+    endsAt: '2026-11-05T00:00:00Z',
   },
   {
     id: 'ca-delegation-2026-09',
