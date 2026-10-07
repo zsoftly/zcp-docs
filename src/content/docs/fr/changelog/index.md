@@ -33,6 +33,8 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [Terraform / OpenTofu : avis sur la mise à jour du nom d'une instance](/fr/changelog/#terraform-instance-name-update)
+  (7 octobre 2026)
 - [CLI v0.0.30 : forfaits personnalisés et clés de stockage objet](/fr/changelog/#cli-v0.0.30) (3
   octobre 2026)
 - [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0) (7 septembre 2026)
@@ -512,6 +514,16 @@ Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié 
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### Avis sur la mise à jour du nom d'une instance : 7 octobre 2026 <!-- changelog-id: terraform-instance-name-update -->
+
+Avec le [fournisseur v0.2.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v0.2.0),
+la modification de `name` sur une `zcp_instance` existante échoue actuellement en production.
+Conservez le nom actuel de l'instance. Si un plan pour une autre modification renomme aussi
+l'instance, rétablissez son nom d'origine avant d'appliquer la modification sans rapport.
+
+Ne forcez pas le remplacement d'une instance uniquement pour la renommer. Le remplacement détruit et
+recrée la VM. La validation de compatibilité est en cours.
 
 ### v0.2.0 : 7 septembre 2026 <!-- changelog-id: terraform-v0.2.0 -->
 
