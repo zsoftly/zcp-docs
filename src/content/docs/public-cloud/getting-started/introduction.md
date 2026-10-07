@@ -44,4 +44,4 @@ Throughout these docs:
 2. [Set up your profile](/public-cloud/getting-started/profile-setup): personal info, 2FA, user
    roles
 3. [Quickstart](/public-cloud/getting-started/quickstart): deploy your first VM, connect via SSH,
-   and attach a block storage volume
+   and submit a block storage volume creation and attachment request

@@ -7,9 +7,7 @@ sidebar_position: 1
 
 Block storage volumes add persistent storage to virtual machines. They provide local NVMe SSD, local
 SATA SSD, or replicated shared storage, depending on the selected region and plan. This page ends
-after attachment verification. Follow
-[Format and Mount a Volume](/public-cloud/storage/block-storage/format-and-mount) to format and
-mount the new volume.
+after you submit the volume creation and attachment request.
 
 ### Create Volumes
 
@@ -54,20 +52,19 @@ Under **Choose Name**, enter a unique **Volumes Name**.
 
 ### Create
 
-Create and attach the volume to the target VM. Do not attach or detach disks while you format and
-mount the volume.
+Submit the volume creation and attachment request for the target VM.
 
 - **Billing Cycle**: Hourly, Monthly, or Yearly.
 - Click **Review & Deploy**, review the summary, then click **Create Volumes**.
 
 ![Create Volumes: Review & Deploy and Create Volumes](../../../../../assets/storage/block-storage/create-volume-create.webp)
 
-The volume steps on this page end after attachment verification. Do not format a disk based only on
-its device name or a manual selection. Continue at
-[Confirm a Stable Volume Identifier](/public-cloud/storage/block-storage/format-and-mount#confirm-a-stable-volume-identifier).
-If the selected volume cannot be confirmed through a stable guest identifier, stop and open
-[Support](/troubleshooting#raise-a-support-ticket) with the project, location, exact error, and
-non-sensitive resource details.
+The public documentation ends after you submit the volume creation and attachment request. Do not
+format a disk based only on a transient device name or a manual selection. Ask
+[Support](/troubleshooting#raise-a-support-ticket) whether the portal volume can be mapped to the
+guest device and whether a tested initialization and mount procedure is available. If an error
+appears, include the project, location, and exact error. In all cases, include non-sensitive
+resource details.
 
 See also: [Storage Types and Resilience](/public-cloud/storage/block-storage/storage-types),
 [Volume Snapshots](/public-cloud/storage/block-storage/snapshots),

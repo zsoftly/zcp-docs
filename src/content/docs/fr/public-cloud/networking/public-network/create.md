@@ -37,13 +37,12 @@ Dans **Choose Network Plan**, sélectionnez un plan réseau.
 
 ### Configuration réseau
 
-Laissez les valeurs affichées pour **Gateway** et **Netmask** inchangées, sauf si les paramètres
-réseau qui vous ont été attribués indiquent d'autres valeurs. Si l'un des champs est vide ou si le
-portail refuse sa valeur affichée, notez le champ et le message d'erreur exacts. Ne devinez pas de
-valeur de remplacement pour la passerelle ou le masque de réseau. Si le message n'est pas clair ou
-si le portail refuse toujours la valeur, ouvrez
-[Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le projet, l'emplacement, le message
-exact et les détails non sensibles de la ressource.
+ZSoftly n’a pas vérifié si **Gateway** et **Netmask** sont obligatoires. Si le portail remplit un
+champ avec une valeur pour le réseau sélectionné, laissez cette valeur inchangée. Si l’un des champs
+est vide ou semble afficher un texte d’espace réservé, ne saisissez ni ne déduisez une valeur. Notez
+le champ et tout message affiché, puis ouvrez
+[Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le projet, l’emplacement, tout
+message affiché et les détails non sensibles de la ressource.
 
 ![Create Isolated Network : configuration de la passerelle et du masque réseau](../../../../../../assets/networking/pub-net-config.webp)
 

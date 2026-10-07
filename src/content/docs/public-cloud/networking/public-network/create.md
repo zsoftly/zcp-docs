@@ -37,12 +37,11 @@ Under **Choose Network Plan**, select a network plan.
 
 ### Network Configuration
 
-Leave the displayed **Gateway** and **Netmask** values unchanged unless your assigned network
-settings specify different values. If either field is blank or the portal rejects its displayed
-value, record the exact field and error message. Do not guess a replacement gateway or netmask
-value. If the message is unclear or the portal still rejects the value, open
-[Support](/troubleshooting#raise-a-support-ticket) with the project, location, exact message, and
-non-sensitive resource details.
+ZSoftly has not verified whether **Gateway** and **Netmask** are required. If the portal populates a
+field with a value for the selected network, leave that value unchanged. If either field is blank or
+appears to show placeholder text, do not enter or infer a value. Record the field and any message
+shown, then open [Support](/troubleshooting#raise-a-support-ticket) with the project, location, any
+message shown, and non-sensitive resource details.
 
 ![Create Isolated Network: gateway and network mask configuration](../../../../../assets/networking/pub-net-config.webp)
 

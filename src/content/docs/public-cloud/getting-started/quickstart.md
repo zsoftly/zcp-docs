@@ -1,10 +1,13 @@
 ---
 title: Quickstart
 sidebar_position: 4
-description: Deploy your first VM on ZSoftly Public Cloud and attach a block storage volume.
+description:
+  Deploy your first VM on ZSoftly Public Cloud and submit a request to create and attach a block
+  storage volume.
 ---
 
-Deploy a VM, connect to it via SSH, and attach a block storage volume. End to end.
+Deploy a VM, connect to it via SSH, then submit a request to create and attach a block storage
+volume.
 
 ## Prerequisites
 
@@ -34,14 +37,14 @@ Your VM needs a network. For a simple setup, use a Public Network.
 3. Complete **Choose Project**, then **Select Location**.
 4. In **Network Details**, enter a **Network Name**.
 5. Under **Choose Network Plan**, select a network plan.
-6. In **Network Configuration**, leave the displayed **Gateway** and **Netmask** values unchanged
-   unless your assigned network settings specify different values. If either field is blank or the
-   portal rejects its displayed value, stop and contact Support. Do not guess a replacement value.
+6. In **Network Configuration**, ZSoftly has not verified whether **Gateway** and **Netmask** are
+   required. If the portal populates a field with a value for the selected network, leave that value
+   unchanged. If either field is blank or appears to show placeholder text, do not enter or infer a
+   value. Stop and contact Support.
 7. Choose a **Billing Cycle** and review the **Price Summary**.
 8. Click **Create Network**.
 
-If the wizard rejects an input, record the exact field and error message. Do not guess replacement
-gateway or netmask values. If the message is unclear or the portal still rejects the value, open
+If the wizard rejects an input, record the exact field and error message. Open
 [Support](/troubleshooting#raise-a-support-ticket) and include the project, location, exact message,
 and non-sensitive resource details.
 
@@ -98,8 +101,8 @@ location, instance name, and non-sensitive error details.
 
 ## Step 4: Attach block storage (optional)
 
-To add persistent storage separate from the root disk, create and attach a volume to the target VM.
-Do not attach or detach disks while you format and mount the volume.
+To add persistent storage separate from the root disk, submit a volume creation and attachment
+request for the target VM.
 
 1. Go to **Volumes** in the portal
 2. Click the **+** icon
@@ -122,12 +125,12 @@ resource details, and exact message.
 The published wizard screenshot shows the text `Minimum 8GB storage is required`. This screenshot is
 for reference only. Use the current value shown for the selected storage plan in the portal.
 
-The volume steps end after attachment verification. Do not format a disk based only on its device
-name or a manual selection. Continue at
-[Confirm a Stable Volume Identifier](/public-cloud/storage/block-storage/format-and-mount#confirm-a-stable-volume-identifier).
-If the selected volume cannot be confirmed through a stable guest identifier, stop and open
-[Support](/troubleshooting#raise-a-support-ticket) with the project, location, exact error, and
-non-sensitive resource details.
+The public documentation ends after you submit the volume creation and attachment request. Do not
+format a disk based only on a transient device name or a manual selection. Ask
+[Support](/troubleshooting#raise-a-support-ticket) whether the portal volume can be mapped to the
+guest device and whether a tested initialization and mount procedure is available. If an error
+appears, include the project, location, and exact error. In all cases, include non-sensitive
+resource details.
 
 ## Next steps
 

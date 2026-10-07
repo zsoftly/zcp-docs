@@ -2,12 +2,14 @@
 title: Démarrage rapide
 sidebar_position: 4
 description:
-  Déployez votre première VM sur ZSoftly Public Cloud et attachez un volume de stockage bloc.
+  Déployez votre première VM sur ZSoftly Public Cloud et envoyez une demande de création et
+  d’attachement d’un volume de stockage bloc.
 ---
 
 # Démarrage rapide
 
-Déployez une VM, connectez-vous avec SSH et attachez un volume de stockage bloc, de bout en bout.
+Déployez une VM, connectez-vous avec SSH, puis envoyez une demande de création et d’attachement d’un
+volume de stockage bloc.
 
 ## Prérequis
 
@@ -38,16 +40,14 @@ Votre VM a besoin d'un réseau. Pour une configuration simple, utilisez un rése
 3. Sélectionnez **Choose Project**, puis **Select Location**.
 4. Dans **Network Details**, saisissez un **Network Name**.
 5. Dans **Choose Network Plan**, sélectionnez un plan réseau.
-6. Dans **Network Configuration**, laissez les valeurs affichées pour **Gateway** et **Netmask**
-   inchangées, sauf si les paramètres réseau qui vous ont été attribués indiquent d'autres valeurs.
-   Si l'un des champs est vide ou si le portail refuse sa valeur affichée, arrêtez-vous et contactez
-   le Support. Ne devinez pas de valeur de remplacement.
+6. Dans **Network Configuration**, ZSoftly n’a pas vérifié si **Gateway** et **Netmask** sont
+   obligatoires. Si le portail remplit un champ avec une valeur pour le réseau sélectionné, laissez
+   cette valeur inchangée. Si l’un des champs est vide ou semble afficher un texte d’espace réservé,
+   ne saisissez ni ne déduisez une valeur. Arrêtez-vous et contactez le Support.
 7. Choisissez un **Billing Cycle** et examinez le **Price Summary**.
 8. Cliquez sur **Create Network**.
 
-Si l'assistant refuse une entrée, notez le champ et le message d'erreur exacts. N'essayez pas de
-remplacer la passerelle ou le masque de réseau par des valeurs devinées. Si le message n'est pas
-clair ou si le portail refuse toujours la valeur, ouvrez
+Si l'assistant refuse une entrée, notez le champ et le message d'erreur exacts. Ouvrez
 [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien). Incluez le projet, l'emplacement, le
 message exact et les détails non sensibles de la ressource.
 
@@ -109,9 +109,8 @@ l'instance et les détails non sensibles de l'erreur.
 
 ## Étape 4 : attacher du stockage bloc (facultatif)
 
-Pour ajouter du stockage persistant séparé du disque racine, créez et attachez un volume à
-l'instance virtuelle cible. N’attachez et ne détachez aucun disque pendant le formatage et le
-montage du volume.
+Pour ajouter du stockage persistant séparé du disque racine, envoyez une demande de création et
+d’attachement de volume pour l’instance virtuelle cible.
 
 1. Allez à **Volumes** dans le portail.
 2. Cliquez sur l'icône **+**.
@@ -135,13 +134,13 @@ La capture d'écran publiée affiche le texte « Minimum 8GB storage is required
 d’écran est fournie à titre indicatif. Utilisez la valeur actuelle affichée pour le plan de stockage
 sélectionné dans le portail.
 
-Les étapes de gestion du volume s’arrêtent après la vérification de l’attachement. Ne formatez pas
-un disque en vous fondant uniquement sur son nom de périphérique ou sur une sélection manuelle.
-Poursuivez à
-[Confirmer un identifiant de volume stable](/fr/public-cloud/storage/block-storage/format-and-mount#confirmer-un-identifiant-de-volume-stable).
-Si le volume sélectionné ne peut pas être confirmé avec un identifiant stable dans l’instance
-virtuelle, arrêtez-vous et ouvrez [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le
-projet, l’emplacement, l’erreur exacte et les détails non sensibles de la ressource.
+La documentation publique s’arrête après l’envoi de la demande de création et d’attachement du
+volume. Ne formatez pas un disque en vous fondant uniquement sur un nom de périphérique transitoire
+ou sur une sélection manuelle. Demandez au
+[Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) si le volume du portail peut être associé
+au périphérique de l’instance virtuelle et si une procédure validée d’initialisation et de montage
+est disponible. Si une erreur s’affiche, indiquez le projet, l’emplacement et le message exact. Dans
+tous les cas, fournissez les détails non sensibles de la ressource.
 
 ## Prochaines étapes
 

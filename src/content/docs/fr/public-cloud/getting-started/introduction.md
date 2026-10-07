@@ -48,4 +48,5 @@ Dans cette documentation :
 2. [Configurer votre profil](/fr/public-cloud/getting-started/profile-setup) : renseignements
    personnels, 2FA et rôles d'utilisateur.
 3. [Démarrage rapide](/fr/public-cloud/getting-started/quickstart) : déployez votre première VM,
-   connectez-vous avec SSH et attachez un volume de stockage bloc.
+   connectez-vous avec SSH, puis envoyez une demande de création et d’attachement de volume de
+   stockage bloc.

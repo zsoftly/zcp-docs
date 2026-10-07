@@ -7,10 +7,8 @@ sidebar_position: 1
 
 Les volumes de stockage bloc ajoutent du stockage persistant aux machines virtuelles. Ils
 fournissent des volumes SSD NVMe locaux, des volumes SSD SATA locaux ou des volumes de stockage
-partagé répliqué, selon la région et le plan choisis. Cette page s’arrête après la vérification de
-l’attachement. Suivez
-[Formater et monter un volume](/fr/public-cloud/storage/block-storage/format-and-mount) pour
-formater et monter le nouveau volume.
+partagé répliqué, selon la région et le plan choisis. Cette page s’arrête après l’envoi de la
+demande de création et d’attachement du volume.
 
 ### Créer des volumes
 
@@ -56,21 +54,20 @@ Dans **Choose Name**, saisissez un **Volumes Name** unique.
 
 ### Créer
 
-Créez et attachez le volume à l'instance virtuelle cible. N’attachez et ne détachez aucun disque
-pendant le formatage et le montage du volume.
+Envoyez la demande de création et d’attachement de volume pour l’instance virtuelle cible.
 
 - **Billing Cycle** : **Hourly**, **Monthly** ou **Yearly**.
 - Cliquez sur **Review & Deploy**, examinez le résumé, puis cliquez sur **Create Volumes**.
 
 ![Étapes Review & Deploy et Create Volumes](../../../../../../assets/storage/block-storage/create-volume-create.webp)
 
-Les étapes de gestion du volume s’arrêtent après la vérification de l’attachement. Ne formatez pas
-un disque en vous fondant uniquement sur son nom de périphérique ou sur une sélection manuelle.
-Poursuivez à
-[Confirmer un identifiant de volume stable](/fr/public-cloud/storage/block-storage/format-and-mount#confirmer-un-identifiant-de-volume-stable).
-Si le volume sélectionné ne peut pas être confirmé avec un identifiant stable dans l’instance
-virtuelle, arrêtez-vous et ouvrez [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le
-projet, l’emplacement, l’erreur exacte et les détails non sensibles de la ressource.
+La documentation publique s’arrête après l’envoi de la demande de création et d’attachement du
+volume. Ne formatez pas un disque en vous fondant uniquement sur un nom de périphérique transitoire
+ou sur une sélection manuelle. Demandez au
+[Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) si le volume du portail peut être associé
+au périphérique de l’instance virtuelle et si une procédure validée d’initialisation et de montage
+est disponible. Si une erreur s’affiche, indiquez le projet, l’emplacement et le message exact. Dans
+tous les cas, fournissez les détails non sensibles de la ressource.
 
 Voir aussi :
 [Types de stockage et résilience](/fr/public-cloud/storage/block-storage/storage-types),
