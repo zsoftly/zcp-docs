@@ -132,8 +132,9 @@ The official command-line tool for the platform. The entries below mirror the CL
 **Custom VM plans, load balancer rule lists, and object-storage access keys.** See the
 [v0.0.30 release](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.30) on GitHub.
 
-- **Create a custom VM without a catalogue plan.** Omit `--plan`, supply a CPU count with `--cpu`,
-  and supply memory and disk in GB with `--memory` and `--disk`.
+- **Create a custom VM without a catalogue plan.** Omit `--plan` and supply all of `--cpu`,
+  `--memory`, and `--disk`. Memory and disk values are in GB. Custom plans require at least 2 vCPUs
+  and no more than 256 GB of memory. You cannot combine `--plan` with custom sizing flags.
 - **List load balancer rules.** `zcp loadbalancer list-rule <load-balancer-slug>` displays rule IDs
   for use with VM attachment commands.
 - **Rotate object-storage access keys.** `zcp object-storage keys` lists, creates, and revokes

@@ -3,7 +3,7 @@ title: CLI Reference
 sidebar_position: 4
 ---
 
-Full command reference for the ZCP CLI v0.0.19.
+Command overview for the ZCP CLI.
 
 For the interactive reference with search, see the
 [ZCP CLI reference on the main site](https://cloud.zcp.zsoftly.ca).
@@ -54,6 +54,29 @@ billing/support/dashboard, and the IAM commands `sub-user`/`role`/`permission`) 
 | `zcp instance stop <name>`    | Power off an instance    |
 | `zcp instance reboot <name>`  | Reboot an instance       |
 | `zcp instance console <name>` | Get console URL          |
+
+#### Custom VM Plans (v0.0.30)
+
+[`zcp` CLI v0.0.30](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.30) supports catalogue
+plans and custom VM plans. To create a custom VM, omit `--plan` and provide all of `--cpu`,
+`--memory`, and `--disk`. Memory and disk sizes are in GB.
+
+```bash
+zcp instance create \
+  --name my-custom-vm \
+  --project default-9 \
+  --region yul-1 \
+  --template ubuntu-2604-lts-1 \
+  --cpu 2 \
+  --memory 4 \
+  --disk 45 \
+  --billing-cycle hourly \
+  --network-plan pnet-yul \
+  --storage-category pro-nvme
+```
+
+Custom plans require at least 2 vCPUs and no more than 256 GB of memory. You cannot combine `--plan`
+with `--cpu`, `--memory`, or `--disk`.
 
 ### Compute: Kubernetes
 
