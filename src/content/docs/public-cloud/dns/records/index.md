@@ -85,8 +85,8 @@ console removes a single value.
 
 ### CAA Is Unavailable in the Console
 
-The ZCP DNS console does not list `CAA` as a record type. Contact support if you need to publish a
-CAA record.
+The ZCP DNS console does not list `CAA` as a record type. Use the CLI or API to create `CAA`
+records.
 
 ## How to Manage Records
 

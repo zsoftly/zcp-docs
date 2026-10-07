@@ -101,8 +101,8 @@ numéros de série SOA mis à jour depuis les deux serveurs de noms faisant auto
 
 :::caution
 
-La console DNS ZCP ne propose pas actuellement `CAA` comme type d'enregistrement. Communiquez avec
-le soutien si vous devez publier un enregistrement CAA.
+La console DNS ZCP ne propose pas actuellement `CAA` comme type d'enregistrement. Consultez les
+[enregistrements CAA](/fr/public-cloud/dns/records/caa) pour les instructions CLI et API.
 
 :::
 

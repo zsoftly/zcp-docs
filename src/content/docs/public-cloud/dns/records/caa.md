@@ -9,8 +9,7 @@ Certificate authorities check this policy before issuing a certificate.
 
 :::caution
 
-You cannot create `CAA` records in the ZCP DNS console. Contact support if you need to publish a CAA
-record.
+The ZCP DNS console does not offer `CAA` as a record type. Create `CAA` records with the CLI or API.
 
 :::
 
@@ -25,6 +24,24 @@ record.
 
 The value has three parts: **flags** (usually `0`), a **tag** (`issue`, `issuewild`, or `iodef`),
 and a quoted **value** (the CA's domain, or a contact URL for `iodef`).
+
+## Create
+
+CLI (wrap the value so the quotes reach the record):
+
+```bash
+zcp dns record-create --domain examplecom --name @ --type CAA --content '0 issue "letsencrypt.org"'
+```
+
+API: `POST` with
+`{ "name": "@", "type": "CAA", "content": "0 issue \"letsencrypt.org\"", "ttl": 14400 }`.
+
+## Verify
+
+```bash
+dig CAA example.com +short
+# 0 issue "letsencrypt.org"
+```
 
 ## Notes
 

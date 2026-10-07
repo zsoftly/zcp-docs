@@ -95,8 +95,8 @@ name servers.
 
 :::caution
 
-The ZCP DNS console does not currently offer `CAA` as a record type. Contact support if you need to
-publish a CAA record.
+The ZCP DNS console does not currently offer `CAA` as a record type. See
+[CAA records](/public-cloud/dns/records/caa) for the CLI and API instructions.
 
 :::
 

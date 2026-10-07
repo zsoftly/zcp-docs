@@ -93,8 +93,8 @@ recréez les valeurs à conserver. La console retire une seule valeur.
 
 ### Les CAA ne sont pas disponibles dans la console
 
-La console DNS ZCP ne propose pas `CAA` comme type d'enregistrement. Communiquez avec le soutien si
-vous devez publier un enregistrement CAA.
+La console DNS ZCP ne propose pas `CAA` comme type d'enregistrement. Utilisez la CLI ou l'API pour
+créer des enregistrements `CAA`.
 
 ## Gérer les enregistrements
 

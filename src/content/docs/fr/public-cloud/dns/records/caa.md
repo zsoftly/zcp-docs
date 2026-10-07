@@ -10,8 +10,8 @@ pour votre domaine. Les autorités de certification vérifient cette politique a
 
 :::caution
 
-Vous ne pouvez pas créer d'enregistrements `CAA` dans la console DNS ZCP. Communiquez avec le
-soutien si vous devez publier un enregistrement CAA.
+La console DNS ZCP ne propose pas `CAA` comme type d'enregistrement. Créez les enregistrements `CAA`
+avec la CLI ou l'API.
 
 :::
 
@@ -27,6 +27,24 @@ soutien si vous devez publier un enregistrement CAA.
 La valeur comporte trois parties : un **indicateur** (généralement `0`), une **balise** (`issue`,
 `issuewild` ou `iodef`) et une **valeur** entre guillemets (le domaine de l'autorité, ou une URL de
 contact pour `iodef`).
+
+## Créer
+
+CLI (protégez la valeur afin que les guillemets parviennent à l'enregistrement) :
+
+```bash
+zcp dns record-create --domain examplecom --name @ --type CAA --content '0 issue "letsencrypt.org"'
+```
+
+API : envoyez une requête `POST` avec
+`{ "name": "@", "type": "CAA", "content": "0 issue \"letsencrypt.org\"", "ttl": 14400 }`.
+
+## Vérifier
+
+```bash
+dig CAA example.com +short
+# 0 issue "letsencrypt.org"
+```
 
 ## Remarques
 
