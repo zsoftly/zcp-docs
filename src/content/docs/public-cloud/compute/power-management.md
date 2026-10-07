@@ -17,7 +17,7 @@ Available from the Instance Overview:
 
 ## Scheduled Stop Actions
 
-Scheduled stop actions are not currently available. Use the manual actions above to stop an
+The portal does not currently offer scheduled stop actions. Use the manual actions above to stop an
 instance.
 
 ## See also

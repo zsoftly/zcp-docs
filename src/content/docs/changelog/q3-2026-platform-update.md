@@ -1,21 +1,21 @@
 ---
 title: Q3 2026 Platform Update
 description:
-  A Q3 2026 update on ZSoftly Cloud Platform work, including backup schedules and billing and
-  Kubernetes billing, where rollout verification is incomplete.
+  The Q3 2026 release for the ZSoftly Cloud Platform, covering backup schedules and backup billing,
+  Kubernetes billing, the Store, and Marketplace deployment emails.
 ---
 
-This update covers work on backup schedules and billing and managed Kubernetes billing. Rollout
-verification for those changes is incomplete. Confirm regional availability and billing before
-relying on them. Items released earlier in the quarter are listed under
+This release covers backup schedules and billing, managed Kubernetes billing, Store purchasing, and
+Marketplace deployment emails. Items released earlier in the quarter are listed under
 [Also Shipped in Q3 2026](#also-shipped-in-q3-2026).
 
 ## Summary
 
 | Area                | Change                                                                                  | Billing impact                   |
 | ------------------- | --------------------------------------------------------------------------------------- | -------------------------------- |
-| Backups             | Schedule and storage-based billing changes are in rollout verification.                 | Confirm before use.              |
-| Kubernetes          | Resource-based billing changes are in rollout verification.                             | Current charges still apply.     |
+| Backups             | Create, edit, pause, resume, and run schedules. Per-schedule timezone and retention.    | Yes. Storage-based billing.      |
+| Backups             | Activity logs for schedule changes, runs, failures, and retention cleanup.              | No                               |
+| Kubernetes          | Billing moves from a cluster charge to the resources provisioned for the cluster.       | Yes. Resource-based billing.     |
 | Kubernetes          | Separate CPU and memory sizing for control-plane and worker nodes.                      | Indirect. Node sizing sets cost. |
 | Store               | Search, category counts, product cards, details, billing cycle, and quantity.           | No                               |
 | Marketplace         | Deployment email with application credentials and the values supplied during setup.     | No                               |
@@ -25,24 +25,19 @@ relying on them. Items released earlier in the quarter are listed under
 
 ### What Changed
 
-Backup scheduling changes are in rollout verification. Confirm schedule availability and
-storage-based billing for your region before relying on them.
-
-The rollout is intended to support schedule settings such as:
+You can create, edit, pause, resume, and run a backup schedule from the portal. Each schedule
+carries its own settings:
 
 - **Timezone.** The schedule runs against the timezone you set on it, not a platform default.
 - **Retention policy.** Each schedule keeps backups for the period you set. Retention cleanup
   removes expired backups.
 
-The intended activity logs cover schedule creation and updates, runs, failures, and retention
-cleanup.
+Activity logs record schedule creation and updates, runs, failures, and retention cleanup.
 
 ### Backup Billing
 
-The storage-based backup billing model is also in rollout verification. Confirm the billing model
-and regional availability with support before relying on these changes.
-
-The intended model is:
+Backup billing moves from a charge tied to the schedule to a charge tied to the storage your backups
+consume.
 
 - The platform bills each backup for the storage it holds.
 - Each backup carries its own subscription. That subscription ends when the backup is deleted,
@@ -50,10 +45,12 @@ The intended model is:
 - A paused schedule creates no new backups. Backups already taken continue to bill for the storage
   they hold until they are deleted.
 
+Backup cost depends on the actual stored backup size and the retention period.
+
 :::caution
 
-Under this model, retaining more backup data for longer increases storage charges. Confirm the
-applicable billing model with support while the rollout is in verification.
+Retention and cost are linked. A long retention period on a large instance holds more backup storage
+and costs more.
 
 :::
 
@@ -61,11 +58,8 @@ applicable billing model with support while the rollout is in verification.
 
 ### What Changed
 
-Resource-based billing for managed Kubernetes remains in rollout verification. Published pricing
-continues to include a managed Kubernetes control-plane charge, so do not assume that current
-clusters bill only for their provisioned resources.
-
-The planned resource-based model includes:
+The platform bills each cloud resource provisioned for a managed Kubernetes cluster, instead of
+charging a single cluster fee:
 
 - Control-plane virtual machines
 - Worker virtual machines
@@ -74,8 +68,8 @@ The planned resource-based model includes:
 - Public IP addresses
 - Load balancers
 
-ZSoftly will publish the final billing behavior and any subscription changes when the rollout is
-complete.
+The Kubernetes cluster itself no longer carries a separate charge. The platform lists the resources
+under **Billing → Subscriptions**.
 
 ### Node Sizing
 
@@ -85,8 +79,9 @@ run on them. See [Create Kubernetes Cluster](/public-cloud/kubernetes/create-clu
 
 ## Existing Resources
 
-Do not assume that existing backups or Kubernetes clusters have migrated. Contact support to verify
-availability and billing for your resources.
+Existing backup billing is being migrated. Existing Kubernetes clusters need a billing configuration
+update. Review **Billing → Subscriptions** and contact support to confirm the migration for your
+resources.
 
 ## Other Changes
 
@@ -155,9 +150,10 @@ These changes are already live. Each links to its changelog entry.
 
 ## What To Do
 
-1. Confirm backup scheduling and billing availability for your region before relying on either
-   feature.
-2. Confirm current Kubernetes billing for your cluster with support before changing workloads.
+1. Review the retention period on each backup schedule.
+2. Delete backups you no longer need. Deleting a backup ends its subscription.
+3. Review **Billing → Subscriptions** for Kubernetes resources and contact support to confirm the
+   billing migration.
 
 ## Related Documentation
 

@@ -17,7 +17,7 @@ Disponibles depuis la vue d'ensemble de l'instance :
 
 ## Actions d'arrêt planifiées
 
-Les actions d'arrêt planifiées ne sont pas encore disponibles. Utilisez les actions manuelles
+Le portail ne propose pas actuellement d'actions d'arrêt planifiées. Utilisez les actions manuelles
 ci-dessus pour arrêter une instance.
 
 ## Voir aussi

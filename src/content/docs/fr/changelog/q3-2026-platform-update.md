@@ -1,52 +1,47 @@
 ---
 title: Mise à jour de la plateforme du T3 2026
 description:
-  Une mise à jour du T3 2026 sur les travaux de la plateforme infonuagique ZSoftly, dont la
-  vérification du déploiement reste incomplète pour les sauvegardes et la facturation de Kubernetes.
+  La version du T3 2026 de la plateforme infonuagique ZSoftly, qui couvre les calendriers et la
+  facturation des sauvegardes, la facturation de Kubernetes, la boutique et les courriels de
+  déploiement de la place de marché.
 ---
 
-Cette mise à jour couvre les travaux sur les calendriers et la facturation des sauvegardes et sur la
-facturation de Kubernetes. La vérification de leur déploiement est incomplète. Confirmez la
-disponibilité régionale et la facturation avant de compter sur ces fonctionnalités. Les éléments
-livrés plus tôt dans le trimestre sont listés dans
+Cette version couvre les calendriers et la facturation des sauvegardes, la facturation de
+Kubernetes, les achats dans la boutique et les courriels de déploiement de la place de marché. Les
+éléments livrés plus tôt dans le trimestre sont listés dans
 [Aussi livré au T3 2026](#aussi-livré-au-t3-2026).
 
 ## Sommaire
 
-| Domaine          | Changement                                                                                                       | Impact sur la facturation                   |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| Sauvegardes      | Les changements de calendrier et de facturation selon le stockage sont en vérification de déploiement.           | Confirmer avant l'utilisation.              |
-| Kubernetes       | Les changements de facturation selon les ressources sont en vérification de déploiement.                         | Les frais actuels s'appliquent encore.      |
-| Kubernetes       | Tailles de processeur et de mémoire distinctes pour le plan de contrôle et les nœuds de travail.                 | Indirect. La taille des nœuds fixe le coût. |
-| Boutique         | Recherche de produits, catégories, présentation en cartes, cycle de facturation et quantité par produit.         | Non                                         |
-| Place de marché  | Courriel de déploiement avec les identifiants de l'application et les valeurs fournies lors de la configuration. | Non                                         |
-| Comptes et accès | Alerte de crédit d'infrastructure faible, gestion des mots de passe des VM, limitation de fréquence renforcée.   | Non                                         |
+| Domaine          | Changement                                                                                                                   | Impact sur la facturation                   |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Sauvegardes      | Créez, modifiez, mettez en pause, reprenez et lancez un calendrier. Fuseau horaire et rétention propres à chaque calendrier. | Oui. Facturation selon le stockage.         |
+| Sauvegardes      | Journaux d'activité pour les changements, exécutions, échecs et nettoyage de rétention.                                      | Non                                         |
+| Kubernetes       | La facturation ne porte plus sur le cluster mais sur les ressources provisionnées pour lui.                                  | Oui. Facturation selon les ressources.      |
+| Kubernetes       | Tailles de processeur et de mémoire distinctes pour le plan de contrôle et les nœuds de travail.                             | Indirect. La taille des nœuds fixe le coût. |
+| Boutique         | Recherche de produits, catégories, présentation en cartes, cycle de facturation et quantité par produit.                     | Non                                         |
+| Place de marché  | Courriel de déploiement avec les identifiants de l'application et les valeurs fournies lors de la configuration.             | Non                                         |
+| Comptes et accès | Alerte de crédit d'infrastructure faible, gestion des mots de passe des VM, limitation de fréquence renforcée.               | Non                                         |
 
 ## Calendriers de sauvegarde
 
 ### Ce qui change
 
-Les changements aux calendriers de sauvegarde sont en vérification de déploiement. Confirmez la
-disponibilité des calendriers et de la facturation selon le stockage dans votre région avant de
-compter sur ces fonctionnalités.
-
-Le déploiement vise à prendre en charge des paramètres de calendrier comme :
+Vous pouvez créer, modifier, mettre en pause, reprendre et lancer un calendrier de sauvegarde depuis
+le portail. Chaque calendrier possède ses propres paramètres :
 
 - **Fuseau horaire.** Le calendrier s'exécute selon le fuseau horaire que vous lui donnez, et non
   selon un fuseau par défaut de la plateforme.
 - **Politique de rétention.** Chaque calendrier conserve les sauvegardes pendant la période que vous
   définissez. Le nettoyage de rétention supprime les sauvegardes expirées.
 
-Les journaux d'activité prévus couvrent la création et les mises à jour des calendriers, les
+Les journaux d'activité enregistrent la création et les mises à jour des calendriers, les
 exécutions, les échecs et le nettoyage de rétention.
 
 ### Facturation des sauvegardes
 
-Le modèle de facturation des sauvegardes selon le stockage est aussi en vérification de déploiement.
-Confirmez le modèle de facturation et la disponibilité régionale avec le soutien avant de compter
-sur ces changements.
-
-Le modèle prévu est le suivant :
+La facturation des sauvegardes ne porte plus sur le calendrier, mais sur le stockage que vos
+sauvegardes utilisent.
 
 - La plateforme facture chaque sauvegarde selon le stockage qu'elle occupe.
 - Chaque sauvegarde possède son propre abonnement. Cet abonnement prend fin à la suppression de la
@@ -54,11 +49,12 @@ Le modèle prévu est le suivant :
 - Un calendrier en pause ne crée aucune nouvelle sauvegarde. Les sauvegardes déjà prises continuent
   d'être facturées tant qu'elles ne sont pas supprimées.
 
+Le coût des sauvegardes dépend de leur taille réellement stockée et de la période de rétention.
+
 :::caution
 
-Selon ce modèle, conserver plus de données de sauvegarde plus longtemps augmente les frais de
-stockage. Confirmez le modèle de facturation applicable avec le soutien pendant la vérification du
-déploiement.
+La rétention et le coût sont liés. Une longue période de rétention sur une grande instance occupe
+plus de stockage et coûte plus cher.
 
 :::
 
@@ -66,11 +62,8 @@ déploiement.
 
 ### Ce qui change
 
-La facturation selon les ressources pour Kubernetes géré reste en vérification de déploiement. Les
-prix publiés comprennent toujours des frais pour le plan de contrôle Kubernetes géré. Ne supposez
-donc pas que les clusters actuels sont facturés seulement pour leurs ressources provisionnées.
-
-Le modèle de facturation selon les ressources prévu comprend :
+La plateforme facture chaque ressource infonuagique provisionnée pour un cluster Kubernetes géré, au
+lieu d'une facturation unique par cluster :
 
 - Machines virtuelles du plan de contrôle
 - Machines virtuelles de travail
@@ -79,8 +72,8 @@ Le modèle de facturation selon les ressources prévu comprend :
 - Adresses IP publiques
 - Équilibreurs de charge
 
-ZSoftly publiera le comportement final de facturation et les changements aux abonnements lorsque le
-déploiement sera terminé.
+Le cluster Kubernetes lui-même n'est plus facturé séparément. La plateforme affiche les ressources
+sous **Billing → Abonnements**.
 
 ### Taille des nœuds
 
@@ -91,8 +84,9 @@ d'API et etcd, et les nœuds de travail pour les charges de travail que vous y e
 
 ## Ressources existantes
 
-Ne supposez pas que les sauvegardes existantes ou les clusters Kubernetes ont migré. Communiquez
-avec le soutien pour vérifier la disponibilité et la facturation de vos ressources.
+La facturation des sauvegardes existantes est en cours de migration. Les clusters Kubernetes
+existants nécessitent une mise à jour de leur configuration de facturation. Consultez **Billing →
+Abonnements** et communiquez avec le soutien pour confirmer la migration de vos ressources.
 
 ## Autres changements
 
@@ -168,10 +162,11 @@ Ces changements sont déjà en service. Chacun renvoie à son entrée du journal
 
 ## À faire
 
-1. Confirmez la disponibilité des calendriers de sauvegarde et de leur facturation dans votre région
-   avant de compter sur ces fonctionnalités.
-2. Confirmez la facturation Kubernetes actuelle de votre cluster avec le soutien avant de modifier
-   vos charges de travail.
+1. Révisez la période de rétention de chaque calendrier de sauvegarde.
+2. Supprimez les sauvegardes dont vous n'avez plus besoin. Supprimer une sauvegarde met fin à son
+   abonnement.
+3. Consultez **Billing → Abonnements** pour les ressources Kubernetes et communiquez avec le soutien
+   pour confirmer la migration de la facturation.
 
 ## Documentation liée
 
