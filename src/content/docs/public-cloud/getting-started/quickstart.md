@@ -34,7 +34,9 @@ Your VM needs a network. For a simple setup, use a Public Network.
 3. Complete **Choose Project**, then **Select Location**.
 4. In **Network Details**, enter a **Network Name**.
 5. Under **Choose Network Plan**, select a network plan.
-6. In **Network Configuration**, review the visible **Gateway** and **Netmask** values.
+6. In **Network Configuration**, leave the displayed **Gateway** and **Netmask** values unchanged
+   unless your assigned network settings specify different values. If either field is blank or the
+   portal rejects its displayed value, stop and contact Support. Do not guess a replacement value.
 7. Choose a **Billing Cycle** and review the **Price Summary**.
 8. Click **Create Network**.
 
@@ -96,18 +98,8 @@ location, instance name, and non-sensitive error details.
 
 ## Step 4: Attach block storage (optional)
 
-To add persistent storage separate from the root disk, connect to the target VM over SSH first.
-Never run these commands on your local workstation. Run `hostname` and confirm that it matches the
-VM's **Server Hostname** in the portal. Then run the first `lsblk` command below before creating the
-volume and record its output.
-
-```bash
-# Confirm that this is the target VM before recording its disks.
-hostname
-
-# Before creating and attaching the volume, record the current devices.
-lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
-```
+To add persistent storage separate from the root disk, create and attach a volume to the target VM.
+Do not attach or detach disks while you format and mount the volume.
 
 1. Go to **Volumes** in the portal
 2. Click the **+** icon
@@ -130,17 +122,10 @@ resource details, and exact message.
 The published wizard screenshot shows the text `Minimum 8GB storage is required`. This screenshot is
 for reference only. Use the current value shown for the selected storage plan in the portal.
 
-After attachment, run this command on the target VM over SSH and compare its output with the
-baseline you recorded before creating the volume.
-
-```bash
-lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
-```
-
 The volume steps end after attachment verification. Do not format a disk based only on its device
-name or a manual selection. Creating a filesystem, mounting the volume, and adding persistent mount
-configuration require a separately tested procedure that identifies the volume by a stable
-identifier. If the attached disk is not unambiguous, stop and open
+name or a manual selection. Continue at
+[Confirm a Stable Volume Identifier](/public-cloud/storage/block-storage/format-and-mount#confirm-a-stable-volume-identifier).
+If the selected volume cannot be confirmed through a stable guest identifier, stop and open
 [Support](/troubleshooting#raise-a-support-ticket) with the project, location, exact error, and
 non-sensitive resource details.
 

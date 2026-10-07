@@ -13,35 +13,37 @@ aux services de communiquer avec des systèmes externes sur Internet.
 
 ![Page Réseaux sur l'onglet Réseau public avec le bouton d'ajout (+)](../../../../../../assets/networking/pub-net-add.webp)
 
-### Choose Project
+### Choisir un projet
 
 Dans **Choose Project**, sélectionnez le projet du réseau.
 
 ![Create Isolated Network : Choose Project](../../../../../../assets/networking/pub-net-project.webp)
 
-### Select Location
+### Sélectionner un emplacement
 
 Dans **Select Location**, choisissez l'emplacement du centre de données du réseau.
 
 ![Create Isolated Network : Select Location](../../../../../../assets/networking/pub-net-location.webp)
 
-### Network Details
+### Détails du réseau
 
 Saisissez un **Network Name**.
 
 ![Create Isolated Network : Network Details et Network Name](../../../../../../assets/networking/pub-net-name.webp)
 
-### Choose Network Plan
+### Choisir un plan réseau
 
 Dans **Choose Network Plan**, sélectionnez un plan réseau.
 
-### Network Configuration
+### Configuration réseau
 
-Examinez les valeurs visibles **Gateway** et **Netmask**. Si l'assistant refuse une entrée, notez le
-champ et le message d'erreur exacts. N'essayez pas de remplacer la passerelle ou le masque de réseau
-par des valeurs devinées. Si le message n'est pas clair ou si le portail refuse toujours la valeur,
-ouvrez [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le projet, l'emplacement, le
-message exact et les détails non sensibles de la ressource.
+Laissez les valeurs affichées pour **Gateway** et **Netmask** inchangées, sauf si les paramètres
+réseau qui vous ont été attribués indiquent d'autres valeurs. Si l'un des champs est vide ou si le
+portail refuse sa valeur affichée, notez le champ et le message d'erreur exacts. Ne devinez pas de
+valeur de remplacement pour la passerelle ou le masque de réseau. Si le message n'est pas clair ou
+si le portail refuse toujours la valeur, ouvrez
+[Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le projet, l'emplacement, le message
+exact et les détails non sensibles de la ressource.
 
 ![Create Isolated Network : configuration de la passerelle et du masque réseau](../../../../../../assets/networking/pub-net-config.webp)
 

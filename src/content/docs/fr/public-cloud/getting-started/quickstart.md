@@ -38,7 +38,10 @@ Votre VM a besoin d'un réseau. Pour une configuration simple, utilisez un rése
 3. Sélectionnez **Choose Project**, puis **Select Location**.
 4. Dans **Network Details**, saisissez un **Network Name**.
 5. Dans **Choose Network Plan**, sélectionnez un plan réseau.
-6. Dans **Network Configuration**, examinez les valeurs visibles **Gateway** et **Netmask**.
+6. Dans **Network Configuration**, laissez les valeurs affichées pour **Gateway** et **Netmask**
+   inchangées, sauf si les paramètres réseau qui vous ont été attribués indiquent d'autres valeurs.
+   Si l'un des champs est vide ou si le portail refuse sa valeur affichée, arrêtez-vous et contactez
+   le Support. Ne devinez pas de valeur de remplacement.
 7. Choisissez un **Billing Cycle** et examinez le **Price Summary**.
 8. Cliquez sur **Create Network**.
 
@@ -106,19 +109,9 @@ l'instance et les détails non sensibles de l'erreur.
 
 ## Étape 4 : attacher du stockage bloc (facultatif)
 
-Pour ajouter du stockage persistant séparé du disque racine, connectez-vous d'abord à l'instance
-virtuelle cible avec SSH. N'exécutez jamais ces commandes sur votre poste de travail local. Exécutez
-`hostname` et vérifiez qu'il correspond au **Server Hostname** de l'instance dans le portail.
-Ensuite, exécutez la première commande `lsblk` ci-dessous avant de créer le volume et enregistrez sa
-sortie.
-
-```bash
-# Confirm that this is the target VM before recording its disks.
-hostname
-
-# Before creating and attaching the volume, record the current devices.
-lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
-```
+Pour ajouter du stockage persistant séparé du disque racine, créez et attachez un volume à
+l'instance virtuelle cible. N’attachez et ne détachez aucun disque pendant le formatage et le
+montage du volume.
 
 1. Allez à **Volumes** dans le portail.
 2. Cliquez sur l'icône **+**.
@@ -142,20 +135,13 @@ La capture d'écran publiée affiche le texte « Minimum 8GB storage is required
 d’écran est fournie à titre indicatif. Utilisez la valeur actuelle affichée pour le plan de stockage
 sélectionné dans le portail.
 
-Après avoir attaché le volume, exécutez cette commande via SSH sur l’instance virtuelle cible, puis
-comparez sa sortie à celle enregistrée avant la création du volume.
-
-```bash
-lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
-```
-
 Les étapes de gestion du volume s’arrêtent après la vérification de l’attachement. Ne formatez pas
-un disque en vous fondant uniquement sur son nom de périphérique ou sur une sélection manuelle. La
-création d’un système de fichiers, le montage du volume et l’ajout d’une configuration de montage
-persistante exigent une procédure testée séparément qui identifie le volume à l’aide d’un
-identifiant stable. Si vous ne pouvez pas identifier clairement le disque attaché, arrêtez-vous et
-ouvrez [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le projet, l’emplacement,
-l’erreur exacte et les détails non sensibles de la ressource.
+un disque en vous fondant uniquement sur son nom de périphérique ou sur une sélection manuelle.
+Poursuivez à
+[Confirmer un identifiant de volume stable](/fr/public-cloud/storage/block-storage/format-and-mount#confirmer-un-identifiant-de-volume-stable).
+Si le volume sélectionné ne peut pas être confirmé avec un identifiant stable dans l’instance
+virtuelle, arrêtez-vous et ouvrez [Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le
+projet, l’emplacement, l’erreur exacte et les détails non sensibles de la ressource.
 
 ## Prochaines étapes
 

@@ -7,7 +7,9 @@ sidebar_position: 1
 
 Block storage volumes add persistent storage to virtual machines. They provide local NVMe SSD, local
 SATA SSD, or replicated shared storage, depending on the selected region and plan. This page ends
-after attachment verification. Follow a separately tested procedure for formatting and mounting.
+after attachment verification. Follow
+[Format and Mount a Volume](/public-cloud/storage/block-storage/format-and-mount) to format and
+mount the new volume.
 
 ### Create Volumes
 
@@ -46,40 +48,24 @@ for reference only. Use the current value shown for the selected storage plan in
 
 ### Choose Name
 
-Select **Choose Name** and provide a unique **Volumes Name**.
+Under **Choose Name**, enter a unique **Volumes Name**.
 
 ![Create Volumes: Choose Name and Volumes Name](../../../../../assets/storage/block-storage/create-volume-name.webp)
 
 ### Create
 
-Connect to the target VM over SSH before creating the volume. Never run these commands on your local
-workstation. Run `hostname` and confirm that it matches the VM's **Server Hostname** in the portal.
-Then run the first `lsblk` command below before creating the volume and record its output.
-
-```bash
-# Confirm that this is the target VM before recording its disks.
-hostname
-
-# Before creating and attaching the volume, record the current devices.
-lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
-```
+Create and attach the volume to the target VM. Do not attach or detach disks while you format and
+mount the volume.
 
 - **Billing Cycle**: Hourly, Monthly, or Yearly.
 - Click **Review & Deploy**, review the summary, then click **Create Volumes**.
 
 ![Create Volumes: Review & Deploy and Create Volumes](../../../../../assets/storage/block-storage/create-volume-create.webp)
 
-After attachment, run this command on the target VM over SSH and compare its output with the
-baseline you recorded before creating the volume.
-
-```bash
-lsblk -p -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
-```
-
 The volume steps on this page end after attachment verification. Do not format a disk based only on
-its device name or a manual selection. Creating a filesystem, mounting the volume, and adding
-persistent mount configuration require a separately tested procedure that identifies the volume by a
-stable identifier. If the attached disk is not unambiguous, stop and open
+its device name or a manual selection. Continue at
+[Confirm a Stable Volume Identifier](/public-cloud/storage/block-storage/format-and-mount#confirm-a-stable-volume-identifier).
+If the selected volume cannot be confirmed through a stable guest identifier, stop and open
 [Support](/troubleshooting#raise-a-support-ticket) with the project, location, exact error, and
 non-sensitive resource details.
 

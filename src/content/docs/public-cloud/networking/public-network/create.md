@@ -37,9 +37,10 @@ Under **Choose Network Plan**, select a network plan.
 
 ### Network Configuration
 
-Review the visible **Gateway** and **Netmask** values. If the wizard rejects a value, record the
-exact field and error message. Do not guess replacement gateway or netmask values. If the message is
-unclear or the portal still rejects the value, open
+Leave the displayed **Gateway** and **Netmask** values unchanged unless your assigned network
+settings specify different values. If either field is blank or the portal rejects its displayed
+value, record the exact field and error message. Do not guess a replacement gateway or netmask
+value. If the message is unclear or the portal still rejects the value, open
 [Support](/troubleshooting#raise-a-support-ticket) with the project, location, exact message, and
 non-sensitive resource details.
 
