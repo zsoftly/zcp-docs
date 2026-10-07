@@ -22,6 +22,13 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
     slug: 'cli-v0.0.30',
   },
   {
+    title: 'French is available in the portal',
+    description:
+      'The ZCP portal now offers a French interface while English remains the default. Sign in, use the portal language selector, and choose French. Translation QA remains in progress. Report unclear or incorrect text through Support.',
+    pubDate: '2026-09-29',
+    slug: 'portal-french-language',
+  },
+  {
     title: 'Terraform / OpenTofu provider v0.2.0',
     description:
       'The provider adds object storage bucket configuration resources, VPC and multi-network instances, and volume lookups. It also fixes volume-backup reads, VM-backup destruction, interval validation, and volume-list pagination.',

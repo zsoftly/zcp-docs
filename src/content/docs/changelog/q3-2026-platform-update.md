@@ -137,16 +137,17 @@ revoke the last active key.
 
 These changes are already live. Each links to its changelog entry.
 
-| Date              | Change                                                                                             |
-| ----------------- | -------------------------------------------------------------------------------------------------- |
-| July 19, 2026     | [CLI v0.0.26](/changelog/#cli-v0.0.26): port-forwarding and SSH key fixes.                         |
-| August 16, 2026   | [Intel compute in Montreal (YUL)](/changelog/#intel-compute-yul).                                  |
-| September 1, 2026 | [Postpaid billing](/changelog/#postpaid-billing) at signup.                                        |
-| September 6, 2026 | [Kubernetes 1.37](/changelog/#kubernetes-1.37) for new managed clusters.                           |
-| September 6, 2026 | [Object storage endpoint DNS resolution from VPCs](/changelog/#object-storage-vpc-dns-resolution). |
-| September 7, 2026 | [Up to 8 subnets per VPC](/changelog/#vpc-subnet-limit).                                           |
-| September 7, 2026 | [CLI v0.0.28](/changelog/#cli-v0.0.28) and [v0.0.29](/changelog/#cli-v0.0.29).                     |
-| September 7, 2026 | [Terraform / OpenTofu provider v0.2.0](/changelog/#terraform-v0.2.0).                              |
+| Date               | Change                                                                                             |
+| ------------------ | -------------------------------------------------------------------------------------------------- |
+| July 19, 2026      | [CLI v0.0.26](/changelog/#cli-v0.0.26): port-forwarding and SSH key fixes.                         |
+| August 16, 2026    | [Intel compute in Montreal (YUL)](/changelog/#intel-compute-yul).                                  |
+| September 1, 2026  | [Postpaid billing](/changelog/#postpaid-billing) at signup.                                        |
+| September 6, 2026  | [Kubernetes 1.37](/changelog/#kubernetes-1.37) for new managed clusters.                           |
+| September 6, 2026  | [Object storage endpoint DNS resolution from VPCs](/changelog/#object-storage-vpc-dns-resolution). |
+| September 7, 2026  | [Up to 8 subnets per VPC](/changelog/#vpc-subnet-limit).                                           |
+| September 7, 2026  | [CLI v0.0.28](/changelog/#cli-v0.0.28) and [v0.0.29](/changelog/#cli-v0.0.29).                     |
+| September 7, 2026  | [Terraform / OpenTofu provider v0.2.0](/changelog/#terraform-v0.2.0).                              |
+| September 29, 2026 | [French is available in the portal](/changelog/#portal-french-language).                           |
 
 ## What To Do
 

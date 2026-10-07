@@ -35,6 +35,8 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 - [CLI v0.0.30 : forfaits personnalisés et clés de stockage objet](/fr/changelog/#cli-v0.0.30) (3
   octobre 2026)
+- [Une interface française est maintenant disponible dans le portail](/fr/changelog/#portal-french-language)
+  (29 septembre 2026)
 - [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0) (7 septembre 2026)
 - [CLI v0.0.29 : listes de volumes complètes](/fr/changelog/#cli-v0.0.29) (7 septembre 2026)
 - [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit) (7 septembre 2026)
@@ -67,6 +69,12 @@ pour l'historique complet au niveau des commits.
 ## Plateforme et services <!-- changelog-id: platform-services -->
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
+
+### Une interface française est maintenant disponible dans le portail (29 septembre 2026) <!-- changelog-id: portal-french-language -->
+
+L'anglais reste la langue par défaut du portail ZCP. Après vous être connecté, ouvrez le sélecteur
+de langue du portail et choisissez le français pour utiliser l'interface en français. La
+vérification des traductions se poursuit. Signalez tout problème de traduction via Support.
 
 ### Jusqu'à 8 sous-réseaux par VPC (7 septembre 2026) <!-- changelog-id: vpc-subnet-limit -->
 

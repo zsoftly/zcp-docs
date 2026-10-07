@@ -149,16 +149,17 @@ au CLI :
 
 Ces changements sont déjà en service. Chacun renvoie à son entrée du journal des modifications.
 
-| Date               | Changement                                                                                           |
-| ------------------ | ---------------------------------------------------------------------------------------------------- |
-| 19 juillet 2026    | [CLI v0.0.26](/fr/changelog/#cli-v0.0.26) : correctifs de redirection de ports et de clés SSH.       |
-| 16 août 2026       | [Calcul Intel à Montréal (YUL)](/fr/changelog/#intel-compute-yul).                                   |
-| 1er septembre 2026 | [Facturation postpayée](/fr/changelog/#postpaid-billing) à l'inscription.                            |
-| 6 septembre 2026   | [Kubernetes 1.37](/fr/changelog/#kubernetes-1.37) pour les nouveaux clusters gérés.                  |
-| 6 septembre 2026   | [Résolution DNS du stockage objet depuis les VPC](/fr/changelog/#object-storage-vpc-dns-resolution). |
-| 7 septembre 2026   | [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit).                                   |
-| 7 septembre 2026   | [CLI v0.0.28](/fr/changelog/#cli-v0.0.28) et [v0.0.29](/fr/changelog/#cli-v0.0.29).                  |
-| 7 septembre 2026   | [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0).                          |
+| Date               | Changement                                                                                                  |
+| ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| 19 juillet 2026    | [CLI v0.0.26](/fr/changelog/#cli-v0.0.26) : correctifs de redirection de ports et de clés SSH.              |
+| 16 août 2026       | [Calcul Intel à Montréal (YUL)](/fr/changelog/#intel-compute-yul).                                          |
+| 1er septembre 2026 | [Facturation postpayée](/fr/changelog/#postpaid-billing) à l'inscription.                                   |
+| 6 septembre 2026   | [Kubernetes 1.37](/fr/changelog/#kubernetes-1.37) pour les nouveaux clusters gérés.                         |
+| 6 septembre 2026   | [Résolution DNS du stockage objet depuis les VPC](/fr/changelog/#object-storage-vpc-dns-resolution).        |
+| 7 septembre 2026   | [Jusqu'à 8 sous-réseaux par VPC](/fr/changelog/#vpc-subnet-limit).                                          |
+| 7 septembre 2026   | [CLI v0.0.28](/fr/changelog/#cli-v0.0.28) et [v0.0.29](/fr/changelog/#cli-v0.0.29).                         |
+| 7 septembre 2026   | [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0).                                 |
+| 29 septembre 2026  | [Une interface française est maintenant disponible dans le portail](/fr/changelog/#portal-french-language). |
 
 ## À faire
 
