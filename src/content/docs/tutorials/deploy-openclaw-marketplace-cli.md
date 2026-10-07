@@ -227,8 +227,13 @@ You are on the VM with OpenClaw ready to configure.
 
 :::note
 
-`zcp instance ssh` resolves the VM's **private** IP first, so it only works from inside the network
-(for example over a VPN). From a regular workstation, SSH to the **public** IP as shown above.
+`zcp instance ssh` prefers an attached public IP and falls back to the private IP. This tutorial
+uses a source-NAT IP with port forwarding, so connect from your workstation with the plain SSH
+command above. To connect through a VPC or VPN, force the private route:
+
+```bash
+zcp instance ssh openclaw --user ubuntu --use-private
+```
 
 :::
 

@@ -334,9 +334,14 @@ ssh -i ~/.ssh/id_ed25519 ubuntu@<ip-publique>
 
 :::note
 
-`zcp instance ssh` résout d'abord l'**IP privée** de la VM. Il ne fonctionne donc que si votre
-machine est sur le même réseau (par exemple via un VPN). Depuis un poste de travail ordinaire,
-connectez-vous en SSH à l'**IP publique** comme ci-dessus.
+`zcp instance ssh` privilégie une IP publique attachée et utilise l'IP privée en l'absence d'IP
+publique. Ce tutoriel utilise une IP source-NAT avec redirection de ports. Depuis votre poste de
+travail, utilisez donc la commande SSH standard ci-dessus. Pour vous connecter par un VPC ou un VPN,
+forcez la route privée :
+
+```bash
+zcp instance ssh dokploy --user ubuntu --use-private
+```
 
 :::
 
