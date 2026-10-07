@@ -69,15 +69,8 @@ A name holds several `TXT` values, so this record sits next to an SPF record alr
 
 ## Restrict Certificate Issuance
 
-Allow only your certificate authority to issue certificates.
-
-```bash
-zcp dns record-create --domain examplecom --name @ --type CAA --content '0 issue "letsencrypt.org"'
-```
-
-```bash
-dig CAA example.com +short   # 0 issue "letsencrypt.org"
-```
+You cannot currently publish a `CAA` record from the ZCP DNS console. Contact support if you need to
+publish a CAA record. See [CAA records](/public-cloud/dns/records/caa).
 
 ## Delegate a Subdomain
 

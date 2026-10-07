@@ -88,6 +88,24 @@ La facturation des sauvegardes existantes est en cours de migration. Les cluster
 existants nécessitent une mise à jour de leur configuration de facturation. Consultez **Billing →
 Abonnements** et communiquez avec le soutien pour confirmer la migration de vos ressources.
 
+## Ensembles d'enregistrements DNS
+
+La création d'un enregistrement DNS pris en charge ajoute sa valeur au nom et au type
+correspondants. Les valeurs existantes restent. Les copies exactes ne créent pas de réponses en
+double. La console retire une valeur sélectionnée sans supprimer les autres. Un `CNAME` ne peut
+toujours pas partager un nom avec un autre type d'enregistrement.
+
+Vous pouvez saisir une valeur `TXT` avec ou sans guillemets doubles. La plateforme la stocke et la
+renvoie entre guillemets. L'assurance qualité en production a confirmé les mêmes réponses DNS et les
+numéros de série SOA mis à jour depuis les deux serveurs de noms faisant autorité.
+
+:::caution
+
+La console DNS ZCP ne propose pas actuellement `CAA` comme type d'enregistrement. Communiquez avec
+le soutien si vous devez publier un enregistrement CAA.
+
+:::
+
 ## Autres changements
 
 - **Alerte de crédit d'infrastructure faible.** La plateforme vous avertit quand le crédit

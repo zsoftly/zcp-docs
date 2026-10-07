@@ -73,15 +73,9 @@ SPF déjà présent sous `@`. Voir
 
 ## Limiter l'émission de certificats
 
-Autorisez uniquement votre autorité de certification à émettre des certificats.
-
-```bash
-zcp dns record-create --domain examplecom --name @ --type CAA --content '0 issue "letsencrypt.org"'
-```
-
-```bash
-dig CAA example.com +short   # 0 issue "letsencrypt.org"
-```
+Vous ne pouvez pas publier un enregistrement `CAA` depuis la console DNS ZCP. Communiquez avec le
+soutien si vous devez publier un enregistrement CAA. Consultez les
+[enregistrements CAA](/fr/public-cloud/dns/records/caa).
 
 ## Déléguer un sous-domaine
 
