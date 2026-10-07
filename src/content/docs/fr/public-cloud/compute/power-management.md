@@ -3,8 +3,7 @@ title: Gestion de l'alimentation
 sidebar_position: 6
 ---
 
-La gestion de l'alimentation vous permet de contrôler l'état d'exécution de votre VM et de
-configurer des actions planifiées.
+La gestion de l'alimentation vous permet de contrôler l'état d'exécution de votre VM.
 
 ## Actions manuelles
 
@@ -16,17 +15,10 @@ Disponibles depuis la vue d'ensemble de l'instance :
 
 ![Actions manuelles d'alimentation pour une instance](../../../../../assets/compute/power-management-manual-power-actions.webp)
 
-## Actions planifiées
+## Actions d'arrêt planifiées
 
-- Depuis la page de l'instance, ouvrez l'onglet **Power Management**.
-- Configurez les heures planifiées de démarrage et d'arrêt, avec prise en charge du fuseau horaire.
-- Activez **Notify me when machine is turned on/off** pour recevoir des alertes par courriel.
-
-:::note
-
-Captures d'écran à venir.
-
-:::
+Les actions d'arrêt planifiées ne sont pas encore disponibles. Utilisez les actions manuelles
+ci-dessus pour arrêter une instance.
 
 ## Voir aussi
 
