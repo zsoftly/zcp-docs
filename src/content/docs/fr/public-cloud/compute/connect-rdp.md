@@ -85,5 +85,5 @@ l'écouteur correspond au PID de `TermService`. Essayez ensuite de vous connecte
 
 ## Voir aussi
 
-- [Se connecter avec SSH](/fr/public-cloud/compute/connect-ssh)
+- [Se connecter avec SSH](/fr/public-cloud/compute/connect-ssh/)
 - [Accès à la console](/fr/public-cloud/compute/console-access/)

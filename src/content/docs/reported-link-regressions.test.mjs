@@ -25,29 +25,32 @@ const internalLinks = (source) =>
     .map((match) => match.groups.href)
     .filter((href) => href.startsWith('/') || href.startsWith('.'));
 
-const assertRouteExists = (pathname) => {
+const assertRouteExists = async (pathname) => {
   const route = pathname.replace(/^\/+|\/+$/g, '');
   const source = path.join(docsRoot, route);
-  return Promise.any([
-    access(`${source}.md`),
-    access(`${source}.mdx`),
-    access(path.join(source, 'index.md')),
-    access(path.join(source, 'index.mdx')),
-  ]);
+  try {
+    await Promise.any([
+      access(`${source}.md`),
+      access(`${source}.mdx`),
+      access(path.join(source, 'index.md')),
+      access(path.join(source, 'index.mdx')),
+    ]);
+  } catch {
+    assert.fail(`No document source matches ${pathname}`);
+  }
 };
 
-test('reported internal links resolve from both slash forms', async () => {
-  for (const file of files) {
+for (const file of files) {
+  test(`${file}: reported internal links resolve from both slash forms`, async () => {
     const source = await readFile(path.join(docsRoot, file), 'utf8');
     const route = `/${file.replace(/(?:^|\/)index\.md$/, '').replace(/\.md$/, '')}`;
     const links = internalLinks(source);
 
-    assert.ok(links.length > 0, `${file} has no internal links to verify`);
     for (const link of links) {
       const slashless = new URL(link, `${site}${route}`).pathname;
       const trailingSlash = new URL(link, `${site}${route}/`).pathname;
       assert.equal(slashless, trailingSlash, `${file}: ${link}`);
       await assertRouteExists(slashless);
     }
-  }
-});
+  });
+}

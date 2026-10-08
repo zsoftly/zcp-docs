@@ -81,5 +81,5 @@ the `TermService` PID. Then retry the RDP connection.
 
 ## See also
 
-- [Connect With SSH](/public-cloud/compute/connect-ssh)
+- [Connect With SSH](/public-cloud/compute/connect-ssh/)
 - [Console Access](/public-cloud/compute/console-access/)

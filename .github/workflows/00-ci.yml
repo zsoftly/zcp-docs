@@ -119,7 +119,7 @@ jobs:
         run: .github/scripts/verify-sitemap.sh https://docs.zcp.zsoftly.ca
 
       - name: '08: Verify robots host'
-        run: .github/scripts/verify-robots.sh https://docs.zcp.zsoftly.ca
+        run: bash .github/scripts/verify-robots.sh https://docs.zcp.zsoftly.ca
 
       - name: '09: Upload build artifact on failure'
         if: failure()
