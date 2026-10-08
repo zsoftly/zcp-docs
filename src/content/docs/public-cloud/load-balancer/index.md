@@ -37,5 +37,5 @@ reliability, and improved performance.
 You can select multiple VMs on the same network while creating the load balancer. To add more
 backend instances afterwards, open the Load Balancer and click **Add New Policies**.
 
-See also: [Public Networks](../networking/public-network/create),
-[VPC](../networking/vpc/create-vpc)
+See also: [Public Networks](/public-cloud/networking/public-network/create/),
+[VPC](/public-cloud/networking/vpc/create-vpc/)

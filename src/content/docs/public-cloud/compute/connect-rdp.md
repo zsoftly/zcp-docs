@@ -42,8 +42,8 @@ the configured public TCP port to VM port 3389, allow the public port in the fir
 connect to the public IP and public port.
 
 If the firewall rule is correct but the connection still fails, use
-[Console Access](./console-access) to check the Windows guest. Open an Administrator PowerShell
-window and run:
+[Console Access](/public-cloud/compute/console-access/) to check the Windows guest. Open an
+Administrator PowerShell window and run:
 
 ```powershell
 Set-ItemProperty `
@@ -82,4 +82,4 @@ the `TermService` PID. Then retry the RDP connection.
 ## See also
 
 - [Connect With SSH](/public-cloud/compute/connect-ssh)
-- [Console Access](/public-cloud/compute/console-access)
+- [Console Access](/public-cloud/compute/console-access/)

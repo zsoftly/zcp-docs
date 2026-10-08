@@ -37,5 +37,5 @@ disponibilité, la fiabilité et de meilleures performances.
 Après la création, cliquez sur l'équilibreur de charge, puis sur **Ajouter VM** pour attacher
 d'autres instances au backend.
 
-Voir aussi : [Réseaux publics](../networking/public-network/create),
-[VPC](../networking/vpc/create-vpc)
+Voir aussi : [Réseaux publics](/fr/public-cloud/networking/public-network/create/),
+[VPC](/fr/public-cloud/networking/vpc/create-vpc/)

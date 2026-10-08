@@ -13,7 +13,8 @@
     "fmt": "prettier --write \"**/*.{js,mjs,ts,tsx,astro,md,mdx,json,yml,yaml}\"",
     "fmt:check": "prettier --check \"**/*.{js,mjs,ts,tsx,astro,md,mdx,json,yml,yaml}\"",
     "lint": "eslint src",
-    "test:ai-readable": "node --test src/integrations/ai-readable-content.test.mjs"
+    "test:ai-readable": "node --test src/integrations/ai-readable-content.test.mjs",
+    "test:reported-links": "node --test src/content/docs/reported-link-regressions.test.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

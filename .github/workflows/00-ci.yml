@@ -94,10 +94,13 @@ jobs:
       - name: '03: Test AI-readable Markdown exporter'
         run: pnpm test:ai-readable
 
-      - name: '04: Build'
+      - name: '04: Test reported internal links'
+        run: pnpm test:reported-links
+
+      - name: '05: Build'
         run: pnpm build
 
-      - name: '05: Verify build output'
+      - name: '06: Verify build output'
         run: |
           if [ ! -d "dist" ]; then
             echo "[FAIL] Build output not found at dist/"
@@ -110,12 +113,15 @@ jobs:
             exit 1
           fi
 
-      - name: '06: Verify sitemap host'
+      - name: '07: Verify sitemap host'
         # No PUBLIC_SITE_URL is set here, so the build must resolve to the
         # canonical host from astro.config.mjs.
         run: .github/scripts/verify-sitemap.sh https://docs.zcp.zsoftly.ca
 
-      - name: '07: Upload build artifact on failure'
+      - name: '08: Verify robots host'
+        run: .github/scripts/verify-robots.sh https://docs.zcp.zsoftly.ca
+
+      - name: '09: Upload build artifact on failure'
         if: failure()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:

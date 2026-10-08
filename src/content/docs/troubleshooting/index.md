@@ -9,7 +9,7 @@ team to fix on the backend. For those, the article tells you to raise a support 
 
 ## Known Issues
 
-- [Detach or Delete Blocked by a Snapshot Error](./detach-blocked-by-snapshot)
+- [Detach or Delete Blocked by a Snapshot Error](/troubleshooting/detach-blocked-by-snapshot/)
 
 ## Raise a Support Ticket
 
