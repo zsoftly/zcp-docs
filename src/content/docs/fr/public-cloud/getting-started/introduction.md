@@ -4,8 +4,6 @@ sidebar_position: 1
 description: Bienvenue dans la documentation de ZSoftly Cloud Platform (ZCP).
 ---
 
-# ZSoftly Cloud Platform (ZCP)
-
 **ZCP** (ZSoftly Cloud Platform) est une plateforme d'infrastructure infonuagique qui vous permet de
 provisionner et de gérer des machines virtuelles, des réseaux privés, du stockage bloc, du stockage
 objet et des grappes Kubernetes à partir d'un portail unique.
