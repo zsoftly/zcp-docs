@@ -48,8 +48,8 @@ la référence complète.
 
 - **CloudStack UI** : navigateur Web, sans installation requise.
 - **cmk** : CLI de gestion CloudStack (binaire Go v6.5.0) : voir
-  [Référence Apache CloudStack](../../reference/apache-cloudstack) pour les étapes d'installation et
-  de configuration.
+  [Référence Apache CloudStack](/fr/private-cloud/reference/apache-cloudstack/) pour les étapes
+  d'installation et de configuration.
 - **Terraform** : via le
   [fournisseur CloudStack](https://registry.terraform.io/providers/cloudstack/cloudstack/latest).
 - **Ansible** : via la

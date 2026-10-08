@@ -12,7 +12,7 @@ l'article vous indique d'ouvrir un billet de soutien.
 
 ## Problèmes connus
 
-- [Détachement ou suppression bloqué par une erreur d'instantané](./detach-blocked-by-snapshot)
+- [Détachement ou suppression bloqué par une erreur d'instantané](/fr/troubleshooting/detach-blocked-by-snapshot/)
 
 ## Ouvrir un billet de soutien
 

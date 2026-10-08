@@ -46,8 +46,8 @@ public configuré au port 3389 de la VM, autorisez le port public dans la règle
 connectez-vous à l'adresse IP publique et au port public.
 
 Si la règle de pare-feu est correcte, mais que la connexion échoue toujours, utilisez
-l'[accès à la console](./console-access) pour vérifier le système Windows. Ouvrez PowerShell en tant
-qu'administrateur et exécutez les commandes suivantes :
+l'[accès à la console](/fr/public-cloud/compute/console-access/) pour vérifier le système Windows.
+Ouvrez PowerShell en tant qu'administrateur et exécutez les commandes suivantes :
 
 ```powershell
 Set-ItemProperty `
@@ -86,4 +86,4 @@ l'écouteur correspond au PID de `TermService`. Essayez ensuite de vous connecte
 ## Voir aussi
 
 - [Se connecter avec SSH](/fr/public-cloud/compute/connect-ssh)
-- [Accès à la console](/fr/public-cloud/compute/console-access)
+- [Accès à la console](/fr/public-cloud/compute/console-access/)

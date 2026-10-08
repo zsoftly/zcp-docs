@@ -54,10 +54,13 @@ jobs:
       - name: '04: Verify sitemap host'
         run: .github/scripts/verify-sitemap.sh https://dev-docs.zcp.zsoftly.ca
 
-      - name: '05: Package release artifact'
+      - name: '05: Verify robots host'
+        run: .github/scripts/verify-robots.sh https://dev-docs.zcp.zsoftly.ca
+
+      - name: '06: Package release artifact'
         run: tar -czf "$RUNNER_TEMP/zcp-docs-dev.tar.gz" -C dist .
 
-      - name: '06: Deploy release'
+      - name: '07: Deploy release'
         uses: ./.github/actions/deploy-release
         with:
           ssh-key: ${{ secrets.DEPLOY_SSH_KEY }}
@@ -66,5 +69,5 @@ jobs:
           releases-dir: /var/releases/zcp-docs-dev
           artifact-path: ${{ runner.temp }}/zcp-docs-dev.tar.gz
 
-      - name: '07: Smoke test live site'
+      - name: '08: Smoke test live site'
         run: .github/scripts/smoke-test.sh dev-docs.zcp.zsoftly.ca
