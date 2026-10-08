@@ -5,70 +5,66 @@ sidebar_position: 1
 
 ## Block Storage Volumes
 
-Block storage volumes provide local NVMe SSD, local SATA SSD, or replicated shared storage that
-attaches to virtual machines, depending on the selected region and plan. Once attached, format and
-mount the volume to extend your VM's storage.
+Block storage volumes add persistent storage to virtual machines. They provide local NVMe SSD, local
+SATA SSD, or replicated shared storage, depending on the selected region and plan. This page ends
+after you submit the volume creation and attachment request.
 
-### Create a Block Storage Volume
+### Create Volumes
 
-- From the left-hand menu, click **Block Storages**.
-- Click **Create Block Storage** or the **+** icon.
+- From the left-hand menu, click **Volumes**.
+- Click the **+** icon.
 
-![Block Storages page with the Create Block Storage (+) button](../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
+![Volumes page with the plus icon](../../../../../assets/storage/block-storage/create-volume-create-a-block-storage-volume.webp)
 
-### Assign to a Project
+### Choose Project
 
-Assign the volume to a project.
+Under **Choose Project**, assign the volume to a project.
 
-![Create Block Storage: assign to a project](../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
+![Create Volumes: Choose Project](../../../../../assets/storage/block-storage/create-volume-assign-to-a-project.webp)
 
-### Choose a Location
+### Select Location
 
-Select the data center location.
+Under **Select Location**, choose the data center location.
 
-![Create Block Storage: choose a location](../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
+![Create Volumes: Select Location](../../../../../assets/storage/block-storage/create-volume-choose-a-location.webp)
 
-### Choose Instance
+### Select Instance to attach Volumes
 
-Select the VM instance to attach this volume to.
+Under **Select Instance to attach Volumes**, choose the VM instance.
 
-![Create Block Storage: choose the instance to attach to](../../../../../assets/storage/block-storage/create-volume-choose-instance.webp)
+![Create Volumes: Select Instance to attach Volumes](../../../../../assets/storage/block-storage/create-volume-choose-instance.webp)
 
-### Select Volume Size
+### Choose Storage Type and Select Volumes Size
 
-Select storage type and size. Custom volumes are available.
+Under **Choose Storage Type**, select a storage type. Under **Select Volumes Size**, select the
+volume size. Custom volumes are available.
 
-![Create Block Storage: select volume storage type and size](../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
+The published wizard screenshot shows the text `Minimum 8GB storage is required`. This screenshot is
+for reference only. Use the current value shown for the selected storage plan in the portal.
 
-### Name
+![Create Volumes: Choose Storage Type and Select Volumes Size](../../../../../assets/storage/block-storage/create-volume-select-volume-size.webp)
 
-Provide a unique Volume Name.
+### Choose Name
 
-![Create Block Storage: name the volume](../../../../../assets/storage/block-storage/create-volume-name.webp)
+Under **Choose Name**, enter a unique **Volumes Name**.
+
+![Create Volumes: Choose Name and Volumes Name](../../../../../assets/storage/block-storage/create-volume-name.webp)
 
 ### Create
 
-- **Billing Cycles**: Hourly, Monthly, or Yearly.
-- Review and click **Create Volume**.
+Submit the volume creation and attachment request for the target VM.
 
-![Create Block Storage: billing options and Create Volume](../../../../../assets/storage/block-storage/create-volume-create.webp)
+- **Billing Cycle**: Hourly, Monthly, or Yearly.
+- Click **Review & Deploy**, review the summary, then click **Create Volumes**.
 
-After creation, format and mount the volume inside the VM:
+![Create Volumes: Review & Deploy and Create Volumes](../../../../../assets/storage/block-storage/create-volume-create.webp)
 
-```bash
-# Find the new disk (usually /dev/vdb)
-lsblk
-
-# Format
-sudo mkfs.ext4 /dev/vdb
-
-# Mount
-sudo mkdir -p /data
-sudo mount /dev/vdb /data
-
-# Persist across reboots
-echo '/dev/vdb /data ext4 defaults 0 2' | sudo tee -a /etc/fstab
-```
+The public documentation ends after you submit the volume creation and attachment request. Do not
+format a disk based only on a transient device name or a manual selection. Ask
+[Support](/troubleshooting#raise-a-support-ticket) whether the portal volume can be mapped to the
+guest device and whether a tested initialization and mount procedure is available. If an error
+appears, include the project, location, and exact error. In all cases, include non-sensitive
+resource details.
 
 See also: [Storage Types and Resilience](/public-cloud/storage/block-storage/storage-types),
 [Volume Snapshots](/public-cloud/storage/block-storage/snapshots),
