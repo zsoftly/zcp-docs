@@ -4,9 +4,16 @@ import Default from '@astrojs/starlight/components/Head.astro';
 const changelogPath = Astro.url.pathname.replace(/\/$/, '');
 const isChangelog = changelogPath === '/changelog' || changelogPath === '/fr/changelog';
 const changelogRssUrl = new URL('/changelog/rss.xml', Astro.site ?? Astro.url).href;
+const markdownPath = `${Astro.url.pathname.replace(/\/$/, '')}.md`;
+const markdownUrl = new URL(markdownPath, Astro.site ?? Astro.url).href;
+const isSplashPage = Astro.locals.starlightRoute.entry?.data.template === 'splash';
 ---
 
 <Default {...Astro.props} />
+
+<link rel="describedby" type="text/markdown" href="/llms.txt" />
+
+{!isSplashPage && <link rel="alternate" type="text/markdown" href={markdownUrl} />}
 
 <!-- Per-host runtime config: sets window.__ZCP_ENV. Served by the reverse proxy, not built in. -->
 <script is:inline src="/config.js"></script>

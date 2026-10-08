@@ -91,10 +91,13 @@ jobs:
       - name: '02: Install Chromium for Playwright (build-time Mermaid SVG)'
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: '03: Build'
+      - name: '03: Test AI-readable Markdown exporter'
+        run: pnpm test:ai-readable
+
+      - name: '04: Build'
         run: pnpm build
 
-      - name: '04: Verify build output'
+      - name: '05: Verify build output'
         run: |
           if [ ! -d "dist" ]; then
             echo "[FAIL] Build output not found at dist/"
@@ -107,12 +110,12 @@ jobs:
             exit 1
           fi
 
-      - name: '05: Verify sitemap host'
+      - name: '06: Verify sitemap host'
         # No PUBLIC_SITE_URL is set here, so the build must resolve to the
         # canonical host from astro.config.mjs.
         run: .github/scripts/verify-sitemap.sh https://docs.zcp.zsoftly.ca
 
-      - name: '06: Upload build artifact on failure'
+      - name: '07: Upload build artifact on failure'
         if: failure()
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:

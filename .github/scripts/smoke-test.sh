@@ -32,6 +32,12 @@ PATHS=(
   "/public-cloud/cli/quickstart"
 )
 
+MARKDOWN_PATHS=(
+  "/public-cloud/getting-started/introduction.md|# Introduction"
+  "/llms.txt|# ZSoftly Cloud Platform Documentation"
+  "/llms-full.txt|## Source:"
+)
+
 # The sitemap host is baked in at build time from PUBLIC_SITE_URL. A release
 # built for the wrong host serves pages that look right while pointing every
 # crawler at another domain, and a search engine that reads that sitemap finds
@@ -64,6 +70,30 @@ check_crawler_files() {
   return $fail
 }
 
+check_markdown_files() {
+  local fail=0 path expected response status body
+  for entry in "${MARKDOWN_PATHS[@]}"; do
+    path="${entry%%|*}"
+    expected="${entry#*|}"
+    response=$(curl -s "${CURL_TLS[@]}" --max-time 15 -w $'\n%{http_code}' "https://${DOMAIN}${path}" || true)
+    status="${response##*$'\n'}"
+    body="${response%$'\n'*}"
+    if [ "$status" != "200" ]; then
+      echo "[FAIL] ${path} -> ${status}"
+      fail=1
+    elif [[ "$body" == *'<!doctype html'* || "$body" == *'<html'* ]]; then
+      echo "[FAIL] ${path} returned HTML instead of Markdown"
+      fail=1
+    elif [[ "$body" == *"${expected}"* ]]; then
+      echo "[OK] ${path} -> Markdown body"
+    else
+      echo "[FAIL] ${path} did not contain expected Markdown content"
+      fail=1
+    fi
+  done
+  return $fail
+}
+
 run_checks() {
   local fail=0
   for path in "${PATHS[@]}"; do
@@ -77,6 +107,7 @@ run_checks() {
   done
 
   check_crawler_files || fail=1
+  check_markdown_files || fail=1
 
   return $fail
 }
@@ -86,7 +117,7 @@ for attempt in $(seq 1 "$MAX_RETRIES"); do
   echo "[INFO] Smoke test attempt ${attempt}/${MAX_RETRIES} on https://${DOMAIN}"
   if run_checks; then
     echo ""
-    echo "[OK] All ${#PATHS[@]} pages, robots.txt, and the sitemap check out on https://${DOMAIN}"
+    echo "[OK] All ${#PATHS[@]} pages, crawler files, and Markdown exports check out on https://${DOMAIN}"
     exit 0
   fi
 
