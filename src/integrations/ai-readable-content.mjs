@@ -1,16 +1,35 @@
-/* global Node, URL, document, process */
-/* eslint-disable no-useless-escape */
+/* global URL */
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { renderMarkdown } from './ai-readable-renderer.mjs';
+
+const exportOrigin = 'http://export.invalid';
+const contentTypes = {
+  '.css': 'text/css',
+  '.html': 'text/html',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+};
 
 const pagePath = (output, file) => {
   const directory = path.dirname(path.relative(output, file));
   return directory === '.' ? '/' : `/${directory}/`;
 };
-const markdownFile = (output, route) =>
-  path.join(output, route === '/' ? 'index.md' : `${route.replace(/\/$/, '')}.md`);
+
+export const markdownFile = (output, route) => {
+  const root = path.resolve(output);
+  const relative = route === '/' ? 'index.md' : `${route.replace(/^\/+|\/+$/g, '')}.md`;
+  const file = path.resolve(root, relative);
+  if (file !== root && !file.startsWith(`${root}${path.sep}`)) {
+    throw new Error(`Markdown output path escapes the build directory: ${route}`);
+  }
+  return file;
+};
+
 const listHtml = async (directory) => {
   const files = await Promise.all(
     (await readdir(directory, { withFileTypes: true })).map(async (entry) => {
@@ -22,158 +41,55 @@ const listHtml = async (directory) => {
   return files.flat();
 };
 
-export const renderMarkdown = (content, baseUrl) => {
-    const ignored = new Set([
-      'button',
-      'form',
-      'input',
-      'label',
-      'option',
-      'script',
-      'select',
-      'style',
-      'svg',
-      'textarea',
-    ]);
-    const clean = (value) =>
-      value
-        .replace(/[ \t]+\n/g, '\n')
-        .replace(/\n{3,}/g, '\n\n')
-        .trim();
-    const escape = (value) => value.replace(/[\\`*_{}<>\[\]]/g, '\\$&');
-    const codeBlocks = [];
-    const renderChildren = (element) => Array.from(element.childNodes).map(render).join('');
-    const renderList = (element, ordered, indent = '') => {
-      const items = Array.from(element.children).filter((child) => child.tagName === 'LI');
-      const start = Number(element.getAttribute('start') ?? 1);
-      return `\n${items
-        .map((item, index) => {
-        const content = clean(
-          Array.from(item.childNodes)
-            .filter(
-              (child) =>
-                child.nodeType !== Node.ELEMENT_NODE ||
-                !['OL', 'UL'].includes(child.tagName)
-            )
-            .map(render)
-            .join('')
-        );
-        const marker = ordered ? `${Number(item.getAttribute('value') ?? start + index)}.` : '-';
-        const nested = Array.from(item.children)
-          .filter((child) => child.tagName === 'OL' || child.tagName === 'UL')
-          .map((child) =>
-            renderList(child, child.tagName === 'OL', `${indent}${' '.repeat(marker.length + 1)}`)
-          );
-        const line = `${indent}${marker} ${content}`;
-        const nestedContent = nested.join('').replace(/^\n|\n+$/g, '');
-        return nestedContent ? `${line}\n${nestedContent}` : line;
-      })
-        .join('\n')}\n\n`;
-    };
-    const renderTable = (element) => {
-      const rows = Array.from(element.querySelectorAll('tr')).map((row) =>
-        Array.from(row.querySelectorAll(':scope > th, :scope > td')).map((cell) =>
-          clean(renderChildren(cell)).replace(/\|/g, '\\|').replace(/\n/g, '<br>')
-        )
-      );
-      if (!rows.length) return '';
-      const width = Math.max(...rows.map((row) => row.length));
-      const header = rows[0].map((value, index) => value || `Column ${index + 1}`);
-      return `\n${[header, Array(width).fill('---'), ...rows.slice(1)]
-        .map(
-          (row) =>
-          `| ${Array.from({ length: width }, (_, index) => row[index] ?? '').join(' | ')} |`
-        )
-        .join('\n')}\n\n`;
-    };
-    const render = (node) => {
-      if (node.nodeType === Node.TEXT_NODE)
-        return escape((node.textContent ?? '').replace(/\s+/g, ' '));
-      if (node.nodeType !== Node.ELEMENT_NODE) return '';
-      const element = node;
-      const tag = element.tagName.toLowerCase();
-      if (
-        ignored.has(tag) ||
-        element.getAttribute('aria-hidden') === 'true' ||
-        element.getAttribute('role') === 'tablist' ||
-        element.classList.contains('sl-anchor-link')
-      )
-        return '';
-      if (/^h[1-6]$/.test(tag))
-        return `\n${'#'.repeat(Number(tag[1]))} ${clean(renderChildren(element))}\n\n`;
-      if (tag === 'p') return `\n${clean(renderChildren(element))}\n\n`;
-      if (tag === 'br') return '\n';
-      if (tag === 'hr') return '\n---\n\n';
-      if (tag === 'a') {
-        const label = clean(renderChildren(element));
-        const href = element.getAttribute('href');
-        return href && label ? `[${label}](${new URL(href, baseUrl).href})` : label;
-      }
-      if (tag === 'img') {
-        const source = element.getAttribute('src');
-        return source && element.alt ? `![${element.alt}](${new URL(source, baseUrl).href})` : '';
-      }
-      if (tag === 'pre') {
-        const code = element.querySelector('code');
-        const lines = Array.from((code ?? element).querySelectorAll(':scope > .ec-line'));
-        const source = lines.length
-          ? lines.map((line) => line.textContent ?? '').join('\n')
-          : ((code ?? element).textContent ?? '');
-        const language =
-          code?.className.match(/language-([^\s]+)/)?.[1] ??
-          element.getAttribute('data-language') ??
-          '';
-        const fence = '`'.repeat(
-          Math.max(3, ...Array.from(source.matchAll(/`+/g), (match) => match[0].length + 1))
-        );
-        const token = `@@CODE_${codeBlocks.length}@@`;
-        codeBlocks.push(`${fence}${language}\n${source}\n${fence}`);
-        return `\n${token}\n\n`;
-      }
-      if (tag === 'code') return `\`${clean(element.textContent ?? '')}\``;
-      if (tag === 'ul') return renderList(element, false);
-      if (tag === 'ol') return renderList(element, true);
-      if (tag === 'table') return renderTable(element);
-      if (tag === 'blockquote')
-        return `\n> ${clean(renderChildren(element)).replace(/\n/g, '\n> ')}\n\n`;
-      if (element.getAttribute('role') === 'tabpanel') {
-        const label = document.getElementById(
-          element.getAttribute('aria-labelledby') ?? ''
-        )?.textContent;
-        return `\n#### ${clean(label ?? 'Example')}\n\n${clean(renderChildren(element))}\n\n`;
-      }
-      if (['article', 'div', 'header', 'section'].includes(tag))
-        return `\n${renderChildren(element)}\n`;
-      return renderChildren(element);
-    };
-    const markdownWithTokens = clean(render(content));
-    const markdown = codeBlocks.reduce(
-      (output, block, index) => output.replace(`@@CODE_${index}@@`, block),
-      markdownWithTokens
-    );
-    return {
-      description:
-        document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '',
-      summary: clean(content.querySelector('p')?.textContent ?? ''),
-      hasHeading: /^# /m.test(markdownWithTokens),
-      markdown,
-      title: document.title.replace(/\s*\|\s*(?:ZSoftly Docs|Documentation ZSoftly)$/, ''),
-    };
+const hasNoindex = (html) =>
+  /<meta\b(?=[^>]*\bname\s*=\s*["']robots["'])(?=[^>]*\bcontent\s*=\s*["'][^"']*\bnoindex\b)[^>]*>/i.test(
+    html
+  );
+
+const isIncludedPage = (html) =>
+  /<link\b(?=[^>]*\brel\s*=\s*["'][^"']*\balternate\b)(?=[^>]*\btype\s*=\s*["']text\/markdown["'])[^>]*>/i.test(
+    html
+  ) &&
+  !/<meta\b[^>]*http-equiv\s*=\s*["']refresh["']/i.test(html) &&
+  !hasNoindex(html);
+
+export const outputFileForRequest = (output, requestUrl) => {
+  let requested;
+  try {
+    requested = new URL(requestUrl);
+  } catch {
+    return undefined;
+  }
+  if (requested.origin !== exportOrigin) return undefined;
+  const rawPath = requestUrl.slice(exportOrigin.length).split(/[?#]/, 1)[0];
+  if (/(?:^|\/)(?:\.{1,2}|%2e(?:%2e)?)(?:\/|$)/i.test(rawPath)) return undefined;
+  let pathname;
+  try {
+    pathname = decodeURIComponent(requested.pathname);
+  } catch {
+    return undefined;
+  }
+  if (!pathname.startsWith('/') || pathname.includes('\0')) return undefined;
+  const root = path.resolve(output);
+  const relative = pathname.endsWith('/') ? `${pathname}index.html` : pathname;
+  const file = path.resolve(root, `.${relative}`);
+  return file === root || file.startsWith(`${root}${path.sep}`) ? file : undefined;
 };
 
-const extractMarkdown = async (page, file, canonicalUrl) => {
-  await page.goto(`file://${file}`);
+const extractMarkdown = async (page, route, canonicalUrl) => {
+  await page.goto(new URL(route, exportOrigin).href);
   const content = page.locator('.sl-markdown-content');
   if ((await content.count()) !== 1) {
-    throw new Error(`Expected one .sl-markdown-content element while exporting ${file}.`);
+    throw new Error(`Expected one .sl-markdown-content element while exporting ${route}.`);
   }
   return content.evaluate(renderMarkdown, canonicalUrl);
 };
 
 const sectionFor = (route) => {
   if (route.startsWith('/public-cloud/getting-started/')) return 'Getting Started';
-  if (route.startsWith('/public-cloud/api/') || route.startsWith('/public-cloud/cli/'))
+  if (route.startsWith('/public-cloud/api/') || route.startsWith('/public-cloud/cli/')) {
     return 'API and CLI Reference';
+  }
   if (route.startsWith('/tutorials/')) return 'Integrations and Examples';
   if (route.startsWith('/troubleshooting/')) return 'Troubleshooting';
   if (route === '/changelog/' || route === '/community/') return 'Optional';
@@ -181,43 +97,47 @@ const sectionFor = (route) => {
 };
 
 export default function aiReadableContent() {
+  let site;
   return {
     name: 'zcp-ai-readable-content',
     hooks: {
+      'astro:config:done': ({ config }) => {
+        site = config.site.toString().replace(/\/$/, '');
+      },
       'astro:build:done': async ({ dir }) => {
         const output = fileURLToPath(dir);
-        const site = (process.env.PUBLIC_SITE_URL ?? 'https://docs.zcp.zsoftly.ca').replace(
-          /\/$/,
-          ''
-        );
+        if (!site) throw new Error('Astro site URL was unavailable while exporting Markdown.');
         const browser = await chromium.launch({ headless: true });
         try {
           const page = await browser.newPage({ javaScriptEnabled: false });
-          await page.route('**/*', (route) =>
-            route.request().url().startsWith('file:') ? route.continue() : route.abort()
-          );
+          await page.route('**/*', async (route) => {
+            const file = outputFileForRequest(output, route.request().url());
+            if (!file) return route.abort();
+            try {
+              await route.fulfill({
+                body: await readFile(file),
+                contentType: contentTypes[path.extname(file)] ?? 'application/octet-stream',
+              });
+            } catch {
+              await route.abort();
+            }
+          });
           const pages = [];
           for (const file of await listHtml(output)) {
             const html = await readFile(file, 'utf8');
             const route = pagePath(output, file);
-            const excluded =
-              route === '/' ||
-              route === '/fr/' ||
-              html.includes('http-equiv="refresh"') ||
-              html.includes('name="robots" content="noindex');
-            if (excluded) continue;
-            if (!html.includes('<main')) {
+            if (!isIncludedPage(html)) continue;
+            if (!html.includes('<main'))
               throw new Error(`Public page ${route} has no <main> element to export.`);
-            }
             if (!html.includes('sl-markdown-content')) {
               throw new Error(`Public page ${route} has no documentation content to export.`);
             }
-            const extracted = await extractMarkdown(page, file, new URL(route, site).href);
-            if (!extracted.hasHeading) {
+            const extracted = await extractMarkdown(page, route, new URL(route, site).href);
+            if (!extracted.hasHeading)
               extracted.markdown = `# ${extracted.title}\n\n${extracted.markdown}`;
-            }
-            await mkdir(path.dirname(markdownFile(output, route)), { recursive: true });
-            await writeFile(markdownFile(output, route), `${extracted.markdown}\n`);
+            const markdownPath = markdownFile(output, route);
+            await mkdir(path.dirname(markdownPath), { recursive: true });
+            await writeFile(markdownPath, `${extracted.markdown}\n`);
             pages.push({ ...extracted, route });
           }
           const groups = new Map();
@@ -242,7 +162,7 @@ export default function aiReadableContent() {
                       .get(group)
                       .map(
                         (item) =>
-                          `- [${item.title.replace(/[\[\]]/g, '\\$&')}](${site}${item.route.replace(/\/$/, '')}.md): ${(item.description || item.summary || `Documentation for ${item.title}.`).replace(/\s+/g, ' ').trim()}`
+                          `- [${item.title.replaceAll('[', '\\[').replaceAll(']', '\\]')}](${site}${item.route.replace(/\/$/, '')}.md): ${(item.description || item.summary || `Documentation for ${item.title}.`).replace(/\s+/g, ' ').trim()}`
                       ),
                     '',
                   ]
