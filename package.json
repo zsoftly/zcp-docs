@@ -12,7 +12,8 @@
     "typecheck": "astro sync && tsc --noEmit",
     "fmt": "prettier --write \"**/*.{ts,tsx,astro,md,mdx,json,yml,yaml}\"",
     "fmt:check": "prettier --check \"**/*.{ts,tsx,astro,md,mdx,json,yml,yaml}\"",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test:ai-readable": "node --test src/integrations/ai-readable-content.test.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

@@ -24,8 +24,7 @@ const encodedPath = entry?.filePath
 const editUrl = encodedPath ? `${DOCS_REPO}/edit/main/${encodedPath}` : `${DOCS_REPO}`;
 const feedbackUrl = `${DOCS_REPO}/issues/new?labels=feedback&title=Feedback+on+docs`;
 
-// Markdown twin of this page (served by src/pages/[...slug].md.ts), e.g.
-// /changelog/ -> /changelog.md. Used by "Copy as Markdown" and the AI links.
+// Markdown twin generated from the rendered production page during the site build.
 const mdPath = `${Astro.url.pathname.replace(/\/$/, '')}.md`;
 const mdUrl = new URL(mdPath, Astro.site ?? Astro.url.origin).href;
 
@@ -298,8 +297,7 @@ const cursorUrl = `https://cursor.com/link/prompt?text=${encodedPrompt}`;
       const label = btn.querySelector('.zs-action-label') as HTMLElement;
       if (!label) return;
 
-      // Prefer the page's true source Markdown (served at <path>.md); fall back
-      // to converting the rendered DOM if that request fails.
+      // Prefer the build-generated Markdown export; fall back to the rendered DOM.
       let markdown = '';
       const mdUrl = btn.dataset.mdUrl;
       if (mdUrl) {

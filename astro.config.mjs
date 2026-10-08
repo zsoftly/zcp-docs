@@ -4,6 +4,7 @@ import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import rehypeMermaid from 'rehype-mermaid';
+import aiReadableContent from './src/integrations/ai-readable-content.mjs';
 import remarkExplicitHeadingIds from './src/plugins/remark-explicit-heading-ids.mjs';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
@@ -184,6 +185,7 @@ export default defineConfig({
     }),
   },
   integrations: [
+    aiReadableContent(),
     starlight({
       title: {
         en: 'ZSoftly Docs',
