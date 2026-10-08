@@ -29,24 +29,21 @@ export const renderMarkdown = (content, baseUrl) => {
   };
   const absoluteUrl = (value) => new URL(value, baseUrl).href;
   const restoreCode = (value) =>
-    value.replace(
-      /@@CODE_(\d+)(?:_(INDENT)_(\d+)|(_QUOTE))?@@/g,
-      (_, index, indent, spaces, quote) => {
-        const continuation = quote ? '> ' : indent ? ' '.repeat(Number(spaces)) : '';
-        return codeBlocks[Number(index)].replace(/\n/g, `\n${continuation}`);
-      }
-    );
-  const markCodeIndent = (value, continuation) =>
-    value.replace(
-      /@@CODE_(\d+)@@/g,
-      (_, index) => `@@CODE_${index}_INDENT_${continuation.length}@@`
-    );
-  const markQuotedCode = (value) =>
-    value.replace(/@@CODE_(\d+)@@/g, (_, index) => `@@CODE_${index}_QUOTE@@`);
+    value.replace(/@@CODE_(\d+)@@/g, (_, index) => {
+      const { content, prefix } = codeBlocks[Number(index)];
+      return content.replace(/\n/g, `\n${prefix}`);
+    });
+  const prefixCodeTokens = (value, prefix) =>
+    value.replace(/@@CODE_(\d+)@@/g, (token, index) => {
+      codeBlocks[Number(index)].prefix = `${prefix}${codeBlocks[Number(index)].prefix}`;
+      return token;
+    });
   const withDisplaySpacing = (element, rendered) => {
     const display = getComputedStyle(element).display;
     if (['block', 'flex', 'grid', 'list-item', 'table'].includes(display)) return `\n${rendered}\n`;
-    if (['inline-block', 'inline-flex', 'inline-grid'].includes(display)) return ` ${rendered} `;
+    if (['inline-block', 'inline-flex', 'inline-grid'].includes(display)) {
+      return `@@SPACE@@${rendered}@@SPACE@@`;
+    }
     return rendered;
   };
   const renderChildren = (element) => Array.from(element.childNodes).map(render).join('');
@@ -76,7 +73,7 @@ export const renderMarkdown = (content, baseUrl) => {
           return line.startsWith(continuation) ? line : `${continuation}${line}`;
         })
         .join('\n')}`;
-      return markCodeIndent(markdown, continuation);
+      return prefixCodeTokens(markdown, ' '.repeat(marker.length + 1));
     });
     return `\n${rendered.join('\n')}\n\n`;
   };
@@ -109,8 +106,10 @@ export const renderMarkdown = (content, baseUrl) => {
     ) {
       return '';
     }
-    if (/^h[1-6]$/.test(tag))
-      return `\n${'#'.repeat(Number(tag[1]))} ${clean(renderChildren(element))}\n\n`;
+    if (/^h[1-6]$/.test(tag)) {
+      const heading = clean(renderChildren(element)).replace(/\s+/g, ' ');
+      return `\n${'#'.repeat(Number(tag[1]))} ${heading}\n\n`;
+    }
     if (tag === 'p') return `\n${clean(renderChildren(element))}\n\n`;
     if (tag === 'br') return '\n';
     if (tag === 'hr') return '\n---\n\n';
@@ -122,7 +121,7 @@ export const renderMarkdown = (content, baseUrl) => {
       const trailing = label.match(/\s*$/)?.[0] ?? '';
       return withDisplaySpacing(
         element,
-        `${leading}[${label.trim()}](${absoluteUrl(href)})${trailing}`
+        `${leading ? '@@SPACE@@' : ''}[${label.trim()}](${absoluteUrl(href)})${trailing ? '@@SPACE@@' : ''}`
       );
     }
     if (tag === 'img') {
@@ -145,7 +144,7 @@ export const renderMarkdown = (content, baseUrl) => {
         Math.max(3, ...Array.from(source.matchAll(/`+/g), (match) => match[0].length + 1))
       );
       const token = `@@CODE_${codeBlocks.length}@@`;
-      codeBlocks.push(`${fence}${language}\n${source}\n${fence}`);
+      codeBlocks.push({ content: `${fence}${language}\n${source}\n${fence}`, prefix: '' });
       return `\n${token}\n\n`;
     }
     if (tag === 'code') return `\`${clean(element.textContent ?? '')}\``;
@@ -153,8 +152,8 @@ export const renderMarkdown = (content, baseUrl) => {
     if (tag === 'ol') return renderList(element, true);
     if (tag === 'table') return renderTable(element);
     if (tag === 'blockquote') {
-      const quote = clean(renderChildren(element));
-      const quoted = markQuotedCode(quote)
+      const quote = prefixCodeTokens(clean(renderChildren(element)), '> ');
+      const quoted = quote
         .split('\n')
         .map((line) => `> ${line}`)
         .join('\n');
@@ -170,12 +169,8 @@ export const renderMarkdown = (content, baseUrl) => {
   };
 
   const markdownWithTokens = clean(render(content))
-    .split('\n')
-    .map((line) => {
-      const indentation = line.match(/^\s*/)?.[0] ?? '';
-      return `${indentation}${line.slice(indentation.length).replace(/ {2,}/g, ' ')}`;
-    })
-    .join('\n');
+    .replace(/(?: ?@@SPACE@@ ?)+/g, ' ')
+    .trim();
   const markdown = restoreCode(markdownWithTokens);
   return {
     description: document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '',

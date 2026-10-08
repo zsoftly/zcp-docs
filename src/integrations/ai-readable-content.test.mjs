@@ -49,6 +49,30 @@ test('keeps ordered list child order and indents multi-block content and code', 
   assert.match(result.markdown, /> Quoted text\.\n>\n> ```sh\n> echo quoted\n> ```/);
 });
 
+test('composes list and blockquote prefixes around code blocks', async () => {
+  const result = await render(
+    '<ol><li><p>Step</p><blockquote><pre><code>first\n\nsecond</code></pre></blockquote></li></ol><blockquote><ol><li><p>Quoted step</p><pre><code>third\nfourth</code></pre></li></ol></blockquote><blockquote><blockquote><pre><code>deep</code></pre></blockquote></blockquote>'
+  );
+
+  assert.match(
+    result.markdown,
+    /1\. Step\n\n {3}> ```\n {3}> first\n {3}> \n {3}> second\n {3}> ```/
+  );
+  assert.match(
+    result.markdown,
+    /> 1\. Quoted step\n>\n> {4}```\n> {4}third\n> {4}fourth\n> {4}```/
+  );
+  assert.match(result.markdown, /> > ```\n> > deep\n> > ```/);
+});
+
+test('adds each nested list marker width to code indentation once', async () => {
+  const result = await render(
+    '<ol><li><p>Parent</p><ul><li><p>Child</p><pre><code>one\ntwo</code></pre></li></ul></li></ol>'
+  );
+
+  assert.match(result.markdown, /1\. Parent\n\n {3}- Child\n\n {5}```\n {5}one\n {5}two\n {5}```/);
+});
+
 test('uses CSS display boundaries and preserves inline link whitespace from a routed page', async () => {
   const page = await browser.newPage({ javaScriptEnabled: false });
   try {
@@ -60,7 +84,7 @@ test('uses CSS display boundaries and preserves inline link whitespace from a ro
         });
       } else {
         await route.fulfill({
-          body: '<title>Example | Documentation ZSoftly</title><link rel="stylesheet" href="/_astro/site.css"><main><div class="sl-markdown-content"><span class="block">team,</span><span class="block">without</span><p>See <a href="/docs"> the docs </a>now.</p><span class="inline">Announcements</span><span class="inline">October</span></div></main>',
+          body: '<title>Example | Documentation ZSoftly</title><link rel="stylesheet" href="/_astro/site.css"><main><div class="sl-markdown-content"><h1>Our <span class="block">cloud</span></h1><span class="block">team,</span><span class="block">without</span><p>See <a href="/docs"> the docs </a>now.</p><span class="inline">Announcements</span><span class="inline">October</span></div></main>',
           contentType: 'text/html',
         });
       }
@@ -69,7 +93,7 @@ test('uses CSS display boundaries and preserves inline link whitespace from a ro
     const result = await page
       .locator('.sl-markdown-content')
       .evaluate(renderMarkdown, 'https://docs.example.test/example/');
-    assert.match(result.markdown, /team,\n\nwithout/);
+    assert.match(result.markdown, /# Our cloud\n\nteam,\n\nwithout/);
     assert.match(result.markdown, /See \[the docs\]\(https:\/\/docs\.example\.test\/docs\) now\./);
     assert.match(result.markdown, /Announcements October/);
   } finally {
