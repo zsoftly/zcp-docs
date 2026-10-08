@@ -55,7 +55,7 @@ jobs:
         run: .github/scripts/verify-sitemap.sh https://dev-docs.zcp.zsoftly.ca
 
       - name: '05: Verify robots host'
-        run: .github/scripts/verify-robots.sh https://dev-docs.zcp.zsoftly.ca
+        run: bash .github/scripts/verify-robots.sh https://dev-docs.zcp.zsoftly.ca
 
       - name: '06: Package release artifact'
         run: tar -czf "$RUNNER_TEMP/zcp-docs-dev.tar.gz" -C dist .
