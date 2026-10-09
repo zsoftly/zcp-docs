@@ -66,7 +66,7 @@ sudo mv zcp-linux-amd64 /usr/local/bin/zcp
 
 ### Build from source
 
-Requires Go 1.26+:
+Requires Go 1.26.0 or later. The selected toolchain is Go 1.26.9:
 
 ```bash
 git clone https://github.com/zsoftly/zcp-cli

@@ -10,11 +10,14 @@ facturation et vérifier votre compte.
 
 :::tip[Commencer à bâtir gratuitement]
 
-Les nouveaux comptes admissibles reçoivent **100 $ CA de crédit promotionnel de lancement** à
-l'inscription, valide pendant **30 jours**. Après avoir dépensé **200 $ CA sur des plans de calcul
-admissibles**, vous pouvez demander **200 $ CA de crédit promotionnel de lancement supplémentaire**,
+Les nouveaux comptes admissibles reçoivent **100
+$ CA de crédit promotionnel de lancement** à
+l'inscription, valide pendant **30 jours**. Après avoir dépensé **200 $
+CA sur des plans de calcul admissibles**, vous pouvez demander **200
+$ CA de crédit promotionnel de lancement supplémentaire**,
 valide pendant **60 jours**, pour un total de crédit promotionnel de lancement pouvant atteindre
-**300 $ CA**.
+**300 $
+CA**.
 
 :::
 
@@ -92,9 +95,11 @@ Après avoir dépensé **200 $ CA sur des plans de calcul admissibles**, vous po
 CA de crédit promotionnel de lancement supplémentaire**. Faites la demande depuis l'adresse courriel
 de votre compte au moyen de notre
 [page de contact](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), en indiquant votre
-**numéro de compte** et la mention **"$200 Credit Request"**. Nous appliquerons directement ce
+**numéro de compte** et la mention
+**"$200 Credit Request"**. Nous appliquerons directement ce
 crédit promotionnel de lancement supplémentaire à votre compte. Il est valide pendant **60 jours**,
-pour un total de crédit promotionnel de lancement pouvant atteindre **300 $ CA**.
+pour un total de crédit promotionnel de lancement pouvant atteindre **300 $
+CA**.
 
 Le crédit promotionnel de lancement supplémentaire de **200 $ CA** s'applique aux plans de calcul
 admissibles allant de Small à XLarge. L'offre est disponible jusqu'au **31 décembre 2026**.

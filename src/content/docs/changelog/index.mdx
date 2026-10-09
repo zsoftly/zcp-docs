@@ -127,6 +127,19 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v0.0.31: October 9, 2026 {/* changelog-id: cli-v0.0.31 */}
+
+**ACL rule pagination controls and dependency security updates.** See the
+[v0.0.31 release](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.31) on GitHub.
+
+- **List ACL rules across API pages.** `zcp acl rules <vpc-slug> <acl-name-or-id>` now reads every
+  API page by default. Use `--max-items`, `--starting-token`, and `--page-size` to control a
+  paginated listing, or `--no-paginate` to request one API page. The command returns an error
+  instead of partial rules if a later page fails. See the
+  [CLI reference](/public-cloud/cli/reference).
+- **Go dependency security updates.** The language minimum remains Go 1.26.0. The selected toolchain
+  is Go 1.26.9, and the CLI updates `golang.org/x/net` to v0.60.0.
+
 ### v0.0.30: October 3, 2026 {/* changelog-id: cli-v0.0.30 */}
 
 **Custom VM plans, load balancer rule lists, and object-storage access keys.** See the
@@ -461,6 +474,52 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [OpenTofu registry](https://search.opentofu.org/provider/zsoftly/zcp) and the
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v0.3.0: October 9, 2026 {/* changelog-id: terraform-v0.3.0 */}
+
+**Custom VM plans, object-storage keys, and load-balancer state fixes.** See the
+[v0.3.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v0.3.0) and
+[tagged changelog](https://github.com/zsoftly/terraform-provider-zcp/blob/v0.3.0/CHANGELOG.md) for
+the complete change list.
+
+- **Create custom-plan instances.** `zcp_instance` accepts `cpu`, `memory_gb`, and `disk_gb`
+  together when you omit `plan`. A fixed catalogue plan still uses `plan`.
+- **Manage object-storage keys as resources.** `zcp_object_storage_key` creates, imports, and
+  revokes S3 access keys. Its `api_secret` is sensitive and remains in Terraform state after the API
+  stops disclosing the plaintext secret. Revoked keys are removed from state. Protect state access
+  accordingly.
+- **Configure S3 bucket settings with explicit credentials.** Bucket configuration resources use
+  `ZCP_S3_ACCESS_KEY` and `ZCP_S3_SECRET_KEY` from the provider process.
+- **Read all ACL rules.** The provider now uses CLI SDK v0.0.31, which reads every ACL-rule page and
+  reports a later-page failure instead of treating missing results as absent.
+- **Look up load balancers and refresh rule IDs.** `data.zcp_load_balancer` exposes rule IDs for
+  attachments. Load-balancer resources refresh through the detail endpoint and clear an initial rule
+  ID when the API no longer returns that rule. Destroy also accepts a load balancer or attachment
+  that the API confirms is already absent.
+- **Read current object-storage allocation.** Object-storage reads support the API's current
+  storage-size response shape.
+- **Apply dependency security updates.** The provider selects Go 1.26.9 and uses `golang.org/x/net`
+  v0.60.0.
+
+:::caution
+
+The API rejects deletion of the only active `zcp_load_balancer_rule` on a load balancer. Keep at
+least one rule when you manage rules independently.
+
+:::
+
+Upgrade the provider constraint, then run `terraform init -upgrade` or `tofu init -upgrade`:
+
+```hcl
+terraform {
+  required_providers {
+    zcp = {
+      source  = "zsoftly/zcp"
+      version = "~> 0.3.0"
+    }
+  }
+}
+```
 
 ### v0.2.0: September 7, 2026 {/* changelog-id: terraform-v0.2.0 */}
 

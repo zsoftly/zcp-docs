@@ -3,7 +3,7 @@ title: CLI Reference
 sidebar_position: 4
 ---
 
-Full command reference for the ZCP CLI v0.0.19.
+Full command reference for the ZCP CLI.
 
 For the interactive reference with search, see the
 [ZCP CLI reference on the main site](https://cloud.zcp.zsoftly.ca).
@@ -102,6 +102,46 @@ billing/support/dashboard, and the IAM commands `sub-user`/`role`/`permission`) 
 | -------------------- | ---------------- |
 | `zcp network list`   | List networks    |
 | `zcp network create` | Create a network |
+
+### Networking: Network ACLs
+
+| Command                                                     | Description                 |
+| ----------------------------------------------------------- | --------------------------- |
+| `zcp acl list <vpc-slug>`                                   | List network ACLs in a VPC  |
+| `zcp acl create <vpc-slug>`                                 | Create a network ACL        |
+| `zcp acl delete <vpc-slug> <acl-name-or-id>`                | Delete a network ACL        |
+| `zcp acl rules <vpc-slug> <acl-name-or-id>`                 | List rules in a network ACL |
+| `zcp acl create-rule <vpc-slug> <acl-name-or-id>`           | Add a rule to a network ACL |
+| `zcp acl update-rule <vpc-slug> <acl-name-or-id> <rule-id>` | Update a network ACL rule   |
+| `zcp acl delete-rule <vpc-slug> <acl-name-or-id> <rule-id>` | Delete a network ACL rule   |
+
+#### Paginate ACL Rule Listings
+
+`zcp acl rules` retrieves every API page by default. The following pagination flags are available in
+v0.0.31 and later:
+
+| Flag                       | Description                                                                                       |
+| -------------------------- | ------------------------------------------------------------------------------------------------- |
+| `--max-items <count>`      | Return at most `<count>` rules. If more rules remain, the response includes a continuation token. |
+| `--starting-token <token>` | Resume a previous listing from its continuation token.                                            |
+| `--page-size <count>`      | Set the number of rules requested in each API call. It does not cap the total result.             |
+| `--no-paginate`            | Request one API page. It cannot be combined with the other pagination flags.                      |
+
+Use a continuation token only with the same VPC and ACL. The token retains its page size. When you
+resume, omit `--page-size` or use the same value. For consistent results, resume before the ACL
+rules change.
+
+With the default table output, a continuation token is written to standard error. With `-o json` or
+`-o yaml`, a listing that uses `--max-items`, `--starting-token`, or `--no-paginate` returns an
+object with `rules` and, when more rules remain, `next_token`. A default listing keeps the existing
+JSON array or YAML list output.
+
+```bash
+zcp acl rules my-vpc web-acl --max-items 25
+zcp acl rules my-vpc web-acl --starting-token '<next-token>'
+zcp acl rules my-vpc web-acl --page-size 50
+zcp acl rules my-vpc web-acl --no-paginate
+```
 
 ### Networking: Firewall
 
