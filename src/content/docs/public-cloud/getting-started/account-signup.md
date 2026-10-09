@@ -10,11 +10,8 @@ up billing, and verify your account.
 
 :::tip[Start building for free]
 
-Eligible new accounts receive
-**CA$100 in launch promotional credit** at signup, valid for **30
-days**. After spending **CA$200**
-on eligible compute plans, you can request an additional
-**CA$200
+Eligible new accounts receive **CA$100 in launch promotional credit** at signup, valid for **30
+days**. After spending **CA$200** on eligible compute plans, you can request an additional **CA$200
 in launch promotional credit**, valid for **60 days**, for up to **CA$300 in total launch
 promotional credit**.
 
@@ -87,8 +84,7 @@ credit, and Postpaid billing threshold.
 After you spend **CA$200 on eligible compute plans**, you can claim an additional **CA$200 in launch
 promotional credit**: request it from your account email address through our
 [contact page](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), including your **account
-number** and referencing
-**"$200 Credit Request"**. We'll apply the additional launch promotional
+number** and referencing **"$200 Credit Request"**. We'll apply the additional launch promotional
 credit to your account. It is valid for **60 days**, bringing your total launch promotional credit
 to up to **CA$300**.
 
