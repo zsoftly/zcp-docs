@@ -462,6 +462,16 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
+### Instance Name Update Notice: October 7, 2026 {/* changelog-id: terraform-instance-name-update */}
+
+With [provider v0.2.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v0.2.0),
+changing `name` on an existing `zcp_instance` currently fails in production. Keep the instance's
+current name. If a plan for another change also renames the instance, restore its original name
+before applying the unrelated change.
+
+Do not force replacement solely to rename an instance. Replacement destroys and recreates the VM.
+Compatibility validation is ongoing.
+
 ### v0.2.0: September 7, 2026 {/* changelog-id: terraform-v0.2.0 */}
 
 **Object storage configuration, richer instance networking, and volume lookups.** See the

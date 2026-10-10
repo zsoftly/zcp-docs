@@ -15,6 +15,13 @@ export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:0
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'Terraform / OpenTofu: instance-name update notice',
+    description:
+      'Changing the name of an existing zcp_instance currently fails in production. Keep the current name, and do not force replacement solely to rename an instance while compatibility validation continues.',
+    pubDate: '2026-10-07',
+    slug: 'terraform-instance-name-update',
+  },
+  {
     title: 'CLI v0.0.30: custom VM plans and object storage keys',
     description:
       'The zcp CLI supports custom VM plans, load balancer rule listings, and S3-compatible object storage key rotation. New S3 credentials are visible for five minutes and direct S3 commands validate the saved access key for the selected store.',
