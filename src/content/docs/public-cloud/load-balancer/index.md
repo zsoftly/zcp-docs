@@ -37,5 +37,27 @@ reliability, and improved performance.
 You can select multiple VMs on the same network while creating the load balancer. To add more
 backend instances afterwards, open the Load Balancer and click **Add New Policies**.
 
+### Manage with Terraform
+
+Provider v0.3.0 exposes `data.zcp_load_balancer` with its rule IDs, so an existing load balancer can
+supply a rule to `zcp_load_balancer_attachment`:
+
+```hcl
+data "zcp_load_balancer" "existing" {
+  slug = var.load_balancer_slug
+}
+
+resource "zcp_load_balancer_attachment" "web" {
+  load_balancer   = data.zcp_load_balancer.existing.id
+  rule            = data.zcp_load_balancer.existing.rules[0].id
+  virtual_machine = zcp_instance.web.id
+  cloud_provider  = zcp_instance.web.cloud_provider
+  region          = zcp_instance.web.region
+}
+```
+
+The API rejects deletion of the only active `zcp_load_balancer_rule` on a load balancer. Keep at
+least one rule when you manage rules independently.
+
 See also: [Public Networks](/public-cloud/networking/public-network/create/),
 [VPC](/public-cloud/networking/vpc/create-vpc/)
