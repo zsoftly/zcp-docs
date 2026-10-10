@@ -64,7 +64,7 @@ terraform {
   required_providers {
     zcp = {
       source  = "zsoftly/zcp"
-      version = "~> 0.3.0"
+      version = "~> 0.1"
     }
   }
 }
@@ -100,9 +100,7 @@ terraform init
 
 </Tabs>
 
-The tool downloads the provider from its registry and verifies the release signature. To upgrade an
-existing configuration to v0.3.0, change its constraint and run `terraform init -upgrade` or
-`tofu init -upgrade`.
+The tool downloads the provider from its registry and verifies the release signature.
 
 ## Step 3: Describe a network and a VM
 
@@ -217,25 +215,13 @@ public_ip = "23.229.49.88"
 
 Run the plan again and it reports **No changes**: your file and the platform agree.
 
-## Step 5: Change Something
+## Step 5: Change something
 
 Edit the instance's `plan` to a bigger size (pick one from `zcp plan vm`) and apply again. The
 provider resizes the VM in place: it stops the instance, changes the compute offering, and starts it
 again, the same way an instance type change works on other clouds. Attributes shown as **forces
 replacement** in the plan output (the template, the region) recreate the VM instead: read the plan
 before you confirm.
-
-For a custom VM, omit `plan` and set all three custom fields. Custom-plan changes require
-replacement.
-
-```hcl
-resource "zcp_instance" "web" {
-  # ...other arguments from Step 3...
-  cpu       = 2
-  memory_gb = 4
-  disk_gb   = 45
-}
-```
 
 ## Step 6: Import existing resources
 
@@ -292,7 +278,7 @@ Nothing keeps billing after a destroy of a fully tracked stack.
 
 ## Next steps
 
-- Browse the provider's resources and data sources on the
+- Browse all 38 resources and 12 data sources in the provider documentation on the
   [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp/latest/docs) or the
   [OpenTofu registry](https://search.opentofu.org/provider/zsoftly/zcp).
 - Add an [SSH key resource](/public-cloud/compute/settings/ssh-keys) to your configuration to log in
