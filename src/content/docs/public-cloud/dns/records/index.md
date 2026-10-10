@@ -63,7 +63,8 @@ quoted.
 
 ## Known Limitations
 
-The first two limits apply to the console, the CLI, and the API alike. The last applies to the CLI.
+The CNAME limitation applies to the console, the CLI, and the API. The CLI deletion limitation is
+specific to the CLI.
 
 ### CNAME Cannot Share a Name
 
@@ -82,12 +83,19 @@ There is no update action. To change a value, delete it and create it again with
 To remove one value with the CLI, delete the set and create the values you want to keep again. The
 console removes a single value.
 
+### CAA Is Unavailable in the Console
+
+The ZCP DNS console does not list `CAA` as a record type. Use the CLI or API to create `CAA`
+records.
+
 ## How to Manage Records
 
-Every type works the same way across all surfaces:
+Use the documented surface for your workflow:
 
-- **Console**: the DNS section of the portal, then **Create Record**.
-- **CLI**: [Manage DNS with the CLI](/public-cloud/dns/cli).
+- **Console**: the DNS section of the portal, then **Create Record**. The console removes one
+  selected value.
+- **CLI**: [Manage DNS with the CLI](/public-cloud/dns/cli). `zcp dns record-delete` removes the
+  whole record set.
 - **API**: [Manage DNS with the API](/public-cloud/dns/api/).
 
 There is no update action. To change a record, delete it and create it again with the new value.

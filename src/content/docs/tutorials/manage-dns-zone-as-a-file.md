@@ -32,7 +32,7 @@ You need:
   `brew install jq` on macOS, or `apt install jq` on Debian and Ubuntu.
 
 Read [Known limitations](/public-cloud/dns/records#known-limitations) before you start. A name and
-type hold one value today, which shapes what a file like this can express.
+type can hold several values, so use one line for each value you want to add.
 
 ## Step 1: Choose a Layout
 
@@ -60,7 +60,7 @@ can see the shape of the zone without parsing it:
 # Columns are whitespace separated and CONTENT is the final field, so it may
 # contain spaces. "@" is the zone apex and "-" means the type takes no priority.
 #
-# TXT values keep their double quotes, because the API rejects an unquoted value.
+# TXT values may include double quotes. The platform accepts unquoted input and returns it quoted.
 
 # NAME     TYPE   TTL  PRIO  CONTENT
 
@@ -92,8 +92,11 @@ can see it and changes arrive through review.
 ## Step 3: Use Shared Regional Ingress Names
 
 Use one A record as a regional ingress target only when its services share the same ingress and move
-together. Point each service at that target with one direct CNAME. Updating the A record then
-changes the destination for every alias in that regional group. Do not use CNAME chains or loops.
+together. Point each service at that target with one direct CNAME. Adding a new A value leaves the
+old destination in the record set. Remove the old value after you verify the new destination so
+every alias in that regional group resolves only to the new target. Use the console to remove one A
+value. With the CLI, delete the whole A record set and recreate the value you want to keep. Do not
+use CNAME chains or loops.
 
 The `example.ca` file groups the `yow-edge` and `yul-edge` targets with the services they own.
 
@@ -238,20 +241,17 @@ finished propagating between them.
   store and reach the script through the environment.
 - **Short TTLs while you iterate.** 300 seconds keeps mistakes cheap. Raise them once the zone is
   settled.
-- **The file is the source of truth.** When someone changes a record in the console, the file and
-  the zone have diverged. Re-apply from the file, or update the file to match, and say which you
-  did.
-- **`record-create` replaces a matching RRset.** It replaces an existing record set with the same
-  name and type. It cannot migrate an A record to a CNAME because the old A record must be removed
-  before the CNAME can exist at that owner. Create and verify the target A record first, then remove
-  each old service A record and add its CNAME.
-- **Do not manage multi-value TXT RRsets with this loop.** Each independent TXT line for the same
-  name replaces that name's TXT RRset. Use support for a workflow that manages separate values in
-  one RRset, or exclude externally managed multi-value RRsets from this file to avoid overwrite.
-- **The script adds and updates, it does not prune.** It applies the records the file names and
-  nothing else. Deleting a line from the file does not remove that record from the zone. Remove it
-  yourself with `zcp dns record-delete`, then delete the line, so the file and the zone stay in
-  step.
+- **The file records your intended values.** Re-running this script only adds values. It does not
+  reconcile console changes or remove values absent from the file. Update the file and remove stale
+  values yourself when the zone changes outside the script.
+- **`record-create` adds to a matching RRset.** It adds a value to an existing record set with the
+  same name and type. It cannot migrate an A record to a CNAME because the old A record must be
+  removed before the CNAME can exist at that owner. Create and verify the target A record first,
+  then remove each old service A record and add its CNAME.
+- **The script adds records but does not prune them.** It applies the records the file names and
+  nothing else. Deleting a line from the file does not remove that value from the zone.
+  `zcp dns record-delete` removes the whole record set, so recreate the values you want to keep
+  after using it.
 
 ## Next Steps
 
