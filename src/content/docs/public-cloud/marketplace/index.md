@@ -7,6 +7,20 @@ ZCP Marketplace images are pre-configured VM templates deployed from the ZCP con
 Most Linux marketplace images ship on **Ubuntu 24.04 LTS** with a first-boot service that completes
 setup automatically. OPNsense is the FreeBSD-based exception and is configured from its console.
 
+## After deployment
+
+After a Marketplace app deploys successfully, ZCP sends a **Your application is ready** email. It
+identifies the virtual machine and deployment date, and includes any values entered during
+deployment. An empty values table does not mean the deployment failed.
+
+Follow the guide for the app you deployed to find its login details. Some apps require a first-login
+setup or store credentials in a different file.
+
+The email also points to `/root/logindetails.txt`. Check the app guide before using that path,
+because some images use a different file or login method.
+
+Store credentials in a password manager and change any initial passwords after signing in.
+
 <div class="mp-stats">
   <div class="mp-stat">
     <span class="mp-num">70</span>
