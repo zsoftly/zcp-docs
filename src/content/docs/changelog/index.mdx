@@ -63,15 +63,22 @@ Updates to the Public Cloud platform and managed services.
 
 ### ZCP Store (October 11, 2026) {/* changelog-id: zcp-store */}
 
-The console has a **Store** tab where an account buys services and licences. Store products bill on
-the same invoice as your instances. They are account level, not tied to a project. Available today:
-Basic Support (free, included with every account), Pro Support at $99 a month, and three one-time
-professional services. Those are Architecture & Design Workshop ($2,500), Monitoring Stack
-Deployment ($1,000) and Annual Security Audit ($3,500). The Bare Metal tab lists ten priced
-dedicated servers from $231 a month. We quote two larger servers on request. Managed services,
-backup and DR, security and compliance, networking, training and licensing products are available
-through support on request. They move to the public Store once we publish prices. See
+The console has a **Store** tab where an account buys services, licences and dedicated servers.
+Store products bill on the same invoice as your instances. They are account level, not tied to a
+project. Available today: Basic Support (free, included with every account), Pro Support at $99 a
+month, and ten priced bare metal servers from $231 a month. Products at CAD 100 a month or less can
+be bought by any account. Products above that can be bought by postpaid accounts and by prepaid
+accounts whose credit balance covers the order. Accounts on manual invoicing order them through
+support. Professional services, managed services, backup and DR, security and compliance,
+networking, training and licensing products are placed through support after a quote. See
 [Store](/public-cloud/store).
+
+### Longer instance passwords (October 11, 2026) {/* changelog-id: instance-password-length */}
+
+New instances get a random sixteen character provisioning password instead of six. A password reset
+on an existing instance also returns the longer form. Instances created before this date keep their
+current password until reset. See
+[Connect With SSH](/public-cloud/compute/connect-ssh#where-to-find-the-password).
 
 ### Compute and storage sold separately (October 11, 2026) {/* changelog-id: compute-storage-separate */}
 

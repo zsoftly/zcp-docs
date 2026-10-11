@@ -13,6 +13,11 @@ After a Marketplace app deploys successfully, ZCP sends a **Your application is 
 identifies the virtual machine and deployment date, and includes any values entered during
 deployment. An empty values table does not mean the deployment failed.
 
+![Sanitized MySQL deployment email showing the virtual machine, deployment date, and deployment values](../../../../assets/marketplace/mysql-deployment-email.webp)
+
+_Sanitized MySQL deployment email. The `additions` values are demo inputs, not credentials to
+reuse._
+
 Follow the guide for the app you deployed to find its login details. Some apps require a first-login
 setup or store credentials in a different file.
 

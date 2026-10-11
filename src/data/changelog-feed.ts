@@ -25,6 +25,13 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
     slug: 'zcp-store',
   },
   {
+    title: 'Longer instance passwords',
+    description:
+      'New instances and password resets return a random sixteen character provisioning password instead of six.',
+    pubDate: '2026-10-11',
+    slug: 'instance-password-length',
+  },
+  {
     title: 'CLI v1.0.1: lifecycle-route and volume fixes',
     description:
       'The current zcp CLI release uses the current instance cancellation and hostname routes, retrieves every VM snapshot page, and accepts a named storage plan with an explicit volume capacity.',
