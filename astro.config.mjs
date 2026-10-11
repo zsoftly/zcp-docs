@@ -97,6 +97,7 @@ const frSidebarLabels = {
   'A and AAAA': 'A et AAAA',
   Examples: 'Exemples',
   Marketplace: 'Marketplace',
+  Store: 'Boutique',
   Databases: 'Bases de données',
   'Web Stacks': 'Piles Web',
   'Monitoring & Automation': 'Surveillance et automatisation',
@@ -597,6 +598,7 @@ export default defineConfig({
                 },
               ],
             },
+            { label: 'Store', slug: 'public-cloud/store' },
           ],
         },
 

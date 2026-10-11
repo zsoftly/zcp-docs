@@ -18,6 +18,13 @@ export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:0
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'ZCP Store',
+    description:
+      'Buy support plans, professional services, bare metal servers and licences from the Store tab in the console. Products are account level and bill on the same invoice as your instances.',
+    pubDate: '2026-10-11',
+    slug: 'zcp-store',
+  },
+  {
     title: 'Compute and storage sold separately',
     description:
       'VM plans now cover CPU and memory only. Choose the root disk as a per-GB block storage volume when you create the server. Existing servers keep their plan and price.',
