@@ -89,7 +89,7 @@ au-dessus de ce montant sont réservés aux comptes postpayés et aux comptes pr
 crédit couvre la commande. Les comptes facturés manuellement les commandent auprès du soutien
 technique. Vous commandez les produits suivants auprès du soutien technique, après un devis :
 services professionnels, services gérés, sauvegarde et reprise après sinistre, sécurité et
-conformité, réseau, formation et licences. Consultez [Store](/public-cloud/store).
+conformité, réseau, formation et licences. Consultez [Store](/public-cloud/store) (en anglais).
 
 ### Mots de passe d'instance plus longs (11 octobre 2026) <!-- changelog-id: instance-password-length -->
 
@@ -619,7 +619,7 @@ sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terra
 
 **Version actuelle du fournisseur.** Consultez la
 [version v1.0.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.0.0) et le
-[guide de mise à niveau](/public-cloud/api/terraform-opentofu/).
+[guide de mise à niveau](/public-cloud/api/terraform-opentofu/) (en anglais).
 
 - **Les nouvelles instances exigent `plan`, `blockstorage_plan` et `root_disk_size`.** Le
   fournisseur rejette les nouvelles configurations personnalisées de processeur, de mémoire et de
