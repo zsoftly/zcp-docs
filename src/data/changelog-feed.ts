@@ -19,6 +19,7 @@ export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:0
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
     title: 'ZCP Store',
+    titleFr: 'ZCP Store',
     description:
       'Buy support plans, professional services, bare metal servers and licences from the Store tab in the console. Products are account level and bill on the same invoice as your instances.',
     pubDate: '2026-10-11',
@@ -26,6 +27,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'Longer instance passwords',
+    titleFr: "Mots de passe d'instance plus longs",
     description:
       'New instances and password resets return a random sixteen character provisioning password instead of six.',
     pubDate: '2026-10-11',
@@ -33,6 +35,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'CLI v1.0.1: lifecycle-route and volume fixes',
+    titleFr: 'CLI v1.0.1 : correctifs des routes de cycle de vie et des volumes',
     description:
       'The current zcp CLI release uses the current instance cancellation and hostname routes, retrieves every VM snapshot page, and accepts a named storage plan with an explicit volume capacity.',
     pubDate: '2026-10-11',
@@ -40,6 +43,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'CLI v1.0.0: separate root storage and backup schedules',
+    titleFr: 'CLI v1.0.0 : stockage racine séparé et planifications de sauvegarde',
     description:
       'New instances and Kubernetes clusters select compute and root storage separately. The CLI also adds VM backup schedules and complete DNS listings.',
     pubDate: '2026-10-11',
@@ -47,6 +51,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'Terraform / OpenTofu provider v1.0.0',
+    titleFr: 'Fournisseur Terraform / OpenTofu v1.0.0',
     description:
       'The provider adds named compute and root-storage selections, split Kubernetes plans, VM backup schedules, paginated DNS lookups, and named volume capacity.',
     pubDate: '2026-10-11',
@@ -54,6 +59,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'Compute and storage sold separately',
+    titleFr: 'Calcul et stockage vendus séparément',
     description:
       'VM plans now cover CPU and memory only. Choose the root disk as a per-GB block storage volume when you create the server. Existing servers keep their plan and price.',
     pubDate: '2026-10-11',
@@ -61,6 +67,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'CLI v0.0.31: ACL rule pagination and dependency security updates',
+    titleFr: 'CLI v0.0.31 : pagination des règles ACL et mises à jour de sécurité',
     description:
       'zcp acl rules reads every API page by default, with --max-items, --starting-token, --page-size and --no-paginate to control a listing. The CLI builds with Go 1.26.9 and updates golang.org/x/net to v0.60.0.',
     pubDate: '2026-10-09',
@@ -148,6 +155,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'CLI v0.0.26: port forwarding and SSH key fixes',
+    titleFr: 'CLI v0.0.26 : correctifs de redirection de ports et de clés SSH',
     description:
       'Port forwarding lists now show ports, asynchronous create commands report accepted requests, and SSH key deletion accepts IDs, names, and slugs.',
     pubDate: '2026-07-19',
@@ -155,6 +163,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'CLI v0.0.25: DNS MX record support',
+    titleFr: 'CLI v0.0.25 : prise en charge des enregistrements MX',
     description:
       'The zcp CLI now supports MX record priorities and validates priority flags before sending DNS record requests.',
     pubDate: '2026-07-18',
@@ -162,6 +171,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'CLI v0.0.24: lifecycle and SDK improvements',
+    titleFr: 'CLI v0.0.24 : améliorations du cycle de vie et du SDK',
     description:
       'VM and load balancer deletion workflows, public IP display, complete list pagination, and Apache 2.0 licensing for the CLI and SDK.',
     pubDate: '2026-07-16',
@@ -169,6 +179,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'CLI v0.0.17: full object storage workflows',
+    titleFr: 'CLI v0.0.17 : workflows complets de stockage objet',
     description:
       'The CLI adds object versioning, policies, tagging, encryption, lifecycle rules, CORS, presigned URLs, copy and move, and richer object operations.',
     pubDate: '2026-06-17',
@@ -176,6 +187,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'Marketplace updates',
+    titleFr: 'Mises à jour de la place de marché',
     description:
       'The ZCP Marketplace provides more than 20 one-click application images, including databases, web stacks, observability, automation, and security tools.',
     pubDate: '2026-06-17',
@@ -183,6 +195,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
   },
   {
     title: 'Terraform and OpenTofu provider',
+    titleFr: 'Fournisseur Terraform et OpenTofu',
     description:
       'Infrastructure as code support is being developed around the ZCP API and CLI resource model for repeatable, region-aware provisioning.',
     pubDate: '2026-06-10',

@@ -1013,29 +1013,6 @@ site-search dialog {
   margin: 0 0 var(--zi-space-3);
 }
 
-.peerpush-card__badge {
-  display: block;
-  margin-block: var(--zi-space-1) var(--zi-space-3);
-}
-
-.peerpush-card__badge img {
-  display: block;
-  height: auto;
-  max-width: 14.375rem;
-  width: 100%;
-}
-
-.peerpush-card__recognition,
-.peerpush-card__message {
-  color: var(--zi-ink-muted);
-  font-size: 0.875rem;
-  line-height: 1.375rem;
-}
-
-.peerpush-card__recognition {
-  margin-bottom: var(--zi-space-2);
-}
-
 .sidebar-cta {
   display: block;
   font-size: 0.875rem;
