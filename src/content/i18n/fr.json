@@ -60,6 +60,7 @@
   "zs.toc.openCursor": "Ouvrir dans Cursor",
   "zs.notice.label": "Avis de service",
   "zs.notice.dismiss": "Masquer l'avis",
+  "zs.notice.statusLink": "Voir l’état du service",
   "zs.notice.caDelegation.label": "Avis de service",
   "zs.notice.caDelegation.text": "Les délégations de domaines en .ca vers ZSoftly échouent pour le moment. Les autres domaines de premier niveau ne sont pas touchés.",
   "zs.notice.caDelegation.link": "Que faire",

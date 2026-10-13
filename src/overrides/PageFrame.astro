@@ -29,7 +29,14 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
     document.documentElement.setAttribute('data-promo-dismissed', '');
   }
 
-  if (noticeId && sessionStorage.getItem('zs-notice-dismissed') === noticeId) {
+  let dismissedNoticeId = null;
+  try {
+    dismissedNoticeId = sessionStorage.getItem('zs-notice-dismissed');
+  } catch {
+    // Storage can be disabled. The browser-side status notice still works.
+  }
+
+  if (noticeId && dismissedNoticeId === noticeId) {
     document.documentElement.setAttribute('data-notice-dismissed', '');
   }
 
@@ -98,31 +105,41 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
 }
 
 {
-  notice && (
+  (
     <div
       id="notice-bar"
       class="notice-bar"
-      data-severity={notice.severity}
+      data-severity={notice?.severity ?? 'caution'}
+      data-local-notice-id={notice?.id}
       role="region"
       aria-label={Astro.locals.t('zs.notice.label')}
+      hidden={!notice}
     >
       <div class="notice-inner">
-        <span class="notice-label">{Astro.locals.t(notice.labelKey)}</span>
+        <span class="notice-label" id="notice-label">
+          {notice ? Astro.locals.t(notice.labelKey) : Astro.locals.t('zs.notice.label')}
+        </span>
         <span class="notice-sep" aria-hidden="true">
           ·
         </span>
-        <span class="notice-text">{Astro.locals.t(notice.textKey)}</span>
-        {noticeHref && notice.linkKey && (
-          <a href={noticeHref} class="notice-link">
-            {Astro.locals.t(notice.linkKey)}
-          </a>
-        )}
+        <span class="notice-text" id="notice-text">
+          {notice ? Astro.locals.t(notice.textKey) : ''}
+        </span>
+        <a
+          id="notice-link"
+          href={noticeHref}
+          class="notice-link"
+          data-status-link-label={Astro.locals.t('zs.notice.statusLink')}
+          hidden={!noticeHref}
+        >
+          {noticeHref && notice?.linkKey ? Astro.locals.t(notice.linkKey) : ''}
+        </a>
       </div>
       <button
         id="notice-dismiss"
         class="notice-dismiss"
         type="button"
-        data-notice-id={notice.id}
+        data-notice-id={notice?.id}
         aria-label={Astro.locals.t('zs.notice.dismiss')}
       >
         <svg
@@ -179,6 +196,32 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
 </div>
 
 <script>
+  import {
+    ONEUPTIME_OVERVIEW_URL,
+    ONEUPTIME_STATUS_PAGE_URL,
+    loadSessionOverview,
+    nextAnnouncementChange,
+    selectActiveAnnouncement,
+    timeoutDelay,
+  } from '../data/oneuptime-notices.mjs';
+
+  const noticeStorage = {
+    getItem(key: string) {
+      try {
+        return sessionStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    },
+    setItem(key: string, value: string) {
+      try {
+        sessionStorage.setItem(key, value);
+      } catch {
+        // Dismissal still applies to the current page when storage is disabled.
+      }
+    },
+  };
+
   document.getElementById('promo-dismiss')?.addEventListener('click', () => {
     sessionStorage.setItem('zs-promo-dismissed', '1');
     document.documentElement.setAttribute('data-promo-dismissed', '');
@@ -187,9 +230,78 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
   const noticeDismiss = document.getElementById('notice-dismiss');
   noticeDismiss?.addEventListener('click', () => {
     // Key the dismissal on the notice id so a revised notice shows again.
-    sessionStorage.setItem('zs-notice-dismissed', noticeDismiss.dataset.noticeId ?? '1');
+    noticeStorage.setItem('zs-notice-dismissed', noticeDismiss.dataset.noticeId ?? '1');
     document.documentElement.setAttribute('data-notice-dismissed', '');
+    document.documentElement.style.setProperty('--zs-notice-height', '0rem');
   });
+
+  const noticeBar = document.getElementById('notice-bar');
+  const noticeText = document.getElementById('notice-text');
+  const noticeLink = document.getElementById('notice-link') as HTMLAnchorElement | null;
+  const noticeLabel = document.getElementById('notice-label');
+  const isFrench = document.documentElement.lang.startsWith('fr');
+  let noticeChangeTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const hideNotice = () => {
+    if (!noticeBar) return;
+    noticeBar.hidden = true;
+    document.documentElement.style.setProperty('--zs-notice-height', '0rem');
+  };
+
+  const showRemoteNotice = (announcement: { id: string; title: string }) => {
+    if (!noticeBar || !noticeText || !noticeDismiss || !noticeLink || !noticeLabel) return;
+    noticeBar.hidden = false;
+    noticeBar.dataset.noticeId = announcement.id;
+    noticeBar.dataset.severity = 'caution';
+    noticeDismiss.dataset.noticeId = announcement.id;
+    noticeText.textContent = announcement.title;
+    // OneUptime announcements are English-only. French chrome remains French.
+    if (isFrench) noticeText.lang = 'en';
+    else noticeText.removeAttribute('lang');
+    noticeLabel.textContent = noticeBar.getAttribute('aria-label') ?? '';
+    noticeLink.href = ONEUPTIME_STATUS_PAGE_URL;
+    noticeLink.textContent = noticeLink.dataset.statusLinkLabel ?? '';
+    noticeLink.hidden = false;
+    if (noticeStorage.getItem('zs-notice-dismissed') === announcement.id) {
+      document.documentElement.setAttribute('data-notice-dismissed', '');
+      document.documentElement.style.setProperty('--zs-notice-height', '0rem');
+    } else {
+      document.documentElement.removeAttribute('data-notice-dismissed');
+      document.documentElement.style.setProperty('--zs-notice-height', '2.5rem');
+    }
+  };
+
+  const renderRemoteOutcome = (outcome: { status: string; announcements?: unknown[] }) => {
+    if (outcome.status !== 'success' || !outcome.announcements) return;
+    const announcement = selectActiveAnnouncement(outcome.announcements);
+    if (announcement) showRemoteNotice(announcement);
+    else hideNotice();
+
+    if (noticeChangeTimer) clearTimeout(noticeChangeTimer);
+    const nextChange = nextAnnouncementChange(outcome.announcements);
+    if (nextChange) {
+      noticeChangeTimer = setTimeout(() => renderRemoteOutcome(outcome), timeoutDelay(nextChange));
+    }
+  };
+
+  const loadRemoteNotice = async () => {
+    const outcome = await loadSessionOverview(noticeStorage, async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5_000);
+      try {
+        const response = await fetch(ONEUPTIME_OVERVIEW_URL, { signal: controller.signal });
+        if (!response.ok) throw new Error(`Status page returned ${response.status}`);
+        return await response.json();
+      } finally {
+        clearTimeout(timeout);
+      }
+    });
+
+    // Failures intentionally leave the build-time local notice untouched.
+    renderRemoteOutcome(outcome);
+  };
+
+  void loadRemoteNotice();
 
   // ── Resizable layout (left sidebar + right TOC) ─────────────
   // Each handle drives a CSS custom property; the content column (main-pane)
@@ -315,6 +427,10 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
 
   .notice-bar[data-severity='info'] {
     --zs-notice-tone: var(--zi-accent);
+  }
+
+  .notice-bar[hidden] {
+    display: none;
   }
 
   :root[data-notice-dismissed] .notice-bar {

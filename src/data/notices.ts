@@ -4,15 +4,14 @@
  * A notice renders as a bar under the promo bar on every page, so customers see
  * service-affecting information without having to find the page it applies to.
  *
- * The window is evaluated when the site builds, because it builds statically.
- * A notice starts appearing at the first deploy after `startsAt`, so schedule a
- * deploy if the exact start time matters. `endsAt` is also re-checked in the
- * browser, so an expired notice stops showing without waiting for a deploy.
+ * These are the local fallback notices. The browser first asks the public
+ * OneUptime status page for service announcements, then keeps this notice only
+ * when that request fails. A local notice still works without JavaScript.
  *
  * To publish one, add an entry below and the matching `zs.notice.*` strings to
  * `src/content/i18n/en.json` and `src/content/i18n/fr.json`. To retire one, set
- * `active: false` or let `endsAt` pass. Only the first notice that is currently
- * showing is rendered, so keep the list short and ordered by importance.
+ * `active: false` or let `endsAt` pass. Only the first active local fallback is
+ * rendered, so keep the list short and ordered by importance.
  */
 
 export type NoticeSeverity = 'info' | 'caution' | 'danger';
