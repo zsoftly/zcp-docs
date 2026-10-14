@@ -60,6 +60,7 @@
   "zs.toc.openCursor": "Open in Cursor",
   "zs.notice.label": "Service notice",
   "zs.notice.dismiss": "Dismiss notice",
+  "zs.notice.statusLink": "View service status",
   "zs.notice.caDelegation.label": "Service notice",
   "zs.notice.caDelegation.text": ".ca domain delegations to ZSoftly are failing right now. Every other top-level domain is unaffected.",
   "zs.notice.caDelegation.link": "What to do",
