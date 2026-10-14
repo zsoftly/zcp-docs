@@ -122,6 +122,30 @@ export function writeSessionOutcome(storage, outcome) {
   }
 }
 
+/** Keeps a dismissal for this page when sessionStorage is unavailable. */
+export function createNoticeDismissalState(storage) {
+  let dismissedId;
+
+  return {
+    dismiss(id) {
+      dismissedId = id;
+      try {
+        storage.setItem('zs-notice-dismissed', id);
+      } catch {
+        // The in-memory id still keeps this page's notice dismissed.
+      }
+    },
+    isDismissed(id) {
+      if (dismissedId === id) return true;
+      try {
+        return storage.getItem('zs-notice-dismissed') === id;
+      } catch {
+        return false;
+      }
+    },
+  };
+}
+
 /** Fetches the public overview at most once per browser tab session, including a failed request. */
 export async function loadSessionOverview(storage, request) {
   const cached = readSessionOutcome(storage);

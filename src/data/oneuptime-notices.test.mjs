@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import {
   MAX_TIMEOUT_MS,
+  createNoticeDismissalState,
   failureOutcome,
   loadSessionOverview,
   nextAnnouncementChange,
@@ -145,6 +146,39 @@ test('fetches and renders an overview outcome when session storage is unavailabl
 
   assert.equal(calls, 1);
   assert.equal(outcome.announcements[0].id, 'maintenance-1');
+});
+
+test('keeps a selected notice dismissed after another active notice expires without storage', () => {
+  const unavailableStorage = {
+    getItem() {
+      throw new Error('SecurityError');
+    },
+    setItem() {
+      throw new Error('SecurityError');
+    },
+  };
+  const notices = parseOverview(
+    overview([
+      announcement({
+        _id: 'dismissed',
+        showAnnouncementAt: '2026-10-13T10:00:00Z',
+        endAnnouncementAt: '2026-10-13T12:00:00Z',
+      }),
+      announcement({
+        _id: 'expiring-other',
+        showAnnouncementAt: '2026-10-13T09:00:00Z',
+        endAnnouncementAt: '2026-10-13T11:00:00Z',
+      }),
+    ])
+  );
+  const dismissal = createNoticeDismissalState(unavailableStorage);
+  const beforeExpiry = selectActiveAnnouncement(notices, Date.parse('2026-10-13T10:30:00Z'));
+  dismissal.dismiss(beforeExpiry.id);
+
+  const afterOtherExpires = selectActiveAnnouncement(notices, Date.parse('2026-10-13T11:00:00Z'));
+  assert.equal(afterOtherExpires.id, 'dismissed');
+  assert.equal(dismissal.isDismissed(afterOtherExpires.id), true);
+  assert.equal(dismissal.isDismissed('expiring-other'), false);
 });
 
 test('caps long timeout delays and re-evaluates at the cap', () => {

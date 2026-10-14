@@ -199,6 +199,7 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
   import {
     ONEUPTIME_OVERVIEW_URL,
     ONEUPTIME_STATUS_PAGE_URL,
+    createNoticeDismissalState,
     loadSessionOverview,
     nextAnnouncementChange,
     selectActiveAnnouncement,
@@ -221,6 +222,7 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
       }
     },
   };
+  const noticeDismissal = createNoticeDismissalState(noticeStorage);
 
   document.getElementById('promo-dismiss')?.addEventListener('click', () => {
     sessionStorage.setItem('zs-promo-dismissed', '1');
@@ -230,7 +232,7 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
   const noticeDismiss = document.getElementById('notice-dismiss');
   noticeDismiss?.addEventListener('click', () => {
     // Key the dismissal on the notice id so a revised notice shows again.
-    noticeStorage.setItem('zs-notice-dismissed', noticeDismiss.dataset.noticeId ?? '1');
+    noticeDismissal.dismiss(noticeDismiss.dataset.noticeId ?? '1');
     document.documentElement.setAttribute('data-notice-dismissed', '');
     document.documentElement.style.setProperty('--zs-notice-height', '0rem');
   });
@@ -262,7 +264,7 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
     noticeLink.href = ONEUPTIME_STATUS_PAGE_URL;
     noticeLink.textContent = noticeLink.dataset.statusLinkLabel ?? '';
     noticeLink.hidden = false;
-    if (noticeStorage.getItem('zs-notice-dismissed') === announcement.id) {
+    if (noticeDismissal.isDismissed(announcement.id)) {
       document.documentElement.setAttribute('data-notice-dismissed', '');
       document.documentElement.style.setProperty('--zs-notice-height', '0rem');
     } else {
