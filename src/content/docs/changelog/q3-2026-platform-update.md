@@ -83,6 +83,23 @@ Existing backup billing is being migrated. Existing Kubernetes clusters need a b
 update. Review **Billing → Subscriptions** and contact support to confirm the migration for your
 resources.
 
+## DNS Record Sets
+
+Creating a supported DNS record adds its value to the matching name and type. Existing values stay.
+Exact duplicates do not create duplicate answers. The console removes one selected value without
+removing the others. A `CNAME` still cannot share a name with another record type.
+
+You can enter a `TXT` value with or without double quotes. The platform stores and returns it
+quoted. Production QA confirmed the same DNS answers and updated SOA serials from both authoritative
+name servers.
+
+:::caution
+
+The ZCP DNS console does not currently offer `CAA` as a record type. See
+[CAA records](/public-cloud/dns/records/caa) for the CLI and API instructions.
+
+:::
+
 ## Other Changes
 
 - **Low infrastructure-credit notifications.** The platform notifies you when account credit for

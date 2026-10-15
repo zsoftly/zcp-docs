@@ -62,8 +62,8 @@ Chez le fournisseur parent, ajoutez des enregistrements `NS` portant le nom `dev
 
 ## Remarques
 
-- **Une zone ZCP délègue vers un seul serveur de noms.** L'usage courant en prévoit deux ou plus.
-  ZCP ne peut pas conserver plus d'une valeur `NS` sous un même nom.
+- **Utilisez au moins deux serveurs de noms.** Ajoutez chaque valeur `NS` sous le sous-domaine
+  délégué. L'usage courant prévoit plusieurs serveurs de noms pour la redondance.
 - **Le fournisseur enfant doit héberger la zone.** La délégation achemine seulement les requêtes.
   Les enregistrements résident chez le fournisseur auquel vous déléguez.
 - **Ne supprimez pas l'ensemble `NS` du sommet.** ZCP gère les enregistrements `ns1` et

@@ -33,9 +33,9 @@ Vous avez besoin de :
 - `jq`, utilisé par le script pour lire le slug de la zone dans la sortie JSON de la CLI.
   Installez-le avec `brew install jq` sur macOS ou `apt install jq` sur Debian et Ubuntu.
 
-Lisez les [limitations connues](/fr/public-cloud/dns/records#limites-connues) avant de commencer.
-Chaque combinaison de nom et de type ne peut aujourd’hui contenir qu’une seule valeur, ce qui limite
-ce qu’un fichier de ce type peut exprimer.
+Lisez les [limitations connues](/fr/public-cloud/dns/records#limites-connues) avant de commencer. Un
+nom et un type peuvent contenir plusieurs valeurs. Utilisez donc une ligne pour chaque valeur à
+ajouter.
 
 ## Étape 1 : Choisir une disposition
 
@@ -64,7 +64,7 @@ colonnes, afin qu’une personne qui révise le fichier voie la structure de la 
 # Columns are whitespace separated and CONTENT is the final field, so it may
 # contain spaces. "@" is the zone apex and "-" means the type takes no priority.
 #
-# TXT values keep their double quotes, because the API rejects an unquoted value.
+# TXT values may include double quotes. The platform accepts unquoted input and returns it quoted.
 
 # NAME     TYPE   TTL  PRIO  CONTENT
 
@@ -97,8 +97,11 @@ vient du fait que tout le monde le voit et que les changements passent par une r
 
 Utilisez un enregistrement A comme cible d’entrée régionale seulement lorsque ses services partagent
 la même entrée et évoluent ensemble. Dirigez chaque service vers cette cible avec un CNAME direct.
-Mettre à jour l’enregistrement A change alors la destination de chaque alias dans ce groupe
-régional. N’utilisez ni chaînes ni boucles de CNAME.
+L'ajout d'une nouvelle valeur A conserve l'ancienne destination dans l'ensemble d'enregistrements.
+Retirez l'ancienne valeur après avoir vérifié la nouvelle destination afin que chaque alias de ce
+groupe régional se résolve uniquement vers la nouvelle cible. Utilisez la console pour retirer une
+seule valeur A. Avec la CLI, supprimez l'ensemble d'enregistrements A complet et recréez la valeur à
+conserver. N’utilisez ni chaînes ni boucles de CNAME.
 
 Le fichier `example.ca` regroupe les cibles `yow-edge` et `yul-edge` avec les services qu’elles
 servent.
@@ -250,22 +253,19 @@ signifie que la zone n’a pas fini de se propager entre eux.
   appartiennent à votre magasin de secrets et atteignent le script par l’environnement.
 - **Des TTL courts pendant les itérations.** 300 secondes rendent les erreurs peu coûteuses.
   Augmentez-les lorsque la zone est stabilisée.
-- **Le fichier est la source de vérité.** Lorsqu’une personne modifie un enregistrement dans la
-  console, le fichier et la zone divergent. Réappliquez le fichier ou mettez-le à jour pour qu’il
-  corresponde, et indiquez ce que vous avez fait.
-- **`record-create` remplace un RRset correspondant.** Il remplace un ensemble d’enregistrements
-  existant avec le même nom et le même type. Il ne peut pas migrer un enregistrement A vers un CNAME
-  parce que l’ancien A doit être retiré avant que le CNAME existe pour ce propriétaire. Créez et
-  vérifiez d’abord l’enregistrement A cible, puis retirez chaque ancien A de service et ajoutez son
-  CNAME.
-- **Ne gérez pas les RRsets TXT à plusieurs valeurs avec cette boucle.** Chaque ligne TXT
-  indépendante du même nom remplace le RRset TXT de ce nom. Utilisez le support pour un flux qui
-  gère des valeurs distinctes dans un même RRset, ou excluez du fichier les RRsets à plusieurs
-  valeurs gérés ailleurs afin d’éviter tout écrasement.
-- **Le script ajoute et met à jour, il ne purge pas.** Il applique les enregistrements nommés dans
-  le fichier et rien d’autre. Supprimer une ligne du fichier ne supprime pas cet enregistrement de
-  la zone. Retirez-le vous-même avec `zcp dns record-delete`, puis supprimez la ligne afin que le
-  fichier et la zone restent synchronisés.
+- **Le fichier répertorie les valeurs prévues.** Réexécuter ce script ajoute seulement des valeurs.
+  Il ne réconcilie pas les changements effectués dans la console et ne retire pas les valeurs
+  absentes du fichier. Mettez à jour le fichier et retirez vous-même les valeurs obsolètes lorsque
+  la zone change en dehors du script.
+- **`record-create` ajoute à un RRset correspondant.** Il ajoute une valeur à un ensemble
+  d'enregistrements existant avec le même nom et le même type. Il ne peut pas migrer un
+  enregistrement A vers un CNAME parce que l'ancien A doit être retiré avant que le CNAME existe
+  pour ce propriétaire. Créez et vérifiez d'abord l'enregistrement A cible, puis retirez chaque
+  ancien A de service et ajoutez son CNAME.
+- **Le script ajoute des enregistrements, mais il ne purge pas la zone.** Il applique les
+  enregistrements nommés dans le fichier et rien d'autre. Supprimer une ligne du fichier ne retire
+  pas cette valeur de la zone. `zcp dns record-delete` supprime l'ensemble complet. Recréez donc les
+  valeurs à conserver après l'avoir utilisé.
 
 ## Prochaines étapes
 
