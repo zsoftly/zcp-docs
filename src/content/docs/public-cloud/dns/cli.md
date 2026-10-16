@@ -85,6 +85,14 @@ exception.
 
 Use `zcp dns record-create` with the zone slug, a relative name, a type, and the content.
 
+:::note
+
+The record output and `--show-zone` described below are pending the next `zcp` CLI release. Until
+you install that release, `record-create` prints all zone records and `record-delete` prints a
+confirmation message without the removed record details. `zcp dns show` does not change.
+
+:::
+
 ```bash
 # Apex A record (use @ for the zone root)
 zcp dns record-create --domain examplecom --name @ --type A --content 203.0.113.10
@@ -125,6 +133,23 @@ Record rules:
 - Supported types are `A`, `AAAA`, `CNAME`, `MX`, `TXT`, and `NS`. The CLI does not create `SRV` or
   `LOC` records yet. Create them in the DNS section of the
   [console](https://cloud.zcp.zsoftly.ca/login) or with the [API](/public-cloud/dns/api/).
+
+By default, `record-create` prints one row for the value it created. The result includes the name,
+type, content, TTL, and, for an `MX` record, its priority. A priority of `0` is shown as `0`.
+
+```text
+NAME          TYPE  CONTENT            TTL    PRIORITY
+example.com.  MX    mail.example.com.  14400  0
+```
+
+Add `--show-zone` when you need the resulting full zone instead.
+
+```bash
+zcp dns record-create --domain examplecom --name @ --type MX --content mail.example.com. --priority 0 --show-zone
+```
+
+`--output json` and `--output yaml` return the same one-record list by default. Use `--show-zone`
+with either format when a script needs the resulting full zone.
 
 :::note
 
@@ -180,7 +205,16 @@ zcp dns record-delete --domain examplecom --name www --type A
 Add `--yes` to skip the confirmation prompt in scripts. Output:
 
 ```text
-DNS record A "www.example.com." deleted from domain "examplecom".
+NAME              TYPE  CONTENT       TTL    PRIORITY
+www.example.com.  A     203.0.113.10  14400  -
+```
+
+The output lists every value removed from the selected record set. `--output json` and
+`--output yaml` return those same results as a list. Add `--show-zone` to print the resulting full
+zone after deletion.
+
+```bash
+zcp dns record-delete --domain examplecom --name www --type A --show-zone
 ```
 
 ## Delete a Zone
