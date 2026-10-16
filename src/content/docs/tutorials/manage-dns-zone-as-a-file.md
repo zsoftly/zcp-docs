@@ -31,8 +31,8 @@ You need:
 - `jq`, which the script uses to read the zone slug out of the CLI's JSON output. Install it with
   `brew install jq` on macOS, or `apt install jq` on Debian and Ubuntu.
 
-Read [Known limitations](/public-cloud/dns/records#known-limitations) before you start. A name and
-type hold one value today, which shapes what a file like this can express.
+Read [DNS Records](/public-cloud/dns/records) before you start. A name and type can hold several
+values, so use one file line for each value you need in the record set.
 
 ## Step 1: Choose a Layout
 
@@ -241,17 +241,16 @@ finished propagating between them.
 - **The file is the source of truth.** When someone changes a record in the console, the file and
   the zone have diverged. Re-apply from the file, or update the file to match, and say which you
   did.
-- **`record-create` replaces a matching RRset.** It replaces an existing record set with the same
-  name and type. It cannot migrate an A record to a CNAME because the old A record must be removed
-  before the CNAME can exist at that owner. Create and verify the target A record first, then remove
-  each old service A record and add its CNAME.
-- **Do not manage multi-value TXT RRsets with this loop.** Each independent TXT line for the same
-  name replaces that name's TXT RRset. Use support for a workflow that manages separate values in
-  one RRset, or exclude externally managed multi-value RRsets from this file to avoid overwrite.
-- **The script adds and updates, it does not prune.** It applies the records the file names and
-  nothing else. Deleting a line from the file does not remove that record from the zone. Remove it
-  yourself with `zcp dns record-delete`, then delete the line, so the file and the zone stay in
-  step.
+- **`record-create` adds to a matching record set.** Existing values with the same name and type
+  remain in place. You can include several values for one `TXT`, `MX`, or `A` record set in the
+  file. An exact duplicate does not create a duplicate DNS answer.
+- **A CNAME needs a name of its own.** It cannot coexist with another record type at the same name.
+  Create and verify the target A record first, then remove each old service A record before you add
+  its CNAME.
+- **The script adds values, it does not prune.** It applies the records the file names and nothing
+  else. Deleting a line from the file does not remove that value from the zone. The current CLI
+  selects a whole record set by name and type for `zcp dns record-delete`, so use it only when you
+  intend to remove every value in that set.
 
 ## Next Steps
 
