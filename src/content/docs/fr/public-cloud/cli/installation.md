@@ -31,7 +31,7 @@ sont pas touchés. Mettez à jour les chemins d'importation :
 ### Linux and macOS
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zsoftly/zcp-cli/main/scripts/install.sh | bash
+curl -fsSL https://github.com/zsoftly/zcp-cli/releases/latest/download/install.sh | bash
 ```
 
 Après l'installation, vérifiez :
@@ -43,8 +43,12 @@ zcp version
 ### Windows (PowerShell)
 
 ```powershell
-irm https://raw.githubusercontent.com/zsoftly/zcp-cli/main/scripts/install.ps1 | iex
+irm https://github.com/zsoftly/zcp-cli/releases/latest/download/install.ps1 | iex
 ```
+
+La version actuelle est la v1.1.0. Consultez la
+[page des versions GitHub](https://github.com/zsoftly/zcp-cli/releases). L'installateur met à niveau
+une installation existante.
 
 ### Téléchargement manuel
 

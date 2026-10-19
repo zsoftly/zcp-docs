@@ -18,6 +18,22 @@ export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:0
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'CLI v1.1.0: block storage snapshot schedules',
+    titleFr: "CLI v1.1.0 : planifications d'instantanés de stockage bloc",
+    description:
+      'The zcp CLI adds commands to create and manage recurring block storage snapshot schedules, including pause, resume, and immediate snapshot runs.',
+    pubDate: '2026-10-19',
+    slug: 'cli-v1.1.0',
+  },
+  {
+    title: 'Terraform / OpenTofu provider v1.1.0',
+    titleFr: 'Fournisseur Terraform / OpenTofu v1.1.0',
+    description:
+      'The provider adds zcp_volume_snapshot_schedule for recurring block storage snapshots, with import, pause and resume support.',
+    pubDate: '2026-10-19',
+    slug: 'terraform-v1.1.0',
+  },
+  {
     title: 'ZCP Store',
     titleFr: 'ZCP Store',
     description:

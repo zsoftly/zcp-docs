@@ -44,8 +44,9 @@ zcp version
 irm https://github.com/zsoftly/zcp-cli/releases/latest/download/install.ps1 | iex
 ```
 
-The current release is [v1.0.1](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.1). The release
-installer upgrades an existing installation in place.
+The current release is v1.1.0. See the
+[GitHub releases page](https://github.com/zsoftly/zcp-cli/releases). The release installer upgrades
+an existing installation in place.
 
 ### Manual download
 
