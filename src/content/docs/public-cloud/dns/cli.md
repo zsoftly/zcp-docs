@@ -130,8 +130,8 @@ Record rules:
 - An `MX` record needs `--priority`. Put the mail server in `--content` and the preference number in
   `--priority`, for example `--priority 10`. The CLI stops with an error if you leave it off.
 - Creating a record at a name and type with existing values adds the new value to the set.
-- Supported types are `A`, `AAAA`, `CNAME`, `MX`, `TXT`, and `NS`. The CLI does not create `SRV` or
-  `LOC` records yet. Create them in the DNS section of the
+- Supported types are `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `TXT`, and `NS`. The CLI does not create
+  `SRV` or `LOC` records yet. Create them in the DNS section of the
   [console](https://cloud.zcp.zsoftly.ca/login) or with the [API](/public-cloud/dns/api/).
 
 By default, `record-create` prints one row for the value it created. The result includes the name,
@@ -209,9 +209,10 @@ NAME              TYPE  CONTENT       TTL    PRIORITY
 www.example.com.  A     203.0.113.10  14400  -
 ```
 
-The output lists every value removed from the selected record set. `--output json` and
-`--output yaml` return those same results as a list. Add `--show-zone` to print the resulting full
-zone after deletion.
+The CLI reads the selected record set before deleting it, then lists every value it found.
+`--output json` and `--output yaml` return those same results as a list. If deletion succeeds but
+the CLI could not read the record details beforehand, it warns on standard error and returns an
+empty result. Add `--show-zone` to print the resulting full zone after deletion.
 
 ```bash
 zcp dns record-delete --domain examplecom --name www --type A --show-zone
