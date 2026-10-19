@@ -7,7 +7,7 @@ sidebar_position: 2
 
 Get authenticated and manage your first resource from the terminal.
 
-This quickstart uses CLI v1.0.1. Install or upgrade with the
+This quickstart uses CLI v1.1.0. Install or upgrade with the
 [installation guide](/public-cloud/cli/installation).
 
 ### Step 1: Authenticate
