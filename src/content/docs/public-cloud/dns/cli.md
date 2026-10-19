@@ -205,15 +205,33 @@ zcp dns record-delete --domain examplecom --name www --type A
 Add `--yes` to skip the confirmation prompt in scripts. Output:
 
 ```text
-NAME              TYPE  CONTENT       TTL    PRIORITY
-www.example.com.  A     203.0.113.10  14400  -
+NAME              TYPE  CONTENT       TTL    PRIORITY  SOURCE
+www.example.com.  A     203.0.113.10  14400  -         Pre-delete snapshot
 ```
 
 By default, the CLI reads the selected record set before deleting it, then lists every value from
-that snapshot. It warns on standard error because a concurrent change can make the snapshot differ
-from the values actually removed. `--output json` and `--output yaml` return the same record list
-without warning text. If deletion succeeds but the CLI could not read record details beforehand, it
-returns an empty result and a warning.
+that pre-delete snapshot. The `SOURCE` column identifies this output as `Pre-delete snapshot`. The
+snapshot is not an authoritative list of values the command deleted. A concurrent change can make it
+differ from the values actually removed. The CLI also writes this warning to standard error.
+
+In JSON and YAML output, each snapshot record has `source: pre_delete_snapshot`.
+
+```json
+[
+  {
+    "name": "www.example.com.",
+    "type": "A",
+    "content": "203.0.113.10",
+    "ttl": "14400",
+    "priority": "-",
+    "source": "pre_delete_snapshot"
+  }
+]
+```
+
+If deletion succeeds but the CLI could not read record details beforehand, it returns an empty
+result and a warning. `--show-zone` returns the resulting full zone and does not add snapshot
+metadata.
 
 Use relative names or `@` for normal record deletion. If a temporary lookup failure prevents the
 snapshot, a name-and-type deletion can proceed only with an explicit fully qualified `--name` ending
