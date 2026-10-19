@@ -247,10 +247,10 @@ finished propagating between them.
 - **A CNAME needs a name of its own.** It cannot coexist with another record type at the same name.
   Create and verify the target A record first, then remove each old service A record before you add
   its CNAME.
-- **The script adds values, it does not prune.** It applies the records the file names and nothing
-  else. Deleting a line from the file does not remove that value from the zone. The current CLI
-  selects a whole record set by name and type for `zcp dns record-delete`, so use it only when you
-  intend to remove every value in that set.
+- **The script adds values and does not prune them.** It applies the records named in the file and
+  nothing else. Deleting a line from the file does not remove that value from the zone. The current
+  CLI selects a whole record set by name and type for `zcp dns record-delete`, so use it only when
+  you intend to remove every value in that set.
 
 ## Next Steps
 

@@ -87,8 +87,8 @@ Use `zcp dns record-create` with the zone slug, a relative name, a type, and the
 
 :::note
 
-The record output and `--show-zone` described below are pending the next `zcp` CLI release. Until
-you install that release, `record-create` prints all zone records and `record-delete` prints a
+The next `zcp` CLI release will add the record output and `--show-zone` behavior described below.
+Until you install that release, `record-create` prints all zone records and `record-delete` prints a
 confirmation message without the removed record details. `zcp dns show` does not change.
 
 :::
@@ -209,10 +209,16 @@ NAME              TYPE  CONTENT       TTL    PRIORITY
 www.example.com.  A     203.0.113.10  14400  -
 ```
 
-The CLI reads the selected record set before deleting it, then lists every value it found.
-`--output json` and `--output yaml` return those same results as a list. If deletion succeeds but
-the CLI could not read the record details beforehand, it warns on standard error and returns an
-empty result. Add `--show-zone` to print the resulting full zone after deletion.
+By default, the CLI reads the selected record set before deleting it, then lists every value from
+that snapshot. It warns on standard error because a concurrent change can make the snapshot differ
+from the values actually removed. `--output json` and `--output yaml` return the same record list
+without warning text. If deletion succeeds but the CLI could not read record details beforehand, it
+returns an empty result and a warning.
+
+Use relative names or `@` for normal record deletion. If a temporary lookup failure prevents the
+snapshot, a name-and-type deletion can proceed only with an explicit fully qualified `--name` ending
+in a dot, such as `www.example.ca.`. Authentication and authorization errors still stop the command.
+Add `--show-zone` to print the resulting full zone after deletion instead.
 
 ```bash
 zcp dns record-delete --domain examplecom --name www --type A --show-zone
