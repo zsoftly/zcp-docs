@@ -33,6 +33,9 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [CLI v1.1.0 : planifications d'instantanés de stockage bloc](/fr/changelog/#cli-v1.1.0) (19
+  octobre 2026)
+- [Fournisseur Terraform / OpenTofu v1.1.0](/fr/changelog/#terraform-v1.1.0) (19 octobre 2026)
 - [ZCP Store](/fr/changelog/#zcp-store) (11 octobre 2026)
 - [Mots de passe d'instance plus longs](/fr/changelog/#instance-password-length) (11 octobre 2026)
 - [CLI v1.0.1 : correctifs des routes de cycle de vie et des volumes](/fr/changelog/#cli-v1.0.1) (11
@@ -193,10 +196,22 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
+### v1.1.0 : 19 octobre 2026 <!-- changelog-id: cli-v1.1.0 -->
+
+**Version actuelle du CLI.** Gérez des planifications récurrentes d'instantanés de stockage bloc.
+Consultez les [versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur GitHub.
+
+- **Créez et gérez des planifications d'instantanés de stockage bloc.** `zcp snapshot schedule`
+  crée, liste, affiche, met à jour, suspend, reprend, supprime et exécute les planifications à la
+  demande. Configurez l'intervalle, le fuseau horaire, la rétention et un instantané immédiat
+  facultatif.
+- **Les planifications restent dans la portée sélectionnée.** Avant la création, le CLI vérifie la
+  région et le projet du volume cible. Les mises à jour et les actions rejettent les planifications
+  hors de la région et du projet sélectionnés.
+
 ### v1.0.1 : 11 octobre 2026 <!-- changelog-id: cli-v1.0.1 -->
 
-**Version actuelle du CLI.** Consultez la
-[version v1.0.1](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.1) sur GitHub.
+Consultez la [version v1.0.1](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.1) sur GitHub.
 
 - **L'annulation d'instance et le changement de nom d'hôte utilisent les routes actuelles de
   l'API.** Changer le nom d'hôte redémarre l'instance.
@@ -615,11 +630,24 @@ le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
+### v1.1.0 : 19 octobre 2026 <!-- changelog-id: terraform-v1.1.0 -->
+
+**Version actuelle du fournisseur.** Utilisez `zcp_volume_snapshot_schedule` pour gérer des
+instantanés récurrents de stockage bloc comme du code. Consultez les
+[versions du fournisseur](https://github.com/zsoftly/terraform-provider-zcp/releases) sur GitHub.
+
+- **Définissez la planification, la rétention, la portée et l'état en pause dans la configuration.**
+  La ressource prend en charge les planifications horaires, quotidiennes, hebdomadaires et
+  mensuelles, un instantané immédiat facultatif et l'importation.
+- **Importez les planifications sans remplacement inutile.** La première application enregistre la
+  valeur configurée de `immediate`. Modifier `name`, `description` ou une valeur `immediate` déjà
+  enregistrée remplace la planification. Supprimez les instantanés conservés avant de supprimer ou
+  de remplacer une planification.
+
 ### v1.0.0 : 11 octobre 2026 <!-- changelog-id: terraform-v1.0.0 -->
 
-**Version actuelle du fournisseur.** Consultez la
-[version v1.0.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.0.0) et le
-[guide de mise à niveau](/public-cloud/api/terraform-opentofu/) (en anglais).
+Consultez la [version v1.0.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.0.0)
+et le [guide de mise à niveau](/public-cloud/api/terraform-opentofu/) (en anglais).
 
 - **Les nouvelles instances exigent `plan`, `blockstorage_plan` et `root_disk_size`.** Le
   fournisseur rejette les nouvelles configurations personnalisées de processeur, de mémoire et de

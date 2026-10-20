@@ -168,10 +168,20 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v1.1.0: October 19, 2026 {/* changelog-id: cli-v1.1.0 */}
+
+**Current CLI release.** Manage recurring block storage snapshot schedules. See the
+[CLI releases](https://github.com/zsoftly/zcp-cli/releases) on GitHub.
+
+- **Create and manage block storage snapshot schedules.** `zcp snapshot schedule` creates, lists,
+  shows, updates, pauses, resumes, deletes, and runs schedules on demand. Configure the interval,
+  time zone, retention, and an optional immediate snapshot.
+- **Keep schedules within the selected scope.** Before creation, the CLI checks the target volume's
+  region and project. Updates and actions reject schedules outside the selected region and project.
+
 ### v1.0.1: October 11, 2026 {/* changelog-id: cli-v1.0.1 */}
 
-**Current CLI release.** See the
-[v1.0.1 release](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.1) on GitHub.
+See the [v1.0.1 release](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.1) on GitHub.
 
 - **Instance cancellation and hostname changes use the current API routes.** Changing a hostname
   restarts the instance.
@@ -543,11 +553,22 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
+### v1.1.0: October 19, 2026 {/* changelog-id: terraform-v1.1.0 */}
+
+**Current provider release.** Use `zcp_volume_snapshot_schedule` to manage recurring block storage
+snapshots as code. See the
+[provider releases](https://github.com/zsoftly/terraform-provider-zcp/releases) on GitHub.
+
+- **Set the schedule, retention, scope, and paused state in configuration.** The resource supports
+  hourly, daily, weekly, and monthly schedules, an optional immediate snapshot, and import.
+- **Import schedules without an unnecessary replacement.** The first apply records the configured
+  `immediate` value. Changing `name`, `description`, or a recorded `immediate` value replaces the
+  schedule. Remove retained snapshots before deleting or replacing a schedule.
+
 ### v1.0.0: October 11, 2026 {/* changelog-id: terraform-v1.0.0 */}
 
-**Current provider release.** See the
-[v1.0.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.0.0) and the
-[upgrade guide](/public-cloud/api/terraform-opentofu/).
+See the [v1.0.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.0.0) and
+the [upgrade guide](/public-cloud/api/terraform-opentofu/).
 
 - **New instances require `plan`, `blockstorage_plan`, and `root_disk_size`.** The provider rejects
   new custom CPU, memory, and disk configurations. Existing custom-plan state remains readable and
