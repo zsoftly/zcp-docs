@@ -85,6 +85,14 @@ exception.
 
 Use `zcp dns record-create` with the zone slug, a relative name, a type, and the content.
 
+:::note
+
+The next `zcp` CLI release will add the record output and `--show-zone` behavior described below.
+Until you install that release, `record-create` prints all zone records and `record-delete` prints a
+confirmation message without the removed record details. `zcp dns show` does not change.
+
+:::
+
 ```bash
 # Apex A record (use @ for the zone root)
 zcp dns record-create --domain examplecom --name @ --type A --content 203.0.113.10
@@ -122,9 +130,26 @@ Record rules:
 - An `MX` record needs `--priority`. Put the mail server in `--content` and the preference number in
   `--priority`, for example `--priority 10`. The CLI stops with an error if you leave it off.
 - Creating a record at a name and type with existing values adds the new value to the set.
-- Supported types are `A`, `AAAA`, `CNAME`, `MX`, `TXT`, and `NS`. The CLI does not create `SRV` or
-  `LOC` records yet. Create them in the DNS section of the
+- Supported types are `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `TXT`, and `NS`. The CLI does not create
+  `SRV` or `LOC` records yet. Create them in the DNS section of the
   [console](https://cloud.zcp.zsoftly.ca/login) or with the [API](/public-cloud/dns/api/).
+
+By default, `record-create` prints one row for the value it created. The result includes the name,
+type, content, TTL, and, for an `MX` record, its priority. A priority of `0` is shown as `0`.
+
+```text
+NAME          TYPE  CONTENT            TTL    PRIORITY
+example.com.  MX    mail.example.com.  14400  0
+```
+
+Add `--show-zone` when you need the resulting full zone instead.
+
+```bash
+zcp dns record-create --domain examplecom --name @ --type MX --content mail.example.com. --priority 0 --show-zone
+```
+
+`--output json` and `--output yaml` return the same one-record list by default. Use `--show-zone`
+with either format when a script needs the resulting full zone.
 
 :::note
 
@@ -180,7 +205,41 @@ zcp dns record-delete --domain examplecom --name www --type A
 Add `--yes` to skip the confirmation prompt in scripts. Output:
 
 ```text
-DNS record A "www.example.com." deleted from domain "examplecom".
+NAME              TYPE  CONTENT       TTL    PRIORITY  SOURCE
+www.example.com.  A     203.0.113.10  14400  -         Pre-delete snapshot
+```
+
+By default, the CLI reads the selected record set before deleting it, then lists every value from
+that pre-delete snapshot. The `SOURCE` column identifies this output as `Pre-delete snapshot`. The
+snapshot is not an authoritative list of values the command deleted. A concurrent change can make it
+differ from the values actually removed. The CLI also writes this warning to standard error.
+
+In JSON and YAML output, each snapshot record has `source: pre_delete_snapshot`.
+
+```json
+[
+  {
+    "name": "www.example.com.",
+    "type": "A",
+    "content": "203.0.113.10",
+    "ttl": "14400",
+    "priority": "-",
+    "source": "pre_delete_snapshot"
+  }
+]
+```
+
+If deletion succeeds but the CLI could not read record details beforehand, it returns an empty
+result and a warning. `--show-zone` returns the resulting full zone and does not add snapshot
+metadata.
+
+Use relative names or `@` for normal record deletion. If a temporary lookup failure prevents the
+snapshot, a name-and-type deletion can proceed only with an explicit fully qualified `--name` ending
+in a dot, such as `www.example.ca.`. Authentication and authorization errors still stop the command.
+Add `--show-zone` to print the resulting full zone after deletion instead.
+
+```bash
+zcp dns record-delete --domain examplecom --name www --type A --show-zone
 ```
 
 ## Delete a Zone
