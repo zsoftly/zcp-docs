@@ -126,6 +126,8 @@ Record rules:
 - The default TTL is `14400` seconds (4 hours). Override it with `--ttl`, for example `--ttl 3600`.
 - Wrap `TXT` content in escaped quotes, for example `'"v=spf1 -all"'`, so the quotes reach the
   record.
+- A `CAA` value includes a quoted value. Pass the complete value in shell quotes, for example
+  `--content '0 issue "letsencrypt.org"'`. The CLI rejects a CAA value without its required quotes.
 - End a `CNAME` target with a trailing dot (`www.example.com.`) to keep it fully qualified.
 - An `MX` record needs `--priority`. Put the mail server in `--content` and the preference number in
   `--priority`, for example `--priority 10`. The CLI stops with an error if you leave it off.
@@ -195,8 +197,8 @@ zcp dns record-create --domain examplecom --name www --type A --content 203.0.11
 
 ## Delete a Record
 
-Address the record set by name and type. The command deletes the whole set, which removes every
-value at that name and type.
+Address the record set by name and type. The command reads the matching values first, then deletes
+each value from that initial snapshot.
 
 ```bash
 zcp dns record-delete --domain examplecom --name www --type A
@@ -211,8 +213,10 @@ www.example.com.  A     203.0.113.10  14400  -         Pre-delete snapshot
 
 By default, the CLI reads the selected record set before deleting it, then lists every value from
 that pre-delete snapshot. The `SOURCE` column identifies this output as `Pre-delete snapshot`. The
-snapshot is not an authoritative list of values the command deleted. A concurrent change can make it
-differ from the values actually removed. The CLI also writes this warning to standard error.
+CLI only targets the values from this initial snapshot. A value added after the read is not deleted.
+This snapshot is not an authoritative list of values the command removed. If a matching value
+changes before deletion, the snapshot can differ from the values removed. The CLI also writes this
+warning to standard error.
 
 In JSON and YAML output, each snapshot record has `source: pre_delete_snapshot`.
 
@@ -229,14 +233,22 @@ In JSON and YAML output, each snapshot record has `source: pre_delete_snapshot`.
 ]
 ```
 
+If the initial read finds no matching values, the command succeeds with an empty result. With
+`--show-zone`, it prints the remaining zone instead.
+
+If one value deletion fails, the command exits with an error and prints no successful deletion
+result. Values deleted before the failure remain deleted. Run `zcp dns show` before retrying so you
+can see the remaining values.
+
 If deletion succeeds but the CLI could not read record details beforehand, it returns an empty
 result and a warning. `--show-zone` returns the resulting full zone and does not add snapshot
 metadata.
 
 Use relative names or `@` for normal record deletion. If a temporary lookup failure prevents the
-snapshot, a name-and-type deletion can proceed only with an explicit fully qualified `--name` ending
-in a dot, such as `www.example.ca.`. Authentication and authorization errors still stop the command.
-Add `--show-zone` to print the resulting full zone after deletion instead.
+snapshot, an explicit fully qualified `--name` ending in a dot, such as `www.example.ca.`, allows a
+name-and-type fallback request. This fallback cannot delete values individually and may fail for a
+multi-value record set. Authentication and authorization errors still stop the command. Add
+`--show-zone` to print the resulting full zone after deletion instead.
 
 ```bash
 zcp dns record-delete --domain examplecom --name www --type A --show-zone
