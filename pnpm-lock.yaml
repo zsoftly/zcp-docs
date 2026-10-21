@@ -8,6 +8,7 @@ overrides:
   nanoid: 3.3.18
   esbuild@>=0.17.0 <0.28.1: 0.28.1
   vite@>=7.0.0 <7.3.5: 7.3.5
+  vite@>=8.3.0 <8.3.3: 8.3.3
   brace-expansion@>=3.0.0 <5.0.12: 5.0.12
   js-yaml@>=4.0.0 <4.3.2: 4.3.2
   svgo@>=4.0.0 <4.1.0: 4.1.0
@@ -5421,10 +5422,10 @@ packages:
         integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==,
       }
 
-  vite@8.3.2:
+  vite@8.3.3:
     resolution:
       {
-        integrity: sha512-SQr1x6W5vVSbROg7vsyXIaxK9b0G7zsT68acdWWRmnBUsgDieLCRG+Rep9WdZgcposvv/GSnr4GUUBqB3vXq6w==,
+        integrity: sha512-cTAldKPImjg6c+gk48U19POPn3GCBzZwpdsN8ZMEEcbpes+6/wvfqUd0C2y3qYY4wsj8PwgFwrZ/1jBPVttMSg==,
       }
     engines: { node: ^20.19.0 || >=22.12.0 }
     hasBin: true
@@ -7036,8 +7037,8 @@ snapshots:
       unifont: 0.7.5
       unstorage: 1.17.5
       verkit: 0.4.1
-      vite: 8.3.2(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1)
-      vitefu: 1.1.3(vite@8.3.2(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1))
+      vite: 8.3.3(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1)
+      vitefu: 1.1.3(vite@8.3.3(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1))
       xxhash-wasm: 1.1.0
       yargs-parser: 22.0.0
       zod: 4.6.5
@@ -9445,7 +9446,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite@8.3.2(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1):
+  vite@8.3.3(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -9460,9 +9461,9 @@ snapshots:
       terser: 5.48.0
       yaml: 2.9.1
 
-  vitefu@1.1.3(vite@8.3.2(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1)):
+  vitefu@1.1.3(vite@8.3.3(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1)):
     optionalDependencies:
-      vite: 8.3.2(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1)
+      vite: 8.3.3(@types/node@25.9.1)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.1)
 
   volar-service-css@0.0.71(@volar/language-service@2.4.28):
     dependencies:
