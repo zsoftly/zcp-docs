@@ -33,9 +33,9 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
-- [CLI v1.1.0 : planifications d'instantanés de stockage bloc](/fr/changelog/#cli-v1.1.0) (19
+- [CLI v1.1.0 : planifications d'instantanés de stockage bloc](/fr/changelog/#cli-v1.1.0) (21
   octobre 2026)
-- [Fournisseur Terraform / OpenTofu v1.1.0](/fr/changelog/#terraform-v1.1.0) (19 octobre 2026)
+- [Fournisseur Terraform / OpenTofu v1.1.0](/fr/changelog/#terraform-v1.1.0) (21 octobre 2026)
 - [ZCP Store](/fr/changelog/#zcp-store) (11 octobre 2026)
 - [Mots de passe d'instance plus longs](/fr/changelog/#instance-password-length) (11 octobre 2026)
 - [CLI v1.0.1 : correctifs des routes de cycle de vie et des volumes](/fr/changelog/#cli-v1.0.1) (11
@@ -196,7 +196,7 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
-### v1.1.0 : 19 octobre 2026 <!-- changelog-id: cli-v1.1.0 -->
+### v1.1.0 : 21 octobre 2026 <!-- changelog-id: cli-v1.1.0 -->
 
 **Version actuelle du CLI.** Gérez des planifications récurrentes d'instantanés de stockage bloc.
 Consultez les [versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur GitHub.
@@ -630,7 +630,7 @@ le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
-### v1.1.0 : 19 octobre 2026 <!-- changelog-id: terraform-v1.1.0 -->
+### v1.1.0 : 21 octobre 2026 <!-- changelog-id: terraform-v1.1.0 -->
 
 **Version actuelle du fournisseur.** Utilisez `zcp_volume_snapshot_schedule` pour gérer des
 instantanés récurrents de stockage bloc comme du code. Consultez les
