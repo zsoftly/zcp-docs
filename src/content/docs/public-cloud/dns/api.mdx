@@ -350,15 +350,28 @@ The record then resolves as `10 mail.example.com.`. Omitting `priority` on an `M
 
 ## Delete a Record
 
-`DELETE` the zone's `records` path with `name` and `type` query parameters. Here `name` is the
-**fully qualified** record name with a trailing dot.
+`DELETE` the zone's `records` path with `name`, `type`, and `content` query parameters. Here `name`
+is the **fully qualified** record name with a trailing dot. `content` must match one record value
+exactly and must be URL encoded.
+
+Each request deletes one value, not the whole record set. Repeat the request for every value you
+want to remove. For `MX`, include the priority and target together in `content`, for example
+`0 mail.example.ca.`. For `TXT` and `CAA`, include the DNS quotes in `content`, then URL encode the
+complete value. For example, use `"v=spf1 -all"` for `TXT` and `0 issue "letsencrypt.org"` for
+`CAA`.
+
+Use `zcp dns record-delete` when you want the CLI to read the existing values and issue one delete
+request for each one.
 
 <Tabs syncKey="lang">
 <TabItem label="cURL">
 
 ```bash
-curl -s -X DELETE \
-  "https://api.zcp.zsoftly.ca/api/dns/domains/examplecom/records?name=www.example.com.&type=A" \
+curl -s -X DELETE --get \
+  "https://api.zcp.zsoftly.ca/api/dns/domains/examplecom/records" \
+  --data-urlencode "name=www.example.com." \
+  --data-urlencode "type=A" \
+  --data-urlencode "content=203.0.113.10" \
   -H "Authorization: Bearer your-token" \
   -H "Accept: application/json"
 ```
@@ -375,7 +388,7 @@ TOKEN = "your-token"
 resp = requests.delete(
     f"{BASE}/dns/domains/examplecom/records",
     headers={"Authorization": f"Bearer {TOKEN}", "Accept": "application/json"},
-    params={"name": "www.example.com.", "type": "A"},
+    params={"name": "www.example.com.", "type": "A", "content": "203.0.113.10"},
 )
 print(resp.json()["message"])
 ```
@@ -388,7 +401,11 @@ const BASE = 'https://api.zcp.zsoftly.ca/api';
 const TOKEN = 'your-token';
 
 const url = new URL(`${BASE}/dns/domains/examplecom/records`);
-url.search = new URLSearchParams({ name: 'www.example.com.', type: 'A' }).toString();
+url.search = new URLSearchParams({
+  name: 'www.example.com.',
+  type: 'A',
+  content: '203.0.113.10',
+}).toString();
 
 const res = await fetch(url, {
   method: 'DELETE',
@@ -414,7 +431,11 @@ func main() {
 	const base = "https://api.zcp.zsoftly.ca/api"
 	const token = "your-token"
 
-	q := url.Values{"name": {"www.example.com."}, "type": {"A"}}
+	q := url.Values{
+		"name":    {"www.example.com."},
+		"type":    {"A"},
+		"content": {"203.0.113.10"},
+	}
 	endpoint := base + "/dns/domains/examplecom/records?" + q.Encode()
 
 	req, _ := http.NewRequest("DELETE", endpoint, nil)

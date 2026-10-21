@@ -249,8 +249,9 @@ finished propagating between them.
   its CNAME.
 - **The script adds values and does not prune them.** It applies the records named in the file and
   nothing else. Deleting a line from the file does not remove that value from the zone. The current
-  CLI selects a whole record set by name and type for `zcp dns record-delete`, so use it only when
-  you intend to remove every value in that set.
+  CLI attempts to delete each value it reads initially for `zcp dns record-delete`. Values added
+  concurrently remain. It is not suitable for selectively pruning one value. Use the console or API
+  with exact record content when you need that control.
 
 ## Next Steps
 
