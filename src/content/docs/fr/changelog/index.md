@@ -198,8 +198,9 @@ L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous 
 
 ### v1.1.0 : 21 octobre 2026 <!-- changelog-id: cli-v1.1.0 -->
 
-**Version actuelle du CLI.** Gérez des planifications récurrentes d'instantanés de stockage bloc.
-Consultez les [versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur GitHub.
+**Planifications d'instantanés et correctifs DNS et de sécurité.** Consultez les
+[versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur GitHub et la
+[référence du CLI](/fr/public-cloud/cli/reference).
 
 - **Créez et gérez des planifications d'instantanés de stockage bloc.** `zcp snapshot schedule`
   crée, liste, affiche, met à jour, suspend, reprend, supprime et exécute les planifications à la
@@ -219,7 +220,8 @@ Consultez les [versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur
   l'enregistrement change en même temps. Le CLI supprime les valeurs de son instantané initial une
   par une. Si une suppression échoue, il s'arrête et signale la progression partielle. Le CLI laisse
   intactes les valeurs ajoutées après la lecture. Un enregistrement déjà absent est traité comme
-  supprimé. Les valeurs CAA doivent être entre guillemets, par exemple
+  supprimé.
+- **Les valeurs CAA doivent être entre guillemets.** Utilisez par exemple
   `--content '0 issue "letsencrypt.org"'`.
 
 ### v1.0.1 : 11 octobre 2026 <!-- changelog-id: cli-v1.0.1 -->
