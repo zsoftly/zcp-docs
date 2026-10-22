@@ -178,6 +178,18 @@ The official command-line tool for the platform. The entries below mirror the CL
   time zone, retention, and an optional immediate snapshot.
 - **Keep schedules within the selected scope.** Before creation, the CLI checks the target volume's
   region and project. Updates and actions reject schedules outside the selected region and project.
+- **Certificate-verification security fix.** The CLI release uses Go 1.26.10 to fix a
+  certificate-verification vulnerability.
+- **DNS record output now identifies the created value.** `dns record-create` returns an error if
+  the API accepts the request but the CLI cannot verify the new value. Inspect the zone with
+  `dns show` before retrying. Use `--show-zone` to print the resulting zone after creation or
+  deletion.
+- **DNS deletion handles multiple values.** Default deletion output is a labelled pre-delete
+  snapshot, not a guarantee of the values removed if the record changes concurrently. The CLI
+  deletes the values from its initial snapshot one by one. If a deletion fails, it stops and reports
+  partial progress. The CLI leaves values added after the read alone. An already absent record is
+  treated as deleted. CAA values must quote their value, for example
+  `--content '0 issue "letsencrypt.org"'`.
 
 ### v1.0.1: October 11, 2026 {/* changelog-id: cli-v1.0.1 */}
 

@@ -208,6 +208,19 @@ Consultez les [versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur
 - **Les planifications restent dans la portée sélectionnée.** Avant la création, le CLI vérifie la
   région et le projet du volume cible. Les mises à jour et les actions rejettent les planifications
   hors de la région et du projet sélectionnés.
+- **Correctif de sécurité pour la vérification des certificats.** La version du CLI utilise Go
+  1.26.10 pour corriger une vulnérabilité de vérification des certificats.
+- **La sortie des enregistrements DNS identifie maintenant la valeur créée.** `dns record-create`
+  renvoie une erreur si l’API accepte la demande, mais que le CLI ne peut pas vérifier la nouvelle
+  valeur. Consultez la zone avec `dns show` avant de réessayer. Utilisez `--show-zone` pour afficher
+  la zone après une création ou une suppression.
+- **La suppression DNS gère désormais les ensembles d'enregistrements.** La sortie par défaut est un
+  instantané étiqueté avant suppression. Il ne garantit pas les valeurs supprimées si
+  l'enregistrement change en même temps. Le CLI supprime les valeurs de son instantané initial une
+  par une. Si une suppression échoue, il s'arrête et signale la progression partielle. Le CLI laisse
+  intactes les valeurs ajoutées après la lecture. Un enregistrement déjà absent est traité comme
+  supprimé. Les valeurs CAA doivent être entre guillemets, par exemple
+  `--content '0 issue "letsencrypt.org"'`.
 
 ### v1.0.1 : 11 octobre 2026 <!-- changelog-id: cli-v1.0.1 -->
 
