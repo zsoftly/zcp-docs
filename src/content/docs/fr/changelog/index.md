@@ -33,9 +33,9 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
-- [CLI v1.1.0 : planifications d'instantanés de stockage bloc](/fr/changelog/#cli-v1.1.0) (21
+- [CLI v1.1.0 : planifications d'instantanés de stockage bloc](/fr/changelog/#cli-v1.1.0) (23
   octobre 2026)
-- [Fournisseur Terraform / OpenTofu v1.1.0](/fr/changelog/#terraform-v1.1.0) (21 octobre 2026)
+- [Fournisseur Terraform / OpenTofu v1.1.0](/fr/changelog/#terraform-v1.1.0) (23 octobre 2026)
 - [ZCP Store](/fr/changelog/#zcp-store) (11 octobre 2026)
 - [Mots de passe d'instance plus longs](/fr/changelog/#instance-password-length) (11 octobre 2026)
 - [CLI v1.0.1 : correctifs des routes de cycle de vie et des volumes](/fr/changelog/#cli-v1.0.1) (11
@@ -196,10 +196,11 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
-### v1.1.0 : 21 octobre 2026 <!-- changelog-id: cli-v1.1.0 -->
+### v1.1.0 : 23 octobre 2026 <!-- changelog-id: cli-v1.1.0 -->
 
-**Version actuelle du CLI.** Gérez des planifications récurrentes d'instantanés de stockage bloc.
-Consultez les [versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur GitHub.
+**Planifications d'instantanés et correctifs DNS et de sécurité.** Consultez les
+[versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur GitHub et la
+[référence du CLI](/fr/public-cloud/cli/reference).
 
 - **Créez et gérez des planifications d'instantanés de stockage bloc.** `zcp snapshot schedule`
   crée, liste, affiche, met à jour, suspend, reprend, supprime et exécute les planifications à la
@@ -208,6 +209,21 @@ Consultez les [versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur
 - **Les planifications restent dans la portée sélectionnée.** Avant la création, le CLI vérifie la
   région et le projet du volume cible. Les mises à jour et les actions rejettent les planifications
   hors de la région et du projet sélectionnés.
+- **Correctif de sécurité pour la vérification des certificats.** La version du CLI utilise Go
+  1.26.10 pour corriger une vulnérabilité de vérification des certificats.
+- **La sortie par défaut de DNS record-create vérifie la valeur créée.** Sans `--show-zone`,
+  `dns record-create` renvoie une erreur si l’API accepte la demande, mais que le CLI ne peut pas
+  vérifier la nouvelle valeur. Consultez la zone avec `dns show` avant de réessayer. `--show-zone`
+  affiche la zone après une création ou une suppression. Avec ce paramètre, la création ne vérifie
+  pas la valeur créée.
+- **La suppression DNS gère désormais les ensembles d'enregistrements.** La sortie par défaut est un
+  instantané étiqueté avant suppression. Il ne garantit pas les valeurs supprimées si
+  l'enregistrement change en même temps. Le CLI supprime les valeurs de son instantané initial une
+  par une. Si une suppression échoue, il s'arrête et signale la progression partielle. Le CLI laisse
+  intactes les valeurs ajoutées après la lecture. Un enregistrement déjà absent est traité comme
+  supprimé.
+- **Les valeurs CAA doivent être entre guillemets.** Utilisez par exemple
+  `--content '0 issue "letsencrypt.org"'`.
 
 ### v1.0.1 : 11 octobre 2026 <!-- changelog-id: cli-v1.0.1 -->
 
@@ -630,7 +646,7 @@ le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
-### v1.1.0 : 21 octobre 2026 <!-- changelog-id: terraform-v1.1.0 -->
+### v1.1.0 : 23 octobre 2026 <!-- changelog-id: terraform-v1.1.0 -->
 
 **Version actuelle du fournisseur.** Utilisez `zcp_volume_snapshot_schedule` pour gérer des
 instantanés récurrents de stockage bloc comme du code. Consultez les

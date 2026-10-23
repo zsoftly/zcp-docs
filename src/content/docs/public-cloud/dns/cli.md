@@ -87,9 +87,9 @@ Use `zcp dns record-create` with the zone slug, a relative name, a type, and the
 
 :::note
 
-The next `zcp` CLI release will add the record output and `--show-zone` behavior described below.
-Until you install that release, `record-create` prints all zone records and `record-delete` prints a
-confirmation message without the removed record details. `zcp dns show` does not change.
+The record output and `--show-zone` behavior described below require `zcp` v1.1.0 or later. Earlier
+versions print all zone records for `record-create` and a confirmation message without removed
+record details for `record-delete`. `zcp dns show` does not change.
 
 :::
 
