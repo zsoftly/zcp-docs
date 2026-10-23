@@ -168,7 +168,7 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
-### v1.1.0: October 21, 2026 {/* changelog-id: cli-v1.1.0 */}
+### v1.1.0: October 23, 2026 {/* changelog-id: cli-v1.1.0 */}
 
 **Snapshot schedules, DNS fixes, and security updates.** See the
 [CLI releases](https://github.com/zsoftly/zcp-cli/releases) on GitHub and the
@@ -181,10 +181,10 @@ The official command-line tool for the platform. The entries below mirror the CL
   region and project. Updates and actions reject schedules outside the selected region and project.
 - **Certificate-verification security fix.** The CLI release uses Go 1.26.10 to fix a
   certificate-verification vulnerability.
-- **DNS record output now identifies the created value.** `dns record-create` returns an error if
-  the API accepts the request but the CLI cannot verify the new value. Inspect the zone with
-  `dns show` before retrying. Use `--show-zone` to print the resulting zone after creation or
-  deletion.
+- **Default DNS record-create output verifies the created value.** Without `--show-zone`,
+  `dns record-create` returns an error if the API accepts the request but the CLI cannot verify the
+  new value. Inspect the zone with `dns show` before retrying. `--show-zone` prints the resulting
+  zone after creation or deletion and skips this check during creation.
 - **DNS deletion handles multiple values.** Default deletion output is a labelled pre-delete
   snapshot, not a guarantee of the values removed if the record changes concurrently. The CLI
   deletes the values from its initial snapshot one by one. If a deletion fails, it stops and reports
@@ -566,7 +566,7 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
-### v1.1.0: October 21, 2026 {/* changelog-id: terraform-v1.1.0 */}
+### v1.1.0: October 23, 2026 {/* changelog-id: terraform-v1.1.0 */}
 
 **Current provider release.** Use `zcp_volume_snapshot_schedule` to manage recurring block storage
 snapshots as code. See the

@@ -22,7 +22,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
     titleFr: "CLI v1.1.0 : planifications d'instantanés de stockage bloc",
     description:
       'The zcp CLI adds commands to create and manage recurring block storage snapshot schedules, including pause, resume, and immediate snapshot runs.',
-    pubDate: '2026-10-21',
+    pubDate: '2026-10-23',
     slug: 'cli-v1.1.0',
   },
   {
@@ -30,7 +30,7 @@ export const changelogFeedEntries: ChangelogFeedEntry[] = [
     titleFr: 'Fournisseur Terraform / OpenTofu v1.1.0',
     description:
       'The provider adds zcp_volume_snapshot_schedule for recurring block storage snapshots, with import, pause and resume support.',
-    pubDate: '2026-10-21',
+    pubDate: '2026-10-23',
     slug: 'terraform-v1.1.0',
   },
   {
