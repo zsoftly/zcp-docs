@@ -196,6 +196,42 @@ Images d'applications en un clic pour les instances de calcul.
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
 
+### v1.2.0 : 29 octobre 2026 <!-- changelog-id: cli-v1.2.0 -->
+
+**Chiffrement côté serveur facultatif pour le stockage objet.** Consultez la
+[version v1.2.0](https://github.com/zsoftly/zcp-cli/releases/tag/v1.2.0) sur GitHub et la
+[référence du CLI](/fr/public-cloud/cli/reference).
+
+- **Chiffrez vos téléversements.** `object put` accepte `--sse AES256` pour une clé gérée par le
+  service pour votre compartiment, ou `--sse aws:kms --sse-kms-key-id` pour un identifiant de clé
+  géré par le service. Le téléchargement déchiffre automatiquement l'objet pour toute personne
+  autorisée à le lire.
+- **Définissez un chiffrement par défaut pour un compartiment.** Les commandes `enable`, `status` et
+  `disable` de `zcp object-storage bucket encryption` le gèrent. Le chiffrement par défaut
+  s'applique aux téléversements suivants qui ne précisent pas leur propre chiffrement. Les objets et
+  versions existants ne changent pas.
+- **Vérifiez les copies et déplacements chiffrés.** Avec `--sse`, `object copy` et `object move`
+  utilisent une copie multipartite et vérifient le chiffrement de la destination avant de se
+  terminer. Sans `--sse`, la copie d'un objet chiffré conserve le chiffrement de la source.
+- **Un déplacement conserve la source en cas de problème.** La source reste en place si la copie
+  échoue, renvoie un résultat incomplet ou échoue à la vérification du chiffrement. Après un échec
+  de vérification, le CLI supprime uniquement la version de destination qu'il a écrite. Dans un
+  compartiment sans gestion des versions, il laisse la destination en place et vous avertit.
+- **Les copies chiffrées conservent les propriétés de l'objet.** Expires, Cache-Control,
+  Content-Disposition, Content-Encoding, Content-Language, Content-Type, les métadonnées utilisateur
+  et les étiquettes sont conservés.
+- **Les erreurs de copie gardent leur code et leur message.** Cela vaut pour les erreurs que le
+  service renvoie dans une réponse HTTP réussie.
+- **Les commandes de chiffrement de compartiment acceptent l'identifiant (slug) du compartiment**
+  affiché par `zcp object-storage bucket list`.
+
+Le chiffrement dépend du service de gestion des clés de la région. Vérifiez la disponibilité auprès
+du soutien ZCP avant de vous y fier. Les autres clients S3, comme l'AWS CLI, doivent utiliser une
+copie multipartite, ou télécharger puis retéléverser l'objet, pour obtenir une copie chiffrée, car
+le service refuse une copie en une seule requête qui demande le chiffrement. Une copie faite sans
+paramètres de chiffrement n'hérite pas du chiffrement par défaut du compartiment de destination. Le
+CLI ne rechiffre pas les objets existants, et le rechiffrement sur place n'est pas pris en charge.
+
 ### v1.1.0 : 23 octobre 2026 <!-- changelog-id: cli-v1.1.0 -->
 
 **Planifications d'instantanés et correctifs DNS et de sécurité.** Consultez les
@@ -646,10 +682,28 @@ le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
+### v1.2.0 : 29 octobre 2026 <!-- changelog-id: terraform-v1.2.0 -->
+
+**Version actuelle du fournisseur.** Utilisez `zcp_object_storage_bucket_encryption` pour gérer
+comme du code le chiffrement par défaut d'un compartiment de stockage objet. Consultez la
+[version v1.2.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.2.0) sur GitHub.
+
+- **Définissez le chiffrement par défaut d'un compartiment dans la configuration.** La ressource
+  prend en charge SSE-S3 ou une clé SSE-KMS gérée par le service, l'importation et la détection de
+  dérive. Les objets existants ne changent pas.
+- **Le chiffrement dépend du service de gestion des clés de la région.** Vérifiez la disponibilité
+  auprès du soutien ZCP avant de vous y fier.
+- **Le comportement des copies est le même que pour le CLI.** Les autres clients S3 doivent utiliser
+  une copie multipartite, ou télécharger puis retéléverser l'objet, pour obtenir une copie chiffrée.
+  Le service refuse les copies en une seule requête qui demandent le chiffrement. Une copie sans
+  paramètres de chiffrement n'hérite pas du chiffrement par défaut du compartiment, et le
+  rechiffrement sur place n'est pas pris en charge.
+- **Le fournisseur est compilé avec le CLI `zcp` v1.2.0.**
+
 ### v1.1.0 : 23 octobre 2026 <!-- changelog-id: terraform-v1.1.0 -->
 
-**Version actuelle du fournisseur.** Utilisez `zcp_volume_snapshot_schedule` pour gérer des
-instantanés récurrents de stockage bloc comme du code. Consultez les
+Utilisez `zcp_volume_snapshot_schedule` pour gérer des instantanés récurrents de stockage bloc comme
+du code. Consultez les
 [versions du fournisseur](https://github.com/zsoftly/terraform-provider-zcp/releases) sur GitHub.
 
 - **Définissez la planification, la rétention, la portée et l'état en pause dans la configuration.**
