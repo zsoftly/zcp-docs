@@ -18,6 +18,22 @@ export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:0
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'CLI v1.2.0: object storage encryption',
+    titleFr: 'CLI v1.2.0 : chiffrement du stockage objet',
+    description:
+      'The zcp CLI adds optional server-side encryption for object storage uploads, copies and moves, and a bucket default encryption. Check availability with ZCP support.',
+    pubDate: '2026-10-29',
+    slug: 'cli-v1.2.0',
+  },
+  {
+    title: 'Terraform / OpenTofu provider v1.2.0',
+    titleFr: 'Fournisseur Terraform / OpenTofu v1.2.0',
+    description:
+      'The provider adds zcp_object_storage_bucket_encryption to manage bucket default encryption as code, with import and drift detection. Check availability with ZCP support.',
+    pubDate: '2026-10-29',
+    slug: 'terraform-v1.2.0',
+  },
+  {
     title: 'CLI v1.1.0: block storage snapshot schedules',
     titleFr: "CLI v1.1.0 : planifications d'instantanés de stockage bloc",
     description:

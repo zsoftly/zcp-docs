@@ -168,6 +168,38 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v1.2.0: October 29, 2026 {/* changelog-id: cli-v1.2.0 */}
+
+**Optional server-side encryption for object storage.** See the
+[v1.2.0 release](https://github.com/zsoftly/zcp-cli/releases/tag/v1.2.0) on GitHub and the
+[CLI reference](/public-cloud/cli/reference).
+
+- **Encrypt uploads.** `object put` accepts `--sse AES256` for a key the service manages for your
+  bucket, or `--sse aws:kms --sse-kms-key-id` for a service-managed key ID. Downloads decrypt
+  automatically for anyone allowed to read the object.
+- **Set a default encryption for a bucket.** `zcp object-storage bucket encryption` has `enable`,
+  `status`, and `disable` commands. The default applies to later uploads that do not set their own
+  encryption. Existing objects and versions stay as they are.
+- **Verify encrypted copies and moves.** With `--sse`, `object copy` and `object move` use a
+  multipart copy and check the destination's encryption before they finish. Without `--sse`, a copy
+  of an encrypted object keeps the source's encryption.
+- **Moves keep the source when something goes wrong.** The source stays if the copy fails, returns
+  an incomplete result, or fails the encryption check. After a failed check, the CLI deletes only
+  the destination version it wrote. On an unversioned bucket it leaves the destination in place and
+  warns you.
+- **Encrypted copies keep object properties.** Expires, Cache-Control, Content-Disposition,
+  Content-Encoding, Content-Language, Content-Type, user metadata, and tags carry over.
+- **Copy errors keep their code and message.** This applies to errors the service returns inside a
+  successful HTTP response.
+- **Bucket encryption commands accept the bucket slug** shown by `zcp object-storage bucket list`.
+
+Encryption depends on the region's key management service. Check availability with ZCP support
+before you rely on it. Other S3 clients, such as the AWS CLI, must use a multipart copy or download
+and re-upload the object to get an encrypted copy, because the service refuses a single-request copy
+that asks for encryption. A copy made without encryption settings does not pick up the destination
+bucket's default. The CLI does not re-encrypt existing objects, and in-place re-encryption is not
+supported.
+
 ### v1.1.0: October 23, 2026 {/* changelog-id: cli-v1.1.0 */}
 
 **Snapshot schedules, DNS fixes, and security updates.** See the
@@ -566,10 +598,25 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
 
+### v1.2.0: October 29, 2026 {/* changelog-id: terraform-v1.2.0 */}
+
+**Current provider release.** Use `zcp_object_storage_bucket_encryption` to manage the default
+encryption of an object storage bucket as code. See the
+[v1.2.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.2.0) on GitHub.
+
+- **Set a bucket default encryption in configuration.** The resource supports SSE-S3 or a
+  service-managed SSE-KMS key, import, and drift detection. Existing objects stay unchanged.
+- **Encryption depends on the region's key management service.** Check availability with ZCP support
+  before you rely on it.
+- **Copy behavior matches the CLI.** Other S3 clients must use a multipart copy or download and
+  re-upload to get an encrypted copy. The service refuses single-request copies that ask for
+  encryption. Copies without encryption settings do not inherit the bucket default, and in-place
+  re-encryption is not supported.
+- **The provider builds against `zcp` CLI v1.2.0.**
+
 ### v1.1.0: October 23, 2026 {/* changelog-id: terraform-v1.1.0 */}
 
-**Current provider release.** Use `zcp_volume_snapshot_schedule` to manage recurring block storage
-snapshots as code. See the
+Use `zcp_volume_snapshot_schedule` to manage recurring block storage snapshots as code. See the
 [provider releases](https://github.com/zsoftly/terraform-provider-zcp/releases) on GitHub.
 
 - **Set the schedule, retention, scope, and paused state in configuration.** The resource supports
