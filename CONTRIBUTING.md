@@ -5,7 +5,7 @@ contribute. Use whichever suits you:
 
 - **Open an issue** to report a problem or request a change.
 - **Open a pull request** to propose the fix directly.
-- **Send an email** to **<docs-support@zsoftly.ca>** and we'll take it from there.
+- **Send an email** to **<hello@zsoftly.ca>** and we'll take it from there.
 
 **Turnaround:** we aim to triage and fulfill documentation requests within **20 business days**.
 Complex changes may take longer. We'll say so on the issue or PR.

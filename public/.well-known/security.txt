@@ -1,0 +1,6 @@
+# Security contact for ZSoftly Technologies Inc. and the ZSoftly Cloud Platform (RFC 9116).
+# Report abuse originating from ZSoftly networks to abuse@zsoftly.ca.
+Contact: mailto:security@zsoftly.ca
+Expires: 2027-10-31T23:59:59Z
+Preferred-Languages: en, fr
+Canonical: https://docs.zcp.zsoftly.ca/.well-known/security.txt
