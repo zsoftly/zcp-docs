@@ -30,3 +30,13 @@ inutiles :
 2. La région où se trouve la ressource.
 3. Le message d'erreur exact, ou une capture d'écran.
 4. Ce que vous tentiez de faire, et environ à quel moment.
+
+## Nous joindre par courriel
+
+Utilisez le système de billets pour les problèmes de compte si vous êtes connecté. Sinon, écrivez à
+l'adresse qui correspond à votre demande :
+
+- **Problèmes de connexion ou soutien technique** : [support@zsoftly.ca](mailto:support@zsoftly.ca)
+- **Vulnérabilité de sécurité** : [security@zsoftly.ca](mailto:security@zsoftly.ca)
+- **Abus provenant d'une adresse IP de ZSoftly** : [abuse@zsoftly.ca](mailto:abuse@zsoftly.ca)
+- **Questions générales** : [hello@zsoftly.ca](mailto:hello@zsoftly.ca)

@@ -25,3 +25,13 @@ Include the following in every ticket to help us resolve it without back-and-for
 2. The region the resource is in.
 3. The exact error message, or a screenshot of it.
 4. What you were trying to do, and roughly when you tried it.
+
+## Contact by Email
+
+Use the ticket system for account issues if you are signed in. Otherwise, email the address that
+matches your request:
+
+- **Sign-in problems or technical support**: [support@zsoftly.ca](mailto:support@zsoftly.ca)
+- **Security vulnerability**: [security@zsoftly.ca](mailto:security@zsoftly.ca)
+- **Abuse from a ZSoftly IP address**: [abuse@zsoftly.ca](mailto:abuse@zsoftly.ca)
+- **General questions**: [hello@zsoftly.ca](mailto:hello@zsoftly.ca)
