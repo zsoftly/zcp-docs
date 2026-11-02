@@ -93,10 +93,14 @@ can see it and changes arrive through review.
 
 Use one A record as a regional ingress target only when its services share the same ingress and move
 together. Point each service at that target with one direct CNAME. Adding a new A value leaves the
-old destination in the record set. Remove the old value after you verify the new destination so
-every alias in that regional group resolves only to the new target. Use the console or API to remove
-one selected A value. The CLI targets every value in its initial snapshot, so it is not suitable for
-this change when the set has several values. Do not use CNAME chains or loops.
+old destination in the record set. After you verify the new destination, remove the old A value with
+the console or API. The authoritative record set no longer contains the old address.
+
+Resolvers may still return the cached old address until its TTL expires. Keep the old destination
+serving traffic until those cached answers expire, even after removing its A value.
+
+The CLI targets every value in its initial snapshot, so it is not suitable for removing one selected
+value when the set has several values. Do not use CNAME chains or loops.
 
 The `example.ca` file groups the `yow-edge` and `yul-edge` targets with the services they own.
 
