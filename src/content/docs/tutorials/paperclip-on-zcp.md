@@ -24,7 +24,7 @@ You need:
 
 - Access to the approved Paperclip image in your ZCP project
 - A VM plan selected for your expected data retention, model usage, and operating needs
-- An SSH key and permission to add a source-restricted SSH firewall rule
+- An SSH key and permission to add a source-restricted firewall or Network ACL rule
 - An approved AI provider subscription or API key if you want to run an agent
 
 Acceptance testing used 4 vCPUs, 8 GB RAM, and a 116 GB root filesystem. This is a historical
@@ -38,7 +38,14 @@ IP address. Do not expose port 3100 to the internet.
 
 1. In the ZCP Console, create a VM from the approved Paperclip image.
 2. Choose your approved plan, network, and SSH key.
-3. Create a TCP forwarding rule for port 22 that permits only your current public IP address.
+3. Configure SSH access for your network:
+   - On a **Public Network**, add a firewall rule that allows TCP on your chosen public SSH port
+     only from your current public IP address as `/32`. Then add a port-forwarding rule that maps
+     that public port to VM TCP port 22. Apply the source CIDR to the firewall rule, not the
+     forwarding rule.
+   - On a **VPC Network**, add a port-forwarding rule from your chosen public SSH port to VM TCP
+     port 22. Add an inbound Network ACL rule that allows TCP port 22 only from your current public
+     IP address as `/32`.
 4. Wait until the VM shows as running.
 
 Use the VM's public IP address and the public SSH port from the forwarding rule in the commands
@@ -304,12 +311,13 @@ For example, the Claude Code connection uses its own configuration directory:
 ```bash
 cd /opt/paperclip
 sudo docker compose exec --user node \
-  -e CLAUDE_CONFIG_DIR='/paperclip/instances/default/ai-local-logins/<connection-id>' \
+  -e CLAUDE_CONFIG_DIR='<paperclip-config-dir>' \
   paperclip sh -lc 'mkdir -p "$CLAUDE_CONFIG_DIR" && claude auth login'
 ```
 
-Replace `<connection-id>` with the path shown in Paperclip. Complete the browser sign-in flow, then
-return to Paperclip and finish agent setup.
+Replace `<paperclip-config-dir>` with the complete `CLAUDE_CONFIG_DIR` directory shown by Paperclip
+for this connection. Do not append it to another path or reuse a directory from another connection.
+Complete the browser sign-in flow, then return to Paperclip and finish agent setup.
 
 Assign the agent this task:
 
@@ -324,9 +332,9 @@ then inspect its saved response. The recorded Claude Code run succeeded and save
 
 ## Troubleshooting
 
-If SSH fails, check the public SSH port in the forwarding rule, the rule's source CIDR, the selected
-SSH key, and the private-key file permissions. If the tunnel fails, keep `ExitOnForwardFailure=yes`,
-check whether local port 3100 is already in use, then retry.
+If SSH fails, check the public SSH port in the forwarding rule, the firewall or Network ACL source
+CIDR, the selected SSH key, and the private-key file permissions. If the tunnel fails, keep
+`ExitOnForwardFailure=yes`, check whether local port 3100 is already in use, then retry.
 
 Cloud-init can report warnings without making first boot fail. Check the first-boot logs and local
 health endpoint before treating a cloud-init warning as an application failure. You can also run
