@@ -28,7 +28,8 @@ You need:
 - An approved AI provider subscription or API key if you want to run an agent
 
 Acceptance testing used 4 vCPUs, 8 GB RAM, and a 116 GB root filesystem. This is a historical
-filesystem measurement, not an allocated-disk value, a minimum, or a capacity recommendation.
+filesystem measurement, not an allocated-disk value, a minimum, or a capacity recommendation. The
+prepared image includes `jq`, which the restore health check uses.
 
 Paperclip uses SSH for administration and browser access. Keep SSH restricted to your current public
 IP address. Do not expose port 3100 to the internet.
@@ -189,6 +190,22 @@ sleep 20
 curl -fsS --max-time 10 http://127.0.0.1:3100/api/health
 ```
 
+## Protect and Retain Your Backup
+
+`/var/backups` is on the VM's root disk. It does not protect you from VM or root-disk loss. Copy the
+backup directory to an approved, access-controlled destination outside the VM. Encrypt the transfer
+and stored copy according to your organization's policy.
+
+The archive and `runtime.env` can include application data, authentication material, and signing
+secrets. Keep `SHA256SUMS` with the backup for verification. After copying the files, verify the
+copied `SHA256SUMS` against the copied files. Do not put any of them in Git, support tickets, or
+public storage.
+
+Set a retention period, monitor the backup destination, and securely delete expired copies under
+your organization's policy. Off-VM recovery, scheduled backup automation, and recovery time and
+recovery point objectives have not been tested. Treat this procedure as operational guidance, not a
+disaster-recovery runbook.
+
 ## Restore into an Isolated Volume
 
 Set `backup_dir` to the backup directory printed by the previous command. This restore procedure
@@ -196,8 +213,14 @@ uses a separate Docker volume and VM port 3101. It does not overwrite the runnin
 
 :::caution
 
-The restore uses the copied runtime configuration. Do not let the restored copy run agent tasks or
-connect to live provider accounts while the original instance is still active.
+This is a local isolated recovery test, not failover or migration. The restore reuses backed-up
+authentication and signing secrets. Keep the original instance healthy and running. Docker publishes
+the restored instance only on the VM loopback address at port 3101, so do not create public
+forwarding or firewall rules for it. Verify only health, login, and saved data. Do not run agents,
+jobs, or provider actions.
+
+For disaster recovery, follow a separate approved runbook that covers shutdown or isolation, secret
+rotation, and external integrations.
 
 :::
 
@@ -259,6 +282,9 @@ sudo docker stop paperclip-restore-check
 sudo docker rm paperclip-restore-check
 ```
 
+Retain or delete the backup directory and isolated restore volume according to your approved
+retention policy.
+
 ```bash
 ssh -i '<private-key-path>' -p '<public-ssh-port>' -o IdentitiesOnly=yes \
   -o ExitOnForwardFailure=yes -N \
@@ -292,7 +318,29 @@ Reply exactly: Paperclip QA successful.
 ```
 
 Wait for the run to finish. Confirm the agent overview lists the provider adapter you configured,
-then inspect its saved response.
+then inspect its saved response. The recorded Claude Code run succeeded and saved
+`Paperclip QA Successful`. Its capitalization and punctuation differ from the requested
+`Paperclip QA successful.` text, so it does not demonstrate exact-text compliance.
+
+## Troubleshooting
+
+If SSH fails, check the public SSH port in the forwarding rule, the rule's source CIDR, the selected
+SSH key, and the private-key file permissions. If the tunnel fails, keep `ExitOnForwardFailure=yes`,
+check whether local port 3100 is already in use, then retry.
+
+Cloud-init can report warnings without making first boot fail. Check the first-boot logs and local
+health endpoint before treating a cloud-init warning as an application failure. You can also run
+`cloud-init status --long` to inspect the current state.
+
+If the restore command says `jq` is unavailable, confirm you are using the approved Paperclip image
+before changing the command.
+
+## Limitations
+
+This tutorial does not establish high availability, performance capacity, a minimum VM size, off-VM
+recovery, backup automation, or recovery objectives. The disposable acceptance VM used for the
+authenticated agent test was removed after testing, so authenticated-agent persistence was not
+rechecked.
 
 ## Next Steps
 
