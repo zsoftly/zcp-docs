@@ -15,6 +15,12 @@ Looking for a single feature instead of a full walkthrough? The
 
 ## Tutorials
 
+### [Deploy Paperclip on ZCP](/tutorials/paperclip-on-zcp/)
+
+Deploy an approved Paperclip image, open its private dashboard through an SSH tunnel, connect an AI
+provider, and verify backup and restore. The Paperclip image is in pre-release review and is not yet
+listed in the Marketplace.
+
 ### [Configure Email Authentication DNS](/tutorials/configure-email-authentication-dns/)
 
 Publish DKIM and DMARC records on an existing ZCP DNS zone with the CLI or Terraform/OpenTofu. Learn
