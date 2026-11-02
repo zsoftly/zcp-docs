@@ -6,10 +6,10 @@ description: ZSoftly Cloud Platform regions (YOW and YUL) and what each offers.
 ZCP runs in two Canadian regions. You pick a region when you create a resource (instance, network,
 volume, cluster). Resources are region-scoped: a VM uses networks and volumes in the same region.
 
-| Code  | Location | Role                                          | Processors | Storage tiers                            |
-| ----- | -------- | --------------------------------------------- | ---------- | ---------------------------------------- |
-| `YUL` | Montreal | Recommended for all production workloads      | Intel, AMD | Pro NVMe (`b2.g1`), Premium SSD (budget) |
-| `YOW` | Ottawa   | Development, testing, and private cloud demos | Intel, AMD | NVMe, HDD (budget)                       |
+| Code  | Location | Role                                          | Processors | Storage tiers                                                             |
+| ----- | -------- | --------------------------------------------- | ---------- | ------------------------------------------------------------------------- |
+| `YUL` | Montreal | Recommended for all production workloads      | Intel, AMD | `b2.g1` (shared replicated NVMe), `b2.g2` (shared replicated SSD, budget) |
+| `YOW` | Ottawa   | Development, testing, and private cloud demos | Intel, AMD | `b1.g1` (shared replicated NVMe), `b1.g3` (shared HDD, budget)            |
 
 `YUL` and `YOW` are the region codes. The CLI, the API, and Terraform take a region as a slug,
 `yul-1` or `yow-1`. Run `zcp region list` to read them. The digit in a slug is not the region digit
@@ -27,7 +27,7 @@ each region.
 - **Latency:** pick the region closest to your users.
 - **Processor:** both YOW and YUL offer Intel and AMD. YUL Intel capacity uses the `ci2` and `cim2`
   families with the `b2.g1` storage category.
-- **Storage:** both regions add a budget tier for cost-sensitive workloads. Premium SSD in YUL, HDD
+- **Storage:** both regions add a budget tier for cost-sensitive workloads. `b2.g2` in YUL, `b1.g3`
   in YOW.
 - **Data residency:** both regions are in Canada.
 

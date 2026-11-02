@@ -40,7 +40,7 @@ const copy = isFrench
     <div>
       <h2 id="zsoftly-consent-title">{copy.title}</h2>
       <p id="zsoftly-consent-description">
-        {copy.description}
+        {copy.description}{' '}
         <a href={`${websiteUrl}/legal/privacy`} target="_blank" rel="noopener noreferrer"
           >{copy.privacy}</a
         >.
@@ -158,13 +158,13 @@ const copy = isFrench
     position: fixed;
     inset-inline-start: 1rem;
     bottom: 1rem;
-    z-index: 60;
+    z-index: var(--zi-layer-float);
     width: min(26rem, calc(100vw - 2rem));
     padding: 1rem;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.75rem;
-    background: var(--sl-color-bg-nav);
-    box-shadow: 0 1rem 3rem rgb(0 0 0 / 25%);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-lg);
+    background: var(--zi-surface);
+    box-shadow: var(--zi-shadow-pop);
   }
 
   .zsoftly-consent__content {
@@ -227,9 +227,9 @@ const copy = isFrench
     width: 2.25rem;
     height: 1.25rem;
     padding: 0.125rem;
-    border: 1px solid var(--sl-color-gray-5);
+    border: 1px solid var(--zi-line-control);
     border-radius: 999px;
-    background: var(--sl-color-gray-6);
+    background: var(--zi-surface);
     transition:
       background 120ms ease,
       border-color 120ms ease;
@@ -240,8 +240,7 @@ const copy = isFrench
     width: 0.875rem;
     height: 0.875rem;
     border-radius: 50%;
-    background: var(--sl-color-white);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 25%);
+    background: var(--zi-line-control);
     transition: transform 120ms ease;
   }
 
@@ -251,11 +250,12 @@ const copy = isFrench
   }
 
   .zsoftly-consent__choice input:checked + .zsoftly-consent__switch span {
+    background: var(--zi-on-accent);
     transform: translateX(1rem);
   }
 
   .zsoftly-consent__choice input:focus-visible + .zsoftly-consent__switch {
-    outline: 2px solid var(--sl-color-text-accent);
+    outline: 2px solid var(--zi-focus);
     outline-offset: 2px;
   }
 
@@ -269,28 +269,41 @@ const copy = isFrench
 
   .zsoftly-consent__actions button,
   #zsoftly-consent-settings {
-    padding: 0.4rem 0.6rem;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.5rem;
-    background: transparent;
-    color: var(--sl-color-white);
+    padding: 0.4rem var(--zi-space-3);
+    border: 1px solid var(--zi-line-control);
+    border-radius: var(--zi-radius-md);
+    background: var(--zi-surface);
+    color: var(--zi-ink);
     cursor: pointer;
     font: inherit;
     font-size: 0.75rem;
+    font-weight: 600;
+    transition: background-color var(--zi-transition);
   }
 
-  #zsoftly-consent-save {
-    border-color: var(--sl-color-accent);
-    background: var(--sl-color-accent);
-    color: var(--sl-color-black);
+  .zsoftly-consent__actions button:hover,
+  #zsoftly-consent-settings:hover {
+    background: var(--zi-surface-raised);
+  }
+
+  #zsoftly-consent-save,
+  #zsoftly-consent-save:hover {
+    border-color: var(--zi-accent);
+    background: var(--zi-accent);
+    color: var(--zi-on-accent);
+  }
+
+  #zsoftly-consent-save:hover {
+    border-color: var(--zi-accent-hover);
+    background: var(--zi-accent-hover);
   }
 
   #zsoftly-consent-settings {
     position: fixed;
     bottom: 1rem;
     left: 1rem;
-    z-index: 50;
-    background: var(--sl-color-bg-nav);
-    box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 20%);
+    z-index: var(--zi-layer-float);
+    background: var(--zi-surface);
+    box-shadow: var(--zi-shadow-pop);
   }
 </style>

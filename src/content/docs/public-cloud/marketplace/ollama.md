@@ -41,23 +41,24 @@ Ollama's default.
 ## Recommended plans by region
 
 Plan names and storage tiers differ by region. The general-purpose plans below give each model
-enough RAM, and their root disk holds the model files. See
+enough RAM. Plans cover CPU and memory only, so choose a root disk to hold the model files on the
+**OS Disk Offering** step. The disk sizes in the table above are starting sizes. See
 [Instance Types](/public-cloud/compute/instance-types/) and the
 [pricing page](https://zcp.zsoftly.ca/pricing) for current specs and prices.
 
-| Model size | YOW-1 (Ottawa)                     | YUL-1 (Montréal)                   |
-| ---------- | ---------------------------------- | ---------------------------------- |
-| 1-8B       | `ci1.l` (4 vCPU, 8 GB, 120 GB)     | `ca2.l` (4 vCPU, 8 GB, 120 GB)     |
-| 13-14B     | `ci1.xl` (4 vCPU, 16 GB, 160 GB)   | `ca2.xl` (4 vCPU, 16 GB, 160 GB)   |
-| 32-34B     | `ci1.2xl` (8 vCPU, 32 GB, 200 GB)  | `ca2.2xl` (8 vCPU, 32 GB, 200 GB)  |
-| 70B        | `ci1.4xl` (16 vCPU, 64 GB, 320 GB) | `ca2.4xl` (16 vCPU, 64 GB, 320 GB) |
+| Model size | YOW-1 (Ottawa)              | YUL-1 (Montréal)            |
+| ---------- | --------------------------- | --------------------------- |
+| 1-8B       | `ci1c.l` (4 vCPU, 8 GB)     | `ca2c.l` (4 vCPU, 8 GB)     |
+| 13-14B     | `ci1c.xl` (4 vCPU, 16 GB)   | `ca2c.xl` (4 vCPU, 16 GB)   |
+| 32-34B     | `ci1c.2xl` (8 vCPU, 32 GB)  | `ca2c.2xl` (8 vCPU, 32 GB)  |
+| 70B        | `ci1c.4xl` (16 vCPU, 64 GB) | `ca2c.4xl` (16 vCPU, 64 GB) |
 
 Adjust from there:
 
 - **Same RAM, lower cost**: the memory-focused family gives the same RAM with fewer vCPUs, good for
-  occasional use. Use `cim1.*` in YOW-1 or `cam2.*` in YUL-1 (for example `cim1.xl` or `cam2.xl` for
-  64 GB).
-- **Faster responses**: add vCPUs with the CPU-focused family (`cac1.*` in YOW-1, `cac2.*` in
+  occasional use. Use `cim1c.*` in YOW-1 or `cam2c.*` in YUL-1 (for example `cim1c.xl` or `cam2c.xl`
+  for 64 GB).
+- **Faster responses**: add vCPUs with the CPU-focused family (`cac1c.*` in YOW-1, `cac2c.*` in
   YUL-1). Public-cloud GPU VM inference is not currently available in YOW-1 or YUL-1. For larger
   interactive models, contact ZSoftly about private or dedicated GPU capacity, or use a managed
   inference service.

@@ -22,6 +22,9 @@ The UI runs on port 9443 over HTTPS.
 | RAM      | 1 GB    | 2 GB        |
 | Storage  | 20 GB   | 40 GB       |
 
+The storage figure is your root disk size. Choose it on the **OS Disk Offering** step when you
+create the instance. You pay for it per GB, separate from the plan.
+
 ## Environment variables
 
 This image takes no deploy-time variables. It creates no shared administrator account. Open the

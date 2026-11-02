@@ -17,6 +17,7 @@ stack that matches your application framework and database requirements.
 - [Apache Tomcat](/public-cloud/marketplace/apache-tomcat)
 - [Drupal](/public-cloud/marketplace/drupal)
 - [Ghost](/public-cloud/marketplace/ghost)
+- [Wiki.js](/public-cloud/marketplace/wikijs)
 
 Review each application page for included software, configuration, and access instructions before
 deployment.

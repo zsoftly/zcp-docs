@@ -61,6 +61,47 @@ complete, commit-level history.
 
 Updates to the Public Cloud platform and managed services.
 
+### ZCP Store (October 11, 2026) {/* changelog-id: zcp-store */}
+
+The console has a **Store** tab where an account buys services, licences and dedicated servers.
+Store products bill on the same invoice as your instances. They are account level, not tied to a
+project. Available today: Basic Support (free, included with every account), Pro Support at $99 a
+month, and ten priced bare metal servers from $231 a month. Products at CAD 100 a month or less can
+be bought by any account. Products above that can be bought by postpaid accounts and by prepaid
+accounts whose credit balance covers the order. Accounts on manual invoicing order them through
+support. Professional services, managed services, backup and DR, security and compliance,
+networking, training and licensing products are placed through support after a quote. See
+[Store](/public-cloud/store).
+
+### Longer instance passwords (October 11, 2026) {/* changelog-id: instance-password-length */}
+
+New instances get a random sixteen character provisioning password instead of six. A password reset
+on an existing instance also returns the longer form. Instances created before this date keep their
+current password until reset. See
+[Connect With SSH](/public-cloud/compute/connect-ssh#where-to-find-the-password).
+
+### Compute and storage sold separately (October 11, 2026) {/* changelog-id: compute-storage-separate */}
+
+Every VM plan now covers CPU and memory only. Plan names carry a `c` before the size, for example
+`ca2c.m` (2 vCPU, 4 GB, YUL on `b2.g1`, $24.80 per month). You choose the root disk on the **OS Disk
+Offering** step as a per-GB block storage volume. The minimum is the template size. Grow it at any
+time. It never shrinks. Rates per GB per month:
+
+- `b1.g1` and `b2.g1`: $0.14
+- `b1.g3`: $0.03
+- `b2.g2`: $0.09
+- `b2.l1`: $0.10
+- `b2.l2`: $0.07
+
+The same root size on the default tier costs the same total as before. Review and Deploy now lists
+compute, network, public IP, and block storage root as separate lines.
+
+Existing servers keep their plan and their price. Resizing an existing server's plan does not change
+its root disk. Custom plans, where you pick your own CPU and RAM, are retired, so choose a fixed
+size. CLI v1.0.0, released the same day, sets the root disk with `--blockstorage-plan` and
+`--root-disk-size`. The Terraform and OpenTofu provider v1.0.0 supports the same named compute and
+root storage selections. See [Instance Types](/public-cloud/compute/instance-types).
+
 ### Up to 8 subnets per VPC (September 7, 2026) {/* changelog-id: vpc-subnet-limit */}
 
 Each VPC supports up to 8 subnets, up from 3. Existing VPCs get the new limit with no changes on
@@ -126,6 +167,101 @@ One-click application images for compute instances.
 
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
+
+### v1.2.0: October 29, 2026 {/* changelog-id: cli-v1.2.0 */}
+
+**Optional server-side encryption for object storage.** See the
+[v1.2.0 release](https://github.com/zsoftly/zcp-cli/releases/tag/v1.2.0) on GitHub and the
+[CLI reference](/public-cloud/cli/reference).
+
+- **Encrypt uploads.** `object put` accepts `--sse AES256` for a key the service manages for your
+  bucket, or `--sse aws:kms --sse-kms-key-id` for a service-managed key ID. Downloads decrypt
+  automatically for anyone allowed to read the object.
+- **Set a default encryption for a bucket.** `zcp object-storage bucket encryption` has `enable`,
+  `status`, and `disable` commands. The default applies to later uploads that do not set their own
+  encryption. Existing objects and versions stay as they are.
+- **Verify encrypted copies and moves.** With `--sse`, `object copy` and `object move` use a
+  multipart copy and check the destination's encryption before they finish. Without `--sse`, a copy
+  of an encrypted object keeps the source's encryption.
+- **Moves keep the source when something goes wrong.** The source stays if the copy fails, returns
+  an incomplete result, or fails the encryption check. After a failed check, the CLI deletes only
+  the destination version it wrote. On an unversioned bucket it leaves the destination in place and
+  warns you.
+- **Encrypted copies keep object properties.** Expires, Cache-Control, Content-Disposition,
+  Content-Encoding, Content-Language, Content-Type, user metadata, and tags carry over.
+- **Copy errors keep their code and message.** This applies to errors the service returns inside a
+  successful HTTP response.
+- **Bucket encryption commands accept the bucket slug** shown by `zcp object-storage bucket list`.
+
+Encryption depends on the region's key management service. Check availability with ZCP support
+before you rely on it. Other S3 clients, such as the AWS CLI, must use a multipart copy or download
+and re-upload the object to get an encrypted copy, because the service refuses a single-request copy
+that asks for encryption. A copy made without encryption settings does not pick up the destination
+bucket's default. The CLI does not re-encrypt existing objects, and in-place re-encryption is not
+supported.
+
+### v1.1.0: October 23, 2026 {/* changelog-id: cli-v1.1.0 */}
+
+**Snapshot schedules, DNS fixes, and security updates.** See the
+[CLI releases](https://github.com/zsoftly/zcp-cli/releases) on GitHub and the
+[CLI reference](/public-cloud/cli/reference).
+
+- **Create and manage block storage snapshot schedules.** `zcp snapshot schedule` creates, lists,
+  shows, updates, pauses, resumes, deletes, and runs schedules on demand. Configure the interval,
+  time zone, retention, and an optional immediate snapshot.
+- **Keep schedules within the selected scope.** Before creation, the CLI checks the target volume's
+  region and project. Updates and actions reject schedules outside the selected region and project.
+- **Certificate-verification security fix.** The CLI release uses Go 1.26.10 to fix a
+  certificate-verification vulnerability.
+- **Default DNS record-create output verifies the created value.** Without `--show-zone`,
+  `dns record-create` returns an error if the API accepts the request but the CLI cannot verify the
+  new value. Inspect the zone with `dns show` before retrying. `--show-zone` prints the resulting
+  zone after creation or deletion and skips this check during creation.
+- **DNS deletion handles multiple values.** Default deletion output is a labelled pre-delete
+  snapshot, not a guarantee of the values removed if the record changes concurrently. The CLI
+  deletes the values from its initial snapshot one by one. If a deletion fails, it stops and reports
+  partial progress. The CLI leaves values added after the read alone. An already absent record is
+  treated as deleted.
+- **CAA values must be quoted.** Use, for example, `--content '0 issue "letsencrypt.org"'`.
+
+### v1.0.1: October 11, 2026 {/* changelog-id: cli-v1.0.1 */}
+
+See the [v1.0.1 release](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.1) on GitHub.
+
+- **Instance cancellation and hostname changes use the current API routes.** Changing a hostname
+  restarts the instance.
+- **VM snapshot lists retrieve all reported pages.** A later pagination failure returns an error
+  instead of a partial list.
+- **Named volume plans accept an explicit capacity.** Use `--plan` with `--size` in
+  `zcp volume create`. See the [CLI reference](/public-cloud/cli/reference).
+
+### v1.0.0: October 11, 2026 {/* changelog-id: cli-v1.0.0 */}
+
+**Separate compute and root-storage selections, VM backup schedules, and complete DNS lists.** See
+the [v1.0.0 release](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.0) on GitHub.
+
+- **New instances require named compute and root-storage plans.** Pass `--plan`,
+  `--blockstorage-plan`, and `--root-disk-size`. Custom CPU, memory, and disk inputs are retired.
+- **New Kubernetes clusters use separate control-plane, worker, and root-storage plans.** The root
+  disk size applies to every node. Automatic scale-out remains unverified.
+- **VM backup schedules support interval, time zone, retention, pause, resume, and run-now
+  controls.** List schedules after an `everyOtherDay` error because the platform can persist that
+  policy before returning the error.
+- **DNS lists retrieve every reported page.** A later pagination failure returns an error instead of
+  a partial list.
+
+### v0.0.31: October 9, 2026 {/* changelog-id: cli-v0.0.31 */}
+
+**ACL rule pagination controls and dependency security updates.** See the
+[v0.0.31 release](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.31) on GitHub.
+
+- **List ACL rules across API pages.** `zcp acl rules <vpc-slug> <acl-name-or-id>` now reads every
+  API page by default. Use `--max-items`, `--starting-token`, and `--page-size` to control a
+  paginated listing, or `--no-paginate` to request one API page. The command returns an error
+  instead of partial rules if a later page fails. See the
+  [CLI reference](/public-cloud/cli/reference).
+- **Go dependency security updates.** The language minimum remains Go 1.26.0. The selected toolchain
+  is Go 1.26.9, and the CLI updates `golang.org/x/net` to v0.60.0.
 
 ### v0.0.30: October 3, 2026 {/* changelog-id: cli-v0.0.30 */}
 
@@ -461,6 +597,97 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [OpenTofu registry](https://search.opentofu.org/provider/zsoftly/zcp) and the
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v1.2.0: October 29, 2026 {/* changelog-id: terraform-v1.2.0 */}
+
+**Current provider release.** Use `zcp_object_storage_bucket_encryption` to manage the default
+encryption of an object storage bucket as code. See the
+[v1.2.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.2.0) on GitHub.
+
+- **Set a bucket default encryption in configuration.** The resource supports SSE-S3 or a
+  service-managed SSE-KMS key, import, and drift detection. Existing objects stay unchanged.
+- **Encryption depends on the region's key management service.** Check availability with ZCP support
+  before you rely on it.
+- **Copy behavior matches the CLI.** Other S3 clients must use a multipart copy or download and
+  re-upload to get an encrypted copy. The service refuses single-request copies that ask for
+  encryption. Copies without encryption settings do not inherit the bucket default, and in-place
+  re-encryption is not supported.
+- **The provider builds against `zcp` CLI v1.2.0.**
+
+### v1.1.0: October 23, 2026 {/* changelog-id: terraform-v1.1.0 */}
+
+Use `zcp_volume_snapshot_schedule` to manage recurring block storage snapshots as code. See the
+[provider releases](https://github.com/zsoftly/terraform-provider-zcp/releases) on GitHub.
+
+- **Set the schedule, retention, scope, and paused state in configuration.** The resource supports
+  hourly, daily, weekly, and monthly schedules, an optional immediate snapshot, and import.
+- **Import schedules without an unnecessary replacement.** The first apply records the configured
+  `immediate` value. Changing `name`, `description`, or a recorded `immediate` value replaces the
+  schedule. Remove retained snapshots before deleting or replacing a schedule.
+
+### v1.0.0: October 11, 2026 {/* changelog-id: terraform-v1.0.0 */}
+
+See the [v1.0.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.0.0) and
+the [upgrade guide](/public-cloud/api/terraform-opentofu/).
+
+- **New instances require `plan`, `blockstorage_plan`, and `root_disk_size`.** The provider rejects
+  new custom CPU, memory, and disk configurations. Existing custom-plan state remains readable and
+  destroyable.
+- **New Kubernetes clusters use separate fixed plans for control-plane nodes, workers, and root
+  storage.** Changing to that shape replaces a cluster. The provider records requested autoscaling
+  bounds but does not confirm immediate scale-out.
+- **`zcp_vm_backup_schedule` manages recurring policies.** It supports interval, time zone,
+  retention, paused state, import, and policy scope. The provider rejects `everyOtherDay` before the
+  platform can persist it and return an error.
+- **DNS lookups paginate by slug, named volumes accept a plan and capacity, and instance name
+  updates use hostname changes.** A hostname update can restart a running instance or start a
+  stopped instance.
+
+### v0.3.0: October 9, 2026 {/* changelog-id: terraform-v0.3.0 */}
+
+**Custom VM plans, object-storage keys, and load-balancer state fixes.** See the
+[v0.3.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v0.3.0) and
+[tagged changelog](https://github.com/zsoftly/terraform-provider-zcp/blob/v0.3.0/CHANGELOG.md) for
+the complete change list.
+
+- **Create custom-plan instances.** `zcp_instance` accepts `cpu`, `memory_gb`, and `disk_gb`
+  together when you omit `plan`. A fixed catalogue plan still uses `plan`.
+- **Manage object-storage keys as resources.** `zcp_object_storage_key` creates, imports, and
+  revokes S3 access keys. Its `api_secret` is sensitive and remains in Terraform state after the API
+  stops disclosing the plaintext secret. Revoked keys are removed from state. Protect state access
+  accordingly.
+- **Configure S3 bucket settings with explicit credentials.** Bucket configuration resources use
+  `ZCP_S3_ACCESS_KEY` and `ZCP_S3_SECRET_KEY` from the provider process.
+- **Read all ACL rules.** The provider now uses CLI SDK v0.0.31, which reads every ACL-rule page and
+  reports a later-page failure instead of treating missing results as absent.
+- **Look up load balancers and refresh rule IDs.** `data.zcp_load_balancer` exposes rule IDs for
+  attachments. Load-balancer resources refresh through the detail endpoint and clear an initial rule
+  ID when the API no longer returns that rule. Destroy also accepts a load balancer or attachment
+  that the API confirms is already absent.
+- **Read current object-storage allocation.** Object-storage reads support the API's current
+  storage-size response shape.
+- **Apply dependency security updates.** The provider selects Go 1.26.9 and uses `golang.org/x/net`
+  v0.60.0.
+
+:::caution
+
+The API rejects deletion of the only active `zcp_load_balancer_rule` on a load balancer. Keep at
+least one rule when you manage rules independently.
+
+:::
+
+Upgrade the provider constraint, then run `terraform init -upgrade` or `tofu init -upgrade`:
+
+```hcl
+terraform {
+  required_providers {
+    zcp = {
+      source  = "zsoftly/zcp"
+      version = "~> 0.3.0"
+    }
+  }
+}
+```
 
 ### v0.2.0: September 7, 2026 {/* changelog-id: terraform-v0.2.0 */}
 

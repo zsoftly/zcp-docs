@@ -1,0 +1,124 @@
+---
+// A plain list of every documentation page, grouped by the sidebar's top-level
+// sections in sidebar order. Both the grouping and the page list are derived at
+// build time: the grouping from the sidebar Starlight resolves from
+// astro.config.mjs, the titles and the list of pages from the docs collection.
+// A page missing from the sidebar still appears, under "More pages", so adding
+// a doc never requires touching this file.
+import { getCollection } from 'astro:content';
+
+type Link = { href: string; title: string };
+type Group = { label: string; links: Link[] };
+type SidebarEntry = {
+  type: 'link' | 'group';
+  label: string;
+  href?: string;
+  entries?: SidebarEntry[];
+};
+
+const normalize = (href: string): string =>
+  `/${href.replace(/^\/+|\/+$/g, '')}/`.replace('//', '/');
+const hrefOf = (id: string): string => normalize(id.replace(/(^|\/)index$/, ''));
+
+const docs = await getCollection('docs');
+const english = docs.filter((entry) => !entry.id.startsWith('fr/'));
+const french = docs.filter((entry) => entry.id.startsWith('fr/'));
+
+const titles = new Map(english.map((entry) => [hrefOf(entry.id), entry.data.title]));
+const listed = new Set<string>();
+
+const collect = (entries: SidebarEntry[]): Link[] =>
+  entries.flatMap((entry) => {
+    if (entry.type === 'group') return collect(entry.entries ?? []);
+    const href = normalize(entry.href ?? '/');
+    if (listed.has(href) || !titles.has(href)) return [];
+    listed.add(href);
+    return [{ href, title: titles.get(href) ?? entry.label }];
+  });
+
+const sidebar = Astro.locals.starlightRoute.sidebar as SidebarEntry[];
+const groups: Group[] = sidebar
+  .map((entry) => ({
+    label: entry.label,
+    links: entry.type === 'group' ? collect(entry.entries ?? []) : collect([entry]),
+  }))
+  .filter((group) => group.links.length > 0);
+
+const byTitle = (a: Link, b: Link): number => a.title.localeCompare(b.title);
+const toLink = (entry: (typeof docs)[number]): Link => ({
+  href: hrefOf(entry.id),
+  title: entry.data.title,
+});
+
+// Anything the sidebar does not reference. The sitemap page itself is excluded.
+const unlisted = english
+  .map(toLink)
+  .filter((link) => !listed.has(link.href) && link.href !== normalize(Astro.url.pathname))
+  .sort(byTitle);
+if (unlisted.length > 0) groups.push({ label: 'More pages', links: unlisted });
+
+if (french.length > 0) {
+  groups.push({ label: 'Français', links: french.map(toLink).sort(byTitle) });
+}
+
+const anchor = (label: string): string =>
+  `sitemap-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+---
+
+<div class="site-map">
+  {
+    groups.map((group) => (
+      <section aria-labelledby={anchor(group.label)}>
+        <h2 id={anchor(group.label)}>{group.label}</h2>
+        <ul>
+          {group.links.map((link) => (
+            <li>
+              <a href={link.href}>{link.title}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .site-map {
+    column-gap: 2.5rem;
+    columns: 1;
+  }
+
+  @media (min-width: 50rem) {
+    .site-map {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .site-map {
+      columns: 3;
+    }
+  }
+
+  .site-map section {
+    break-inside: avoid;
+    margin-bottom: 2rem;
+  }
+
+  .site-map h2 {
+    border-bottom: 1px solid var(--sl-color-hairline);
+    font-size: var(--sl-text-lg);
+    margin-top: 0;
+    padding-bottom: 0.4rem;
+  }
+
+  .site-map ul {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+  }
+
+  .site-map li {
+    margin-top: 0.4rem;
+  }
+</style>

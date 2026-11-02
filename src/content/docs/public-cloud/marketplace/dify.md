@@ -26,6 +26,9 @@ vector store, and nginx).
 | RAM      | 4 GB    | 8 GB        |
 | Storage  | 40 GB   | 80 GB       |
 
+The storage figure is your root disk size. Choose it on the **OS Disk Offering** step when you
+create the instance. You pay for it per GB, separate from the plan.
+
 RAM and storage requirements grow with usage.
 
 ## Getting started

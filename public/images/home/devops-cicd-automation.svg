@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-labelledby="devops-cicd-automation-title devops-cicd-automation-desc">
+  <title id="devops-cicd-automation-title">DevOps CI/CD automation</title>
+  <desc id="devops-cicd-automation-desc">A four-stage delivery pipeline diagram showing automated continuous integration and deployment flow.</desc>
+  <rect width="800" height="450" fill="#f7f9fd"/>
+  <path d="M32 92V32H92M708 32H768V92M32 358V418H92M708 418H768V358" fill="none" stroke="#b9c8e8" stroke-width="2"/>
+  <path d="M32 112H64M736 338H768" fill="none" stroke="#00198a" stroke-width="4"/>
+  <path d="M92 142H708M92 308H708" fill="none" stroke="#b9c8e8" stroke-width="2"/>
+  <path d="M92 142V126H108M708 308V324H692" fill="none" stroke="#00198a" stroke-width="3"/>
+  <rect x="92" y="178" width="100" height="94" rx="3" fill="#001170" fill-opacity="1" stroke="none" stroke-width="0"/>
+  <rect x="108" y="194" width="68" height="18" rx="1" fill="#dae5fa" fill-opacity="1" stroke="none" stroke-width="0"/>
+  <path d="M108 238H148" fill="none" stroke="#dae5fa" stroke-width="3" stroke-opacity="1"/>
+  <rect x="270" y="178" width="100" height="94" rx="3" fill="#001170" fill-opacity="1" stroke="none" stroke-width="0"/>
+  <rect x="286" y="194" width="68" height="18" rx="1" fill="#dae5fa" fill-opacity="1" stroke="none" stroke-width="0"/>
+  <path d="M286 238H326" fill="none" stroke="#dae5fa" stroke-width="3" stroke-opacity="1"/>
+  <rect x="448" y="178" width="100" height="94" rx="3" fill="#001170" fill-opacity="1" stroke="none" stroke-width="0"/>
+  <rect x="464" y="194" width="68" height="18" rx="1" fill="#dae5fa" fill-opacity="1" stroke="none" stroke-width="0"/>
+  <path d="M464 238H504" fill="none" stroke="#dae5fa" stroke-width="3" stroke-opacity="1"/>
+  <rect x="626" y="178" width="100" height="94" rx="3" fill="#001170" fill-opacity="1" stroke="none" stroke-width="0"/>
+  <rect x="642" y="194" width="68" height="18" rx="1" fill="#dae5fa" fill-opacity="1" stroke="none" stroke-width="0"/>
+  <path d="M642 238H682" fill="none" stroke="#dae5fa" stroke-width="3" stroke-opacity="1"/>
+  <polyline points="192,225 246,225" fill="none" stroke="#00198a" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter" stroke-opacity="1"/>
+  <path d="M246 214L264 225L246 236Z" fill="#00198a"/>
+  <polyline points="370,225 424,225" fill="none" stroke="#00198a" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter" stroke-opacity="1"/>
+  <path d="M424 214L442 225L424 236Z" fill="#00198a"/>
+  <polyline points="548,225 602,225" fill="none" stroke="#00198a" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter" stroke-opacity="1"/>
+  <path d="M602 214L620 225L602 236Z" fill="#00198a"/>
+  <circle cx="583" cy="225" r="7" fill="#ff0000" fill-opacity="1"/>
+  <path d="M92 354H392" fill="none" stroke="#00198a" stroke-width="3" stroke-opacity="1"/>
+  <path d="M408 354H708" fill="none" stroke="#b9c8e8" stroke-width="3" stroke-opacity="1"/>
+  <circle cx="392" cy="354" r="7" fill="#00198a" fill-opacity="1"/>
+</svg>

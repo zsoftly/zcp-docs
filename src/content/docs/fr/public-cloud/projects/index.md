@@ -55,8 +55,8 @@ de cette page, vous pouvez consulter et gérer tout ce qu'il contient :
 | **Équilibreur de charge** | Répartit le trafic entre plusieurs instances pour la haute disponibilité.             |
 
 Lorsque vous créez l'une de ces ressources, vous sélectionnez le projet auquel elle appartient.
-Consultez [Créer une instance de calcul](../compute/create-instance) pour voir un exemple du
-sélecteur de projet.
+Consultez [Créer une instance de calcul](/fr/public-cloud/compute/create-instance/) pour voir un
+exemple du sélecteur de projet.
 
 ## Ajouter des utilisateurs à un projet
 
@@ -95,9 +95,9 @@ Définir une limite de quota à `-1` accorde un quota **illimité** pour cette r
 
 ## Prochaines étapes
 
-- [Créer une instance de calcul](../compute/create-instance) : déployez votre première VM dans un
-  projet.
-- [Démarrage rapide](../getting-started/quickstart) : passez de zéro à une VM fonctionnelle et
-  accessible.
-- [Réseautage](../networking/public-network/create) : donnez de la connectivité aux ressources de
-  votre projet.
+- [Créer une instance de calcul](/fr/public-cloud/compute/create-instance/) : déployez votre
+  première VM dans un projet.
+- [Démarrage rapide](/fr/public-cloud/getting-started/quickstart/) : passez de zéro à une VM
+  fonctionnelle et accessible.
+- [Réseautage](/fr/public-cloud/networking/public-network/create/) : donnez de la connectivité aux
+  ressources de votre projet.

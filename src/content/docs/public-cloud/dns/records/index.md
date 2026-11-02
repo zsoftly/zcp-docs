@@ -76,11 +76,11 @@ records, and never at the zone apex.
 
 There is no update action. To change a value, delete it and create it again with the new value.
 
-### CLI Delete Removes the Whole Set
+### CLI Delete Uses an Initial Snapshot
 
-`zcp dns record-delete` deletes the record set at a name and type, which removes every value in it.
-To remove one value with the CLI, delete the set and create the values you want to keep again. The
-console removes a single value.
+`zcp dns record-delete` attempts to delete each value it reads initially at a name and type. Values
+added concurrently remain. The CLI is not suitable for removing one selected value. Use the console
+or the API with the exact record content instead.
 
 ## How to Manage Records
 

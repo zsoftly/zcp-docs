@@ -9,41 +9,49 @@ aux services de communiquer avec des systèmes externes sur Internet.
 ### Créer un réseau public
 
 - Dans le menu de gauche, cliquez sur **Réseaux** → onglet **Réseau public**.
-- Cliquez sur l'icône **+** pour ouvrir la page de création.
+- Cliquez sur l'icône **+**. La page porte le titre **Create Isolated Network**.
 
 ![Page Réseaux sur l'onglet Réseau public avec le bouton d'ajout (+)](../../../../../../assets/networking/pub-net-add.webp)
 
-### Choisir un emplacement
+### Choisir un projet
 
-Sélectionnez l'emplacement du centre de données où héberger le réseau.
+Dans **Choose Project**, sélectionnez le projet du réseau.
 
-![Créer un réseau public : choisir un emplacement](../../../../../../assets/networking/pub-net-location.webp)
+![Create Isolated Network : Choose Project](../../../../../../assets/networking/pub-net-project.webp)
 
-### Assigner à un projet
+### Sélectionner un emplacement
 
-Assignez le réseau à un projet pour organiser les ressources.
+Dans **Select Location**, choisissez l'emplacement du centre de données du réseau.
 
-![Créer un réseau public : assigner à un projet](../../../../../../assets/networking/pub-net-project.webp)
+![Create Isolated Network : Select Location](../../../../../../assets/networking/pub-net-location.webp)
 
-### Configurations réseau
+### Détails du réseau
 
-Configurez la passerelle et le masque réseau pour définir le routage et la structure des adresses
-IP.
+Saisissez un **Network Name**.
 
-![Créer un réseau public : configuration de la passerelle et du masque réseau](../../../../../../assets/networking/pub-net-config.webp)
+![Create Isolated Network : Network Details et Network Name](../../../../../../assets/networking/pub-net-name.webp)
 
-### Nom
+### Choisir un plan réseau
 
-Fournissez un nom unique pour votre réseau public.
+Dans **Choose Network Plan**, sélectionnez un plan réseau.
 
-![Créer un réseau public : nommer le réseau](../../../../../../assets/networking/pub-net-name.webp)
+### Configuration réseau
+
+ZSoftly n’a pas vérifié si **Gateway** et **Netmask** sont obligatoires. Si le portail remplit un
+champ avec une valeur pour le réseau sélectionné, laissez cette valeur inchangée. Si l’un des champs
+est vide ou semble afficher un texte d’espace réservé, ne saisissez ni ne déduisez une valeur. Notez
+le champ et tout message affiché, puis ouvrez
+[Support](/fr/troubleshooting#ouvrir-un-billet-de-soutien) avec le projet, l’emplacement, tout
+message affiché et les détails non sensibles de la ressource.
+
+![Create Isolated Network : configuration de la passerelle et du masque réseau](../../../../../../assets/networking/pub-net-config.webp)
 
 ### Créer
 
-- Choisissez le **cycle de facturation** : horaire, mensuel ou annuel.
-- Passez en revue le sommaire du prix et cliquez sur **Créer**.
+- **Billing Cycle** : **Hourly**, **Monthly** ou **Yearly**.
+- Passez en revue le **Price Summary** et cliquez sur **Create Network**.
 
-![Créer un réseau public : cycle de facturation et sommaire du prix](../../../../../../assets/networking/pub-net-billing.webp)
+![Create Isolated Network : cycle de facturation et sommaire du prix](../../../../../../assets/networking/pub-net-billing.webp)
 
 Voir aussi : [Vue d'ensemble du réseau](/fr/public-cloud/networking/public-network/overview),
 [IP publiques](/fr/public-cloud/networking/public-network/public-ips)

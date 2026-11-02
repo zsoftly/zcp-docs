@@ -25,6 +25,9 @@ The image uses the pinned container image `nousresearch/hermes-agent:v2026.8.3`.
 | RAM      | 2 GB    | 4 GB        |
 | Storage  | 20 GB   | 40 GB       |
 
+The storage figure is your root disk size. Choose it on the **OS Disk Offering** step when you
+create the instance. You pay for it per GB, separate from the plan.
+
 HermesAgent uses external model providers by default. If you plan to run local models on the same
 VM, size the instance separately for those model workloads.
 

@@ -25,11 +25,10 @@ export type IconShape =
 export interface MarketplaceHighlight {
   /** Docs path for the category or the lead image. */
   href: string;
-  /** Icon badge colour, as a hex value. */
-  color: string;
   /**
-   * Shapes of a 24x24 stroked icon, as structured data rather than markup, so
-   * nothing here is ever injected as raw HTML.
+   * Shapes of a 24x24 outline icon, as structured data rather than markup, so
+   * nothing here is ever injected as raw HTML. Icons take the accent colour
+   * from the page. Entries differ by icon and label, never by colour.
    */
   icon: IconShape[];
   /** Marketplace image names covering this workload. */
@@ -41,7 +40,6 @@ export interface MarketplaceHighlight {
 export const marketplaceHighlights: MarketplaceHighlight[] = [
   {
     href: '/public-cloud/marketplace/k3s',
-    color: '#6366f1',
     icon: [
       { tag: 'circle', cx: '12', cy: '12', r: '10' },
       { tag: 'path', d: 'M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20' },
@@ -56,7 +54,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/keycloak',
-    color: '#06b6d4',
     icon: [
       { tag: 'path', d: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
       { tag: 'circle', cx: '12', cy: '10', r: '2.5' },
@@ -70,7 +67,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/networking-vpn',
-    color: '#64748b',
     icon: [
       { tag: 'circle', cx: '12', cy: '5', r: '2.5' },
       { tag: 'circle', cx: '5', cy: '19', r: '2.5' },
@@ -86,7 +82,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/monitoring-automation',
-    color: '#22c55e',
     icon: [
       { tag: 'path', d: 'M3 3v18h18' },
       { tag: 'path', d: 'm7 15 4-6 3 4 4-7' },
@@ -103,7 +98,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/devops-source-control',
-    color: '#f97316',
     icon: [
       { tag: 'circle', cx: '18', cy: '18', r: '3' },
       { tag: 'circle', cx: '6', cy: '6', r: '3' },
@@ -118,7 +112,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/ollama',
-    color: '#ec4899',
     icon: [
       { tag: 'rect', width: '16', height: '12', x: '4', y: '8', rx: '2' },
       { tag: 'path', d: 'M12 8V4M8 2h8' },
@@ -134,7 +127,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/databases',
-    color: '#3b82f6',
     icon: [
       { tag: 'ellipse', cx: '12', cy: '5', rx: '9', ry: '3' },
       { tag: 'path', d: 'M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5' },
@@ -149,7 +141,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/openbao',
-    color: '#14b8a6',
     icon: [
       { tag: 'rect', width: '18', height: '11', x: '3', y: '11', rx: '2' },
       { tag: 'path', d: 'M7 11V7a5 5 0 0 1 10 0v4' },
@@ -163,7 +154,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/web-stacks',
-    color: '#eab308',
     icon: [
       { tag: 'circle', cx: '12', cy: '12', r: '10' },
       { tag: 'path', d: 'M2 12h20' },
@@ -178,7 +168,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/valkey',
-    color: '#ef4444',
     icon: [{ tag: 'path', d: 'M13 2 3 14h9l-1 8 10-12h-9l1-8z' }],
     apps: ['Valkey', 'RabbitMQ'],
     title: { en: 'Caching & Message Queues', fr: "Cache et files d'attente" },
@@ -189,7 +178,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/elasticsearch',
-    color: '#f59e0b',
     icon: [
       { tag: 'circle', cx: '11', cy: '11', r: '7' },
       { tag: 'path', d: 'm21 21-4.3-4.3' },
@@ -203,7 +191,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/apache-kafka',
-    color: '#8b5cf6',
     icon: [{ tag: 'path', d: 'M3 12h4l3-8 4 16 3-8h4' }],
     apps: ['Apache Kafka'],
     title: { en: 'Event Streaming', fr: "Diffusion d'événements" },
@@ -214,7 +201,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/harbor',
-    color: '#0ea5e9',
     icon: [
       {
         tag: 'path',
@@ -231,7 +217,6 @@ export const marketplaceHighlights: MarketplaceHighlight[] = [
   },
   {
     href: '/public-cloud/marketplace/n8n',
-    color: '#a855f7',
     icon: [
       { tag: 'circle', cx: '5', cy: '6', r: '2' },
       { tag: 'circle', cx: '19', cy: '6', r: '2' },

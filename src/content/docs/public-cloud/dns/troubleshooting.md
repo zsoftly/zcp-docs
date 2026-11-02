@@ -76,8 +76,9 @@ other record. Delete the other records at that name first, or use a different na
 
 A name and type hold several values. Creating a record at a name and type with existing values adds
 the new value to the set. To remove a value you no longer want, delete it in the console, which
-removes only that value. `zcp dns record-delete` removes the whole set at a name and type, so create
-the values you want to keep again afterward. See
+removes only that value. `zcp dns record-delete` attempts to delete each value it reads initially,
+while values added concurrently remain. It is not suitable for removing one selected value. Use the
+console or the API with the exact record content instead. See
 [Several values per name and type](/public-cloud/dns/records#several-values-per-name-and-type).
 
 ### A TXT Value Appears With Quotes

@@ -36,6 +36,9 @@ Drupal runs on a native LAMP stack (Apache, MariaDB, PHP). The site is pre-insta
 | RAM      | 2 GB    | 4 GB        |
 | Storage  | 20 GB   | 40 GB       |
 
+The storage figure is your root disk size. Choose it on the **OS Disk Offering** step when you
+create the instance. You pay for it per GB, separate from the plan.
+
 Storage needs grow with media uploads and the number of installed modules.
 
 ## Getting started

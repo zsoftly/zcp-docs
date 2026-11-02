@@ -1,10 +1,13 @@
 ---
-// PageFrame override: injects the site-wide promotional announcement bar
-// above Starlight's fixed nav header.
+// PageFrame override: adds the site-wide promo bar (while src/data/promo.ts has it active)
+// and the notice bar above Starlight's fixed nav header, plus the consent banner and Ask Docs.
 import Default from '@astrojs/starlight/components/PageFrame.astro';
 import type { Props } from '@astrojs/starlight/props';
 import { CLOUD_REGISTER_URL, localePathPrefix } from '../data/site';
 import { getActiveNotice } from '../data/notices';
+import { promoBar } from '../data/promo';
+import ConsentBanner from './ConsentBanner.astro';
+import AskDocs from './AskDocs.astro';
 
 const notice = getActiveNotice();
 const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
@@ -26,7 +29,14 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
     document.documentElement.setAttribute('data-promo-dismissed', '');
   }
 
-  if (noticeId && sessionStorage.getItem('zs-notice-dismissed') === noticeId) {
+  let dismissedNoticeId = null;
+  try {
+    dismissedNoticeId = sessionStorage.getItem('zs-notice-dismissed');
+  } catch {
+    // Storage can be disabled. The browser-side status notice still works.
+  }
+
+  if (noticeId && dismissedNoticeId === noticeId) {
     document.documentElement.setAttribute('data-notice-dismissed', '');
   }
 
@@ -35,278 +45,101 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
   }
 </script>
 
+{/* Reserve layout space for the promo bar only while it is active. */}
+{promoBar.active && <style is:inline set:html=":root { --zs-promo-height: 2.5rem; }" />}
+
 {/* Reserve layout space for the notice bar only while one is showing. */}
 {notice && <style is:inline set:html=":root { --zs-notice-height: 2.5rem; }" />}
 
-{/* Site-wide brand background — animated bokeh field (styles in custom.css) */}
-<div class="zs-bg" aria-hidden="true">
-  <svg
-    class="zs-bokeh"
-    viewBox="0 0 1600 900"
-    preserveAspectRatio="xMidYMid slice"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <radialGradient id="zs-dot" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--zs-dot-core)" stop-opacity="0.9"></stop>
-        <stop offset="70%" stop-color="var(--zs-dot-core)" stop-opacity="0"></stop>
-      </radialGradient>
-    </defs>
-    <g class="zs-far">
-      <circle cx="995.2" cy="386.6" r="9.4" opacity="0.07"></circle>
-      <circle
-        class="zs-ring"
-        cx="461.4"
-        cy="176.0"
-        r="15.9"
-        stroke-width="1.5"
-        stroke-opacity="0.29"></circle>
-      <circle cx="434.8" cy="263.5" r="9.1" opacity="0.27"></circle>
-      <circle cx="906.2" cy="144.9" r="15.8" opacity="0.08"></circle>
-      <circle cx="784.4" cy="159.4" r="16.5" opacity="0.13"></circle>
-      <circle cx="635.6" cy="474.1" r="16.8" opacity="0.14"></circle>
-      <circle cx="495.7" cy="681.8" r="10.8" opacity="0.11"></circle>
-      <circle cx="750.3" cy="650.5" r="16.8" opacity="0.19"></circle>
-      <circle cx="792.8" cy="35.5" r="10.1" opacity="0.27"></circle>
-      <circle cx="1550.7" cy="449.1" r="8.9" opacity="0.29"></circle>
-      <circle cx="727.3" cy="345.5" r="14.1" opacity="0.35"></circle>
-      <circle cx="1012.5" cy="204.9" r="12.2" opacity="0.24"></circle>
-      <circle cx="400.8" cy="762.9" r="15.9" opacity="0.28"></circle>
-      <circle cx="548.2" cy="568.2" r="13.3" opacity="0.26"></circle>
-      <circle cx="1260.6" cy="578.0" r="16.3" opacity="0.36"></circle>
-      <circle cx="1201.5" cy="702.1" r="9.2" opacity="0.23"></circle>
-      <circle cx="492.7" cy="865.3" r="11.2" opacity="0.38"></circle>
-      <circle cx="725.8" cy="424.3" r="11.7" opacity="0.14"></circle>
-      <circle cx="520.6" cy="52.7" r="15.7" opacity="0.30"></circle>
-      <circle cx="146.7" cy="696.1" r="8.8" opacity="0.36"></circle>
-      <circle cx="320.6" cy="642.0" r="9.6" opacity="0.39"></circle>
-      <circle cx="389.5" cy="169.1" r="10.8" opacity="0.13"></circle>
-      <circle cx="1563.6" cy="580.7" r="8.6" opacity="0.23"></circle>
-      <circle cx="220.0" cy="121.9" r="9.8" opacity="0.08"></circle>
-      <circle cx="1135.5" cy="842.8" r="10.3" opacity="0.20"></circle>
-      <circle cx="378.6" cy="287.3" r="9.3" opacity="0.30"></circle>
-      <circle cx="287.1" cy="190.8" r="16.3" opacity="0.33"></circle>
-      <circle cx="925.9" cy="476.6" r="16.7" opacity="0.35"></circle>
-      <circle
-        class="zs-ring"
-        cx="1451.9"
-        cy="77.3"
-        r="13.1"
-        stroke-width="1.5"
-        stroke-opacity="0.22"></circle>
-      <circle cx="1458.0" cy="885.8" r="9.1" opacity="0.28"></circle>
-      <circle cx="815.2" cy="623.9" r="9.4" opacity="0.15"></circle>
-      <circle cx="1270.4" cy="234.3" r="9.3" opacity="0.37"></circle>
-      <circle cx="535.3" cy="142.5" r="9.1" opacity="0.20"></circle>
-      <circle cx="1169.6" cy="570.3" r="15.0" opacity="0.38"></circle>
-      <circle cx="1385.3" cy="156.1" r="9.2" opacity="0.27"></circle>
-      <circle cx="100.9" cy="646.9" r="13.7" opacity="0.08"></circle>
-      <circle
-        class="zs-ring"
-        cx="188.1"
-        cy="251.2"
-        r="10.2"
-        stroke-width="2.4"
-        stroke-opacity="0.29"></circle>
-      <circle cx="888.6" cy="853.5" r="12.5" opacity="0.16"></circle>
-      <circle class="zs-ring" cx="2.3" cy="173.0" r="16.5" stroke-width="2.0" stroke-opacity="0.31"
-      ></circle>
-      <circle cx="220.9" cy="363.1" r="10.8" opacity="0.27"></circle>
-      <circle cx="234.9" cy="242.4" r="15.6" opacity="0.11"></circle>
-      <circle cx="1073.4" cy="665.9" r="11.6" opacity="0.10"></circle>
-      <circle cx="1141.9" cy="636.2" r="14.0" opacity="0.28"></circle>
-    </g>
-    <g class="zs-near">
-      <circle cx="461.0" cy="635.8" r="2.5" opacity="0.12"></circle>
-      <circle cx="52.3" cy="322.7" r="2.1" opacity="0.27"></circle>
-      <circle class="zs-ring" cx="984.0" cy="382.1" r="5.0" stroke-width="2.1" stroke-opacity="0.15"
-      ></circle>
-      <circle class="zs-ring" cx="634.0" cy="294.0" r="2.0" stroke-width="2.6" stroke-opacity="0.22"
-      ></circle>
-      <circle
-        class="zs-ring"
-        cx="1411.3"
-        cy="518.1"
-        r="2.1"
-        stroke-width="1.6"
-        stroke-opacity="0.32"></circle>
-      <circle cx="643.3" cy="677.0" r="3.6" opacity="0.17"></circle>
-      <circle cx="276.5" cy="165.5" r="6.1" opacity="0.24"></circle>
-      <circle cx="659.2" cy="370.1" r="2.6" opacity="0.13"></circle>
-      <circle cx="568.5" cy="798.4" r="5.4" opacity="0.24"></circle>
-      <circle cx="1408.9" cy="351.3" r="7.8" opacity="0.33"></circle>
-      <circle cx="631.8" cy="277.4" r="4.3" opacity="0.26"></circle>
-      <circle cx="1127.4" cy="345.0" r="6.6" opacity="0.13"></circle>
-      <circle class="zs-ring" cx="544.7" cy="479.0" r="3.6" stroke-width="2.2" stroke-opacity="0.29"
-      ></circle>
-      <circle cx="103.4" cy="647.6" r="2.4" opacity="0.35"></circle>
-      <circle class="zs-ring" cx="766.9" cy="202.9" r="7.0" stroke-width="2.8" stroke-opacity="0.21"
-      ></circle>
-      <circle cx="233.4" cy="652.6" r="7.0" opacity="0.19"></circle>
-      <circle cx="523.5" cy="62.3" r="2.0" opacity="0.24"></circle>
-      <circle cx="1533.8" cy="434.1" r="4.0" opacity="0.35"></circle>
-      <circle cx="1529.5" cy="475.3" r="4.3" opacity="0.38"></circle>
-      <circle cx="1598.3" cy="637.2" r="2.8" opacity="0.31"></circle>
-      <circle cx="1083.7" cy="524.5" r="3.1" opacity="0.17"></circle>
-      <circle cx="875.0" cy="223.7" r="2.2" opacity="0.09"></circle>
-      <circle cx="64.2" cy="339.8" r="7.6" opacity="0.09"></circle>
-      <circle cx="1352.9" cy="568.4" r="2.6" opacity="0.39"></circle>
-      <circle cx="742.5" cy="267.0" r="5.5" opacity="0.38"></circle>
-      <circle cx="1295.9" cy="217.9" r="4.1" opacity="0.32"></circle>
-      <circle cx="1505.8" cy="50.3" r="5.5" opacity="0.26"></circle>
-      <circle cx="620.3" cy="597.5" r="2.9" opacity="0.13"></circle>
-      <circle cx="1323.8" cy="270.5" r="2.1" opacity="0.35"></circle>
-      <circle cx="2.8" cy="516.5" r="2.2" opacity="0.18"></circle>
-      <circle cx="365.2" cy="63.8" r="4.9" opacity="0.18"></circle>
-      <circle cx="1142.7" cy="710.5" r="6.4" opacity="0.12"></circle>
-      <circle cx="909.2" cy="202.1" r="5.7" opacity="0.38"></circle>
-      <circle class="zs-ring" cx="710.8" cy="137.9" r="7.6" stroke-width="2.8" stroke-opacity="0.15"
-      ></circle>
-      <circle class="zs-ring" cx="977.1" cy="615.5" r="3.5" stroke-width="1.3" stroke-opacity="0.27"
-      ></circle>
-      <circle class="zs-ring" cx="929.9" cy="374.3" r="3.9" stroke-width="2.9" stroke-opacity="0.19"
-      ></circle>
-      <circle cx="409.7" cy="176.9" r="7.6" opacity="0.13"></circle>
-      <circle
-        class="zs-ring"
-        cx="1334.1"
-        cy="730.9"
-        r="2.3"
-        stroke-width="2.6"
-        stroke-opacity="0.25"></circle>
-      <circle cx="1361.5" cy="253.9" r="2.2" opacity="0.18"></circle>
-      <circle cx="1260.7" cy="199.2" r="2.5" opacity="0.23"></circle>
-      <circle cx="1504.8" cy="687.7" r="5.5" opacity="0.08"></circle>
-      <circle class="zs-ring" cx="34.5" cy="296.1" r="2.0" stroke-width="2.4" stroke-opacity="0.21"
-      ></circle>
-      <circle cx="44.7" cy="353.2" r="2.1" opacity="0.30"></circle>
-      <circle cx="891.4" cy="256.8" r="2.2" opacity="0.31"></circle>
-      <circle cx="755.5" cy="196.9" r="6.1" opacity="0.15"></circle>
-      <circle cx="909.7" cy="512.3" r="2.0" opacity="0.13"></circle>
-      <circle cx="1261.4" cy="41.2" r="4.4" opacity="0.13"></circle>
-      <circle cx="773.8" cy="796.4" r="4.0" opacity="0.11"></circle>
-      <circle
-        class="zs-ring"
-        cx="1041.3"
-        cy="527.6"
-        r="7.1"
-        stroke-width="2.5"
-        stroke-opacity="0.20"></circle>
-      <circle cx="625.1" cy="825.1" r="3.4" opacity="0.37"></circle>
-      <circle cx="972.9" cy="402.5" r="2.9" opacity="0.36"></circle>
-      <circle
-        class="zs-ring"
-        cx="1062.7"
-        cy="813.6"
-        r="3.7"
-        stroke-width="1.5"
-        stroke-opacity="0.25"></circle>
-      <circle cx="522.3" cy="887.2" r="2.5" opacity="0.08"></circle>
-      <circle cx="181.4" cy="778.1" r="7.0" opacity="0.27"></circle>
-      <circle cx="748.6" cy="143.0" r="2.6" opacity="0.18"></circle>
-      <circle cx="719.4" cy="222.1" r="2.1" opacity="0.27"></circle>
-      <circle cx="1249.5" cy="275.8" r="2.0" opacity="0.29"></circle>
-      <circle cx="453.6" cy="712.7" r="3.2" opacity="0.25"></circle>
-      <circle cx="511.9" cy="258.0" r="2.0" opacity="0.19"></circle>
-      <circle cx="254.9" cy="626.9" r="6.2" opacity="0.25"></circle>
-      <circle cx="39.9" cy="697.0" r="6.5" opacity="0.26"></circle>
-      <circle cx="307.5" cy="358.3" r="2.3" opacity="0.32"></circle>
-      <circle cx="1021.5" cy="252.4" r="4.0" opacity="0.18"></circle>
-      <circle cx="1140.8" cy="49.1" r="3.4" opacity="0.11"></circle>
-      <circle cx="1404.4" cy="819.0" r="4.4" opacity="0.40"></circle>
-      <circle cx="1215.3" cy="550.8" r="6.0" opacity="0.32"></circle>
-      <circle cx="685.3" cy="233.1" r="6.3" opacity="0.22"></circle>
-      <circle cx="1039.0" cy="373.9" r="5.5" opacity="0.19"></circle>
-      <circle cx="177.5" cy="61.9" r="4.4" opacity="0.37"></circle>
-      <circle cx="772.6" cy="243.4" r="2.3" opacity="0.15"></circle>
-      <circle cx="448.5" cy="269.6" r="2.8" opacity="0.28"></circle>
-      <circle cx="1455.8" cy="427.5" r="7.2" opacity="0.10"></circle>
-      <circle cx="263.5" cy="551.2" r="7.5" opacity="0.19"></circle>
-      <circle cx="407.1" cy="638.7" r="2.2" opacity="0.13"></circle>
-      <circle class="zs-ring" cx="177.8" cy="883.3" r="2.8" stroke-width="2.0" stroke-opacity="0.13"
-      ></circle>
-      <circle cx="567.2" cy="875.0" r="2.0" opacity="0.39"></circle>
-      <circle cx="268.5" cy="410.0" r="3.2" opacity="0.13"></circle>
-      <circle class="zs-ring" cx="444.6" cy="420.1" r="7.9" stroke-width="2.3" stroke-opacity="0.17"
-      ></circle>
-      <circle cx="58.2" cy="357.4" r="4.2" opacity="0.08"></circle>
-      <circle cx="1597.2" cy="34.0" r="6.1" opacity="0.21"></circle>
-      <circle cx="203.2" cy="165.0" r="7.3" opacity="0.09"></circle>
-      <circle class="zs-ring" cx="898.7" cy="833.3" r="4.5" stroke-width="2.9" stroke-opacity="0.16"
-      ></circle>
-      <circle cx="630.2" cy="296.1" r="4.9" opacity="0.12"></circle>
-      <circle cx="1218.1" cy="136.3" r="5.0" opacity="0.07"></circle>
-      <circle cx="730.9" cy="503.5" r="2.8" opacity="0.25"></circle>
-      <circle cx="215.5" cy="56.9" r="6.7" opacity="0.26"></circle>
-      <circle cx="128.6" cy="541.2" r="2.9" opacity="0.29"></circle>
-    </g>
-  </svg>
-</div>
-
-<div id="promo-bar" class="promo-bar" role="region" aria-label={Astro.locals.t('zs.promo.label')}>
-  <div class="promo-inner">
-    <span class="promo-live" aria-label={Astro.locals.t('zs.promo.liveLabel')}>
-      <span class="live-dot" aria-hidden="true"></span>
-      {Astro.locals.t('zs.promo.live')}
-    </span>
-    <span class="promo-sep" aria-hidden="true">·</span>
-    <span class="promo-text">{Astro.locals.t('zs.promo.credit')}</span>
-    <span class="promo-sep" aria-hidden="true">·</span>
-    <span class="promo-text">{Astro.locals.t('zs.promo.ends')}</span>
-  </div>
-  <span class="promo-sep promo-sep--cta" aria-hidden="true">·</span>
-  <a href={CLOUD_REGISTER_URL} class="promo-cta" target="_blank" rel="noopener noreferrer">
-    {Astro.locals.t('zs.promo.cta')}
-  </a>
-  <button
-    id="promo-dismiss"
-    class="promo-dismiss"
-    type="button"
-    aria-label={Astro.locals.t('zs.promo.dismiss')}
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      aria-hidden="true"
+{
+  promoBar.active && (
+    <div
+      id="promo-bar"
+      class="promo-bar"
+      role="region"
+      aria-label={Astro.locals.t('zs.promo.label')}
     >
-      <line x1="18" y1="6" x2="6" y2="18"></line>
-      <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-  </button>
-</div>
+      <div class="promo-inner">
+        <span class="promo-live" aria-label={Astro.locals.t('zs.promo.liveLabel')}>
+          <span class="live-dot" aria-hidden="true" />
+          {Astro.locals.t('zs.promo.live')}
+        </span>
+        <span class="promo-sep" aria-hidden="true">
+          ·
+        </span>
+        <span class="promo-text">{Astro.locals.t('zs.promo.credit')}</span>
+        <span class="promo-sep" aria-hidden="true">
+          ·
+        </span>
+        <span class="promo-text">{Astro.locals.t('zs.promo.ends')}</span>
+      </div>
+      <span class="promo-sep promo-sep--cta" aria-hidden="true">
+        ·
+      </span>
+      <a href={CLOUD_REGISTER_URL} class="promo-cta" target="_blank" rel="noopener noreferrer">
+        {Astro.locals.t('zs.promo.cta')}
+      </a>
+      <button
+        id="promo-dismiss"
+        class="promo-dismiss"
+        type="button"
+        aria-label={Astro.locals.t('zs.promo.dismiss')}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+  )
+}
 
 {
-  notice && (
+  (
     <div
       id="notice-bar"
       class="notice-bar"
-      data-severity={notice.severity}
+      data-severity={notice?.severity ?? 'caution'}
+      data-local-notice-id={notice?.id}
       role="region"
       aria-label={Astro.locals.t('zs.notice.label')}
+      hidden={!notice}
     >
       <div class="notice-inner">
-        <span class="notice-label">{Astro.locals.t(notice.labelKey)}</span>
+        <span class="notice-label" id="notice-label">
+          {notice ? Astro.locals.t(notice.labelKey) : Astro.locals.t('zs.notice.label')}
+        </span>
         <span class="notice-sep" aria-hidden="true">
           ·
         </span>
-        <span class="notice-text">{Astro.locals.t(notice.textKey)}</span>
-        {noticeHref && notice.linkKey && (
-          <a href={noticeHref} class="notice-link">
-            {Astro.locals.t(notice.linkKey)}
-          </a>
-        )}
+        <span class="notice-text" id="notice-text">
+          {notice ? Astro.locals.t(notice.textKey) : ''}
+        </span>
+        <a
+          id="notice-link"
+          href={noticeHref}
+          class="notice-link"
+          data-status-link-label={Astro.locals.t('zs.notice.statusLink')}
+          hidden={!noticeHref}
+        >
+          {noticeHref && notice?.linkKey ? Astro.locals.t(notice.linkKey) : ''}
+        </a>
       </div>
       <button
         id="notice-dismiss"
         class="notice-dismiss"
         type="button"
-        data-notice-id={notice.id}
+        data-notice-id={notice?.id}
         aria-label={Astro.locals.t('zs.notice.dismiss')}
       >
         <svg
@@ -334,6 +167,14 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
   <slot />
 </Default>
 
+{
+  /* Rendered here, outside Starlight's main pane, on purpose. The main pane sets
+     isolation: isolate, so a fixed element inside it can never rise above the
+     sidebar or header, whatever its z-index. */
+}
+<ConsentBanner />
+<AskDocs />
+
 <div
   id="sidebar-resizer"
   class="sidebar-resizer"
@@ -355,6 +196,34 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
 </div>
 
 <script>
+  import {
+    ONEUPTIME_OVERVIEW_URL,
+    ONEUPTIME_STATUS_PAGE_URL,
+    createNoticeDismissalState,
+    loadSessionOverview,
+    nextAnnouncementChange,
+    selectActiveAnnouncement,
+    timeoutDelay,
+  } from '../data/oneuptime-notices.mjs';
+
+  const noticeStorage = {
+    getItem(key: string) {
+      try {
+        return sessionStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    },
+    setItem(key: string, value: string) {
+      try {
+        sessionStorage.setItem(key, value);
+      } catch {
+        // Dismissal still applies to the current page when storage is disabled.
+      }
+    },
+  };
+  const noticeDismissal = createNoticeDismissalState(noticeStorage);
+
   document.getElementById('promo-dismiss')?.addEventListener('click', () => {
     sessionStorage.setItem('zs-promo-dismissed', '1');
     document.documentElement.setAttribute('data-promo-dismissed', '');
@@ -363,9 +232,78 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
   const noticeDismiss = document.getElementById('notice-dismiss');
   noticeDismiss?.addEventListener('click', () => {
     // Key the dismissal on the notice id so a revised notice shows again.
-    sessionStorage.setItem('zs-notice-dismissed', noticeDismiss.dataset.noticeId ?? '1');
+    noticeDismissal.dismiss(noticeDismiss.dataset.noticeId ?? '1');
     document.documentElement.setAttribute('data-notice-dismissed', '');
+    document.documentElement.style.setProperty('--zs-notice-height', '0rem');
   });
+
+  const noticeBar = document.getElementById('notice-bar');
+  const noticeText = document.getElementById('notice-text');
+  const noticeLink = document.getElementById('notice-link') as HTMLAnchorElement | null;
+  const noticeLabel = document.getElementById('notice-label');
+  const isFrench = document.documentElement.lang.startsWith('fr');
+  let noticeChangeTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const hideNotice = () => {
+    if (!noticeBar) return;
+    noticeBar.hidden = true;
+    document.documentElement.style.setProperty('--zs-notice-height', '0rem');
+  };
+
+  const showRemoteNotice = (announcement: { id: string; title: string }) => {
+    if (!noticeBar || !noticeText || !noticeDismiss || !noticeLink || !noticeLabel) return;
+    noticeBar.hidden = false;
+    noticeBar.dataset.noticeId = announcement.id;
+    noticeBar.dataset.severity = 'caution';
+    noticeDismiss.dataset.noticeId = announcement.id;
+    noticeText.textContent = announcement.title;
+    // OneUptime announcements are English-only. French chrome remains French.
+    if (isFrench) noticeText.lang = 'en';
+    else noticeText.removeAttribute('lang');
+    noticeLabel.textContent = noticeBar.getAttribute('aria-label') ?? '';
+    noticeLink.href = ONEUPTIME_STATUS_PAGE_URL;
+    noticeLink.textContent = noticeLink.dataset.statusLinkLabel ?? '';
+    noticeLink.hidden = false;
+    if (noticeDismissal.isDismissed(announcement.id)) {
+      document.documentElement.setAttribute('data-notice-dismissed', '');
+      document.documentElement.style.setProperty('--zs-notice-height', '0rem');
+    } else {
+      document.documentElement.removeAttribute('data-notice-dismissed');
+      document.documentElement.style.setProperty('--zs-notice-height', '2.5rem');
+    }
+  };
+
+  const renderRemoteOutcome = (outcome: { status: string; announcements?: unknown[] }) => {
+    if (outcome.status !== 'success' || !outcome.announcements) return;
+    const announcement = selectActiveAnnouncement(outcome.announcements);
+    if (announcement) showRemoteNotice(announcement);
+    else hideNotice();
+
+    if (noticeChangeTimer) clearTimeout(noticeChangeTimer);
+    const nextChange = nextAnnouncementChange(outcome.announcements);
+    if (nextChange) {
+      noticeChangeTimer = setTimeout(() => renderRemoteOutcome(outcome), timeoutDelay(nextChange));
+    }
+  };
+
+  const loadRemoteNotice = async () => {
+    const outcome = await loadSessionOverview(noticeStorage, async () => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5_000);
+      try {
+        const response = await fetch(ONEUPTIME_OVERVIEW_URL, { signal: controller.signal });
+        if (!response.ok) throw new Error(`Status page returned ${response.status}`);
+        return await response.json();
+      } finally {
+        clearTimeout(timeout);
+      }
+    });
+
+    // Failures intentionally leave the build-time local notice untouched.
+    renderRemoteOutcome(outcome);
+  };
+
+  void loadRemoteNotice();
 
   // ── Resizable layout (left sidebar + right TOC) ─────────────
   // Each handle drives a CSS custom property; the content column (main-pane)
@@ -462,10 +400,14 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
 </script>
 
 <style>
+  /* Both bars are plain surface-raised strips with a hairline, like the
+     header. The notice tone shows on its label only, with the word. */
+
   /* The notice bar sits between the promo bar and the fixed header. Its height
      feeds --sl-announcement-height in custom.css, which is what pushes the
      header and content down, so both bars can be shown or dismissed freely. */
   .notice-bar {
+    --zs-notice-tone: var(--zi-warning);
     position: fixed;
     inset-inline: 0;
     inset-block-start: var(--zs-promo-height, 2.5rem);
@@ -474,28 +416,34 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-inline: 1rem 3rem;
-    gap: 0.75rem;
-    background-color: #92400e;
-    color: #ffffff;
+    padding-inline: var(--zi-space-4) var(--zi-space-12);
+    gap: var(--zi-space-3);
+    background-color: var(--zi-surface-raised);
+    border-bottom: 1px solid var(--zi-line);
+    color: var(--zi-ink);
   }
 
   .notice-bar[data-severity='danger'] {
-    background-color: #991b1b;
+    --zs-notice-tone: var(--zi-danger);
   }
 
   .notice-bar[data-severity='info'] {
-    background-color: #1e3a8a;
+    --zs-notice-tone: var(--zi-accent);
+  }
+
+  .notice-bar[hidden] {
+    display: none;
   }
 
   :root[data-notice-dismissed] .notice-bar {
     display: none;
   }
 
-  .notice-inner {
+  .notice-inner,
+  .promo-inner {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--zi-space-2);
     font-size: 0.8125rem;
     flex-wrap: nowrap;
     flex: 0 1 auto;
@@ -507,70 +455,78 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
     -webkit-overflow-scrolling: touch;
   }
 
-  .notice-inner::-webkit-scrollbar {
+  .notice-inner::-webkit-scrollbar,
+  .promo-inner::-webkit-scrollbar {
     display: none;
   }
 
+  .notice-label,
+  .promo-live {
+    font-family: var(--zi-font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
   .notice-label {
-    font-weight: 600;
-    white-space: nowrap;
-    color: #ffffff;
+    color: var(--zs-notice-tone);
   }
 
-  .notice-sep {
-    color: rgba(255, 255, 255, 0.4);
+  .notice-sep,
+  .promo-sep {
+    color: var(--zi-ink-faint);
     flex-shrink: 0;
   }
 
-  .notice-text {
+  .notice-text,
+  .promo-text {
     white-space: nowrap;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--zi-ink-muted);
   }
 
-  .notice-link {
-    color: #ffffff !important;
+  .notice-link,
+  .promo-cta {
+    color: var(--zi-accent) !important;
+    font-size: 0.8125rem;
     font-weight: 600;
     text-decoration: none !important;
     white-space: nowrap;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
-    padding-bottom: 1px;
-    transition: border-color 150ms ease;
     flex-shrink: 0;
+    transition: color var(--zi-transition);
   }
 
-  .notice-link:hover {
-    border-bottom-color: rgba(255, 255, 255, 0.95);
-    text-decoration: none !important;
+  .notice-link:hover,
+  .promo-cta:hover {
+    color: var(--zi-accent-hover) !important;
+    text-decoration: underline !important;
+    text-underline-offset: 2px;
   }
 
-  .notice-dismiss {
+  .notice-dismiss,
+  .promo-dismiss {
     position: absolute;
-    inset-inline-end: 0.75rem;
+    inset-inline-end: var(--zi-space-3);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.25rem;
+    padding: var(--zi-space-1);
     background: transparent;
     border: 0;
-    border-radius: 0.25rem;
-    color: rgba(255, 255, 255, 0.7);
+    border-radius: var(--zi-radius-sm);
+    color: var(--zi-ink-muted);
     cursor: pointer;
-    transition: color 150ms ease;
+    flex-shrink: 0;
+    transition:
+      color var(--zi-transition),
+      background-color var(--zi-transition);
   }
 
-  .notice-dismiss:hover {
-    color: #ffffff;
-  }
-
-  @media (max-width: 640px) {
-    .notice-bar {
-      justify-content: flex-start;
-      padding-inline: 1rem 2.75rem;
-    }
-
-    .notice-inner {
-      flex: 1 1 auto;
-    }
+  .notice-dismiss:hover,
+  .promo-dismiss:hover {
+    color: var(--zi-ink);
+    background-color: var(--zi-surface);
   }
 
   .promo-bar {
@@ -579,84 +535,43 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
     inset-block-start: 0;
     z-index: 9999;
     height: var(--zs-promo-height, 2.5rem);
-    background-color: #00198a;
+    background-color: var(--zi-surface-raised);
+    border-bottom: 1px solid var(--zi-line);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-inline: 1rem 3rem;
-    gap: 0.75rem;
+    padding-inline: var(--zi-space-4) var(--zi-space-12);
+    gap: var(--zi-space-3);
   }
 
   :root[data-promo-dismissed] .promo-bar {
     display: none;
   }
 
-  .promo-inner {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    color: rgba(255, 255, 255, 0.9);
-    flex-wrap: nowrap;
-    flex: 0 1 auto;
-    min-inline-size: 0;
-    max-inline-size: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .promo-inner::-webkit-scrollbar {
-    display: none;
-  }
-
+  /* Status tag: a static 6px dot in the status colour before the word. */
   .promo-live {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    font-weight: 600;
-    color: #ffffff;
-    white-space: nowrap;
+    gap: var(--zi-space-1);
+    color: var(--zi-ink);
   }
 
   .live-dot {
     width: 6px;
     height: 6px;
-    border-radius: 50%;
-    background-color: #4ade80;
+    border-radius: 3px;
+    background-color: var(--zi-success);
     flex-shrink: 0;
-    animation: pulse-dot 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-dot {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.6;
-      transform: scale(0.85);
-    }
-  }
-
-  .promo-sep {
-    color: rgba(255, 255, 255, 0.35);
-    flex-shrink: 0;
-  }
-
-  .promo-text {
-    white-space: nowrap;
-    color: rgba(255, 255, 255, 0.85);
   }
 
   @media (max-width: 640px) {
+    .notice-bar,
     .promo-bar {
       justify-content: flex-start;
-      padding-inline: 1rem 2.75rem;
+      padding-inline: var(--zi-space-4) 2.75rem;
     }
 
+    .notice-inner,
     .promo-inner {
       flex: 1 1 auto;
     }
@@ -665,56 +580,6 @@ const noticeHref = notice?.path ? `${localePrefix}/${notice.path}` : undefined;
        precede it would read as trailing punctuation on truncated text. */
     .promo-sep--cta {
       display: none;
-    }
-  }
-
-  .promo-cta {
-    color: #ffffff !important;
-    font-weight: 600;
-    text-decoration: none !important;
-    white-space: nowrap;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-    padding-bottom: 1px;
-    transition: border-color 150ms ease;
-    flex-shrink: 0;
-  }
-
-  .promo-cta:hover {
-    border-bottom-color: rgba(255, 255, 255, 0.9);
-    text-decoration: none !important;
-  }
-
-  .promo-dismiss {
-    position: absolute;
-    inset-inline-end: 0.75rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.25rem;
-    border-radius: 4px;
-    transition:
-      color 150ms ease,
-      background-color 150ms ease;
-    flex-shrink: 0;
-  }
-
-  .promo-dismiss:hover {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .promo-dismiss:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.8);
-    outline-offset: 2px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .live-dot {
-      animation: none;
     }
   }
 </style>

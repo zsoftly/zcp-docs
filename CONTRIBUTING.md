@@ -5,7 +5,7 @@ contribute. Use whichever suits you:
 
 - **Open an issue** to report a problem or request a change.
 - **Open a pull request** to propose the fix directly.
-- **Send an email** to **<docs-support@zsoftly.ca>** and we'll take it from there.
+- **Send an email** to **<hello@zsoftly.ca>** and we'll take it from there.
 
 **Turnaround:** we aim to triage and fulfill documentation requests within **20 business days**.
 Complex changes may take longer. We'll say so on the issue or PR.
@@ -46,8 +46,10 @@ pnpm install
 
 All docs live in `src/content/docs/` (English). Each page is Markdown with a `title` frontmatter
 field. Follow [docs/content-standards.md](./docs/content-standards.md) for style, asides, code
-blocks, and structure. Don't edit `src/content/docs/fr/**`. Our translation/review workflow handles
-the French copy.
+blocks, and structure. Styling changes follow the
+[ZCP Instrument design system](https://github.com/zsoftly/platform/blob/main/docs/architecture/zcp-instrument-design-system.md)
+(local `$HOME/zsoftly/platform/docs/architecture/zcp-instrument-design-system.md`). Don't edit
+`src/content/docs/fr/**`. Our translation/review workflow handles the French copy.
 
 ### 3. Run the checks
 

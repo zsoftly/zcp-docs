@@ -91,9 +91,9 @@ These are Starlight-specific and easy to get wrong:
 
 ### Code blocks
 
-- Code blocks render as flat boxes (no frame chrome) via `defaultProps.frame: 'none'` in
-  `ec.config.mjs`. This is the site’s visual standard. Keep frames disabled unless the design calls
-  for terminal or editor chrome.
+- Code blocks render as plain boxes with a copy button and no frame chrome or language label, via
+  `defaultProps.frame: 'none'` in `ec.config.mjs`. Keep Expressive Code's external stylesheet, which
+  is the default. The inline option loads no styles under Astro 7.
 - Multi-language examples (API/SDK) go in `<Tabs>` with `syncKey` so the language choice syncs
   across sections. CLI/shell/portal-UI examples stay single-language.
 - Use `.ca` for fictional example domains. Preserve real vendor, service, customer, and incident
@@ -128,6 +128,10 @@ Always use the short forms:
 - Code blocks: **astro-expressive-code 0.44.2** (configured in `ec.config.mjs`)
 - Content: Markdown + MDX via Starlight content collections (`src/content/docs/`)
 - Layout overrides: `src/overrides/*.astro`; global styles: `src/styles/custom.css`
+- Visual design: follow the ZCP Instrument design system
+  ([GitHub](https://github.com/zsoftly/platform/blob/main/docs/architecture/zcp-instrument-design-system.md),
+  local `$HOME/zsoftly/platform/docs/architecture/zcp-instrument-design-system.md`). Tokens live in
+  `src/styles/tokens.css`.
 - Package manager: **pnpm 10**
 - Link checking: `starlight-links-validator` (the build fails on broken internal links)
 

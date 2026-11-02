@@ -1,158 +1,254 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Footer.astro';
-import { PEERPUSH_BADGE_URL, PEERPUSH_LISTING_URL } from '../data/peerpush';
-import { websiteUrl } from '../data/site';
-import ConsentBanner from './ConsentBanner.astro';
+import { footerColumns, STATUS_PAGE_URL } from '../data/footer';
+import { localePathPrefix } from '../data/site';
 
-const localePrefix = Astro.locals.starlightRoute.locale === 'fr' ? '/fr' : '';
+const locale = Astro.locals.starlightRoute.locale;
+const localePrefix = localePathPrefix(locale);
 const buildDate = new Date().toISOString().slice(0, 10);
+
+const columns = footerColumns.map((column, index) => ({
+  id: `site-footer-col-${index}`,
+  heading: Astro.locals.t(column.headingKey),
+  links: column.links.map((link) => ({
+    label: Astro.locals.t(link.labelKey),
+    href: link.kind === 'docs' ? `${localePrefix}${link.href}` : link.href,
+    external: link.kind === 'external',
+  })),
+}));
+
+// The same page in each locale. Starlight serves a fallback page under /fr/
+// for every page without a translation, so both targets always exist.
+const basePath = Astro.url.pathname.replace(/^\/fr(?=\/|$)/, '') || '/';
+const languages = [
+  { label: 'English', lang: 'en', href: basePath, current: localePrefix === '' },
+  {
+    label: 'Français',
+    lang: 'fr',
+    href: `${localePathPrefix('fr')}${basePath}`,
+    current: localePrefix !== '',
+  },
+];
 ---
 
 <Default {...Astro.props} />
 
 <div class="site-footer">
-  <div class="site-footer__inner">
-    <nav class="site-footer__nav" aria-label={Astro.locals.t('zs.footer.navLabel')}>
-      <a href={`${localePrefix}/public-cloud/getting-started/introduction`}>ZCP</a>
-      <a href={`${localePrefix}/private-cloud/overview`}>ZPCP</a>
-      <a href={`${localePrefix}/public-cloud/cli/installation`}>CLI</a>
-      <a href={`${localePrefix}/public-cloud/api/authentication`}>API</a>
-      <a href={websiteUrl} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.footer.website')}</a
-      >
-      <a href={`${websiteUrl}/services`} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.footer.services')}</a
-      >
-      <a href={`${websiteUrl}/compare`} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.footer.compare')}</a
-      >
-      <a href={`${websiteUrl}/services/private-cloud`} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.footer.privateCloud')}</a
-      >
-      <a href={`${websiteUrl}/pricing`} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.footer.pricing')}</a
-      >
-      <a href={`${websiteUrl}/pricing#calculator`} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.footer.pricingCalculator')}</a
-      >
-      <a href={`${localePrefix}/community/`}>{Astro.locals.t('zs.footer.community')}</a>
-      <a href={`${websiteUrl}/contact`} target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.footer.contact')}</a
-      >
-      <a href="https://cloud.zcp.zsoftly.ca" target="_blank" rel="noopener noreferrer"
-        >{Astro.locals.t('zs.footer.console')}</a
-      >
-      <a
-        href="https://status.zcp.zsoftly.ca/status-page/e6c6cd2d-5290-4091-a150-2d046be03d75"
-        target="_blank"
-        rel="noopener noreferrer">{Astro.locals.t('zs.footer.status')}</a
-      >
-      <a href="https://github.com/zsoftly/zcp-docs" target="_blank" rel="noopener noreferrer"
-        >GitHub</a
-      >
-    </nav>
+  <nav class="site-footer__columns" aria-label={Astro.locals.t('zs.footer.navLabel')}>
+    {
+      columns.map((column) => (
+        <div class="site-footer__column">
+          <p class="site-footer__heading" id={column.id}>
+            {column.heading}
+          </p>
+          <ul aria-labelledby={column.id}>
+            {column.links.map((link) => (
+              <li>
+                {link.external ? (
+                  <a href={link.href} target="_blank" rel="noopener noreferrer">
+                    {link.label}
+                  </a>
+                ) : (
+                  <a href={link.href}>{link.label}</a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </nav>
+
+  <div class="site-footer__bar">
     <p class="site-footer__copy">
       © {new Date().getFullYear()} ZSoftly Technologies Inc.
       <span class="site-footer__version">{Astro.locals.t('zs.footer.build')} {buildDate}</span>
     </p>
-    <div class="site-footer__badges">
+    <div class="site-footer__meta">
       <a
         data-status-badge-link
         hidden
         class="site-footer__status"
-        href="https://status.zcp.zsoftly.ca/status-page/e6c6cd2d-5290-4091-a150-2d046be03d75"
+        href={STATUS_PAGE_URL}
         target="_blank"
         rel="noopener noreferrer"
       >
         <img data-status-badge alt={Astro.locals.t('zs.footer.statusBadgeAlt')} height="20" />
       </a>
-      <a
-        class="site-footer__peerpush"
-        href={PEERPUSH_LISTING_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src={PEERPUSH_BADGE_URL}
-          alt={Astro.locals.t('zs.footer.peerpushBadgeAlt')}
-          width="230"
-          height="65"
-          loading="lazy"
-          decoding="async"
-          referrerpolicy="no-referrer"
-        />
-      </a>
+      <nav class="site-footer__langs" aria-label={Astro.locals.t('zs.header.languageNav')}>
+        {
+          languages.map((language) => (
+            <a
+              href={language.href}
+              lang={language.lang}
+              hreflang={language.lang}
+              aria-current={language.current ? 'true' : undefined}
+            >
+              {language.label}
+            </a>
+          ))
+        }
+      </nav>
     </div>
-    <script is:inline>
-      (function () {
-        const BADGE_URL =
-          'https://status.zcp.zsoftly.ca/api/status-page/badge/e6c6cd2d-5290-4091-a150-2d046be03d75?token=';
-
-        function initStatusBadge() {
-          const token = (window.__ZCP_ENV || {}).statusBadgeToken;
-          if (!token) return;
-          const link = document.querySelector('[data-status-badge-link]');
-          const img = document.querySelector('[data-status-badge]');
-          if (!link || !img || link.dataset.statusBadgeReady === 'true') return;
-          img.src = BADGE_URL + encodeURIComponent(token);
-          link.hidden = false;
-          link.dataset.statusBadgeReady = 'true';
-        }
-
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', initStatusBadge, { once: true });
-        } else {
-          initStatusBadge();
-        }
-
-        if (!window.__zcpStatusBadgeBound) {
-          window.__zcpStatusBadgeBound = true;
-          document.addEventListener('astro:page-load', initStatusBadge);
-        }
-      })();
-    </script>
   </div>
+  <script is:inline>
+    (function () {
+      const BADGE_URL =
+        'https://status.zcp.zsoftly.ca/api/status-page/badge/e6c6cd2d-5290-4091-a150-2d046be03d75?token=';
+
+      function initStatusBadge() {
+        const token = (window.__ZCP_ENV || {}).statusBadgeToken;
+        if (!token) return;
+        const link = document.querySelector('[data-status-badge-link]');
+        const img = document.querySelector('[data-status-badge]');
+        if (!link || !img || link.dataset.statusBadgeReady === 'true') return;
+        img.src = BADGE_URL + encodeURIComponent(token);
+        link.hidden = false;
+        link.dataset.statusBadgeReady = 'true';
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initStatusBadge, { once: true });
+      } else {
+        initStatusBadge();
+      }
+
+      if (!window.__zcpStatusBadgeBound) {
+        window.__zcpStatusBadgeBound = true;
+        document.addEventListener('astro:page-load', initStatusBadge);
+      }
+    })();
+  </script>
 </div>
 
-<ConsentBanner />
-
 <style>
-  .site-footer__version {
-    margin-inline-start: 0.75rem;
-    font-size: 0.7rem;
-    color: var(--sl-color-gray-4);
-    font-variant-numeric: tabular-nums;
+  .site-footer {
+    border-top: 1px solid var(--zi-line);
+    container-type: inline-size;
+    display: grid;
+    gap: var(--zi-space-8);
+    margin-top: var(--zi-space-12);
+    padding-block: var(--zi-space-8) var(--zi-space-2);
   }
 
-  .site-footer__badges {
+  .site-footer__columns {
+    display: grid;
+    gap: var(--zi-space-8) var(--zi-space-6);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @container (min-width: 44rem) {
+    .site-footer__columns {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .site-footer__column {
+    align-content: start;
+    display: grid;
+    gap: var(--zi-space-3);
+  }
+
+  /* Column headings use the telemetry label style. */
+  .site-footer__heading {
+    color: var(--zi-ink-faint);
+    font-family: var(--zi-font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1rem;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .site-footer ul {
+    display: grid;
+    gap: var(--zi-space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-footer li {
+    margin: 0;
+  }
+
+  .site-footer a {
+    border-radius: var(--zi-radius-sm);
+    color: var(--zi-ink-muted);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-decoration: none;
+    transition: color var(--zi-transition);
+  }
+
+  .site-footer a:hover {
+    color: var(--zi-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .site-footer a:focus-visible {
+    outline: 2px solid var(--zi-focus);
+    outline-offset: 2px;
+  }
+
+  .site-footer__bar {
+    align-items: center;
+    border-top: 1px solid var(--zi-line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zi-space-3) var(--zi-space-6);
+    justify-content: space-between;
+    padding-top: var(--zi-space-4);
+  }
+
+  .site-footer__copy {
+    color: var(--zi-ink-faint);
+    font-size: 0.8125rem;
+    margin: 0;
+  }
+
+  /* Build stamp: telemetry label. */
+  .site-footer__version {
+    color: var(--zi-ink-faint);
+    font-family: var(--zi-font-mono);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    margin-inline-start: var(--zi-space-3);
+    text-transform: uppercase;
+  }
+
+  .site-footer__meta {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--zi-space-4);
   }
 
   .site-footer__status {
-    display: inline-block;
+    display: inline-flex;
   }
 
   .site-footer__status[hidden] {
     display: none;
   }
 
-  .site-footer__peerpush {
-    display: inline-block;
+  .site-footer__langs {
+    display: flex;
+    gap: var(--zi-space-3);
+    font-family: var(--zi-font-mono);
   }
 
-  .site-footer__peerpush:focus-visible {
-    outline: 2px solid var(--sl-color-accent);
-    outline-offset: 3px;
+  .site-footer__langs a {
+    font-size: 0.8125rem;
   }
 
-  .site-footer__peerpush img {
-    display: block;
-    height: auto;
-    max-width: 8.75rem;
-    width: 100%;
+  .site-footer__langs a[aria-current='true'] {
+    color: var(--zi-ink);
+    font-weight: 500;
   }
 </style>

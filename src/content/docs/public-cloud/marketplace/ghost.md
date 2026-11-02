@@ -23,6 +23,9 @@ fast editor and built-in email delivery with a clean, theme-driven front end.
 | RAM      | 2 GB    | 4 GB        |
 | Storage  | 20 GB   | 40 GB       |
 
+The storage figure is your root disk size. Choose it on the **OS Disk Offering** step when you
+create the instance. You pay for it per GB, separate from the plan.
+
 :::caution
 
 Ghost requires a domain name. It does not run against a bare IP address. Provide `GHOST_URL` at

@@ -16,62 +16,52 @@ export const COMMUNITY_SLACK_URL =
   'https://join.slack.com/t/zsoftlycloudp-exg5502/shared_invite/zt-469b56b2b-lG5HB2WnuntgwFG4UwfMew';
 
 /**
- * Links in the "Explore ZCP" header menu and the mobile menu.
- *
- * Add, remove or reorder entries here rather than in the components. `labelKey`
- * must exist in both `src/content/i18n/en.json` and `src/content/i18n/fr.json`.
- */
-export interface ExploreLink {
-  labelKey: string;
-  /** One short line under the label, as the marketing site header does. */
-  noteKey: string;
-  href: string;
-}
-
-export const exploreLinks: ExploreLink[] = [
-  {
-    labelKey: 'zs.header.services',
-    noteKey: 'zs.header.servicesNote',
-    href: `${websiteUrl}/services`,
-  },
-  {
-    labelKey: 'zs.header.compare',
-    noteKey: 'zs.header.compareNote',
-    href: `${websiteUrl}/compare`,
-  },
-  {
-    labelKey: 'zs.header.pricing',
-    noteKey: 'zs.header.pricingNote',
-    href: `${websiteUrl}/pricing`,
-  },
-  {
-    labelKey: 'zs.header.pricingCalculator',
-    noteKey: 'zs.header.pricingCalculatorNote',
-    href: `${websiteUrl}/pricing#calculator`,
-  },
-  {
-    labelKey: 'zs.header.privateCloud',
-    noteKey: 'zs.header.privateCloudNote',
-    href: `${websiteUrl}/services/private-cloud`,
-  },
-];
-
-/**
  * Primary documentation links in the site header and the mobile menu.
  *
- * `path` is site-relative without a locale prefix, so each caller adds `/fr`
- * when rendering the French site.
+ * Add, remove or reorder entries here rather than in the components. `path` is
+ * site-relative without a locale prefix, so each caller adds `/fr` when
+ * rendering the French site. `labelKey` must exist in both
+ * `src/content/i18n/en.json` and `src/content/i18n/fr.json`.
  */
 export interface DocsNavLink {
   labelKey: string;
   path: string;
+  /**
+   * Extra unprefixed paths whose pages count as part of this link's section,
+   * so the link stays marked while a reader is anywhere inside it.
+   */
+  sections?: string[];
 }
 
 export const docsNavLinks: DocsNavLink[] = [
-  { labelKey: 'zs.header.quickstart', path: '/public-cloud/getting-started/quickstart' },
-  { labelKey: 'zs.header.browseDocs', path: '/public-cloud/getting-started/introduction' },
-  { labelKey: 'zs.header.tutorials', path: '/tutorials' },
+  { labelKey: 'zs.header.getStarted', path: '/public-cloud/getting-started/quickstart/' },
+  { labelKey: 'zs.header.products', path: '/public-cloud/getting-started/introduction/' },
+  { labelKey: 'zs.header.tutorials', path: '/tutorials/', sections: ['/tutorials/'] },
+  {
+    labelKey: 'zs.header.cliApi',
+    path: '/public-cloud/cli/quickstart/',
+    sections: ['/public-cloud/cli/', '/public-cloud/api/'],
+  },
+  { labelKey: 'zs.header.releaseNotes', path: '/changelog/', sections: ['/changelog/'] },
 ];
+
+/**
+ * The `aria-current` value for a header link on the page at `pathname`:
+ * `page` on the link's own page, `true` anywhere else in its section.
+ */
+export function docsNavCurrent(
+  link: DocsNavLink,
+  pathname: string,
+  localePrefix: string
+): 'page' | 'true' | undefined {
+  const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);
+  const current = withSlash(pathname);
+  if (current === withSlash(`${localePrefix}${link.path}`)) return 'page';
+  const inSection = (link.sections ?? []).some((section) =>
+    current.startsWith(`${localePrefix}${section}`)
+  );
+  return inSection ? 'true' : undefined;
+}
 
 /**
  * Path prefix for the active locale, for building site-relative links.
