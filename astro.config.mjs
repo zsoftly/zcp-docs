@@ -4,6 +4,7 @@ import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import rehypeMermaid from 'rehype-mermaid';
+import aiReadableContent from './src/integrations/ai-readable-content.mjs';
 import remarkExplicitHeadingIds from './src/plugins/remark-explicit-heading-ids.mjs';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
 
@@ -96,6 +97,7 @@ const frSidebarLabels = {
   'A and AAAA': 'A et AAAA',
   Examples: 'Exemples',
   Marketplace: 'Marketplace',
+  Store: 'Boutique',
   Databases: 'Bases de données',
   'Web Stacks': 'Piles Web',
   'Monitoring & Automation': 'Surveillance et automatisation',
@@ -103,6 +105,11 @@ const frSidebarLabels = {
   'DevOps & Source Control': 'DevOps et contrôle de source',
   'Networking & VPN': 'Réseautage et VPN',
   'Control Panels': 'Panneaux de contrôle',
+  'Security & Identity': 'Sécurité et identité',
+  'E-commerce': 'Commerce électronique',
+  'AI & Agents': 'IA et agents',
+  'Business Apps': "Applications d'affaires",
+  'Desktop Environments': 'Environnements de bureau',
   'Private Cloud': 'Nuage privé',
   'Platform Components': 'Composants de plateforme',
   'After Deployment': 'Après le déploiement',
@@ -184,6 +191,7 @@ export default defineConfig({
     }),
   },
   integrations: [
+    aiReadableContent(),
     starlight({
       title: {
         en: 'ZSoftly Docs',
@@ -217,7 +225,7 @@ export default defineConfig({
           href: 'https://github.com/zsoftly/zcp-docs',
         },
       ],
-      customCss: ['./src/styles/custom.css'],
+      customCss: ['./src/styles/tokens.css', './src/styles/custom.css'],
       components: {
         Head: './src/overrides/Head.astro',
         Header: './src/overrides/Header.astro',
@@ -315,6 +323,7 @@ export default defineConfig({
           items: [
             { label: 'Authentication', slug: 'public-cloud/api/authentication' },
             { label: 'Quickstart', slug: 'public-cloud/api/quickstart' },
+            { label: 'Terraform & OpenTofu', slug: 'public-cloud/api/terraform-opentofu' },
             { label: 'Reference', slug: 'public-cloud/api/reference' },
           ],
         },
@@ -537,6 +546,12 @@ export default defineConfig({
                     { label: 'Valkey 9.1', slug: 'public-cloud/marketplace/valkey' },
                     { label: 'Elasticsearch 9', slug: 'public-cloud/marketplace/elasticsearch' },
                     { label: 'InfluxDB 2', slug: 'public-cloud/marketplace/influxdb' },
+                    { label: 'Supabase', slug: 'public-cloud/marketplace/supabase' },
+                    { label: 'Qdrant', slug: 'public-cloud/marketplace/qdrant' },
+                    { label: 'NocoDB', slug: 'public-cloud/marketplace/nocodb' },
+                    { label: 'SeaweedFS', slug: 'public-cloud/marketplace/seaweedfs' },
+                    { label: 'Neo4j', slug: 'public-cloud/marketplace/neo4j' },
+                    { label: 'ClickHouse', slug: 'public-cloud/marketplace/clickhouse' },
                   ],
                 },
                 {
@@ -547,6 +562,16 @@ export default defineConfig({
                     { label: 'WordPress', slug: 'public-cloud/marketplace/wordpress' },
                     { label: 'LAMP Stack', slug: 'public-cloud/marketplace/lamp' },
                     { label: 'LEMP Stack', slug: 'public-cloud/marketplace/lemp' },
+                    {
+                      label: 'Nginx Proxy Manager',
+                      slug: 'public-cloud/marketplace/nginx-proxy-manager',
+                    },
+                    { label: 'Nginx', slug: 'public-cloud/marketplace/nginx' },
+                    { label: 'HAProxy', slug: 'public-cloud/marketplace/haproxy' },
+                    { label: 'Apache Tomcat', slug: 'public-cloud/marketplace/apache-tomcat' },
+                    { label: 'Drupal', slug: 'public-cloud/marketplace/drupal' },
+                    { label: 'Ghost', slug: 'public-cloud/marketplace/ghost' },
+                    { label: 'Wiki.js', slug: 'public-cloud/marketplace/wikijs' },
                   ],
                 },
                 {
@@ -556,6 +581,11 @@ export default defineConfig({
                     { label: 'Overview', slug: 'public-cloud/marketplace/monitoring-automation' },
                     { label: 'Grafana', slug: 'public-cloud/marketplace/grafana' },
                     { label: 'n8n', slug: 'public-cloud/marketplace/n8n' },
+                    { label: 'Prometheus', slug: 'public-cloud/marketplace/prometheus' },
+                    { label: 'Zabbix', slug: 'public-cloud/marketplace/zabbix' },
+                    { label: 'Uptime Kuma', slug: 'public-cloud/marketplace/uptime-kuma' },
+                    { label: 'Beszel', slug: 'public-cloud/marketplace/beszel' },
+                    { label: 'Gatus', slug: 'public-cloud/marketplace/gatus' },
                   ],
                 },
                 {
@@ -566,6 +596,13 @@ export default defineConfig({
                     { label: 'Docker', slug: 'public-cloud/marketplace/docker' },
                     { label: 'Node.js 24', slug: 'public-cloud/marketplace/nodejs' },
                     { label: 'OpenClaw', slug: 'public-cloud/marketplace/openclaw' },
+                    { label: 'Portainer', slug: 'public-cloud/marketplace/portainer' },
+                    { label: 'Coolify', slug: 'public-cloud/marketplace/coolify' },
+                    { label: 'Rancher', slug: 'public-cloud/marketplace/rancher' },
+                    { label: 'K3s', slug: 'public-cloud/marketplace/k3s' },
+                    { label: 'RabbitMQ', slug: 'public-cloud/marketplace/rabbitmq' },
+                    { label: 'Apache Kafka', slug: 'public-cloud/marketplace/apache-kafka' },
+                    { label: 'Directus', slug: 'public-cloud/marketplace/directus' },
                   ],
                 },
                 {
@@ -574,6 +611,12 @@ export default defineConfig({
                   items: [
                     { label: 'Overview', slug: 'public-cloud/marketplace/devops-source-control' },
                     { label: 'GitLab CE 19.1', slug: 'public-cloud/marketplace/gitlab' },
+                    { label: 'Jenkins', slug: 'public-cloud/marketplace/jenkins' },
+                    { label: 'Forgejo', slug: 'public-cloud/marketplace/forgejo' },
+                    { label: 'Nexus', slug: 'public-cloud/marketplace/nexus' },
+                    { label: 'Artifactory', slug: 'public-cloud/marketplace/artifactory' },
+                    { label: 'Harbor', slug: 'public-cloud/marketplace/harbor' },
+                    { label: 'Gitea', slug: 'public-cloud/marketplace/gitea' },
                   ],
                 },
                 {
@@ -583,6 +626,13 @@ export default defineConfig({
                     { label: 'Overview', slug: 'public-cloud/marketplace/networking-vpn' },
                     { label: 'Tailscale', slug: 'public-cloud/marketplace/tailscale' },
                     { label: 'NetBird', slug: 'public-cloud/marketplace/netbird' },
+                    { label: 'Headplane', slug: 'public-cloud/marketplace/headplane' },
+                    { label: 'OPNsense', slug: 'public-cloud/marketplace/opnsense' },
+                    {
+                      label: 'Technitium DNS Server',
+                      slug: 'public-cloud/marketplace/technitium-dns-server',
+                    },
+                    { label: 'WG-Easy', slug: 'public-cloud/marketplace/wg-easy' },
                   ],
                 },
                 {
@@ -591,10 +641,65 @@ export default defineConfig({
                   items: [
                     { label: 'Overview', slug: 'public-cloud/marketplace/control-panels' },
                     { label: 'cPanel', slug: 'public-cloud/marketplace/cpanel' },
+                    { label: 'Pterodactyl', slug: 'public-cloud/marketplace/pterodactyl' },
+                    { label: 'Pelican Panel', slug: 'public-cloud/marketplace/pelican-panel' },
+                  ],
+                },
+                {
+                  label: 'Security & Identity',
+                  collapsed: true,
+                  items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/security-identity' },
+                    { label: 'Authentik', slug: 'public-cloud/marketplace/authentik' },
+                    { label: 'Keycloak', slug: 'public-cloud/marketplace/keycloak' },
+                    { label: 'OpenBao', slug: 'public-cloud/marketplace/openbao' },
+                    { label: 'Vaultwarden', slug: 'public-cloud/marketplace/vaultwarden' },
+                  ],
+                },
+                {
+                  label: 'E-commerce',
+                  collapsed: true,
+                  items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/e-commerce' },
+                    { label: 'Bagisto', slug: 'public-cloud/marketplace/bagisto' },
+                    { label: 'Medusa', slug: 'public-cloud/marketplace/medusa' },
+                  ],
+                },
+                {
+                  label: 'AI & Agents',
+                  collapsed: true,
+                  items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/ai-agents' },
+                    { label: 'Dify', slug: 'public-cloud/marketplace/dify' },
+                    { label: 'HermesAgent', slug: 'public-cloud/marketplace/hermesagent' },
+                    { label: 'Ollama', slug: 'public-cloud/marketplace/ollama' },
+                  ],
+                },
+                {
+                  label: 'Business Apps',
+                  collapsed: true,
+                  items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/business-apps' },
+                    { label: 'ERPNext', slug: 'public-cloud/marketplace/erpnext' },
+                    { label: 'IceWarp', slug: 'public-cloud/marketplace/icewarp' },
+                    { label: 'Mattermost', slug: 'public-cloud/marketplace/mattermost' },
+                    { label: 'Zammad', slug: 'public-cloud/marketplace/zammad' },
+                  ],
+                },
+                {
+                  label: 'Desktop Environments',
+                  collapsed: true,
+                  items: [
+                    { label: 'Overview', slug: 'public-cloud/marketplace/desktop-environments' },
+                    {
+                      label: 'Ubuntu KDE Desktop',
+                      slug: 'public-cloud/marketplace/ubuntu-kde-desktop',
+                    },
                   ],
                 },
               ],
             },
+            { label: 'Store', slug: 'public-cloud/store' },
           ],
         },
 

@@ -29,7 +29,7 @@ import them. CLI end users are not affected. Update import paths:
 ### Linux and macOS
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zsoftly/zcp-cli/main/scripts/install.sh | bash
+curl -fsSL https://github.com/zsoftly/zcp-cli/releases/latest/download/install.sh | bash
 ```
 
 After installation, verify:
@@ -41,8 +41,12 @@ zcp version
 ### Windows (PowerShell)
 
 ```powershell
-irm https://raw.githubusercontent.com/zsoftly/zcp-cli/main/scripts/install.ps1 | iex
+irm https://github.com/zsoftly/zcp-cli/releases/latest/download/install.ps1 | iex
 ```
+
+The current release is v1.2.0. See the
+[GitHub releases page](https://github.com/zsoftly/zcp-cli/releases). The release installer upgrades
+an existing installation in place.
 
 ### Manual download
 
@@ -66,7 +70,7 @@ sudo mv zcp-linux-amd64 /usr/local/bin/zcp
 
 ### Build from source
 
-Requires Go 1.26+:
+Requires Go 1.26.0 or later. The selected toolchain is Go 1.26.9:
 
 ```bash
 git clone https://github.com/zsoftly/zcp-cli

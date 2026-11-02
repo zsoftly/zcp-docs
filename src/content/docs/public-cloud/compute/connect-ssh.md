@@ -36,7 +36,9 @@ If an image has no distribution-specific user, it may use `root`. The exact user
 
 If you deployed without an SSH key, open the instance's **Overview** tab and reveal the
 **Provisioning Password**: click the eye icon to show it, or the copy icon to copy it. Use it with
-the default username above.
+the default username above. The password is a random sixteen character string generated when the
+instance is created. Instances created before October 11, 2026 keep their original six character
+password until you reset it from the instance actions.
 
 ![Virtual Machine Overview with the Provisioning Password field highlighted](../../../../assets/compute/provisioning-password.webp)
 
@@ -91,8 +93,10 @@ ssh username@ip_address
 Example:
 
 ```bash
-ssh root@192.168.1.1
+ssh ubuntu@203.0.113.10
 ```
+
+Replace `203.0.113.10` with the public IP address from the portal.
 
 ![Connecting to a VM over SSH from a terminal](../../../../assets/compute/connect-ssh-connecting.webp)
 

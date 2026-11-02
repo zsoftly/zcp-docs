@@ -27,6 +27,9 @@ over SSH on port 2222, which leaves the VM's own SSH daemon on port 22.
 | RAM      | 1 GB    | 2 GB        |
 | Storage  | 20 GB   | 40 GB       |
 
+The storage figure is your root disk size. Choose it on the **OS Disk Offering** step when you
+create the instance. You pay for it per GB, separate from the plan.
+
 ## Environment variables
 
 These values are optional during marketplace deployment. Leave a password field blank to have a

@@ -1,54 +1,160 @@
 ---
-// Compact hero: a title and one line of tagline, so the page reaches its
-// content quickly. The primary actions live in the site header, and the
-// principle panel renders further down the page via PrinciplePanel.astro.
+// Docs home hero: an eyebrow, the title, a one-line tagline, then the search field and the Ask Docs
+// button.
+// The search field opens the site search in the header (Starlight's site-search), and
+// Ask Docs opens the Ask Docs dialog from src/overrides/AskDocs.astro. Neither has
+// its own logic here. The rest of the home page is src/components/DocsHome.astro.
+const t = Astro.locals.t;
 ---
 
 <section class="zs-hero">
-  <div class="zs-hero__copy">
-    <h1 class="zs-hero__title" id="_top" data-page-title>
-      {`${Astro.locals.t('zs.hero.titleLine1')} ${Astro.locals.t('zs.hero.titleLine2')}`}
-    </h1>
-    <p class="zs-hero__tagline">{Astro.locals.t('zs.hero.tagline')}</p>
+  <p class="zs-hero__eyebrow">{t('zs.hero.eyebrow')}</p>
+  <h1 class="zs-hero__title" id="_top" data-page-title>{t('zs.hero.title')}</h1>
+  <p class="zs-hero__tagline">{t('zs.hero.tagline')}</p>
+  <div class="zs-hero__actions">
+    <button type="button" class="zs-hero__search" data-zs-hero-search>
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m20 20-3.5-3.5"></path>
+      </svg>
+      <span class="zs-hero__search-text">{t('zs.hero.search')}</span>
+      <kbd class="zs-hero__kbd">⌘K</kbd>
+    </button>
+    <button type="button" class="zs-hero__ask" data-zs-hero-ask>
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"></path>
+        <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"></path>
+      </svg>
+      {t('zs.askDocs.button')}
+    </button>
   </div>
 </section>
 
+<script>
+  // Defer the click. Starlight's search closes its dialog on any click outside it. This click is
+  // still bubbling to the window when the dialog opens.
+  document.querySelector('[data-zs-hero-search]')?.addEventListener('click', () => {
+    setTimeout(() => {
+      document.querySelector<HTMLButtonElement>('site-search button[data-open-modal]')?.click();
+    });
+  });
+  document.querySelector('[data-zs-hero-ask]')?.addEventListener('click', () => {
+    document.querySelector<HTMLButtonElement>('[data-ask-docs-open]')?.click();
+  });
+</script>
+
 <style>
-  /* ── Hero layout ──────────────────────────────────────────── */
   .zs-hero {
-    padding-block: 0.75rem 0.5rem;
+    display: grid;
+    gap: var(--zi-space-4);
+    max-inline-size: 52rem;
+    padding-block: var(--zi-space-8) var(--zi-space-2);
   }
 
+  .zs-hero__eyebrow {
+    margin: 0;
+    font: 500 0.75rem/1rem var(--zi-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--zi-ink-faint);
+  }
+
+  /* display-1: the one landing title. */
   .zs-hero__title {
-    font-size: clamp(1.5rem, 2.5vw, 2.125rem);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.025em;
-    color: var(--sl-color-text);
-    margin: 0 0 0.75rem;
+    font-size: clamp(1.875rem, 4vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--zi-ink);
+    margin: 0;
     border: none;
     padding: 0;
-  }
-
-  :root[data-theme='dark'] .zs-hero__title {
-    color: rgba(255, 255, 255, 0.95);
+    text-wrap: balance;
   }
 
   .zs-hero__tagline {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--sl-color-gray-2);
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: var(--zi-ink-muted);
     margin: 0;
+    max-inline-size: 42rem;
   }
 
-  .zs-hero__tagline strong {
-    color: var(--sl-color-text);
+  .zs-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zi-space-3);
+    margin-block-start: var(--zi-space-2);
+  }
+
+  .zs-hero__search,
+  .zs-hero__ask {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zi-space-2);
+    block-size: 3.25rem;
+    padding-inline: var(--zi-space-4);
+    border: 1px solid var(--zi-line-control);
+    border-radius: var(--zi-radius-md);
+    font: 400 1rem var(--zi-font-sans);
+    cursor: pointer;
+    transition:
+      background-color 120ms,
+      border-color 120ms;
+  }
+
+  .zs-hero__search {
+    flex: 1 1 26rem;
+    background: var(--zi-surface);
+    color: var(--zi-ink-muted);
+    text-align: start;
+  }
+  .zs-hero__search:hover {
+    border-color: var(--zi-ink-muted);
+  }
+  .zs-hero__search-text {
+    flex: 1 1 auto;
+    color: var(--zi-ink-faint);
+  }
+  .zs-hero__kbd {
+    font: 500 0.75rem var(--zi-font-mono);
+    color: var(--zi-ink-faint);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-sm);
+    padding: 2px 6px;
+  }
+
+  .zs-hero__ask {
+    background: var(--zi-surface-raised);
+    color: var(--zi-ink);
     font-weight: 600;
   }
-
-  :root[data-theme='dark'] .zs-hero__tagline strong {
-    color: rgba(255, 255, 255, 0.9);
+  .zs-hero__ask:hover {
+    background: var(--zi-surface-sunken);
   }
 
-  /* Action buttons */
+  .zs-hero__search:focus-visible,
+  .zs-hero__ask:focus-visible {
+    outline: 2px solid var(--zi-focus);
+    outline-offset: 2px;
+  }
 </style>

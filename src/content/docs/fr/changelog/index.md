@@ -33,6 +33,19 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [CLI v1.1.0 : planifications d'instantanés de stockage bloc](/fr/changelog/#cli-v1.1.0) (23
+  octobre 2026)
+- [Fournisseur Terraform / OpenTofu v1.1.0](/fr/changelog/#terraform-v1.1.0) (23 octobre 2026)
+- [ZCP Store](/fr/changelog/#zcp-store) (11 octobre 2026)
+- [Mots de passe d'instance plus longs](/fr/changelog/#instance-password-length) (11 octobre 2026)
+- [CLI v1.0.1 : correctifs des routes de cycle de vie et des volumes](/fr/changelog/#cli-v1.0.1) (11
+  octobre 2026)
+- [CLI v1.0.0 : stockage racine séparé et planifications de sauvegarde](/fr/changelog/#cli-v1.0.0)
+  (11 octobre 2026)
+- [Fournisseur Terraform / OpenTofu v1.0.0](/fr/changelog/#terraform-v1.0.0) (11 octobre 2026)
+- [Calcul et stockage vendus séparément](/fr/changelog/#compute-storage-separate) (11 octobre 2026)
+- [CLI v0.0.31 : pagination des règles ACL et mises à jour de sécurité](/fr/changelog/#cli-v0.0.31)
+  (9 octobre 2026)
 - [CLI v0.0.30 : forfaits personnalisés et clés de stockage objet](/fr/changelog/#cli-v0.0.30) (3
   octobre 2026)
 - [Fournisseur Terraform / OpenTofu v0.2.0](/fr/changelog/#terraform-v0.2.0) (7 septembre 2026)
@@ -67,6 +80,52 @@ pour l'historique complet au niveau des commits.
 ## Plateforme et services <!-- changelog-id: platform-services -->
 
 Mises à jour de la plateforme Public Cloud et des services gérés.
+
+### ZCP Store (11 octobre 2026) <!-- changelog-id: zcp-store -->
+
+La console comporte un onglet **Store** où un compte achète des services, des licences et des
+serveurs dédiés. Les produits du Store sont facturés sur la même facture que vos instances. Ils
+relèvent du compte, pas d'un projet. Disponibles dès aujourd'hui : Basic Support (gratuit, inclus
+avec chaque compte), Pro Support à 99 $ par mois et dix serveurs bare metal tarifés à partir de 231
+$ par mois. Tout compte peut acheter les produits de 100 $ CA par mois ou moins. Les produits
+au-dessus de ce montant sont réservés aux comptes postpayés et aux comptes prépayés dont le solde de
+crédit couvre la commande. Les comptes facturés manuellement les commandent auprès du soutien
+technique. Vous commandez les produits suivants auprès du soutien technique, après un devis :
+services professionnels, services gérés, sauvegarde et reprise après sinistre, sécurité et
+conformité, réseau, formation et licences. Consultez [Store](/public-cloud/store) (en anglais).
+
+### Mots de passe d'instance plus longs (11 octobre 2026) <!-- changelog-id: instance-password-length -->
+
+Les nouvelles instances reçoivent un mot de passe de provisionnement aléatoire de seize caractères
+au lieu de six. La réinitialisation du mot de passe d'une instance existante renvoie aussi la forme
+longue. Les instances créées avant cette date gardent leur mot de passe actuel jusqu'à une
+réinitialisation. Consultez
+[Se connecter avec SSH](/fr/public-cloud/compute/connect-ssh#où-trouver-le-mot-de-passe).
+
+### Calcul et stockage vendus séparément (11 octobre 2026) <!-- changelog-id: compute-storage-separate -->
+
+Chaque forfait de VM ne couvre plus que le processeur et la mémoire. Les noms de forfaits portent un
+`c` avant la taille, par exemple `ca2c.m` (2 vCPU, 4 Go, YUL sur `b2.g1`, 24,80 $ par mois). Vous
+choisissez le disque racine à l'étape **OS Disk Offering**, sous forme de volume de stockage bloc
+facturé au Go. Le minimum est la taille du modèle. Agrandissez-le à tout moment. Il ne se réduit
+jamais. Tarifs par Go et par mois :
+
+- `b1.g1` et `b2.g1` : 0,14 $
+- `b1.g3` : 0,03 $
+- `b2.g2` : 0,09 $
+- `b2.l1` : 0,10 $
+- `b2.l2` : 0,07 $
+
+La même taille de disque racine sur le palier par défaut coûte le même total qu'avant. L'étape
+Review and Deploy liste maintenant le calcul, le réseau, l'adresse IP publique et le stockage bloc
+racine sur des lignes distinctes.
+
+Les serveurs existants conservent leur forfait et leur prix. Redimensionner le forfait d'un serveur
+existant ne change pas son disque racine. Les forfaits personnalisés, où vous choisissez vos propres
+processeurs et mémoire, sont retirés. Choisissez une taille fixe. Le CLI v1.0.0, publié le même
+jour, définit le disque racine avec `--blockstorage-plan` et `--root-disk-size`. Le fournisseur
+Terraform et OpenTofu v1.0.0 prend en charge les mêmes sélections nommées de calcul et de stockage
+racine. Consultez [Types d'instances](/fr/public-cloud/compute/instance-types).
 
 ### Jusqu'à 8 sous-réseaux par VPC (7 septembre 2026) <!-- changelog-id: vpc-subnet-limit -->
 
@@ -136,6 +195,116 @@ Images d'applications en un clic pour les instances de calcul.
 
 L'outil en ligne de commande officiel de la plateforme. Les entrées ci-dessous reflètent le
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) du CLI sur GitHub.
+
+### v1.2.0 : 29 octobre 2026 <!-- changelog-id: cli-v1.2.0 -->
+
+**Chiffrement côté serveur facultatif pour le stockage objet.** Consultez la
+[version v1.2.0](https://github.com/zsoftly/zcp-cli/releases/tag/v1.2.0) sur GitHub et la
+[référence du CLI](/fr/public-cloud/cli/reference).
+
+- **Chiffrez vos téléversements.** `object put` accepte `--sse AES256` pour une clé gérée par le
+  service pour votre compartiment, ou `--sse aws:kms --sse-kms-key-id` pour un identifiant de clé
+  géré par le service. Le téléchargement déchiffre automatiquement l'objet pour toute personne
+  autorisée à le lire.
+- **Définissez un chiffrement par défaut pour un compartiment.** Les commandes `enable`, `status` et
+  `disable` de `zcp object-storage bucket encryption` le gèrent. Le chiffrement par défaut
+  s'applique aux téléversements suivants qui ne précisent pas leur propre chiffrement. Les objets et
+  versions existants ne changent pas.
+- **Vérifiez les copies et déplacements chiffrés.** Avec `--sse`, `object copy` et `object move`
+  utilisent une copie multipartite et vérifient le chiffrement de la destination avant de se
+  terminer. Sans `--sse`, la copie d'un objet chiffré conserve le chiffrement de la source.
+- **Un déplacement conserve la source en cas de problème.** La source reste en place si la copie
+  échoue, renvoie un résultat incomplet ou échoue à la vérification du chiffrement. Après un échec
+  de vérification, le CLI supprime uniquement la version de destination qu'il a écrite. Dans un
+  compartiment sans gestion des versions, il laisse la destination en place et vous avertit.
+- **Les copies chiffrées conservent les propriétés de l'objet.** Expires, Cache-Control,
+  Content-Disposition, Content-Encoding, Content-Language, Content-Type, les métadonnées utilisateur
+  et les étiquettes sont conservés.
+- **Les erreurs de copie gardent leur code et leur message.** Cela vaut pour les erreurs que le
+  service renvoie dans une réponse HTTP réussie.
+- **Les commandes de chiffrement de compartiment acceptent l'identifiant (slug) du compartiment**
+  affiché par `zcp object-storage bucket list`.
+
+Le chiffrement dépend du service de gestion des clés de la région. Vérifiez la disponibilité auprès
+du soutien ZCP avant de vous y fier. Les autres clients S3, comme l'AWS CLI, doivent utiliser une
+copie multipartite, ou télécharger puis retéléverser l'objet, pour obtenir une copie chiffrée, car
+le service refuse une copie en une seule requête qui demande le chiffrement. Une copie faite sans
+paramètres de chiffrement n'hérite pas du chiffrement par défaut du compartiment de destination. Le
+CLI ne rechiffre pas les objets existants, et le rechiffrement sur place n'est pas pris en charge.
+
+### v1.1.0 : 23 octobre 2026 <!-- changelog-id: cli-v1.1.0 -->
+
+**Planifications d'instantanés et correctifs DNS et de sécurité.** Consultez les
+[versions du CLI](https://github.com/zsoftly/zcp-cli/releases) sur GitHub et la
+[référence du CLI](/fr/public-cloud/cli/reference).
+
+- **Créez et gérez des planifications d'instantanés de stockage bloc.** `zcp snapshot schedule`
+  crée, liste, affiche, met à jour, suspend, reprend, supprime et exécute les planifications à la
+  demande. Configurez l'intervalle, le fuseau horaire, la rétention et un instantané immédiat
+  facultatif.
+- **Les planifications restent dans la portée sélectionnée.** Avant la création, le CLI vérifie la
+  région et le projet du volume cible. Les mises à jour et les actions rejettent les planifications
+  hors de la région et du projet sélectionnés.
+- **Correctif de sécurité pour la vérification des certificats.** La version du CLI utilise Go
+  1.26.10 pour corriger une vulnérabilité de vérification des certificats.
+- **La sortie par défaut de DNS record-create vérifie la valeur créée.** Sans `--show-zone`,
+  `dns record-create` renvoie une erreur si l’API accepte la demande, mais que le CLI ne peut pas
+  vérifier la nouvelle valeur. Consultez la zone avec `dns show` avant de réessayer. `--show-zone`
+  affiche la zone après une création ou une suppression. Avec ce paramètre, la création ne vérifie
+  pas la valeur créée.
+- **La suppression DNS gère désormais les ensembles d'enregistrements.** La sortie par défaut est un
+  instantané étiqueté avant suppression. Il ne garantit pas les valeurs supprimées si
+  l'enregistrement change en même temps. Le CLI supprime les valeurs de son instantané initial une
+  par une. Si une suppression échoue, il s'arrête et signale la progression partielle. Le CLI laisse
+  intactes les valeurs ajoutées après la lecture. Un enregistrement déjà absent est traité comme
+  supprimé.
+- **Les valeurs CAA doivent être entre guillemets.** Utilisez par exemple
+  `--content '0 issue "letsencrypt.org"'`.
+
+### v1.0.1 : 11 octobre 2026 <!-- changelog-id: cli-v1.0.1 -->
+
+Consultez la [version v1.0.1](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.1) sur GitHub.
+
+- **L'annulation d'instance et le changement de nom d'hôte utilisent les routes actuelles de
+  l'API.** Changer le nom d'hôte redémarre l'instance.
+- **Les listes d'instantanés de VM récupèrent toutes les pages signalées.** Un échec de pagination
+  sur une page ultérieure renvoie une erreur plutôt qu'une liste partielle.
+- **Les forfaits de volume nommés acceptent une capacité explicite.** Utilisez `--plan` avec
+  `--size` dans `zcp volume create`. Consultez la
+  [référence du CLI](/fr/public-cloud/cli/reference).
+
+### v1.0.0 : 11 octobre 2026 <!-- changelog-id: cli-v1.0.0 -->
+
+**Sélections distinctes du calcul et du stockage racine, planifications de sauvegarde de VM et
+listes DNS complètes.** Consultez la
+[version v1.0.0](https://github.com/zsoftly/zcp-cli/releases/tag/v1.0.0) sur GitHub.
+
+- **Les nouvelles instances exigent des forfaits nommés de calcul et de stockage racine.** Passez
+  `--plan`, `--blockstorage-plan` et `--root-disk-size`. Les entrées personnalisées de processeur,
+  de mémoire et de disque sont retirées.
+- **Les nouvelles grappes Kubernetes utilisent des forfaits distincts pour le plan de contrôle, les
+  nœuds de travail et le stockage racine.** La taille du disque racine s'applique à chaque nœud.
+  L'ajout automatique de nœuds reste non vérifié.
+- **Les planifications de sauvegarde de VM prennent en charge l'intervalle, le fuseau horaire, la
+  rétention, la pause, la reprise et l'exécution immédiate.** Listez les planifications après une
+  erreur `everyOtherDay`, car la plateforme peut enregistrer cette politique avant de renvoyer
+  l'erreur.
+- **Les listes DNS récupèrent toutes les pages signalées.** Un échec de pagination sur une page
+  ultérieure renvoie une erreur plutôt qu'une liste partielle.
+
+### v0.0.31 : 9 octobre 2026 <!-- changelog-id: cli-v0.0.31 -->
+
+**Contrôles de pagination des règles ACL et mises à jour de sécurité des dépendances.** Consultez la
+[version v0.0.31](https://github.com/zsoftly/zcp-cli/releases/tag/v0.0.31) sur GitHub.
+
+- **Listez les règles ACL sur toutes les pages de l'API.**
+  `zcp acl rules <vpc-slug> <acl-name-or-id>` lit maintenant chaque page de l'API par défaut.
+  Utilisez `--max-items`, `--starting-token` et `--page-size` pour contrôler une liste paginée, ou
+  `--no-paginate` pour demander une seule page de l'API. La commande renvoie une erreur plutôt que
+  des règles partielles si une page ultérieure échoue. Consultez la
+  [référence du CLI](/fr/public-cloud/cli/reference).
+- **Mises à jour de sécurité des dépendances Go.** Le minimum du langage reste Go 1.26.0. La chaîne
+  d'outils sélectionnée est Go 1.26.9 et le CLI met à jour `golang.org/x/net` vers la v0.60.0.
 
 ### v0.0.30 : 3 octobre 2026 <!-- changelog-id: cli-v0.0.30 -->
 
@@ -512,6 +681,110 @@ Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié 
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+
+### v1.2.0 : 29 octobre 2026 <!-- changelog-id: terraform-v1.2.0 -->
+
+**Version actuelle du fournisseur.** Utilisez `zcp_object_storage_bucket_encryption` pour gérer
+comme du code le chiffrement par défaut d'un compartiment de stockage objet. Consultez la
+[version v1.2.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.2.0) sur GitHub.
+
+- **Définissez le chiffrement par défaut d'un compartiment dans la configuration.** La ressource
+  prend en charge SSE-S3 ou une clé SSE-KMS gérée par le service, l'importation et la détection de
+  dérive. Les objets existants ne changent pas.
+- **Le chiffrement dépend du service de gestion des clés de la région.** Vérifiez la disponibilité
+  auprès du soutien ZCP avant de vous y fier.
+- **Le comportement des copies est le même que pour le CLI.** Les autres clients S3 doivent utiliser
+  une copie multipartite, ou télécharger puis retéléverser l'objet, pour obtenir une copie chiffrée.
+  Le service refuse les copies en une seule requête qui demandent le chiffrement. Une copie sans
+  paramètres de chiffrement n'hérite pas du chiffrement par défaut du compartiment, et le
+  rechiffrement sur place n'est pas pris en charge.
+- **Le fournisseur est compilé avec le CLI `zcp` v1.2.0.**
+
+### v1.1.0 : 23 octobre 2026 <!-- changelog-id: terraform-v1.1.0 -->
+
+Utilisez `zcp_volume_snapshot_schedule` pour gérer des instantanés récurrents de stockage bloc comme
+du code. Consultez les
+[versions du fournisseur](https://github.com/zsoftly/terraform-provider-zcp/releases) sur GitHub.
+
+- **Définissez la planification, la rétention, la portée et l'état en pause dans la configuration.**
+  La ressource prend en charge les planifications horaires, quotidiennes, hebdomadaires et
+  mensuelles, un instantané immédiat facultatif et l'importation.
+- **Importez les planifications sans remplacement inutile.** La première application enregistre la
+  valeur configurée de `immediate`. Modifier `name`, `description` ou une valeur `immediate` déjà
+  enregistrée remplace la planification. Supprimez les instantanés conservés avant de supprimer ou
+  de remplacer une planification.
+
+### v1.0.0 : 11 octobre 2026 <!-- changelog-id: terraform-v1.0.0 -->
+
+Consultez la [version v1.0.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.0.0)
+et le [guide de mise à niveau](/public-cloud/api/terraform-opentofu/) (en anglais).
+
+- **Les nouvelles instances exigent `plan`, `blockstorage_plan` et `root_disk_size`.** Le
+  fournisseur rejette les nouvelles configurations personnalisées de processeur, de mémoire et de
+  disque. L'état des forfaits personnalisés existants reste lisible et destructible.
+- **Les nouvelles grappes Kubernetes utilisent des forfaits fixes distincts pour les nœuds du plan
+  de contrôle, les nœuds de travail et le stockage racine.** Passer à cette forme remplace la
+  grappe. Le fournisseur enregistre les bornes de mise à l'échelle automatique demandées sans
+  confirmer une montée en charge immédiate.
+- **`zcp_vm_backup_schedule` gère les politiques récurrentes.** Il prend en charge l'intervalle, le
+  fuseau horaire, la rétention, l'état en pause, l'importation et la portée de la politique. Le
+  fournisseur rejette `everyOtherDay` avant que la plateforme puisse l'enregistrer et renvoyer une
+  erreur.
+- **Les recherches DNS paginent par slug, les volumes nommés acceptent un forfait et une capacité,
+  et la mise à jour du nom d'une instance passe par un changement de nom d'hôte.** Un changement de
+  nom d'hôte peut redémarrer une instance en cours d'exécution ou démarrer une instance arrêtée.
+
+### v0.3.0 : 9 octobre 2026 <!-- changelog-id: terraform-v0.3.0 -->
+
+**Forfaits de VM personnalisés, clés de stockage objet et correctifs d'état des équilibreurs de
+charge.** Consultez la
+[version v0.3.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v0.3.0) et le
+[journal des modifications associé à la version](https://github.com/zsoftly/terraform-provider-zcp/blob/v0.3.0/CHANGELOG.md)
+pour la liste complète des changements.
+
+- **Créez des instances à forfait personnalisé.** `zcp_instance` accepte `cpu`, `memory_gb` et
+  `disk_gb` ensemble lorsque vous omettez `plan`. Un forfait catalogue fixe continue d'utiliser
+  `plan`.
+- **Gérez les clés de stockage objet comme des ressources.** `zcp_object_storage_key` crée, importe
+  et révoque des clés d'accès S3. Son attribut `api_secret` est sensible et reste dans l'état
+  Terraform après que l'API cesse de divulguer le secret en clair. Les clés révoquées sont retirées
+  de l'état. Protégez l'accès à l'état en conséquence.
+- **Configurez les paramètres des compartiments S3 avec des identifiants explicites.** Les
+  ressources de configuration de compartiment utilisent `ZCP_S3_ACCESS_KEY` et `ZCP_S3_SECRET_KEY`
+  du processus du fournisseur.
+- **Lisez toutes les règles ACL.** Le fournisseur utilise le SDK du CLI v0.0.31. Ce SDK lit chaque
+  page de règles ACL et signale l'échec d'une page ultérieure au lieu de traiter les résultats
+  manquants comme absents.
+- **Recherchez des équilibreurs de charge et rafraîchissez les identifiants de règles.**
+  `data.zcp_load_balancer` expose les identifiants de règles pour les attachements. Les ressources
+  d'équilibreur de charge se rafraîchissent par le point de terminaison de détail. Elles effacent un
+  identifiant de règle initial lorsque l'API ne renvoie plus cette règle. La destruction accepte
+  aussi un équilibreur de charge ou un attachement que l'API confirme déjà absent.
+- **Lisez l'allocation actuelle du stockage objet.** Les lectures du stockage objet acceptent le
+  format actuel de la réponse de l'API sur la taille du stockage.
+- **Appliquez les mises à jour de sécurité des dépendances.** Le fournisseur sélectionne Go 1.26.9
+  et utilise `golang.org/x/net` v0.60.0.
+
+:::caution
+
+L'API rejette la suppression de la seule règle `zcp_load_balancer_rule` active d'un équilibreur de
+charge. Conservez au moins une règle lorsque vous gérez les règles séparément.
+
+:::
+
+Mettez à jour la contrainte du fournisseur, puis exécutez `terraform init -upgrade` ou
+`tofu init -upgrade` :
+
+```hcl
+terraform {
+  required_providers {
+    zcp = {
+      source  = "zsoftly/zcp"
+      version = "~> 0.3.0"
+    }
+  }
+}
+```
 
 ### v0.2.0 : 7 septembre 2026 <!-- changelog-id: terraform-v0.2.0 -->
 

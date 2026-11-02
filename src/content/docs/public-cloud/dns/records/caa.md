@@ -1,7 +1,7 @@
 ---
 title: CAA Records
 description:
-  Learn how CAA records restrict certificate issuance and the current ZCP DNS console limitation.
+  Create CAA records through the CLI or API when the ZCP DNS console does not offer the record type.
 ---
 
 A `CAA` record lists the certificate authorities allowed to issue certificates for your domain.

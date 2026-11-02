@@ -29,7 +29,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #f59e0b; --cat-dim: rgba(245,158,11,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
   </div>
   <h2 class="mp-cat-title">Les plus populaires</h2>
@@ -141,7 +141,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #f59e0b; --cat-dim: rgba(245,158,11,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
   </div>
   <h2 class="mp-cat-title">Panneaux de contrôle</h2>
@@ -163,7 +163,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #22c55e; --cat-dim: rgba(34,197,94,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
   </div>
   <h2 class="mp-cat-title">Serveurs web</h2>
@@ -235,7 +235,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #0ea5e9; --cat-dim: rgba(14,165,233,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
   </div>
   <h2 class="mp-cat-title">CMS</h2>
@@ -277,7 +277,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #6366f1; --cat-dim: rgba(99,102,241,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
   </div>
   <h2 class="mp-cat-title">Bureaux distants</h2>
@@ -299,7 +299,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #a855f7; --cat-dim: rgba(168,85,247,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
   </div>
   <h2 class="mp-cat-title">Outils développeur</h2>
@@ -491,7 +491,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #f97316; --cat-dim: rgba(249,115,22,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
   </div>
   <h2 class="mp-cat-title">Bases de données</h2>
@@ -633,7 +633,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #14b8a6; --cat-dim: rgba(20,184,166,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
   </div>
   <h2 class="mp-cat-title">Applications métier</h2>
@@ -725,7 +725,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #06b6d4; --cat-dim: rgba(6,182,212,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
   </div>
   <h2 class="mp-cat-title">Sécurité et VPN</h2>
@@ -838,7 +838,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #3b82f6; --cat-dim: rgba(59,130,246,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
   </div>
   <h2 class="mp-cat-title">Surveillance</h2>
@@ -910,7 +910,7 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
 <div class="mp-section">
 <div class="mp-cat-header">
-  <div class="mp-cat-icon" style="--cat-color: #ec4899; --cat-dim: rgba(236,72,153,0.12);">
+  <div class="mp-cat-icon">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18 9.5l-4.1 1.9L12 16l-1.9-4.6L6 9.5l4.1-1.9z"/><path d="M19 14l.95 2.3L22 17.25l-2.05.95L19 20.5l-.95-2.3L16 17.25l2.05-.95z"/></svg>
   </div>
   <h2 class="mp-cat-title">IA et agents</h2>

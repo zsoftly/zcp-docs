@@ -55,8 +55,8 @@ see and manage everything the Project contains:
 | **Load Balancer**    | Distributes traffic across multiple instances for high availability.      |
 
 When you create any of these resources, you select the Project they belong to. See
-[Create a Compute Instance](../compute/create-instance) for an example of the Project selector in
-action.
+[Create a Compute Instance](/public-cloud/compute/create-instance/) for an example of the Project
+selector in action.
 
 ## Add Users to a Project
 
@@ -94,6 +94,8 @@ Setting a quota limit to `-1` grants **unlimited** quota for that resource.
 
 ## Next steps
 
-- [Create a Compute Instance](../compute/create-instance): deploy your first VM into a Project.
-- [Quickstart](../getting-started/quickstart): go from zero to a running, reachable VM.
-- [Networking](../networking/public-network/create): give your Project's resources connectivity.
+- [Create a Compute Instance](/public-cloud/compute/create-instance/): deploy your first VM into a
+  Project.
+- [Quickstart](/public-cloud/getting-started/quickstart/): go from zero to a running, reachable VM.
+- [Networking](/public-cloud/networking/public-network/create/): give your Project's resources
+  connectivity.

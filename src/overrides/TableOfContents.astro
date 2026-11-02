@@ -1,6 +1,7 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/TableOfContents.astro';
+import { assistantUrl, pagePrompt } from '../lib/ai-assistants';
 
 const { toc, entry, lastUpdated } = Astro.locals.starlightRoute;
 const hasToc = toc && toc.items.length > 0;
@@ -24,21 +25,18 @@ const encodedPath = entry?.filePath
 const editUrl = encodedPath ? `${DOCS_REPO}/edit/main/${encodedPath}` : `${DOCS_REPO}`;
 const feedbackUrl = `${DOCS_REPO}/issues/new?labels=feedback&title=Feedback+on+docs`;
 
-// Markdown twin of this page (served by src/pages/[...slug].md.ts), e.g.
-// /changelog/ -> /changelog.md. Used by "Copy as Markdown" and the AI links.
+// Markdown twin generated from the rendered production page during the site build.
 const mdPath = `${Astro.url.pathname.replace(/\/$/, '')}.md`;
 const mdUrl = new URL(mdPath, Astro.site ?? Astro.url.origin).href;
 
-// "Ask AI about this page" — open the current page in an AI assistant, prompted
-// to read its clean Markdown URL (assistants ingest it more reliably than HTML).
-// `Astro.site` is the canonical host, so links point at the published page even
-// when previewing locally. Query params match each assistant's prefill contract:
-// ChatGPT `?prompt=`, Claude `?q=`, Cursor `cursor.com/link/prompt?text=`.
-const aiPrompt = `Read this documentation page:\n\n${mdUrl}`;
-const encodedPrompt = encodeURIComponent(aiPrompt);
-const chatgptUrl = `https://chatgpt.com/?prompt=${encodedPrompt}`;
-const claudeUrl = `https://claude.ai/new?q=${encodedPrompt}`;
-const cursorUrl = `https://cursor.com/link/prompt?text=${encodedPrompt}`;
+// "Ask AI about this page": open the current page in an AI assistant, prompted to read its
+// clean Markdown URL (assistants ingest it more reliably than HTML). `Astro.site` is the
+// canonical host, so links point at the published page even when previewing locally. Links and
+// prompts come from src/lib/ai-assistants.ts, shared with the Ask Docs dialog.
+const aiPrompt = pagePrompt(mdUrl);
+const chatgptUrl = assistantUrl('chatgpt', aiPrompt);
+const claudeUrl = assistantUrl('claude', aiPrompt);
+const cursorUrl = assistantUrl('cursor', aiPrompt);
 ---
 
 <div class="zs-toc-panel">
@@ -298,8 +296,7 @@ const cursorUrl = `https://cursor.com/link/prompt?text=${encodedPrompt}`;
       const label = btn.querySelector('.zs-action-label') as HTMLElement;
       if (!label) return;
 
-      // Prefer the page's true source Markdown (served at <path>.md); fall back
-      // to converting the rendered DOM if that request fails.
+      // Prefer the build-generated Markdown export; fall back to the rendered DOM.
       let markdown = '';
       const mdUrl = btn.dataset.mdUrl;
       if (mdUrl) {
@@ -475,19 +472,23 @@ const cursorUrl = `https://cursor.com/link/prompt?text=${encodedPrompt}`;
 
   /* Last updated badge */
   .zs-last-updated {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
+    display: block;
+    font-family: var(--zi-font-mono);
     font-size: 0.75rem;
-    color: var(--sl-color-gray-3);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--zi-ink-faint);
     margin: 0 0 1rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--sl-color-gray-6);
-    line-height: 1;
+    line-height: 1.4;
   }
 
   .zs-last-updated svg {
-    flex-shrink: 0;
+    display: inline-block;
+    margin-inline-end: 0.375rem;
+    vertical-align: -1px;
     opacity: 0.6;
   }
 
@@ -508,22 +509,22 @@ const cursorUrl = `https://cursor.com/link/prompt?text=${encodedPrompt}`;
     width: 100%;
     padding: 0.375rem 0.5rem;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--zi-radius-md);
     background: transparent;
     cursor: pointer;
     font-size: 0.8125rem;
-    font-weight: 450;
+    font-weight: 400;
     color: var(--sl-color-gray-2);
     text-decoration: none !important;
     transition:
-      background-color 120ms ease,
-      color 120ms ease;
+      background-color var(--zi-transition),
+      color var(--zi-transition);
     font-family: inherit;
     text-align: left;
   }
 
   .zs-action-btn:hover {
-    background-color: var(--sl-color-gray-6);
+    background-color: var(--zi-surface-raised);
     color: var(--sl-color-text);
     text-decoration: none !important;
   }
@@ -546,11 +547,12 @@ const cursorUrl = `https://cursor.com/link/prompt?text=${encodedPrompt}`;
   .zs-toc-ai-label {
     margin: 0 0 0.375rem;
     padding: 0 0.5rem;
-    font-size: 0.6875rem;
-    font-weight: 600;
+    font-family: var(--zi-font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--sl-color-gray-3);
+    letter-spacing: 0.08em;
+    color: var(--zi-ink-faint);
   }
 
   .zs-action-btn .zs-ext {

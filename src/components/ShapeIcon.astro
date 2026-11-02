@@ -1,5 +1,6 @@
 ---
-// Renders a 24x24 stroked icon from structured shapes.
+// Renders a 24x24 outline icon from structured shapes. The stroke is
+// currentColor, so the icon takes the accent or text colour of its container.
 //
 // Each shape is emitted through a real element with named attributes, so the
 // icon data is never injected as raw HTML and cannot carry markup.
@@ -20,7 +21,7 @@ const { shapes, size = 20 } = Astro.props;
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"
-  stroke-width="1.75"
+  stroke-width="1.5"
   stroke-linecap="round"
   stroke-linejoin="round"
   aria-hidden="true"

@@ -69,8 +69,8 @@ entre guillemets.
 
 ## Limites connues
 
-La limite relative aux CNAME s'applique à la console, à la CLI et à l'API. La limite de suppression
-par la CLI est propre à la CLI.
+Les deux premières limites s'appliquent autant à la console qu'à la CLI et à l'API. La dernière
+s'applique à la CLI.
 
 ### Un CNAME ne peut pas partager un nom
 
@@ -91,19 +91,12 @@ avec la nouvelle valeur.
 les valeurs qu'il contient. Pour retirer une seule valeur avec la CLI, supprimez l'ensemble, puis
 recréez les valeurs à conserver. La console retire une seule valeur.
 
-### Les CAA ne sont pas disponibles dans la console
-
-La console DNS ZCP ne propose pas `CAA` comme type d'enregistrement. Utilisez la CLI ou l'API pour
-créer des enregistrements `CAA`.
-
 ## Gérer les enregistrements
 
-Utilisez l'interface documentée pour votre flux de travail :
+Tous les types se gèrent de la même façon dans chaque interface :
 
-- **Console** : ouvrez la section DNS du portail, puis cliquez sur **Créer un enregistrement**. La
-  console retire une valeur sélectionnée.
-- **CLI** : [Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli). `zcp dns record-delete` supprime
-  l'ensemble d'enregistrements complet.
+- **Console** : ouvrez la section DNS du portail, puis cliquez sur **Créer un enregistrement**.
+- **CLI** : [Gérer le DNS avec la CLI](/fr/public-cloud/dns/cli).
 - **API** : [Gérer le DNS avec l'API](/fr/public-cloud/dns/api/).
 
 Aucune action de mise à jour n'existe. Pour modifier un enregistrement, supprimez-le, puis

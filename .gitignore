@@ -122,6 +122,7 @@ ansible/cloudstack/tests/
 dist/
 .astro/
 .pnpm-store/
+ai-craft/
 
 # Legacy Docusaurus artifacts (safety — do not commit if re-generated)
 build/

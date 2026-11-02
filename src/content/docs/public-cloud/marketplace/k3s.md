@@ -21,6 +21,9 @@ full operational footprint of a larger Kubernetes platform.
 | RAM      | 2 GB    | 4 GB        |
 | Storage  | 20 GB   | 40 GB       |
 
+The storage figure is your root disk size. Choose it on the **OS Disk Offering** step when you
+create the instance. You pay for it per GB, separate from the plan.
+
 Size the instance for the workloads you plan to run. K3s itself is lightweight, but containers,
 images, logs, and persistent volumes can grow over time.
 

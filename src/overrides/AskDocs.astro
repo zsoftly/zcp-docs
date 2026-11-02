@@ -1,0 +1,372 @@
+---
+/**
+ * Ask Docs: a floating button that opens a dialog. The reader types a question and opens it in
+ * ChatGPT, Claude or Cursor. The prompt points the assistant at the current page and the
+ * full ZCP documentation (llms.txt, llms-full.txt), so answers come from these docs.
+ * Links and prompts come from src/lib/ai-assistants.ts, the same module the table of contents
+ * uses. Rendered once per page from PageFrame.astro.
+ */
+import { assistants } from '../lib/ai-assistants';
+import { askDocsExamples } from '../data/ask-docs';
+
+const lang = Astro.locals.starlightRoute.lang?.startsWith('fr') ? 'fr' : 'en';
+const siteUrl = (Astro.site ?? new URL(Astro.url.origin)).href;
+const path = Astro.url.pathname.replace(/\/$/, '');
+const isHome = path === '' || path === '/fr';
+const pageMarkdownUrl = isHome ? '' : new URL(`${path}.md`, siteUrl).href;
+const examples = askDocsExamples[lang];
+const t = Astro.locals.t;
+---
+
+<button
+  type="button"
+  class="zs-ask-docs-btn"
+  data-ask-docs-open
+  aria-haspopup="dialog"
+  aria-controls="zs-ask-docs"
+>
+  {t('zs.askDocs.button')}
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"></path>
+    <path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"></path>
+  </svg>
+</button>
+
+<dialog
+  id="zs-ask-docs"
+  class="zs-ask-docs"
+  aria-labelledby="zs-ask-docs-title"
+  data-site-url={siteUrl}
+  data-page-url={pageMarkdownUrl}
+  data-lang={lang}
+>
+  <form method="dialog" class="zs-ask-docs__panel" data-ask-docs-form>
+    <div class="zs-ask-docs__head">
+      <h2 id="zs-ask-docs-title">{t('zs.askDocs.title')}</h2>
+      <button
+        type="submit"
+        value="close"
+        class="zs-ask-docs__close"
+        aria-label={t('zs.askDocs.close')}
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+    <p class="zs-ask-docs__intro">{t('zs.askDocs.intro')}</p>
+
+    <p class="zs-ask-docs__label">{t('zs.askDocs.examples')}</p>
+    <div class="zs-ask-docs__examples">
+      {
+        examples.map((question) => (
+          <button type="button" class="zs-ask-docs__example" data-ask-docs-example>
+            {question}
+          </button>
+        ))
+      }
+    </div>
+
+    <label class="zs-ask-docs__label" for="zs-ask-docs-input">{t('zs.askDocs.input')}</label>
+    <textarea
+      id="zs-ask-docs-input"
+      class="zs-ask-docs__input"
+      rows="2"
+      placeholder={t('zs.askDocs.placeholder')}
+      data-ask-docs-input></textarea>
+
+    <p class="zs-ask-docs__label">{t('zs.askDocs.askWith')}</p>
+    <div class="zs-ask-docs__assistants">
+      {
+        assistants.map((assistant) => (
+          <button
+            type="button"
+            class="zs-ask-docs__assistant"
+            data-ask-docs-assistant={assistant.id}
+          >
+            {t(assistant.labelKey)}
+          </button>
+        ))
+      }
+    </div>
+    <p class="zs-ask-docs__hint" data-ask-docs-hint data-template={t('zs.askDocs.enterHint')}></p>
+    <p class="zs-ask-docs__privacy">{t('zs.askDocs.privacy')}</p>
+  </form>
+</dialog>
+
+<script>
+  import {
+    assistantUrl,
+    assistants,
+    defaultAssistant,
+    isAssistantId,
+    questionPrompt,
+    type AssistantId,
+  } from '../lib/ai-assistants';
+
+  const STORAGE_KEY = 'zs-ask-docs-assistant';
+  const dialog = document.getElementById('zs-ask-docs') as HTMLDialogElement | null;
+  const openButton = document.querySelector<HTMLButtonElement>('[data-ask-docs-open]');
+
+  if (dialog && openButton) {
+    const input = dialog.querySelector<HTMLTextAreaElement>('[data-ask-docs-input]')!;
+    const hint = dialog.querySelector<HTMLElement>('[data-ask-docs-hint]')!;
+    const lang = dialog.dataset.lang === 'fr' ? 'fr' : 'en';
+
+    const readPreferred = (): AssistantId => {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (isAssistantId(saved)) return saved;
+      } catch {
+        /* storage blocked: fall back to the default */
+      }
+      return defaultAssistant;
+    };
+
+    let preferred = readPreferred();
+
+    const renderHint = () => {
+      const label = assistants.find((assistant) => assistant.id === preferred)?.name ?? '';
+      hint.textContent = (hint.dataset.template ?? '').replace('{assistant}', label);
+      dialog.querySelectorAll<HTMLElement>('[data-ask-docs-assistant]').forEach((button) => {
+        button.classList.toggle('is-preferred', button.dataset.askDocsAssistant === preferred);
+      });
+    };
+
+    const ask = (id: AssistantId) => {
+      const question = input.value.trim();
+      if (!question) {
+        input.focus();
+        return;
+      }
+      preferred = id;
+      try {
+        localStorage.setItem(STORAGE_KEY, id);
+      } catch {
+        /* storage blocked: the choice is not remembered */
+      }
+      const prompt = questionPrompt({
+        question,
+        pageMarkdownUrl: dialog.dataset.pageUrl ?? '',
+        siteUrl: dialog.dataset.siteUrl ?? location.origin,
+        lang,
+      });
+      window.open(assistantUrl(id, prompt), '_blank', 'noopener,noreferrer');
+      dialog.close();
+    };
+
+    openButton.addEventListener('click', () => {
+      renderHint();
+      dialog.showModal();
+      input.focus();
+    });
+
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+
+    dialog.querySelectorAll<HTMLButtonElement>('[data-ask-docs-example]').forEach((button) => {
+      button.addEventListener('click', () => {
+        input.value = button.textContent?.trim() ?? '';
+        input.focus();
+      });
+    });
+
+    dialog.querySelectorAll<HTMLButtonElement>('[data-ask-docs-assistant]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const id = button.dataset.askDocsAssistant;
+        if (isAssistantId(id)) ask(id);
+      });
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
+        event.preventDefault();
+        ask(preferred);
+      }
+    });
+
+    if (!assistants.some((assistant) => assistant.id === preferred)) preferred = defaultAssistant;
+  }
+</script>
+
+<style>
+  .zs-ask-docs-btn {
+    position: fixed;
+    inset-block-end: max(var(--zi-space-6), env(safe-area-inset-bottom, 0px));
+    inset-inline-end: var(--zi-space-6);
+    z-index: calc(var(--zi-layer-float) - 1);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zi-space-2);
+    height: 2.75rem;
+    padding: 0 var(--zi-space-4);
+    border: 1px solid var(--zi-line-control);
+    border-radius: 999px;
+    background: var(--zi-surface);
+    color: var(--zi-ink);
+    font: 600 0.9375rem/1 var(--zi-font-sans);
+    box-shadow: var(--zi-shadow-pop);
+    cursor: pointer;
+    transition:
+      background-color 120ms,
+      border-color 120ms;
+  }
+  .zs-ask-docs-btn:hover {
+    background: var(--zi-surface-raised);
+  }
+  .zs-ask-docs-btn:focus-visible,
+  .zs-ask-docs :focus-visible {
+    outline: 2px solid var(--zi-focus);
+    outline-offset: 2px;
+  }
+  /* On phones the consent banner spans the bottom edge. Step aside while it is open. */
+  @media (max-width: 50rem) {
+    :global(body:has(#zsoftly-consent-banner:not([hidden]))) .zs-ask-docs-btn {
+      display: none;
+    }
+  }
+  @media print {
+    .zs-ask-docs-btn {
+      display: none;
+    }
+  }
+
+  /* Centred explicitly: a global reset zeroes the dialog's default auto margins. */
+  .zs-ask-docs {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    height: fit-content;
+    width: min(40rem, calc(100vw - 2 * var(--zi-space-4)));
+    max-height: calc(100dvh - 2 * var(--zi-space-8));
+    padding: 0;
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-lg);
+    background: var(--zi-surface);
+    color: var(--zi-ink);
+    box-shadow: var(--zi-shadow-pop);
+  }
+  :global(#zs-ask-docs::backdrop) {
+    background: rgb(0 0 0 / 0.55);
+  }
+  .zs-ask-docs__panel {
+    display: grid;
+    gap: var(--zi-space-3);
+    padding: var(--zi-space-6);
+  }
+  .zs-ask-docs__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--zi-space-3);
+  }
+  .zs-ask-docs__head h2 {
+    margin: 0;
+    font: 600 1.25rem/1.4 var(--zi-font-sans);
+    color: var(--zi-ink);
+  }
+  .zs-ask-docs__close {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: var(--zi-radius-md);
+    background: transparent;
+    color: var(--zi-ink-muted);
+    cursor: pointer;
+  }
+  .zs-ask-docs__close:hover {
+    background: var(--zi-surface-raised);
+    color: var(--zi-ink);
+  }
+  .zs-ask-docs__intro {
+    margin: 0;
+    color: var(--zi-ink-muted);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .zs-ask-docs__label {
+    margin: var(--zi-space-2) 0 0;
+    font: 500 0.75rem/1rem var(--zi-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--zi-ink-faint);
+  }
+  .zs-ask-docs__examples,
+  .zs-ask-docs__assistants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zi-space-2);
+  }
+  .zs-ask-docs__example,
+  .zs-ask-docs__assistant {
+    padding: var(--zi-space-2) var(--zi-space-3);
+    border: 1px solid var(--zi-line-control);
+    border-radius: var(--zi-radius-md);
+    background: var(--zi-surface);
+    color: var(--zi-ink);
+    font: 400 0.875rem/1.4 var(--zi-font-sans);
+    text-align: start;
+    cursor: pointer;
+    transition:
+      background-color 120ms,
+      border-color 120ms;
+  }
+  .zs-ask-docs__example:hover,
+  .zs-ask-docs__assistant:hover {
+    background: var(--zi-surface-raised);
+  }
+  .zs-ask-docs__assistant {
+    font-weight: 600;
+  }
+  .zs-ask-docs__assistant.is-preferred {
+    border-color: var(--zi-accent);
+    color: var(--zi-accent);
+  }
+  .zs-ask-docs__input {
+    width: 100%;
+    min-height: 3.5rem;
+    padding: var(--zi-space-3);
+    border: 1px solid var(--zi-line-control);
+    border-radius: var(--zi-radius-md);
+    background: var(--zi-surface);
+    color: var(--zi-ink);
+    font: 400 1rem/1.5 var(--zi-font-sans);
+    resize: vertical;
+    box-sizing: border-box;
+  }
+  .zs-ask-docs__input::placeholder {
+    color: var(--zi-ink-faint);
+  }
+  .zs-ask-docs__hint,
+  .zs-ask-docs__privacy {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--zi-ink-muted);
+  }
+  .zs-ask-docs__privacy {
+    color: var(--zi-ink-faint);
+  }
+</style>

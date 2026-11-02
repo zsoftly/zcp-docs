@@ -1,0 +1,428 @@
+---
+/**
+ * The docs home page body, shared by the English and French home pages. It renders from
+ * `src/data/home.ts`, the tutorials collection and the changelog feed, so only the section headings
+ * in `t` are written here. The hero (title, search and Ask Docs) is `src/overrides/Hero.astro`.
+ */
+import { getEntry } from 'astro:content';
+import {
+  HOME_RELEASE_COUNT,
+  homeGetStarted,
+  homePlatforms,
+  homeProducts,
+  homeSpotlight,
+  homeTools,
+} from '../data/home';
+import { tutorialPublishedOn } from '../data/tutorials';
+import ShapeIcon from './ShapeIcon.astro';
+import { latestChangelogEntries, publicationDateAtUtcMidnight } from '../data/changelog-feed';
+
+interface Props {
+  lang: 'en' | 'fr';
+}
+
+const { lang } = Astro.props;
+const prefix = lang === 'fr' ? '/fr/' : '/';
+const href = (path: string) => (path.startsWith('/') ? path : `${prefix}${path}`);
+const dateFormat = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-CA' : 'en-CA', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+const formatDate = (date: string) => dateFormat.format(publicationDateAtUtcMidnight(date));
+
+const t = {
+  platforms: { en: 'Choose your platform', fr: 'Choisissez votre plateforme' },
+  start: { en: 'Get started', fr: 'Pour commencer' },
+  spotlight: { en: 'Documentation spotlight', fr: 'À la une' },
+  allTutorials: { en: 'All tutorials', fr: 'Tous les tutoriels' },
+  products: { en: 'Explore products', fr: 'Explorez les produits' },
+  tools: { en: 'CLI, API and tools', fr: 'CLI, API et outils' },
+  releases: { en: 'Release notes', fr: 'Notes de version' },
+  changelog: { en: 'View the full changelog', fr: 'Voir le journal des modifications complet' },
+};
+
+const spotlight = await Promise.all(
+  homeSpotlight.map(async (item) => {
+    const id = lang === 'fr' ? `fr/tutorials/${item.slug}` : `tutorials/${item.slug}`;
+    const entry = await getEntry('docs', id);
+    if (!entry) throw new Error(`[ERROR] DocsHome: tutorial ${id} not found`);
+    const published = tutorialPublishedOn[item.slug];
+    return {
+      ...item,
+      title: entry.data.title,
+      description: entry.data.description ?? '',
+      date: published ? formatDate(published) : null,
+      href: href(`tutorials/${item.slug}/`),
+    };
+  })
+);
+
+const releases = latestChangelogEntries(HOME_RELEASE_COUNT, lang).map((entry) => ({
+  ...entry,
+  date: formatDate(entry.pubDate),
+  href: href(`changelog/#${entry.slug}`),
+}));
+---
+
+<div class="zs-home not-content">
+  <section class="zs-home__section" aria-labelledby="zs-home-platforms">
+    <h2 id="zs-home-platforms">{t.platforms[lang]}</h2>
+    <div class="zs-home__grid zs-home__grid--3">
+      {
+        homePlatforms.map((platform) => (
+          <a class="zs-home__platform" href={href(platform.path)}>
+            <span class="zs-home__label">{platform.label[lang]}</span>
+            <span class="zs-home__platform-title">{platform.title[lang]}</span>
+            <span class="zs-home__desc">{platform.desc[lang]}</span>
+            <span class="zs-home__go">{platform.cta[lang]} →</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="zs-home__section" aria-labelledby="zs-home-start">
+    <h2 id="zs-home-start">{t.start[lang]}</h2>
+    <div class="zs-home__grid zs-home__grid--4">
+      {
+        homeGetStarted.map((item) => (
+          <a class="zs-home__card" href={href(item.path)}>
+            <span class="zs-home__icon" aria-hidden="true">
+              {item.icon && <ShapeIcon shapes={item.icon} size={22} />}
+            </span>
+            <span class="zs-home__card-title">{item.title[lang]}</span>
+            <span class="zs-home__desc">{item.desc[lang]}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="zs-home__section" aria-labelledby="zs-home-spotlight">
+    <h2 id="zs-home-spotlight">{t.spotlight[lang]}</h2>
+    <div class="zs-home__grid zs-home__grid--2">
+      {
+        spotlight.map((item) => (
+          <a class="zs-home__spotlight" href={item.href}>
+            <img src={item.image} alt="" width="800" height="450" loading="lazy" decoding="async" />
+            <span class="zs-home__spotlight-body">
+              <span class="zs-home__meta">
+                <span class="zs-home__tag">{item.tag[lang]}</span>
+                {item.date && <span class="zs-home__label">{item.date}</span>}
+              </span>
+              <span class="zs-home__platform-title">{item.title}</span>
+              <span class="zs-home__desc">{item.description}</span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+    <a class="zs-home__more" href={href('tutorials/')}>
+      {t.allTutorials[lang]} →
+    </a>
+  </section>
+
+  <section class="zs-home__section" aria-labelledby="zs-home-products">
+    <h2 id="zs-home-products">{t.products[lang]}</h2>
+    <div class="zs-home__products">
+      {
+        homeProducts.map((item) => (
+          <a class="zs-home__product" href={href(item.path)}>
+            <span class="zs-home__icon" aria-hidden="true">
+              {item.icon && <ShapeIcon shapes={item.icon} size={22} />}
+            </span>
+            <span class="zs-home__card-title">{item.title[lang]}</span>
+            <span class="zs-home__desc">{item.desc[lang]}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <div class="zs-home__split">
+    <section aria-labelledby="zs-home-tools">
+      <h2 id="zs-home-tools">{t.tools[lang]}</h2>
+      <ul class="zs-home__list">
+        {
+          homeTools.map((tool) => (
+            <li>
+              {tool.path ? (
+                <a class="zs-home__row" href={href(tool.path)}>
+                  <span class="zs-home__glyph" aria-hidden="true">
+                    {tool.glyph}
+                  </span>
+                  <span class="zs-home__card-title">{tool.title[lang]}</span>
+                  <span class="zs-home__desc">{tool.desc[lang]}</span>
+                </a>
+              ) : (
+                <button class="zs-home__row" type="button" data-zs-home-ask>
+                  <span class="zs-home__glyph" aria-hidden="true">
+                    {tool.glyph}
+                  </span>
+                  <span class="zs-home__card-title">{tool.title[lang]}</span>
+                  <span class="zs-home__desc">{tool.desc[lang]}</span>
+                </button>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="zs-home-releases">
+      <h2 id="zs-home-releases">{t.releases[lang]}</h2>
+      <ul class="zs-home__list">
+        {
+          releases.map((entry) => (
+            <li>
+              <a class="zs-home__release" href={entry.href}>
+                <span class="zs-home__label">{entry.date}</span>
+                <span class="zs-home__card-title">{entry.title}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="zs-home__more" href={href('changelog/')}>
+        {t.changelog[lang]} →
+      </a>
+    </section>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-zs-home-ask]').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.querySelector<HTMLButtonElement>('[data-ask-docs-open]')?.click();
+    });
+  });
+</script>
+
+<style>
+  .zs-home {
+    display: grid;
+    gap: var(--zi-space-12);
+    padding-block: var(--zi-space-8) var(--zi-space-12);
+  }
+
+  .zs-home h2 {
+    margin: 0 0 var(--zi-space-4);
+    font-size: 1.375rem;
+    line-height: 1.875rem;
+    font-weight: 600;
+    color: var(--zi-ink);
+  }
+
+  .zs-home__grid {
+    display: grid;
+    gap: var(--zi-space-6);
+  }
+  .zs-home__grid--2 {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  }
+  .zs-home__grid--3 {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  }
+  .zs-home__grid--4 {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  }
+
+  .zs-home a {
+    color: var(--zi-ink);
+    text-decoration: none;
+  }
+
+  .zs-home__platform,
+  .zs-home__card,
+  .zs-home__spotlight {
+    display: grid;
+    align-content: start;
+    gap: var(--zi-space-2);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-lg);
+    transition: border-color 120ms;
+  }
+  .zs-home__platform {
+    padding: var(--zi-space-6);
+    background: var(--zi-surface-raised);
+  }
+  .zs-home__card {
+    padding: var(--zi-space-4) var(--zi-space-4) var(--zi-space-6);
+    background: var(--zi-surface);
+  }
+  .zs-home__spotlight {
+    gap: 0;
+    overflow: hidden;
+    background: var(--zi-surface);
+  }
+  .zs-home__platform:hover,
+  .zs-home__card:hover,
+  .zs-home__spotlight:hover {
+    border-color: var(--zi-line-strong);
+  }
+
+  .zs-home__spotlight img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 16 / 7;
+    object-fit: cover;
+    border-block-end: 1px solid var(--zi-line);
+  }
+  .zs-home__spotlight-body {
+    display: grid;
+    gap: var(--zi-space-2);
+    padding: var(--zi-space-4) var(--zi-space-6) var(--zi-space-6);
+  }
+
+  .zs-home__label {
+    font: 500 0.75rem/1rem var(--zi-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--zi-ink-faint);
+  }
+  .zs-home__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--zi-space-2);
+  }
+  .zs-home__tag {
+    font: 500 0.75rem/1rem var(--zi-font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--zi-accent);
+    border: 1px solid var(--zi-accent);
+    border-radius: var(--zi-radius-sm);
+    padding: 2px var(--zi-space-2);
+  }
+
+  .zs-home__platform-title {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+  }
+  .zs-home__card-title {
+    font-size: 1.0625rem;
+    line-height: 1.625rem;
+    font-weight: 600;
+  }
+  .zs-home__desc {
+    font-size: 0.875rem;
+    line-height: 1.375rem;
+    color: var(--zi-ink-muted);
+  }
+  .zs-home__go,
+  .zs-home__more {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .zs-home a.zs-home__more,
+  .zs-home__go {
+    color: var(--zi-accent);
+  }
+  .zs-home__more {
+    display: inline-block;
+    margin-block-start: var(--zi-space-4);
+  }
+  .zs-home a.zs-home__more:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .zs-home__icon {
+    display: grid;
+    place-items: center;
+    inline-size: 36px;
+    block-size: 36px;
+    border-radius: var(--zi-radius-md);
+    color: var(--zi-accent);
+    transition: background-color 120ms;
+  }
+  /* The one highlight: a soft accent square behind the icon. No other hue is used. */
+  :is(.zs-home__card, .zs-home__product):is(:hover, :focus-visible) .zs-home__icon {
+    background: var(--zi-accent-soft);
+  }
+
+  .zs-home__products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    border-block-start: 1px solid var(--zi-line);
+    border-inline-start: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-lg);
+    overflow: hidden;
+  }
+  .zs-home__product {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    align-items: center;
+    gap: var(--zi-space-1) var(--zi-space-3);
+    padding: var(--zi-space-4);
+    border-inline-end: 1px solid var(--zi-line);
+    border-block-end: 1px solid var(--zi-line);
+    transition: background-color 120ms;
+  }
+  .zs-home__product .zs-home__icon {
+    grid-row: span 2;
+  }
+  .zs-home__product:hover {
+    background: var(--zi-surface-raised);
+  }
+
+  .zs-home__split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: var(--zi-space-12);
+  }
+  .zs-home__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .zs-home__row,
+  .zs-home__release {
+    display: grid;
+    gap: 2px var(--zi-space-3);
+    padding-block: var(--zi-space-3);
+    border-block-end: 1px solid var(--zi-line);
+  }
+  .zs-home__row {
+    inline-size: 100%;
+    grid-template-columns: 40px 1fr;
+    align-items: center;
+    padding-inline: 0;
+    text-align: start;
+    background: none;
+    border-inline: 0;
+    border-block-start: 0;
+    color: var(--zi-ink);
+    font: inherit;
+    cursor: pointer;
+  }
+  .zs-home__row .zs-home__desc {
+    grid-column: 2;
+  }
+  .zs-home__glyph {
+    grid-row: span 2;
+    inline-size: 40px;
+    block-size: 40px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-md);
+    background: var(--zi-surface-sunken);
+    font: 500 0.8125rem var(--zi-font-mono);
+    color: var(--zi-accent);
+  }
+  .zs-home__row:hover .zs-home__card-title,
+  .zs-home__release:hover .zs-home__card-title {
+    color: var(--zi-accent);
+  }
+
+  .zs-home :is(a, button):focus-visible {
+    outline: 2px solid var(--zi-focus);
+    outline-offset: 2px;
+  }
+</style>

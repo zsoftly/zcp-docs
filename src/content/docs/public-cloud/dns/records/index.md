@@ -77,11 +77,11 @@ records, and never at the zone apex.
 
 There is no update action. To change a value, delete it and create it again with the new value.
 
-### CLI Delete Removes the Whole Set
+### CLI Delete Uses an Initial Snapshot
 
-`zcp dns record-delete` deletes the record set at a name and type, which removes every value in it.
-To remove one value with the CLI, delete the set and create the values you want to keep again. The
-console removes a single value.
+`zcp dns record-delete` attempts to delete each value it reads initially at a name and type. Values
+added concurrently remain. The CLI is not suitable for removing one selected value. Use the console
+or the API with the exact record content instead.
 
 ### CAA Is Unavailable in the Console
 
@@ -94,8 +94,8 @@ Use the documented surface for your workflow:
 
 - **Console**: the DNS section of the portal, then **Create Record**. The console removes one
   selected value.
-- **CLI**: [Manage DNS with the CLI](/public-cloud/dns/cli). `zcp dns record-delete` removes the
-  whole record set.
+- **CLI**: [Manage DNS with the CLI](/public-cloud/dns/cli). `zcp dns record-delete` reads the
+  matching values, then attempts to delete each one from that initial snapshot.
 - **API**: [Manage DNS with the API](/public-cloud/dns/api/).
 
 There is no update action. To change a record, delete it and create it again with the new value.

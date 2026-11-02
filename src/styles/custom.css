@@ -1,17 +1,73 @@
 /* ============================================================
-   ZSoftly brand tokens
-   ============================================================ */
+   ZCP Instrument for Starlight
+   ============================================================
+   Design spec: docs/architecture/zcp-instrument-design-system.md in the
+   platform repo. The tokens are defined once in tokens.css (listed first in
+   customCss). This file maps Starlight's variables onto them and styles the
+   site's own components. Every colour here is a token. */
 
+/* ── Starlight variable mapping ─────────────────────────────── */
+/* Starlight's grey scale runs from --sl-color-white (strongest text) to
+   --sl-color-black (page ground) in both themes, so one mapping covers Paper
+   and Carbon. The tokens switch underneath it. Starlight declares its own
+   values inside cascade layers, so this unlayered :root block wins in both
+   themes. */
 :root {
-  --sl-color-accent-low: #dae5fa;
-  --sl-color-accent: #00198a;
-  --sl-color-accent-high: #001170;
+  --sl-color-white: var(--zi-ink);
+  --sl-color-gray-1: var(--zi-ink);
+  --sl-color-gray-2: var(--zi-ink-muted);
+  --sl-color-gray-3: var(--zi-ink-muted);
+  --sl-color-gray-4: var(--zi-ink-faint);
+  --sl-color-gray-5: var(--zi-line-strong);
+  --sl-color-gray-6: var(--zi-line);
+  --sl-color-gray-7: var(--zi-surface-raised);
+  --sl-color-black: var(--zi-surface);
 
+  --sl-color-accent-low: var(--zi-accent-soft);
+  --sl-color-accent: var(--zi-accent);
+  --sl-color-accent-high: var(--zi-accent-hover);
+
+  --sl-color-text: var(--zi-ink);
+  --sl-color-text-accent: var(--zi-accent);
+  --sl-color-text-invert: var(--zi-on-accent);
+  --sl-color-bg: var(--zi-surface);
+  --sl-color-bg-nav: var(--zi-surface-raised);
+  --sl-color-bg-sidebar: var(--zi-surface-raised);
+  --sl-color-bg-inline-code: var(--zi-surface-sunken);
+  --sl-color-bg-accent: var(--zi-accent);
+  --sl-color-hairline: var(--zi-line);
+  --sl-color-hairline-light: var(--zi-line);
+  --sl-color-hairline-shade: var(--zi-line);
+
+  /* Hairlines carry structure. Only floating things (search, menus) get a
+     shadow. */
+  --sl-shadow-sm: none;
+  --sl-shadow-md: var(--zi-shadow-pop);
+  --sl-shadow-lg: var(--zi-shadow-pop);
+
+  --sl-font: var(--zi-font-sans);
+  --sl-font-mono: var(--zi-font-mono);
+
+  /* Type scale: display-2 for the page h1, heading-2 and heading-3 for
+     sections, body 16/27, code 14. */
+  --sl-text-h1: 1.875rem;
+  --sl-text-h2: 1.375rem;
+  --sl-text-h3: 1.0625rem;
+  --sl-text-h4: 1rem;
+  --sl-text-h5: 1rem;
+  --sl-text-code: 0.875rem;
+  --sl-line-height: 1.6875;
+  --sl-line-height-headings: 1.3;
+}
+
+/* ── Top bars and header offsets ────────────────────────────── */
+:root {
   /* Top bar heights. --sl-announcement-height is their total, and every layout
      offset below is written against that total, so either bar can be present or
      dismissed without the header or content overlapping. PageFrame sets
-     --zs-notice-height to a real height only while a notice is showing. */
-  --zs-promo-height: 2.5rem;
+     --zs-promo-height and --zs-notice-height to a real height only while that
+     bar is showing. */
+  --zs-promo-height: 0rem;
   --zs-notice-height: 0rem;
   --sl-announcement-height: calc(var(--zs-promo-height) + var(--zs-notice-height));
   --sl-nav-height: calc(3.5rem + var(--sl-announcement-height));
@@ -39,6 +95,7 @@
 .page > header.header {
   top: var(--sl-announcement-height) !important;
   height: calc(var(--sl-nav-height) - var(--sl-announcement-height)) !important;
+  border-bottom: 1px solid var(--zi-line);
 }
 
 @media (max-width: 49.999rem) {
@@ -46,64 +103,87 @@
     --sl-menu-button-size: 2.5rem;
   }
 
-  starlight-menu-button button[aria-controls='starlight__sidebar'] {
+  /* Starlight 0.42 renders the toggle as .sl-menu-button (a popover trigger). */
+  .sl-menu-button {
     --zs-mobile-header-height: calc(var(--sl-nav-height) - var(--sl-announcement-height));
     --zs-menu-button-offset: calc(
       (var(--zs-mobile-header-height) - var(--sl-menu-button-size)) / 2
     );
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.92);
-    border: 1px solid var(--sl-color-gray-5);
-    box-shadow: var(--sl-shadow-sm);
-    color: var(--sl-color-text);
+    background-color: var(--zi-surface);
+    border: 1px solid var(--zi-line-control);
+    border-radius: var(--zi-radius-md);
+    box-shadow: none;
+    color: var(--zi-ink);
     display: flex;
     justify-content: center;
     top: calc(var(--sl-announcement-height) + var(--zs-menu-button-offset)) !important;
   }
 
-  :root[data-theme='dark'] starlight-menu-button button[aria-controls='starlight__sidebar'] {
-    background-color: rgba(17, 17, 17, 0.92);
-    color: var(--sl-color-text);
-  }
-
-  starlight-menu-button[aria-expanded='true'] button[aria-controls='starlight__sidebar'] {
-    background-color: var(--sl-color-gray-5);
-    box-shadow: none;
+  .sl-menu-button:has(~ :popover-open) {
+    background-color: var(--zi-surface-raised);
   }
 
   site-search button[data-open-modal] {
     align-items: center;
-    border-radius: 50%;
-    color: var(--sl-color-text);
+    border-radius: var(--zi-radius-md);
+    color: var(--zi-ink);
     display: flex;
     height: 2.5rem;
     justify-content: center;
     padding: 0;
     width: 2.5rem;
   }
+
+  .sidebar-pane {
+    --zs-mobile-menu-surface: var(--zi-surface-raised);
+    background-color: var(--zs-mobile-menu-surface);
+  }
 }
 
-:root {
-  /* Only override what doesn't touch Expressive Code's frame/text rendering.
-     --sl-color-gray-*, --sl-color-white, --sl-color-black are left at
-     Starlight's defaults — EC uses them directly for code block backgrounds. */
-  --sl-color-bg: #ffffff;
-  --sl-color-bg-sidebar: #f9f9f9;
-  --sl-color-bg-nav: #ffffff;
-
-  --sl-font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --sl-font-mono: ui-monospace, 'Cascadia Code', monospace;
+/* ── Ground ─────────────────────────────────────────────────── */
+/* Plain surface everywhere, in both themes. No backdrop, no translucency. */
+html,
+body {
+  background-color: var(--zi-surface);
+  color: var(--zi-ink);
 }
 
-/* Dark mode — only override background surfaces, leave grays alone */
-:root[data-theme='dark'] {
-  --sl-color-accent-low: rgba(0, 25, 138, 0.25);
-  --sl-color-accent: #6b8ef5;
-  --sl-color-accent-high: #dae5fa;
+body {
+  font-family: var(--zi-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
 
-  --sl-color-bg: #0d0d0d;
-  --sl-color-bg-sidebar: #111111;
-  --sl-color-bg-nav: #0d0d0d;
+/* ── Focus and motion ───────────────────────────────────────── */
+/* Visible focus on every interactive element: 2px solid accent, 2px offset. */
+:focus-visible {
+  outline: 2px solid var(--zi-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Search dialog ──────────────────────────────────────────── */
+/* It floats in the browser top layer, so it is one of the few places with a
+   shadow. The panel is surface-raised with a hairline, not Starlight's grey. */
+site-search dialog {
+  background-color: var(--zi-surface-raised);
+  border-color: var(--zi-line);
+  box-shadow: var(--zi-shadow-pop);
+}
+
+@media (min-width: 50rem) {
+  site-search dialog {
+    border-radius: var(--zi-radius-lg);
+  }
 }
 
 /* ── Logo ───────────────────────────────────────────────────── */
@@ -112,102 +192,263 @@
   width: auto;
 }
 
-/* ── Header border ──────────────────────────────────────────── */
-:root:not([data-theme='dark']) header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-:root[data-theme='dark'] header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+/* ── Telemetry label ────────────────────────────────────────── */
+/* Uppercase mono for metadata a system would print: eyebrows, category
+   labels, versions, dates and region tags. */
+.zs-label,
+.sidebar-links h4,
+.mp-label,
+.app-card__apps,
+.link-card__eyebrow {
+  font-family: var(--zi-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1rem;
+  text-transform: uppercase;
+  color: var(--zi-ink-faint);
 }
 
-/* ── Auth buttons ───────────────────────────────────────────── */
-.btn-login:focus-visible,
-.btn-signup:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
+/* ── Content typography ─────────────────────────────────────── */
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
+.content-panel h1 {
+  color: var(--zi-ink);
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+.content-panel h1#_top {
+  letter-spacing: -0.015em;
+  line-height: 2.375rem;
+}
+
+.sl-markdown-content h2 {
+  line-height: 1.875rem;
+  margin-top: var(--zi-space-8);
+}
+
+.sl-markdown-content h3 {
+  line-height: 1.625rem;
+}
+
+.sl-markdown-content :is(h3, h4, h5, h6) {
+  margin-top: var(--zi-space-6);
+}
+
+/* Running text reads at a 68 to 72 character measure. Tables and code keep
+   the full column. */
+.sl-markdown-content :is(p, ul, ol, dl):not(:where(.not-content *)) {
+  max-inline-size: 72ch;
+}
+
+/* Links are accent. Prose links keep a thin underline so they do not rely on
+   colour alone: accent and ink are too close in luminance to tell apart. */
+.sl-markdown-content a:not(:where(.not-content *)) {
+  color: var(--zi-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color var(--zi-transition);
+}
+
+.sl-markdown-content a:not(:where(.not-content *)):hover {
+  color: var(--zi-accent-hover);
+  text-decoration-thickness: 2px;
+}
+
+/* Inline code: code face at 0.875em on surface-sunken with a hairline. */
+.sl-markdown-content code:not(:where(.not-content *)) {
+  background-color: var(--zi-surface-sunken);
+  border: 1px solid var(--zi-line);
+  border-radius: var(--zi-radius-sm);
+  font-family: var(--zi-font-mono);
+  font-size: 0.875em;
+  padding: 0 var(--zi-space-1);
+}
+
+.sl-markdown-content blockquote:not(:where(.not-content *)) {
+  border-inline-start: 2px solid var(--zi-line-strong);
+  color: var(--zi-ink-muted);
+}
+
+.sl-markdown-content hr:not(:where(.not-content *)) {
+  border-color: var(--zi-line);
+}
+
+/* ── DataTable ──────────────────────────────────────────────── */
+/* The table is its own scroll frame, so a wide table never scrolls the page.
+   fit-content keeps the hairline frame tight around narrow tables. */
+.sl-markdown-content table:not(:where(.not-content *)) {
+  border: 1px solid var(--zi-line);
+  border-collapse: separate;
+  border-radius: var(--zi-radius-lg);
+  border-spacing: 0;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.375rem;
+  max-inline-size: 100%;
+  inline-size: fit-content;
+}
+
+.sl-markdown-content :is(th, td):not(:where(.not-content *)) {
+  border-bottom: 1px solid var(--zi-line);
+  color: var(--zi-ink);
+  padding: var(--zi-space-2) var(--zi-space-4);
+}
+
+.sl-markdown-content :is(th:first-child, td:first-child):not(:where(.not-content *)) {
+  padding-inline-start: var(--zi-space-4);
+}
+
+.sl-markdown-content :is(th:last-child, td:last-child):not(:where(.not-content *)) {
+  padding-inline-end: var(--zi-space-4);
+}
+
+.sl-markdown-content th:not(:where(.not-content *)) {
+  background-color: var(--zi-surface-raised);
+  color: var(--zi-ink-faint);
+  font-family: var(--zi-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1rem;
+  text-transform: uppercase;
+  vertical-align: bottom;
+}
+
+.sl-markdown-content tr:last-child > td:not(:where(.not-content *)) {
+  border-bottom: 0;
+}
+
+.sl-markdown-content tbody tr:hover > td:not(:where(.not-content *)) {
+  background-color: var(--zi-surface-raised);
+}
+
+.sl-markdown-content td code:not(:where(.not-content *)) {
+  font-size: 0.8125rem;
+}
+
+/* ── Callout (Starlight asides) ─────────────────────────────── */
+/* One box for every tone: hairline on surface-raised, ink body. The tone colour
+   sits on the icon and the title only, and the title always carries the word. */
+.starlight-aside {
+  background-color: var(--zi-surface-raised);
+  border: 1px solid var(--zi-line);
+  border-radius: var(--zi-radius-md);
+  color: var(--zi-ink);
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  padding: var(--zi-space-4);
+}
+
+.starlight-aside--note {
+  --sl-color-asides-text-accent: var(--zi-accent);
+  --sl-color-asides-border: var(--zi-line);
+  background-color: var(--zi-surface-raised);
+}
+
+.starlight-aside--tip {
+  --sl-color-asides-text-accent: var(--zi-success);
+  --sl-color-asides-border: var(--zi-line);
+  background-color: var(--zi-surface-raised);
+}
+
+.starlight-aside--caution {
+  --sl-color-asides-text-accent: var(--zi-warning);
+  --sl-color-asides-border: var(--zi-line);
+  background-color: var(--zi-surface-raised);
+}
+
+.starlight-aside--danger {
+  --sl-color-asides-text-accent: var(--zi-danger);
+  --sl-color-asides-border: var(--zi-line);
+  background-color: var(--zi-surface-raised);
+}
+
+.starlight-aside__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.375rem;
+}
+
+.starlight-aside__icon {
+  font-size: 1.25rem;
+}
+
+.starlight-aside__content a {
+  color: var(--zi-accent);
+}
+
+.sl-markdown-content .starlight-aside code:not(:where(.not-content *)) {
+  background-color: var(--zi-surface-sunken);
+}
+
+.sl-markdown-content .starlight-aside :is(th, td, hr, blockquote):not(:where(.not-content *)) {
+  border-color: var(--zi-line);
+}
+
+/* ── CodeBlock (Expressive Code) ────────────────────────────── */
+/* ec.config.mjs sets the restrained syntax themes and the surface-sunken
+   ground. Here the block gets its hairline frame. */
+.expressive-code figure.frame {
+  background-color: var(--zi-surface-sunken);
+  border: 1px solid var(--zi-line);
+  border-radius: var(--zi-radius-md);
+  overflow: hidden;
+}
+
+.expressive-code figure.frame pre {
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.expressive-code .copy button {
+  border: 1px solid var(--zi-line-control) !important;
+  border-radius: var(--zi-radius-sm) !important;
+}
+
+.expressive-code .copy button:focus-visible {
+  outline: 2px solid var(--zi-focus);
   outline-offset: 2px;
 }
 
-.btn-login {
-  border: 1.5px solid var(--sl-color-accent);
-  border-radius: 6px;
-  color: var(--sl-color-accent) !important;
-  font-weight: 600;
-  font-size: 0.875rem;
-  padding: 5px 14px;
-  text-decoration: none !important;
-  transition:
-    background-color 150ms ease,
-    color 150ms ease;
-  white-space: nowrap;
-  line-height: 1.4;
-}
-.btn-login:hover {
-  background-color: var(--sl-color-accent-low);
-  color: var(--sl-color-accent-high) !important;
-}
-
-.btn-signup {
-  background-color: var(--sl-color-accent);
-  border-radius: 6px;
-  color: #ffffff !important;
-  font-weight: 600;
-  font-size: 0.875rem;
-  padding: 5px 14px;
-  text-decoration: none !important;
-  transition:
-    background-color 150ms ease,
-    transform 150ms ease,
-    box-shadow 200ms ease;
-  white-space: nowrap;
-  line-height: 1.4;
-}
-.btn-signup:hover {
-  background-color: var(--sl-color-accent-high);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px -8px rgba(0, 25, 138, 0.45);
-  color: #ffffff !important;
-}
-:root[data-theme='dark'] .btn-signup:hover {
-  box-shadow: 0 8px 20px -8px rgba(107, 142, 245, 0.4);
-}
-
-/* ============================================================
-   Sidebar
-   ============================================================ */
-
-/* Top-level group labels (ZCP, ZPCP) — prominent, bold */
+/* ── Sidebar (SidebarNav) ───────────────────────────────────── */
+/* Top-level groups (ZCP, ZPCP) read as labels. */
 .sidebar ul.top-level > li > details > summary,
 .sidebar ul.top-level > li > a {
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-family: var(--zi-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--sl-color-text) !important;
-  padding: 0.4rem 0.625rem;
-  border-radius: 6px;
+  color: var(--zi-ink-muted) !important;
+  padding: 0.4rem var(--zi-space-3);
+  border-radius: var(--zi-radius-md);
   cursor: pointer;
   list-style: none;
   user-select: none;
-  transition: background-color 150ms ease;
-}
-.sidebar ul.top-level > li > details > summary:hover {
-  background-color: var(--sl-color-gray-6);
+  transition: background-color var(--zi-transition);
 }
 
-/* Sub-section group labels — medium weight, readable */
+.sidebar ul.top-level > li > details > summary:hover {
+  background-color: var(--zi-surface);
+}
+
+/* Sub-section group labels */
 .sidebar details > summary {
-  padding: 0.3rem 0.625rem;
-  border-radius: 6px;
+  padding: 0.3rem var(--zi-space-3);
+  border-radius: var(--zi-radius-md);
   cursor: pointer;
   user-select: none;
   list-style: none;
-  transition: background-color 150ms ease;
+  transition: background-color var(--zi-transition);
 }
+
 .sidebar details > summary::-webkit-details-marker {
   display: none;
 }
+
 .sidebar details > summary:hover {
-  background-color: var(--sl-color-gray-6);
+  background-color: var(--zi-surface);
 }
 
 /* Linked sidebar groups have distinct targets: the overview link remains visible
@@ -217,9 +458,11 @@
 .sidebar li.has-linked-label {
   position: relative;
 }
+
 .sidebar li.has-linked-label > .group-link {
   padding-inline-end: 3rem;
 }
+
 .sidebar li.has-linked-label > details.linked-group > .group-toggle {
   display: flex;
   position: absolute;
@@ -231,10 +474,28 @@
   height: calc(1.4em + 0.6rem);
   padding: 0;
 }
+
+/* The toggle sits flush with the sidebar edge, so its ring is drawn inside. */
 .sidebar li.has-linked-label > details.linked-group > .group-toggle:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
+  outline: 2px solid var(--zi-focus);
   outline-offset: -2px;
-  border-radius: 0.25rem;
+  border-radius: var(--zi-radius-sm);
+}
+
+/* Top-level group names carry the label style through Starlight's inner
+   span as well. */
+.sidebar ul.top-level > li > details > summary .group-label .large,
+.sidebar ul.top-level > li > a .group-label .large {
+  font-family: var(--zi-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--zi-ink-muted);
+}
+
+.sidebar ul ul .group-label .large {
+  font-family: var(--zi-font-sans);
 }
 
 .sidebar .group-label .large {
@@ -242,55 +503,49 @@
   font-weight: 600;
   letter-spacing: 0;
   text-transform: none;
-  color: var(--sl-color-text);
+  color: var(--zi-ink);
 }
 
-/* Caret */
 .sidebar .caret {
-  color: var(--sl-color-gray-3);
-  transition: transform 200ms ease;
+  color: var(--zi-ink-faint);
+  transition: transform var(--zi-transition);
   flex-shrink: 0;
 }
+
 .sidebar details[open] > summary .caret {
   transform: rotate(90deg);
 }
 
-/* Regular nav links */
+/* Links: ink-muted at 14px, surface on hover with ink text. */
 .sidebar a {
   font-size: 0.875rem;
   font-weight: 400;
-  color: var(--sl-color-gray-2);
-  padding: 0.3rem 0.625rem;
-  border-radius: 6px;
+  color: var(--zi-ink-muted);
+  padding: 0.3rem var(--zi-space-3);
+  border-radius: var(--zi-radius-md);
+  border-inline-start: 2px solid transparent;
   display: block;
   text-decoration: none;
   transition:
-    background-color 150ms ease,
-    color 150ms ease;
-}
-.sidebar a:hover {
-  background-color: var(--sl-color-gray-6);
-  color: var(--sl-color-text);
-  text-decoration: none;
-}
-.sidebar a:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
-  outline-offset: -2px;
-  background-color: var(--sl-color-gray-6);
+    background-color var(--zi-transition),
+    color var(--zi-transition);
 }
 
-/* Active page */
-.sidebar a[aria-current='page'] {
-  background-color: var(--sl-color-gray-6);
-  color: var(--sl-color-text) !important;
+.sidebar a:hover {
+  background-color: var(--zi-surface);
+  color: var(--zi-ink);
+  text-decoration: none;
+}
+
+/* Current page: accent-soft fill, accent text at 600, 2px accent leading bar. */
+.sidebar a[aria-current='page'],
+.sidebar a[aria-current='page']:hover,
+.sidebar a[aria-current='page']:focus {
+  background-color: var(--zi-accent-soft);
+  border-inline-start-color: var(--zi-accent);
+  border-radius: 0 var(--zi-radius-md) var(--zi-radius-md) 0;
+  color: var(--zi-accent) !important;
   font-weight: 600;
-}
-:root[data-theme='dark'] .sidebar a[aria-current='page'] {
-  background-color: rgba(255, 255, 255, 0.08);
-}
-:root:not([data-theme='dark']) .sidebar a[aria-current='page'] {
-  background-color: rgba(0, 25, 138, 0.07);
-  color: #00198a !important;
 }
 
 /* Sub-item indents. Links and group labels at the same depth share the same
@@ -300,12 +555,12 @@
 .sidebar ul ul details > summary {
   padding-left: 1.25rem;
 }
+
 .sidebar ul ul ul a,
 .sidebar ul ul ul details > summary {
   padding-left: 1.875rem;
 }
 
-/* Vertical rhythm */
 .sidebar li {
   margin-block: 1px;
 }
@@ -314,7 +569,7 @@
 .sidebar ul.top-level > li + li {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--sl-color-gray-6);
+  border-top: 1px solid var(--zi-line);
 }
 
 @media (max-width: 49.999rem) {
@@ -347,12 +602,6 @@
     margin-top: 0.5rem;
     padding-top: 0.5rem;
   }
-
-  .sidebar .mobile-menu-footer .mobile-auth-link {
-    display: flex;
-    min-height: 3rem;
-    padding-inline: 1rem;
-  }
 }
 
 /* ============================================================
@@ -362,7 +611,7 @@
    freed-up sidebar space into dead margin, so dragging the sidebar never
    actually widens the article. We replace that model with a real flex row:
 
-     [ left sidebar ]  [ content — flex: 1 ]  [ TOC — --toc-width ]
+     [ left sidebar ]  [ content, flex: 1 ]  [ TOC, --toc-width ]
 
    Both edges are drag-resizable (--sl-sidebar-width and --toc-width); the
    content column absorbs whatever space they give up, so the frame is fully
@@ -387,6 +636,7 @@
     max-width: none !important;
     margin-inline: 0 !important;
   }
+
   [data-has-sidebar] .content-panel {
     flex: 1 1 0;
     min-inline-size: 0;
@@ -397,15 +647,13 @@
     width: var(--toc-width) !important;
     flex: 0 0 var(--toc-width) !important;
   }
+
   [data-has-toc] .right-sidebar {
     width: var(--toc-width) !important;
   }
 }
 
-/* ============================================================
-   Resize handles (left sidebar + right TOC)
-   ============================================================ */
-
+/* ── Resize handles (left sidebar + right TOC) ──────────────── */
 .sidebar-resizer,
 .toc-resizer {
   position: fixed;
@@ -415,12 +663,12 @@
   cursor: col-resize;
   z-index: 200;
   background: transparent;
-  transition: background-color 150ms ease;
 }
 
 .sidebar-resizer {
   left: var(--sl-sidebar-width, 18rem);
 }
+
 .toc-resizer {
   right: var(--toc-width, 17rem);
 }
@@ -434,16 +682,17 @@
   width: 2px;
   background: transparent;
   border-radius: 1px;
-  transition: background-color 150ms ease;
+  transition: background-color var(--zi-transition);
 }
 
+/* The handle's focus indicator is the full-height 2px accent bar. */
 .sidebar-resizer:hover::after,
 .sidebar-resizer:active::after,
 .sidebar-resizer:focus-visible::after,
 .toc-resizer:hover::after,
 .toc-resizer:active::after,
 .toc-resizer:focus-visible::after {
-  background: var(--sl-color-accent);
+  background: var(--zi-accent);
 }
 
 .sidebar-resizer:focus-visible,
@@ -466,85 +715,35 @@
 }
 
 /* ============================================================
-   Animations
-   ============================================================ */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.anim-1 {
-  animation: fade-up 0.5s ease-out 0.05s both;
-}
-.anim-2 {
-  animation: fade-up 0.5s ease-out 0.15s both;
-}
-.anim-3 {
-  animation: fade-up 0.5s ease-out 0.25s both;
-}
-.anim-4 {
-  animation: fade-up 0.5s ease-out 0.35s both;
-}
-.anim-5 {
-  animation: fade-up 0.5s ease-out 0.1s both;
-}
-.anim-6 {
-  animation: fade-up 0.5s ease-out 0.2s both;
-}
-.anim-7 {
-  animation: fade-up 0.5s ease-out 0.3s both;
-}
-.anim-8 {
-  animation: fade-up 0.5s ease-out 0.4s both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .anim-1,
-  .anim-2,
-  .anim-3,
-  .anim-4,
-  .anim-5,
-  .anim-6,
-  .anim-7,
-  .anim-8 {
-    animation: none;
-  }
-}
-
-/* ============================================================
-   Landing page — AWS-style two-column layout
+   Landing page
    ============================================================ */
 
-/* Outer layout: main content + right sidebar */
 .home-layout {
   display: grid;
   grid-template-columns: 1fr 18rem;
-  gap: 2rem;
-  margin-top: 1rem;
+  gap: var(--zi-space-8);
+  margin-top: var(--zi-space-4);
   align-items: start;
 }
 
-/* Grid items default to min-width:auto, so a wide child such as the carousel
-   track would stretch this column and scroll the whole page sideways. */
+/* Grid items default to min-width:auto, so a wide child would stretch this
+   column and scroll the whole page sideways. */
 .home-main {
   min-inline-size: 0;
 }
+
 @media (max-width: 900px) {
   .home-layout {
     grid-template-columns: 1fr;
   }
+
   .home-sidebar {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: var(--zi-space-4);
   }
 }
+
 @media (max-width: 640px) {
   .home-sidebar {
     grid-template-columns: 1fr;
@@ -552,711 +751,146 @@
 }
 
 .home-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--zi-space-12);
 }
+
 .home-section--alt {
-  padding-top: 2rem;
-  border-top: 1px solid var(--sl-color-gray-6);
+  padding-top: var(--zi-space-8);
+  border-top: 1px solid var(--zi-line);
 }
 
 .section-title {
   font-size: 1.0625rem;
   font-weight: 600;
-  color: var(--sl-color-text);
-  margin: 0 0 1rem;
+  line-height: 1.625rem;
+  color: var(--zi-ink);
+  margin: 0 0 var(--zi-space-4);
   border: none;
   padding: 0;
-  letter-spacing: -0.01em;
 }
 
-/* ── Service grid (8-up, colored icons) ─────────────────────── */
-.service-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--sl-color-bg-sidebar);
+.section-lead {
+  color: var(--zi-ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin: calc(-1 * var(--zi-space-2)) 0 var(--zi-space-4);
+  max-inline-size: 72ch;
 }
+
+.section-cta {
+  display: inline-block;
+  margin-top: var(--zi-space-4);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ── LinkCard ───────────────────────────────────────────────── */
+/* Whole-surface link: hairline border on surface, line-strong on hover, the
+   fill never changes. The outline icon takes accent. Categories differ by icon
+   and label, never by colour. The service, dev tool, tutorial and marketplace
+   cards all share this. */
+.service-grid,
+.devtools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--zi-space-6);
+}
+
 @media (max-width: 540px) {
-  .service-grid {
+  .service-grid,
+  .devtools-grid {
     grid-template-columns: 1fr;
   }
 }
 
-.service-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.875rem;
-  padding: 1rem 1.125rem;
-  text-decoration: none !important;
+.service-card,
+.devtool-card,
+.app-card {
+  border: 1px solid var(--zi-line);
+  border-radius: var(--zi-radius-lg);
+  background: var(--zi-surface);
   color: inherit;
-  border-right: 1px solid var(--sl-color-gray-6);
-  border-bottom: 1px solid var(--sl-color-gray-6);
-  transition: background-color 150ms ease;
-}
-.service-card:nth-child(even) {
-  border-right: none;
-}
-.service-card:nth-last-child(-n + 2) {
-  border-bottom: none;
-}
-@media (max-width: 540px) {
-  .service-card {
-    border-right: none;
-  }
-  .service-card:last-child {
-    border-bottom: none;
-  }
-}
-.service-card:hover {
-  background-color: var(--sl-color-gray-7);
+  padding: var(--zi-space-4);
   text-decoration: none !important;
-}
-.service-card:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
-  outline-offset: -2px;
-  background-color: var(--sl-color-gray-7);
+  transition: border-color var(--zi-transition);
 }
 
-/* Colored icon badge */
+.service-card,
+.devtool-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  column-gap: var(--zi-space-2);
+}
+
+.service-card:hover,
+.devtool-card:hover,
+.app-card:hover {
+  border-color: var(--zi-line-strong);
+  text-decoration: none !important;
+}
+
+/* Outline icon in accent, no tile behind it. */
 .service-icon {
-  flex-shrink: 0;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: var(--icon-bg-dim, rgba(0, 25, 138, 0.12));
-  color: var(--icon-bg, #00198a);
-  margin-top: 1px;
-  transition: background-color 200ms ease;
+  color: var(--zi-accent);
+  block-size: 1.625rem;
 }
-.service-card:is(:hover, :focus-visible) .service-icon,
-.devtool-card:is(:hover, :focus-visible) .service-icon {
-  background: var(--icon-bg, #00198a);
-  color: #ffffff;
+
+.service-icon svg {
+  block-size: 20px;
+  inline-size: 20px;
+  stroke-width: 1.5;
 }
 
 .service-name {
-  font-size: 0.875rem;
+  font-size: 1.0625rem;
   font-weight: 600;
-  color: var(--sl-color-accent);
-  margin: 0 0 0.2rem;
-  line-height: 1.3;
+  line-height: 1.625rem;
+  color: var(--zi-ink);
+  margin: 0 0 var(--zi-space-1);
 }
-:root:not([data-theme='dark']) .service-name {
-  color: #00198a;
+
+.service-desc {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  color: var(--zi-ink-muted);
+  margin: 0;
 }
-.service-card:is(:hover, :focus-visible) .service-name,
-.devtool-card:is(:hover, :focus-visible) .service-name {
-  text-decoration: underline;
+
+.link-card__eyebrow {
+  display: block;
+  grid-column: 1 / -1;
+  margin: 0 0 var(--zi-space-2);
 }
 
 .mp-status {
   display: inline-flex;
   align-items: center;
-  margin-inline-start: 0.35rem;
-  padding: 0.08rem 0.35rem;
-  border-radius: 999px;
-  border: 1px solid var(--sl-color-gray-5);
-  color: var(--sl-color-gray-2);
+  margin-inline-start: var(--zi-space-2);
+  padding: 2px var(--zi-space-2);
+  border: 1px solid var(--zi-line-control);
+  border-radius: var(--zi-radius-sm);
+  background: var(--zi-surface);
+  color: var(--zi-ink-muted);
+  font-family: var(--zi-font-mono);
   font-size: 0.625rem;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   line-height: 1.3;
   text-transform: uppercase;
   vertical-align: 0.08em;
   white-space: nowrap;
 }
 
-.service-desc {
-  font-size: 0.875rem;
-  color: var(--sl-color-gray-2);
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* ── Dev tools row ──────────────────────────────────────────── */
-.devtools-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--sl-color-bg-sidebar);
-}
-@media (max-width: 540px) {
-  .devtools-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.devtool-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.875rem;
-  padding: 1rem 1.125rem;
-  text-decoration: none !important;
-  color: inherit;
-  border-right: 1px solid var(--sl-color-gray-6);
-  transition: background-color 150ms ease;
-}
-.devtool-card:last-child {
-  border-right: none;
-}
-.devtool-card:hover {
-  background-color: var(--sl-color-gray-7);
-  text-decoration: none !important;
-}
-.devtool-card:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
-  outline-offset: -2px;
-  background-color: var(--sl-color-gray-7);
-}
-.devtool-card .service-name {
-  font-size: 0.875rem;
-}
-
-/* Changelog subscription control */
-.changelog-rss-actions {
-  margin: 1.5rem 0 2rem;
-}
-.changelog-rss-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.65rem 0.9rem;
-  border: 1px solid var(--sl-color-accent);
-  border-radius: 0.45rem;
-  color: var(--sl-color-accent) !important;
-  font-weight: 600;
-  text-decoration: none !important;
-  transition:
-    background-color 150ms ease,
-    color 150ms ease,
-    border-color 150ms ease;
-}
-.changelog-rss-link:hover,
-.changelog-rss-link:focus-visible {
-  background-color: var(--sl-color-accent);
-  border-color: var(--sl-color-accent);
-  color: #ffffff !important;
-}
-.changelog-rss-link:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
-  outline-offset: 3px;
-}
-
-/* ── Right sidebar ──────────────────────────────────────────── */
-.home-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.sidebar-card {
-  background: var(--sl-color-bg-sidebar);
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 10px;
-  padding: 1.25rem;
-}
-.sidebar-card h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--sl-color-text);
-  margin: 0 0 0.5rem;
-  border: none;
-  padding: 0;
-}
-.sidebar-card p {
-  font-size: 0.9rem;
-  color: var(--sl-color-gray-2);
-  margin: 0 0 1rem;
-  line-height: 1.55;
-}
-.peerpush-card__badge {
-  display: block;
-  margin-block: 0.25rem 0.875rem;
-}
-.peerpush-card__badge:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
-  outline-offset: 3px;
-}
-.peerpush-card__badge img {
-  display: block;
-  height: auto;
-  max-width: 14.375rem;
-  width: 100%;
-}
-.peerpush-card__recognition,
-.peerpush-card__message {
-  color: var(--sl-color-gray-2);
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-.peerpush-card__recognition {
-  margin-bottom: 0.5rem;
-}
-.sidebar-cta {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--sl-color-accent) !important;
-  text-decoration: none !important;
-}
-.sidebar-cta:hover {
-  text-decoration: underline !important;
-}
-.sidebar-cta:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
-  outline-offset: 2px;
-}
-
-.sidebar-links {
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
-  background: var(--sl-color-bg-sidebar);
-}
-.sidebar-links h4 {
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--sl-color-gray-3);
-  margin: 0 0 0.75rem;
-  border: none;
-  padding: 0;
-}
-.sidebar-links ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.sidebar-links li a {
-  font-size: 0.875rem;
-  color: var(--sl-color-accent) !important;
-  text-decoration: none !important;
-  line-height: 1.4;
-}
-:root:not([data-theme='dark']) .sidebar-links li a {
-  color: #00198a !important;
-}
-.sidebar-links li a:hover {
-  text-decoration: underline !important;
-}
-.sidebar-links li a:focus-visible {
-  outline: 2px solid var(--sl-color-accent);
-  outline-offset: 2px;
-  text-decoration: none !important;
-}
-
-/* ============================================================
-   Marketplace index page
-   ============================================================ */
-
-/* Last card in any service-grid has no orphan right border */
-.service-grid .service-card:last-child {
-  border-right: none;
-}
-
-/* Single-item grid: card spans full width */
-.service-grid.mp-solo .service-card {
-  grid-column: 1 / -1;
-  border-right: none;
-}
-
-/* Featured (Most Popular) grid: 3-column so 5 cards lay out as 3+2 */
-.service-grid.mp-featured {
-  grid-template-columns: repeat(3, 1fr);
-  border-color: rgba(245, 158, 11, 0.35);
-  background: linear-gradient(
-    to bottom,
-    rgba(245, 158, 11, 0.04) 0%,
-    var(--sl-color-bg-sidebar) 100%
-  );
-}
-:root[data-theme='dark'] .service-grid.mp-featured {
-  border-color: rgba(245, 158, 11, 0.25);
-  background: linear-gradient(
-    to bottom,
-    rgba(245, 158, 11, 0.06) 0%,
-    var(--sl-color-bg-sidebar) 100%
-  );
-}
-.service-grid.mp-featured .service-card:nth-child(even) {
-  border-right: 1px solid var(--sl-color-gray-6);
-}
-.service-grid.mp-featured .service-card:nth-child(3n) {
-  border-right: none;
-}
-@media (max-width: 640px) {
-  .service-grid.mp-featured {
-    grid-template-columns: 1fr 1fr;
-  }
-  .service-grid.mp-featured .service-card:nth-child(3n) {
-    border-right: 1px solid var(--sl-color-gray-6);
-  }
-  .service-grid.mp-featured .service-card:nth-child(even) {
-    border-right: none;
-  }
-}
-
-/* Stats bar */
-.mp-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--sl-color-bg-sidebar);
-  margin: 1.5rem 0 2.5rem;
-}
-
-@media (max-width: 640px) {
-  .mp-stats {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.mp-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.125rem 0.875rem;
-  text-align: center;
-  border-right: 1px solid var(--sl-color-gray-6);
-  gap: 0.2rem;
-}
-
-.mp-stat:last-child {
-  border-right: none;
-}
-
-@media (max-width: 640px) {
-  .mp-stat:nth-child(2) {
-    border-right: none;
-  }
-  .mp-stat:nth-child(n + 3) {
-    border-top: 1px solid var(--sl-color-gray-6);
-  }
-}
-
-.mp-num {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--sl-color-accent);
-}
-
-.mp-num--sm {
-  font-size: 1rem;
-}
-
-.mp-label {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  color: var(--sl-color-gray-3);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-/* Category section */
-.mp-section {
-  margin-bottom: 2.25rem;
-}
-
-.mp-cat-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.875rem;
-}
-
-.mp-cat-icon {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: var(--cat-dim, rgba(0, 25, 138, 0.12));
-  color: var(--cat-color, #00198a);
-}
-
-.mp-cat-title {
-  font-size: 1.0625rem !important;
-  font-weight: 700 !important;
-  color: var(--sl-color-text) !important;
-  margin: 0 !important;
-  border: none !important;
-  padding: 0 !important;
-  letter-spacing: -0.015em;
-}
-
-/* Brand icon container (official SVG logos) */
-.mp-brand-icon {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  margin-top: 1px;
-  transition: background-color 150ms ease;
-}
-:root[data-theme='dark'] .mp-brand-icon {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-.service-card:hover .mp-brand-icon {
-  background: rgba(0, 0, 0, 0.08);
-}
-:root[data-theme='dark'] .service-card:hover .mp-brand-icon {
-  background: rgba(255, 255, 255, 0.13);
-}
-.mp-brand-icon .icon-for-dark {
-  display: none;
-}
-:root[data-theme='dark'] .mp-brand-icon .icon-for-dark {
-  display: block;
-}
-:root[data-theme='dark'] .mp-brand-icon .icon-for-light {
-  display: none;
-}
-
-/* ── Theme-specific documentation screenshots ──────────────── */
-.postpaid-signup-screenshot__dark {
-  display: none;
-}
-
-:root[data-theme='dark'] .postpaid-signup-screenshot__light {
-  display: none;
-}
-
-:root[data-theme='dark'] .postpaid-signup-screenshot__dark {
-  display: block;
-}
-
-/* ============================================================
-   Site footer
-   ============================================================ */
-.site-footer {
-  margin-top: 3rem;
-  padding: 1.5rem 0 0.5rem;
-  border-top: 1px solid var(--sl-color-gray-6);
-}
-.site-footer__inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.site-footer__nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
-}
-.site-footer__nav a {
-  font-size: 0.8rem;
-  color: var(--sl-color-gray-3);
-  text-decoration: none;
-  transition: color 150ms ease;
-}
-.site-footer__nav a:hover {
-  color: var(--sl-color-accent);
-  text-decoration: none;
-}
-.site-footer__copy {
-  font-size: 0.8rem;
-  color: var(--sl-color-gray-4);
-  margin: 0;
-}
-
-/* ============================================================
-   Global content typography — compact, docs-density scale.
-   Font family unchanged; tightens the heading scale, body
-   line-height, and section gaps on doc pages. CSS only, so it
-   is independent of content, config, and i18n work.
-   ============================================================ */
-:root {
-  --sl-text-h1: 1.875rem;
-  --sl-text-h2: 1.5rem;
-  --sl-text-h3: 1.25rem;
-  --sl-text-h4: 1.0625rem;
-  --sl-text-h5: 1rem;
-  --sl-line-height: 1.65;
-}
-
-/* Tighter space above section headings (Starlight's default is airier) */
-.sl-markdown-content :is(h2, h3, h4, h5, h6) {
-  margin-top: 1.75rem;
-}
-.sl-markdown-content :is(h2) {
-  margin-top: 2.25rem;
-}
-
-/* ============================================================
-   Site-wide brand background — animated bokeh field (light + dark)
-   CSS-only (no JS, CSP-safe). Markup: .zs-bg/.zs-bokeh in PageFrame.astro.
-   ============================================================ */
-
-:root {
-  --zs-dot-core: #2347b8;
-}
-:root[data-theme='dark'] {
-  --zs-dot-core: #d2e0ff;
-}
-
-/* Let the fixed backdrop show through the page surfaces. */
-html,
-body,
-.page {
-  background: transparent;
-}
-
-.zs-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  overflow: hidden;
-  background: radial-gradient(
-    ellipse 74% 100% at 46% 40%,
-    #d6e2fb 0%,
-    #e6edff 30%,
-    #f1f6ff 60%,
-    #ffffff 100%
-  );
-}
-
-/* Dark = the banner's exact base: one broad soft blue glow into deep navy. */
-:root[data-theme='dark'] .zs-bg {
-  background: radial-gradient(
-    ellipse 60% 98% at 46% 50%,
-    #143c9c 0%,
-    #102f7e 22%,
-    #0b2160 42%,
-    #07163f 60%,
-    #030c25 78%,
-    #00040f 100%
-  );
-}
-
-/* The bokeh field — soft pale dots (banner palette + density), drifting. */
-.zs-bokeh {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.zs-bokeh circle {
-  fill: url(#zs-dot);
-}
-.zs-bokeh .zs-ring {
-  fill: none;
-  stroke: var(--zs-dot-core);
-}
-.zs-bokeh .zs-far {
-  filter: blur(2px);
-}
-
-/* The bokeh field is intentionally static. An earlier version drifted via
-   infinite transform animations, which forced the GPU to recompute the panel
-   surfaces below every frame and froze low-power machines. A static field looks
-   identical in any snapshot (and matches the prefers-reduced-motion
-   experience). Do not re-add a background animation here. */
-
-/* Translucent surfaces so the bokeh bubbles stay DISTINCT through the whole
-   site. The light tint alone keeps body text legible.
-
-   No backdrop-filter: blur() anywhere. backdrop-filter re-blurs everything
-   behind the panel on every scroll/compositor frame, and on Retina / low-power
-   GPUs that recompute (over the full-height sidebar + full-width header + TOC)
-   was the dominant runtime cost — it kept the page heavy even with the
-   background animation removed. The opaque tint carries the frosted look on its
-   own. Do not re-introduce backdrop-filter on these surfaces. */
-.content-panel {
-  background-color: rgba(255, 255, 255, 0.56);
-}
-.sidebar-pane,
-.right-sidebar,
-.page > header.header {
-  background-color: rgba(255, 255, 255, 0.46);
-}
-
-:root[data-theme='dark'] .content-panel {
-  background-color: rgba(8, 12, 30, 0.5);
-}
-:root[data-theme='dark'] .sidebar-pane,
-:root[data-theme='dark'] .right-sidebar,
-:root[data-theme='dark'] .page > header.header {
-  background-color: rgba(6, 10, 26, 0.42);
-}
-
-@media (max-width: 49.999rem) {
-  .page > header.header {
-    background-color: rgba(255, 255, 255, 0.96);
-  }
-
-  .sidebar-pane {
-    --zs-mobile-menu-surface: #eef4ff;
-    background-color: var(--zs-mobile-menu-surface);
-  }
-
-  :root[data-theme='dark'] .page > header.header {
-    background-color: rgba(6, 10, 26, 0.94);
-  }
-
-  :root[data-theme='dark'] .sidebar-pane {
-    --zs-mobile-menu-surface: #071024;
-    background-color: var(--zs-mobile-menu-surface);
-  }
-}
-
-@media print {
-  .zs-bg {
-    display: none;
-  }
-  .content-panel,
-  .sidebar-pane,
-  .right-sidebar,
-  .page > header.header {
-    background-color: #ffffff;
-  }
-}
-
 /* ── Marketplace highlights ─────────────────────────────────── */
-.section-lead {
-  color: var(--sl-color-gray-2);
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  margin: -0.5rem 0 1rem;
-}
-
-.section-cta {
-  display: inline-block;
-  margin-top: 0.9rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
 .app-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
+  gap: var(--zi-space-4);
   min-inline-size: 0;
 }
 
@@ -1274,55 +908,27 @@ body,
   }
 }
 
-/* Nine cards in three rows have to fit the height six took in two, so the card
-   is trimmed: a smaller badge, tighter type, and clamped description and image
-   lines. Clamping keeps every row the same height whatever the text length. */
+/* Clamped description and image lines keep every row the same height
+   whatever the text length. */
 .app-card {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: var(--zi-space-1);
   min-inline-size: 0;
-  padding: 0.75rem;
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 8px;
-  background: var(--sl-color-bg);
-  color: inherit;
-  text-decoration: none !important;
-  transition:
-    border-color 150ms ease,
-    transform 150ms ease;
-}
-
-.app-card:hover,
-.app-card:focus-visible {
-  border-color: var(--sl-color-accent);
-  transform: translateY(-2px);
-  outline: none;
 }
 
 .app-card .service-icon {
-  block-size: 26px;
-  border-radius: 6px;
-  inline-size: 26px;
-  margin-bottom: 0.1rem;
-}
-
-.app-card .service-icon svg {
-  block-size: 15px;
-  inline-size: 15px;
-}
-
-.app-card:is(:hover, :focus-visible) .service-icon {
-  background: var(--icon-bg, #00198a);
-  color: #ffffff;
+  block-size: auto;
+  justify-content: flex-start;
+  margin-bottom: var(--zi-space-1);
 }
 
 .app-card__name {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: 600;
-  line-height: 1.25;
-  color: var(--sl-color-accent);
+  line-height: 1.375rem;
+  color: var(--zi-ink);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -1330,19 +936,11 @@ body,
   overflow: hidden;
 }
 
-:root:not([data-theme='dark']) .app-card__name {
-  color: #00198a;
-}
-
-.app-card:is(:hover, :focus-visible) .app-card__name {
-  text-decoration: underline;
-}
-
 .app-card__desc {
   margin: 0;
-  font-size: 0.75rem;
-  line-height: 1.45;
-  color: var(--sl-color-gray-2);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--zi-ink-muted);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -1352,12 +950,275 @@ body,
 
 .app-card__apps {
   margin: auto 0 0;
-  padding-top: 0.3rem;
-  font-size: 0.6875rem;
-  line-height: 1.35;
-  color: var(--sl-color-gray-3);
+  padding-top: var(--zi-space-2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* ── Buttons ────────────────────────────────────────────────── */
+/* Secondary: surface fill, line-control border, ink text. */
+.changelog-rss-actions {
+  margin: var(--zi-space-6) 0 var(--zi-space-8);
+}
+
+.changelog-rss-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--zi-space-2);
+  min-block-size: 36px;
+  padding: 0 var(--zi-space-3);
+  border: 1px solid var(--zi-line-control);
+  border-radius: var(--zi-radius-md);
+  background-color: var(--zi-surface);
+  color: var(--zi-ink) !important;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background-color var(--zi-transition);
+}
+
+.changelog-rss-link:hover {
+  background-color: var(--zi-surface-raised);
+}
+
+/* ── Right sidebar ──────────────────────────────────────────── */
+.home-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--zi-space-4);
+}
+
+.sidebar-card,
+.sidebar-links {
+  background: var(--zi-surface-raised);
+  border: 1px solid var(--zi-line);
+  border-radius: var(--zi-radius-lg);
+  padding: var(--zi-space-4);
+}
+
+.sidebar-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--zi-ink);
+  margin: 0 0 var(--zi-space-2);
+  border: none;
+  padding: 0;
+}
+
+.sidebar-card p {
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  color: var(--zi-ink-muted);
+  margin: 0 0 var(--zi-space-3);
+}
+
+.sidebar-cta {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--zi-accent) !important;
+  text-decoration: none !important;
+}
+
+.sidebar-cta + .sidebar-cta {
+  margin-top: var(--zi-space-2);
+}
+
+.sidebar-cta:hover {
+  color: var(--zi-accent-hover) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+.sidebar-links h4 {
+  margin: 0 0 var(--zi-space-3);
+  border: none;
+  padding: 0;
+}
+
+.sidebar-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--zi-space-2);
+}
+
+.sidebar-links li a {
+  font-size: 0.875rem;
+  color: var(--zi-accent) !important;
+  text-decoration: none !important;
+  line-height: 1.4;
+}
+
+.sidebar-links li a:hover {
+  color: var(--zi-accent-hover) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+.sidebar-links .sidebar-cta {
+  margin-top: var(--zi-space-3);
+}
+
+/* ============================================================
+   Marketplace index page
+   ============================================================ */
+
+/* Single-item grid: card spans full width */
+.service-grid.mp-solo .service-card {
+  grid-column: 1 / -1;
+}
+
+/* Featured (Most Popular) grid: three columns, plain like every other grid. */
+.service-grid.mp-featured {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 640px) {
+  .service-grid.mp-featured {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .service-grid.mp-featured {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Stats bar */
+.mp-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--zi-line);
+  border-radius: var(--zi-radius-lg);
+  overflow: hidden;
+  background: var(--zi-surface-raised);
+  margin: var(--zi-space-6) 0 var(--zi-space-8);
+}
+
+@media (max-width: 640px) {
+  .mp-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.mp-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--zi-space-4) var(--zi-space-3);
+  text-align: center;
+  border-right: 1px solid var(--zi-line);
+  gap: var(--zi-space-1);
+}
+
+/* Starlight's markdown flow spacing would push every stat after the first
+   down, so the cells reset it. */
+.sl-markdown-content .mp-stats > .mp-stat,
+.sl-markdown-content .mp-stat > * {
+  margin-top: 0;
+}
+
+.mp-stat:last-child {
+  border-right: none;
+}
+
+@media (max-width: 640px) {
+  .mp-stat:nth-child(2) {
+    border-right: none;
+  }
+
+  .mp-stat:nth-child(n + 3) {
+    border-top: 1px solid var(--zi-line);
+  }
+}
+
+.mp-num {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--zi-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.mp-num--sm {
+  font-size: 1rem;
+}
+
+/* Category section */
+.mp-section {
+  margin-bottom: var(--zi-space-8);
+}
+
+.mp-cat-header {
+  display: flex;
+  align-items: center;
+  gap: var(--zi-space-2);
+  margin-bottom: var(--zi-space-4);
+}
+
+.mp-cat-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--zi-accent);
+}
+
+.mp-cat-title {
+  font-size: 1.0625rem !important;
+  font-weight: 600 !important;
+  color: var(--zi-ink) !important;
+  margin: 0 !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Logo cards centre the frame against the name and description. */
+.service-card:has(.mp-brand-icon) {
+  align-items: center;
+}
+
+/* Brand logos keep their own artwork. They sit in a hairline frame, never on a
+   coloured tile. */
+.mp-brand-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--zi-radius-md);
+  background: var(--zi-surface);
+  border: 1px solid var(--zi-line);
+}
+
+.mp-brand-icon .icon-for-dark {
+  display: none;
+}
+
+:root[data-theme='dark'] .mp-brand-icon .icon-for-dark {
+  display: block;
+}
+
+:root[data-theme='dark'] .mp-brand-icon .icon-for-light {
+  display: none;
+}
+
+/* ── Theme-specific documentation screenshots ──────────────── */
+.postpaid-signup-screenshot__dark {
+  display: none;
+}
+
+:root[data-theme='dark'] .postpaid-signup-screenshot__light {
+  display: none;
+}
+
+:root[data-theme='dark'] .postpaid-signup-screenshot__dark {
+  display: block;
+}

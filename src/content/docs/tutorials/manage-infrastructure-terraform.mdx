@@ -215,6 +215,16 @@ public_ip = "23.229.49.88"
 
 Run the plan again and it reports **No changes**: your file and the platform agree.
 
+{/* Upcoming provider change, not shipped. */}
+
+:::note
+
+Plans are compute-only since October 11, 2026. The provider still models the root disk size only for
+custom plans. An update that adds root disk sizing for fixed plans is coming in a later release. It
+is not available yet.
+
+:::
+
 ## Step 5: Change something
 
 Edit the instance's `plan` to a bigger size (pick one from `zcp plan vm`) and apply again. The

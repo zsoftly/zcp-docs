@@ -90,8 +90,7 @@ Exact duplicates do not create duplicate answers. The console removes one select
 removing the others. A `CNAME` still cannot share a name with another record type.
 
 You can enter a `TXT` value with or without double quotes. The platform stores and returns it
-quoted. Production QA confirmed the same DNS answers and updated SOA serials from both authoritative
-name servers.
+quoted.
 
 :::caution
 

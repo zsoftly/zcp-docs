@@ -3,7 +3,7 @@ title: CLI Reference
 sidebar_position: 4
 ---
 
-Full command reference for the ZCP CLI v0.0.19.
+Full command reference for the ZCP CLI.
 
 For the interactive reference with search, see the
 [ZCP CLI reference on the main site](https://cloud.zcp.zsoftly.ca).
@@ -55,6 +55,31 @@ billing/support/dashboard, and the IAM commands `sub-user`/`role`/`permission`) 
 | `zcp instance reboot <name>`  | Reboot an instance       |
 | `zcp instance console <name>` | Get console URL          |
 
+#### Root disk sizing
+
+Plans are compute-only, so you choose the root disk separately when you create an instance. CLI
+v1.0.0 and later require `--blockstorage-plan`, `--root-disk-size`, and `--storage-category` for a
+new instance. The CLI no longer accepts custom CPU, memory, or disk selections. Choose a named
+compute plan.
+
+```bash
+zcp instance create --name my-vm \
+  --template "<template-slug>" --plan "<compute-plan-slug>" \
+  --blockstorage-plan "<root-storage-plan-slug>" --root-disk-size 100 \
+  --network-plan "<network-plan-slug>" --storage-category "<storage-category-slug>" \
+  --billing-cycle hourly
+```
+
+- `--blockstorage-plan`: the root storage tier slug. List tiers with `zcp plan storage`.
+- `--root-disk-size`: the root disk size in GB for that tier.
+
+The CLI takes slugs, not display names. List compute, storage, and network plan slugs with
+`zcp plan vm`, `zcp plan storage`, and `zcp plan network`. List storage categories with
+`zcp storage-category list`.
+
+Changing an instance name changes its hostname. The platform can restart a running instance or start
+a stopped instance to apply that change.
+
 ### Compute: Kubernetes
 
 | Command                         | Description                |
@@ -65,6 +90,23 @@ billing/support/dashboard, and the IAM commands `sub-user`/`role`/`permission`) 
 | `zcp kubernetes stop <name>`    | Stop a cluster             |
 | `zcp kubernetes upgrade <name>` | Upgrade Kubernetes version |
 
+#### Kubernetes Cluster Plans
+
+CLI v1.0.0 and later require separate fixed plans for the control plane, workers, and root storage.
+The root storage plan and `--root-disk-size` apply to every node. Use `zcp plan kubernetes` and
+`zcp plan storage` to find values in the selected region.
+
+```bash
+zcp kubernetes create --name my-cluster --version "<kubernetes-version>" \
+  --control-plane-plan "<control-plane-plan-slug>" \
+  --worker-plan "<worker-plan-slug>" --storage-plan "<root-storage-plan-slug>" \
+  --root-disk-size 100 --storage-category "<storage-category-slug>" \
+  --workers 3 --ssh-key "<ssh-key-name>" --billing-cycle hourly
+```
+
+The command `zcp kubernetes scale --enable-autoscaling` submits the requested worker bounds but does
+not confirm that the platform added a worker. Check cluster status after the request.
+
 ### Storage: Volumes
 
 | Command                    | Description                |
@@ -73,12 +115,34 @@ billing/support/dashboard, and the IAM commands `sub-user`/`role`/`permission`) 
 | `zcp volume create`        | Create a new volume        |
 | `zcp volume delete <name>` | Delete a volume            |
 
+Create a volume in a named storage tier with a positive capacity in GB:
+
+```bash
+zcp volume create --name data-volume --plan "<storage-plan-slug>" --size 100 \
+  --storage-category "<storage-category-slug>" --billing-cycle hourly
+```
+
 ### Storage: Snapshots
 
 | Command                | Description           |
 | ---------------------- | --------------------- |
 | `zcp snapshot list`    | List volume snapshots |
 | `zcp vm-snapshot list` | List VM snapshots     |
+
+### Storage: VM Backup Schedules
+
+`zcp vm-backup schedule` creates and manages recurring VM backup policies. Policies support hourly,
+daily, weekly, and monthly intervals, IANA time zones, retention counts, and paused state.
+
+```bash
+zcp vm-backup schedule create my-vm --name nightly --interval dailyAt \
+  --at 01:00 --timezone America/Toronto --retention 7
+zcp vm-backup schedule pause "<schedule-id>"
+zcp vm-backup schedule resume "<schedule-id>"
+```
+
+Do not use `everyOtherDay`. The platform can persist the policy and then return an error. If that
+happens, list schedules and remove any unintended policy before retrying.
 
 ### Storage: Object Storage
 
@@ -102,6 +166,46 @@ billing/support/dashboard, and the IAM commands `sub-user`/`role`/`permission`) 
 | -------------------- | ---------------- |
 | `zcp network list`   | List networks    |
 | `zcp network create` | Create a network |
+
+### Networking: Network ACLs
+
+| Command                                                     | Description                 |
+| ----------------------------------------------------------- | --------------------------- |
+| `zcp acl list <vpc-slug>`                                   | List network ACLs in a VPC  |
+| `zcp acl create <vpc-slug>`                                 | Create a network ACL        |
+| `zcp acl delete <vpc-slug> <acl-name-or-id>`                | Delete a network ACL        |
+| `zcp acl rules <vpc-slug> <acl-name-or-id>`                 | List rules in a network ACL |
+| `zcp acl create-rule <vpc-slug> <acl-name-or-id>`           | Add a rule to a network ACL |
+| `zcp acl update-rule <vpc-slug> <acl-name-or-id> <rule-id>` | Update a network ACL rule   |
+| `zcp acl delete-rule <vpc-slug> <acl-name-or-id> <rule-id>` | Delete a network ACL rule   |
+
+#### Paginate ACL Rule Listings
+
+`zcp acl rules` retrieves every API page by default. The following pagination flags are available in
+v0.0.31 and later:
+
+| Flag                       | Description                                                                                       |
+| -------------------------- | ------------------------------------------------------------------------------------------------- |
+| `--max-items <count>`      | Return at most `<count>` rules. If more rules remain, the response includes a continuation token. |
+| `--starting-token <token>` | Resume a previous listing from its continuation token.                                            |
+| `--page-size <count>`      | Set the number of rules requested in each API call. It does not cap the total result.             |
+| `--no-paginate`            | Request one API page. It cannot be combined with the other pagination flags.                      |
+
+Use a continuation token only with the same VPC and ACL. The token retains its page size. When you
+resume, omit `--page-size` or use the same value. For consistent results, resume before the ACL
+rules change.
+
+With the default table output, a continuation token is written to standard error. With `-o json` or
+`-o yaml`, a listing that uses `--max-items`, `--starting-token`, or `--no-paginate` returns an
+object with `rules` and, when more rules remain, `next_token`. A default listing keeps the existing
+JSON array or YAML list output.
+
+```bash
+zcp acl rules my-vpc web-acl --max-items 25
+zcp acl rules my-vpc web-acl --starting-token '<next-token>'
+zcp acl rules my-vpc web-acl --page-size 50
+zcp acl rules my-vpc web-acl --no-paginate
+```
 
 ### Networking: Firewall
 

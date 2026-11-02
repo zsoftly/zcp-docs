@@ -41,13 +41,31 @@ recovery on another host.
 
 ## Sizes and root disks
 
-The standard local root tiers start at **40 GiB**. Larger fixed sizes include 60, 80, 120, 160, 200,
-320, and 400 GiB. Custom data-volume sizing has a 10 GiB minimum where the selected plan supports
-custom volumes.
+Root disk size is chosen per instance, with the template size as the minimum. Data volumes have a 10
+GiB minimum.
 
-Root storage is included with the selected VM plan. A separate data volume is useful when you need
-to keep application data separate from the operating system, change the VM independently from the
-data, or apply a separate backup plan.
+Root storage is no longer included with the VM plan. Since October 11, 2026, the root disk is a
+block storage volume on the tier you choose on the **OS Disk Offering** step. It is billed per GB
+per month at the rate for that tier. The minimum size is the template size. Grow the disk at any
+time. You cannot shrink it. See [Instance Types](/public-cloud/compute/instance-types). Servers
+created before that date keep their bundled root disk and their price.
+
+Use a data volume to keep application data apart from the operating system, change the VM without
+touching the data, or back up the data on its own plan.
+
+Prices were checked on 2026-10-11. The [pricing page](https://zcp.zsoftly.ca/pricing) is the source
+of truth.
+
+| Tier    | Region | Media                  | Price per GB per month |
+| ------- | ------ | ---------------------- | ---------------------- |
+| `b1.g1` | YOW    | Shared replicated NVMe | $0.14                  |
+| `b1.g3` | YOW    | Shared HDD             | $0.03                  |
+| `b2.g1` | YUL    | Shared replicated NVMe | $0.14                  |
+| `b2.g2` | YUL    | Shared replicated SSD  | $0.09                  |
+| `b2.l1` | YUL    | Local NVMe             | $0.10                  |
+| `b2.l2` | YUL    | Local SSD              | $0.07                  |
+
+Prices are in CAD.
 
 ## Backup and recovery
 

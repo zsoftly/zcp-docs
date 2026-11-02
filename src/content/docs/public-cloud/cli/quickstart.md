@@ -7,6 +7,9 @@ sidebar_position: 2
 
 Get authenticated and manage your first resource from the terminal.
 
+This quickstart uses CLI v1.2.0. Install or upgrade with the
+[installation guide](/public-cloud/cli/installation).
+
 ### Step 1: Authenticate
 
 ```bash
@@ -47,6 +50,9 @@ zcp region list
 
 # List available plans
 zcp plan vm
+zcp plan storage
+zcp plan network
+zcp storage-category list
 
 # List your projects
 zcp project list
@@ -61,11 +67,26 @@ zcp template list --region yow-1
 # Create an instance
 zcp instance create \
   --name my-server \
-  --template ubuntu-2604-lts \
-  --plan ci1xs \
-  --region yow \
-  --network my-public-network
+  --template "<template-slug>" \
+  --plan "<compute-plan-slug>" \
+  --blockstorage-plan "<root-storage-plan-slug>" \
+  --root-disk-size 100 \
+  --network-plan "<network-plan-slug>" \
+  --storage-category "<storage-category-slug>" \
+  --billing-cycle hourly
 ```
+
+:::note
+
+Plans are compute-only. CLI v1.0.0 and later require `--blockstorage-plan` for the named root
+storage tier and `--root-disk-size` in GB. List values in your selected region with `zcp plan vm`,
+`zcp plan storage`, `zcp plan network`, and `zcp storage-category list`.
+
+Replace each quoted placeholder with a slug from your account. Set `--root-disk-size` to a positive
+number that meets or exceeds the template's minimum disk size. `--network-plan` creates an isolated
+network. Use a plan slug from `zcp plan network`.
+
+:::
 
 ### Step 4: Manage it
 

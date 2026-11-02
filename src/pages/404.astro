@@ -1,4 +1,7 @@
 ---
+// Standalone page (Starlight's own 404 route is disabled), so it loads the
+// Instrument tokens directly and sets data-theme itself.
+import '../styles/tokens.css';
 import { websiteUrl } from '../data/site';
 
 const links = [
@@ -25,14 +28,26 @@ const links = [
     />
     <link rel="icon" href="/favicon.svg" />
     <title>Page not found | ZSoftly Docs</title>
+    <script is:inline>
+      // Follow the theme the visitor picked in the docs (Starlight stores it
+      // under starlight-theme), falling back to the system preference.
+      (function () {
+        var stored = '';
+        try {
+          stored = localStorage.getItem('starlight-theme') || '';
+        } catch (e) {}
+        var dark =
+          stored === 'dark' ||
+          (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header">
       <a class="brand" href="/" aria-label="ZSoftly Docs home">
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="/logo-dark.svg" />
-          <img src="/logo.svg" alt="ZSoftly Cloud Platform" />
-        </picture>
+        <img class="brand-logo brand-logo--light" src="/logo.svg" alt="ZSoftly Cloud Platform" />
+        <img class="brand-logo brand-logo--dark" src="/logo-dark.svg" alt="" />
         <span>ZSoftly Docs</span>
       </a>
       <nav aria-label="Site navigation">
@@ -73,30 +88,28 @@ const links = [
 </html>
 
 <style>
+  /* Plain surface in both themes: no gradient, no grid. */
   :global(*) {
     box-sizing: border-box;
   }
 
   :global(html) {
     min-width: 320px;
-    background: #f7f9ff;
+    background: var(--zi-surface);
   }
 
   :global(body) {
     min-height: 100vh;
     margin: 0;
-    color: #17213c;
-    background:
-      radial-gradient(circle at 50% 18%, rgb(47 87 210 / 0.13), transparent 35rem),
-      linear-gradient(180deg, #f7f9ff 0%, #eef3ff 100%);
-    font-family:
-      Inter,
-      ui-sans-serif,
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      'Segoe UI',
-      sans-serif;
+    color: var(--zi-ink);
+    background: var(--zi-surface);
+    font-family: var(--zi-font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :global(:focus-visible) {
+    outline: 2px solid var(--zi-focus);
+    outline-offset: 2px;
   }
 
   a {
@@ -105,14 +118,13 @@ const links = [
 
   .site-header {
     display: flex;
-    min-height: 4.5rem;
+    min-height: 3.5rem;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
-    padding: 0.75rem clamp(1.25rem, 5vw, 4rem);
-    border-bottom: 1px solid rgb(35 62 128 / 0.12);
-    background: rgb(255 255 255 / 0.84);
-    backdrop-filter: blur(16px);
+    gap: var(--zi-space-8);
+    padding: var(--zi-space-2) clamp(1rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--zi-line);
+    background: var(--zi-surface-raised);
   }
 
   .brand,
@@ -123,22 +135,31 @@ const links = [
   }
 
   .brand {
-    gap: 0.75rem;
-    color: #142c84;
-    font-size: 0.95rem;
-    font-weight: 700;
+    gap: var(--zi-space-3);
+    color: var(--zi-ink);
+    font-size: 0.9375rem;
+    font-weight: 600;
     text-decoration: none;
   }
 
-  .brand img {
+  .brand-logo {
     display: block;
-    width: 2rem;
-    height: 2rem;
+    width: auto;
+    height: 1.75rem;
+  }
+
+  .brand-logo--dark,
+  :global(:root[data-theme='dark']) .brand-logo--light {
+    display: none;
+  }
+
+  :global(:root[data-theme='dark']) .brand-logo--dark {
+    display: block;
   }
 
   .site-header nav {
     gap: clamp(0.75rem, 2.5vw, 2rem);
-    color: #52617e;
+    color: var(--zi-ink-muted);
     font-size: 0.875rem;
     font-weight: 600;
   }
@@ -146,146 +167,127 @@ const links = [
   .site-header nav a,
   .site-footer a {
     text-decoration: none;
+    transition: color 120ms ease;
   }
 
   .site-header nav a:hover,
-  .site-header nav a:focus-visible,
-  .site-footer a:hover,
-  .site-footer a:focus-visible {
-    color: #153bc1;
+  .site-footer a:hover {
+    color: var(--zi-accent);
   }
 
   .not-found {
     display: grid;
-    min-height: calc(100vh - 9rem);
+    min-height: calc(100vh - 8rem);
     place-items: center;
-    padding: clamp(5rem, 12vw, 9rem) 1.25rem;
-    background-image:
-      linear-gradient(rgb(80 111 211 / 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(80 111 211 / 0.07) 1px, transparent 1px);
-    background-position: center;
-    background-size: 3rem 3rem;
+    padding: var(--zi-space-16) var(--zi-space-4);
   }
 
   .content {
     width: min(100%, 52rem);
-    text-align: center;
   }
 
+  /* Telemetry label */
   .eyebrow {
-    margin: 0 0 1rem;
-    color: #52617e;
+    margin: 0 0 var(--zi-space-3);
+    color: var(--zi-ink-faint);
+    font-family: var(--zi-font-mono);
     font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.24em;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1rem;
+    text-transform: uppercase;
   }
 
+  /* display-1 */
   h1 {
     margin: 0;
-    color: #1235ac;
-    font-size: clamp(3.25rem, 8vw, 6rem);
-    font-weight: 750;
-    letter-spacing: -0.07em;
-    line-height: 0.98;
+    color: var(--zi-ink);
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
   }
 
   .lede {
-    max-width: 38rem;
-    margin: 1.5rem auto 0;
-    color: #52617e;
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    line-height: 1.7;
+    max-width: 72ch;
+    margin: var(--zi-space-4) 0 0;
+    color: var(--zi-ink-muted);
+    font-size: 1rem;
+    line-height: 1.6875;
   }
 
   .actions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 2.25rem;
+    gap: var(--zi-space-3);
+    margin-top: var(--zi-space-8);
   }
 
   .button {
     display: inline-flex;
-    min-height: 3rem;
+    min-height: 36px;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    font-size: 0.95rem;
-    font-weight: 700;
+    border: 1px solid transparent;
+    border-radius: var(--zi-radius-md);
+    padding: 0 var(--zi-space-3);
+    font-size: 0.875rem;
+    font-weight: 600;
     text-decoration: none;
     transition:
-      transform 150ms ease,
-      box-shadow 150ms ease,
-      background-color 150ms ease;
-  }
-
-  .button:hover,
-  .button:focus-visible {
-    transform: translateY(-1px);
+      background-color 120ms ease,
+      border-color 120ms ease;
   }
 
   .button-primary {
-    color: white;
-    background: #1235ac;
-    box-shadow: 0 0.75rem 1.5rem rgb(18 53 172 / 0.2);
+    color: var(--zi-on-accent);
+    background: var(--zi-accent);
   }
 
-  .button-primary:hover,
-  .button-primary:focus-visible {
-    background: #0e2b8f;
+  .button-primary:hover {
+    background: var(--zi-accent-hover);
   }
 
   .button-secondary {
-    color: #1235ac;
-    border: 1px solid rgb(18 53 172 / 0.25);
-    background: rgb(255 255 255 / 0.7);
+    color: var(--zi-ink);
+    border-color: var(--zi-line-control);
+    background: var(--zi-surface);
   }
 
-  .button-secondary:hover,
-  .button-secondary:focus-visible {
-    background: white;
+  .button-secondary:hover {
+    background: var(--zi-surface-raised);
   }
 
   .link-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.75rem;
-    margin-top: 4rem;
-    text-align: left;
+    gap: var(--zi-space-4);
+    margin-top: var(--zi-space-12);
   }
 
   .link-grid a {
-    border: 1px solid rgb(18 53 172 / 0.14);
-    border-radius: 0.6rem;
-    padding: 0.9rem 1rem;
-    color: #52617e;
-    background: rgb(255 255 255 / 0.58);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-lg);
+    padding: var(--zi-space-4);
+    color: var(--zi-ink);
+    background: var(--zi-surface);
     font-size: 0.875rem;
-    font-weight: 650;
+    font-weight: 600;
     text-decoration: none;
-    transition:
-      border-color 150ms ease,
-      color 150ms ease,
-      background-color 150ms ease;
+    transition: border-color 120ms ease;
   }
 
-  .link-grid a:hover,
-  .link-grid a:focus-visible {
-    color: #1235ac;
-    border-color: rgb(18 53 172 / 0.4);
-    background: white;
+  .link-grid a:hover {
+    border-color: var(--zi-line-strong);
   }
 
   .site-footer {
     justify-content: space-between;
-    gap: 1rem;
-    padding: 1.25rem clamp(1.25rem, 5vw, 4rem);
-    border-top: 1px solid rgb(35 62 128 / 0.12);
-    color: #71809c;
-    background: rgb(255 255 255 / 0.7);
-    font-size: 0.8rem;
+    gap: var(--zi-space-4);
+    padding: var(--zi-space-4) clamp(1rem, 5vw, 4rem);
+    border-top: 1px solid var(--zi-line);
+    color: var(--zi-ink-faint);
+    font-size: 0.8125rem;
   }
 
   @media (max-width: 700px) {
@@ -293,72 +295,18 @@ const links = [
       display: none;
     }
 
-    .not-found {
-      min-height: calc(100vh - 8rem);
-    }
-
     .link-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: 3rem;
+      margin-top: var(--zi-space-8);
     }
   }
 
-  @media (prefers-color-scheme: dark) {
-    :global(html),
-    :global(body) {
-      background-color: #091332;
-    }
-
-    :global(body) {
-      color: #e8edff;
-      background:
-        radial-gradient(circle at 50% 18%, rgb(49 89 215 / 0.25), transparent 35rem),
-        linear-gradient(180deg, #0b1638 0%, #071027 100%);
-    }
-
-    .site-header,
-    .site-footer {
-      border-color: rgb(180 199 255 / 0.14);
-      background: rgb(5 13 37 / 0.82);
-    }
-
-    .brand,
-    h1,
-    .button-secondary,
-    .link-grid a:hover,
-    .link-grid a:focus-visible,
-    .site-header nav a:hover,
-    .site-header nav a:focus-visible,
-    .site-footer a:hover,
-    .site-footer a:focus-visible {
-      color: #b9caff;
-    }
-
-    .eyebrow,
-    .lede,
-    .site-header nav,
-    .site-footer,
-    .link-grid a {
-      color: #a5b1cc;
-    }
-
-    .not-found {
-      background-image:
-        linear-gradient(rgb(143 169 255 / 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgb(143 169 255 / 0.08) 1px, transparent 1px);
-    }
-
-    .button-secondary,
-    .link-grid a {
-      border-color: rgb(162 184 255 / 0.25);
-      background: rgb(12 28 70 / 0.7);
-    }
-
-    .button-secondary:hover,
-    .button-secondary:focus-visible,
-    .link-grid a:hover,
-    .link-grid a:focus-visible {
-      background: #12265c;
+  @media (prefers-reduced-motion: reduce) {
+    .button,
+    .link-grid a,
+    .site-header nav a,
+    .site-footer a {
+      transition: none;
     }
   }
 </style>

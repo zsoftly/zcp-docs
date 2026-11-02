@@ -73,8 +73,7 @@ SPF déjà présent sous `@`. Voir
 
 ## Limiter l'émission de certificats
 
-La console DNS ZCP ne propose pas `CAA` comme type d'enregistrement. Créez l'enregistrement avec la
-CLI ou l'API.
+Autorisez uniquement votre autorité de certification à émettre des certificats.
 
 ```bash
 zcp dns record-create --domain examplecom --name @ --type CAA --content '0 issue "letsencrypt.org"'
@@ -83,8 +82,6 @@ zcp dns record-create --domain examplecom --name @ --type CAA --content '0 issue
 ```bash
 dig CAA example.com +short   # 0 issue "letsencrypt.org"
 ```
-
-Consultez les [enregistrements CAA](/fr/public-cloud/dns/records/caa).
 
 ## Déléguer un sous-domaine
 

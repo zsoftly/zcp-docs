@@ -27,6 +27,9 @@ PostgreSQL, so the stack is PostgreSQL, the server, and the worker.
 | RAM      | 2 GB    | 4 GB        |
 | Storage  | 20 GB   | 40 GB       |
 
+The storage figure is your root disk size. Choose it on the **OS Disk Offering** step when you
+create the instance. You pay for it per GB, separate from the plan.
+
 ## Environment variables
 
 You can optionally set these when deploying Authentik from the marketplace. Leave a password field

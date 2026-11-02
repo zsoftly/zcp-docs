@@ -1,91 +1,56 @@
 ---
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
-import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
-import {
-  CLOUD_LOGIN_URL,
-  CLOUD_REGISTER_URL,
-  docsNavLinks,
-  exploreLinks,
-  localePathPrefix,
-} from '../data/site';
+import { CLOUD_LOGIN_URL, docsNavCurrent, docsNavLinks, localePathPrefix } from '../data/site';
 
+// Below Starlight's 50rem breakpoint the header shows only the title and
+// search, so the documentation nav, language, theme and console live here.
 const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
+const docsLinks = docsNavLinks.map((link) => ({
+  label: Astro.locals.t(link.labelKey),
+  href: `${localePrefix}${link.path}`,
+  current: docsNavCurrent(link, Astro.url.pathname, localePrefix),
+}));
 ---
 
 <div class="mobile-menu-footer">
-  <nav class="mobile-explore" aria-label={Astro.locals.t('zs.header.docsNav')}>
+  <nav class="mobile-docs-nav" aria-label={Astro.locals.t('zs.header.docsNav')}>
     {
-      docsNavLinks.map((link) => (
-        <a
-          class="mobile-explore-link mobile-explore-link--docs"
-          href={`${localePrefix}${link.path}`}
-        >
-          {Astro.locals.t(link.labelKey)}
+      docsLinks.map((link) => (
+        <a class="mobile-docs-link" href={link.href} aria-current={link.current}>
+          {link.label}
         </a>
       ))
     }
   </nav>
-
-  <nav class="mobile-explore" aria-label={Astro.locals.t('zs.header.exploreNav')}>
-    {
-      exploreLinks.map((link) => (
-        <a class="mobile-explore-link" href={link.href} target="_blank" rel="noopener noreferrer">
-          {Astro.locals.t(link.labelKey)}
-        </a>
-      ))
-    }
-  </nav>
-
-  <div
-    class="mobile-auth-actions"
-    role="group"
-    aria-label={Astro.locals.t('zs.header.accountActions')}
-  >
-    <a
-      class="mobile-auth-link mobile-auth-login"
-      href={CLOUD_LOGIN_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {Astro.locals.t('zs.header.login')}
-    </a>
-    <a
-      class="mobile-auth-link mobile-auth-signup"
-      href={CLOUD_REGISTER_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {Astro.locals.t('zs.header.signup')}
-    </a>
-  </div>
 
   <div class="mobile-preferences sl-flex">
-    <div class="social-icons">
-      <SocialIcons />
-    </div>
     <div class="mobile-utility-controls">
-      <ThemeSelect />
       <LanguageSelect />
+      <ThemeSelect />
     </div>
   </div>
+
+  <a class="mobile-console" href={CLOUD_LOGIN_URL} target="_blank" rel="noopener noreferrer">
+    {Astro.locals.t('zs.header.openConsole')}
+  </a>
 </div>
 
 <style>
   @layer starlight.core {
     .mobile-menu-footer {
-      /* Light and dark values for the same semantic colour. Everything below
-         reads these, so a theme swap is one block rather than one rule per
-         element. rgb(0 25 138) and rgb(107 142 245) are --sl-color-accent in
-         light and dark; they are spelled out here because CSS cannot apply
-         alpha to a hex custom property. */
-      --zs-menu-divider: rgba(0, 25, 138, 0.18);
-      --zs-menu-chip-bg: rgba(255, 255, 255, 0.88);
-      --zs-menu-chip-border: rgba(0, 25, 138, 0.18);
-      --zs-menu-social-bg: rgba(255, 255, 255, 0.78);
-      --zs-menu-social-border: rgba(0, 25, 138, 0.14);
-      --zs-menu-on-accent: #ffffff;
+      /* Semantic roles for this menu, read from the Instrument tokens, which
+         already switch between Paper and Carbon. Chips are secondary
+         controls: surface fill with a line-control border. */
+      --zs-menu-divider: var(--zi-line);
+      --zs-menu-chip-bg: var(--zi-surface);
+      --zs-menu-chip-border: var(--zi-line-control);
+      --zs-menu-on-accent: var(--zi-on-accent);
+      /* One height for every row and control in this menu, a 44px touch target. */
+      --zs-menu-control-height: 2.75rem;
 
+      display: grid;
+      gap: 0.75rem;
       margin-inline: calc(-1 * var(--sl-sidebar-pad-x));
       margin-top: auto;
       padding: 0.75rem var(--sl-sidebar-pad-x) max(0.75rem, env(safe-area-inset-bottom));
@@ -94,138 +59,27 @@ const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
       z-index: 1;
     }
 
-    :global(:root[data-theme='dark']) .mobile-menu-footer {
-      --zs-menu-divider: rgba(107, 142, 245, 0.22);
-      --zs-menu-chip-bg: rgba(6, 10, 26, 0.86);
-      --zs-menu-chip-border: rgba(107, 142, 245, 0.26);
-      --zs-menu-social-bg: rgba(6, 10, 26, 0.86);
-      --zs-menu-social-border: rgba(107, 142, 245, 0.26);
-    }
-
-    /* The desktop header hides its Explore menu below 48rem, so these links are
-       the only way to reach the marketing site on a phone. */
-    .mobile-explore {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      padding-bottom: 0.75rem;
-      margin-bottom: 0.75rem;
-      border-bottom: 1px solid var(--zs-menu-divider);
-    }
-
-    .mobile-explore-link {
-      align-items: center;
-      background-color: var(--zs-menu-chip-bg);
-      border: 1px solid var(--zs-menu-chip-border);
-      border-radius: 0.375rem;
-      color: var(--sl-color-text);
-      display: flex;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      min-height: 2.25rem;
-      padding-inline: 0.75rem;
-      text-decoration: none;
-      transition:
-        background-color 150ms ease,
-        border-color 150ms ease;
-    }
-
-    .mobile-explore-link:hover,
-    .mobile-explore-link:focus-visible {
-      border-color: var(--sl-color-accent);
-      text-decoration: none;
-    }
-
-    /* The header hides the documentation links on narrow screens, so they lead
-       here rather than sitting below the marketing links. */
-    .mobile-explore-link--docs {
-      border-color: var(--sl-color-accent);
-      color: var(--sl-color-text-accent);
-    }
-
-    .mobile-auth-actions {
+    .mobile-docs-nav {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 0.75rem;
-    }
-
-    .mobile-auth-link {
-      align-items: center;
-      border-radius: 0.375rem;
-      display: flex;
-      font-size: 0.875rem;
-      font-weight: 700;
-      justify-content: center;
-      min-height: 3rem;
-      padding-inline: 1rem;
-      text-decoration: none;
-      transition:
-        background-color 150ms ease,
-        border-color 150ms ease,
-        color 150ms ease;
-    }
-
-    .mobile-auth-login {
-      border: 1px solid var(--sl-color-gray-5);
-      color: var(--sl-color-text);
-    }
-
-    .mobile-auth-login:hover,
-    .mobile-auth-login:focus-visible {
-      background-color: var(--sl-color-gray-6);
-      color: var(--sl-color-text);
-      text-decoration: none;
-    }
-
-    .mobile-auth-signup {
-      background-color: var(--sl-color-accent);
-    }
-
-    .mobile-auth-signup:hover,
-    .mobile-auth-signup:focus-visible {
-      background-color: var(--sl-color-accent-high);
-      text-decoration: none;
-    }
-
-    .social-icons {
-      align-items: center;
-      display: flex;
-      gap: 1rem;
-      margin-inline-end: auto;
-      padding-block: 0;
-    }
-
-    .social-icons :global(a) {
-      align-items: center;
-      background-color: var(--zs-menu-social-bg);
-      border: 1px solid var(--zs-menu-social-border);
-      border-radius: 999px;
-      color: var(--sl-color-accent);
-      display: flex;
-      height: 2.5rem;
-      justify-content: center;
-      margin: 0;
-      width: 2.5rem;
-    }
-
-    .social-icons:empty {
-      display: none;
+      gap: 2px;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--zs-menu-divider);
     }
 
     .mobile-preferences {
       align-items: center;
-      column-gap: 1rem;
-      flex-wrap: nowrap;
-      justify-content: space-between;
-      padding-top: 0.75rem;
+      justify-content: flex-start;
     }
 
     .mobile-utility-controls {
       align-items: center;
       display: flex;
       gap: 0.5rem;
-      margin-inline-start: auto;
       min-width: 0;
+    }
+    .mobile-preferences,
+    .mobile-utility-controls {
+      width: 100%;
     }
 
     .mobile-utility-controls :global(starlight-theme-toggle),
@@ -234,6 +88,9 @@ const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
       flex: 0 0 auto;
       line-height: 0;
     }
+    .mobile-utility-controls :global(starlight-lang-select) {
+      flex: 1 1 auto;
+    }
 
     /* The theme toggle gets the same chip treatment, but outside this layer.
        See the unlayered block below. */
@@ -241,22 +98,19 @@ const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
       align-items: center;
       background-color: var(--zs-menu-chip-bg);
       border: 1px solid var(--zs-menu-chip-border);
-      border-radius: 999px;
+      border-radius: var(--zi-radius-md);
       color: var(--sl-color-text);
       display: flex;
-      height: 2.5rem;
-      min-height: 2.5rem;
+      height: var(--zs-menu-control-height);
+      min-height: var(--zs-menu-control-height);
       overflow: hidden;
       position: relative;
     }
 
-    .social-icons :global(a:hover),
-    .social-icons :global(a:focus-visible),
     .mobile-utility-controls :global(starlight-lang-select label:hover),
     .mobile-utility-controls :global(starlight-lang-select label:focus-within) {
-      background-color: var(--sl-color-accent);
-      border-color: var(--sl-color-accent);
-      color: var(--zs-menu-on-accent);
+      background-color: var(--zi-surface-raised);
+      color: var(--zi-ink);
     }
 
     .mobile-utility-controls :global(starlight-theme-toggle .theme-icon) {
@@ -264,8 +118,9 @@ const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
     }
 
     .mobile-utility-controls :global(starlight-lang-select label) {
-      --sl-inline-padding: 0.5rem;
+      --sl-inline-padding: 0.75rem;
       min-width: 7.25rem;
+      width: 100%;
     }
 
     .mobile-utility-controls :global(starlight-lang-select select) {
@@ -275,18 +130,69 @@ const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
     }
 
     .mobile-utility-controls :global(option) {
-      background-color: var(--sl-color-accent);
-      color: var(--zs-menu-on-accent);
+      background-color: var(--zi-surface);
+      color: var(--zi-ink);
     }
   }
 
   /* Unlayered on purpose. Normal declarations outside a cascade layer beat
-     every layered rule regardless of specificity, which is what these two need
+     every layered rule regardless of specificity, which is what these rules need
      against Starlight's own layered defaults. Do not move them back into
      starlight.core, and do not reach for !important instead. */
-  .mobile-menu-footer .mobile-auth-signup,
-  .mobile-menu-footer .mobile-auth-signup:hover,
-  .mobile-menu-footer .mobile-auth-signup:focus-visible {
+  /* The nav chips and the console button are links, and inside Starlight's
+     sidebar the generic .sidebar a rules in custom.css would restyle them, so
+     these selectors also outrank those. */
+  /* Nav rows follow the Instrument SidebarNav: plain full-width rows, no box. */
+  .mobile-menu-footer a.mobile-docs-link {
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+    border-inline-start: 2px solid transparent;
+    border-radius: var(--zi-radius-md);
+    color: var(--zi-ink);
+    display: flex;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    min-height: var(--zs-menu-control-height);
+    padding: 0 0.75rem;
+    text-decoration: none;
+    transition:
+      background-color var(--zi-transition),
+      border-color var(--zi-transition);
+  }
+
+  .mobile-menu-footer a.mobile-docs-link:hover,
+  .mobile-menu-footer a.mobile-docs-link:focus-visible {
+    background-color: var(--zi-surface-raised);
+    color: var(--zi-ink);
+  }
+
+  .mobile-menu-footer a.mobile-docs-link[aria-current] {
+    background-color: var(--zi-accent-soft);
+    border-inline-start-color: var(--zi-accent);
+    border-radius: 0 var(--zi-radius-md) var(--zi-radius-md) 0;
+    color: var(--zi-accent);
+  }
+
+  .mobile-menu-footer a.mobile-console {
+    align-items: center;
+    background-color: var(--zi-accent);
+    border: 0;
+    border-radius: var(--zi-radius-md);
+    color: var(--zs-menu-on-accent);
+    display: flex;
+    font-size: 0.875rem;
+    font-weight: 600;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0 1rem;
+    text-decoration: none;
+    transition: background-color var(--zi-transition);
+  }
+
+  .mobile-menu-footer a.mobile-console:hover,
+  .mobile-menu-footer a.mobile-console:focus-visible {
+    background-color: var(--zi-accent-hover);
     color: var(--zs-menu-on-accent);
   }
 
@@ -294,12 +200,12 @@ const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
     align-items: center;
     background-color: var(--zs-menu-chip-bg);
     border: 1px solid var(--zs-menu-chip-border);
-    border-radius: 999px;
+    border-radius: var(--zi-radius-md);
     color: var(--sl-color-text);
     display: flex;
-    height: 2.5rem;
+    height: var(--zs-menu-control-height);
     justify-content: center;
-    min-height: 2.5rem;
+    min-height: var(--zs-menu-control-height);
     overflow: hidden;
     padding: 0;
     position: relative;
@@ -312,8 +218,7 @@ const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
   .mobile-menu-footer
     .mobile-utility-controls
     :global(starlight-theme-toggle .theme-toggle-btn:focus-visible) {
-    background-color: var(--sl-color-accent);
-    border-color: var(--sl-color-accent);
-    color: var(--zs-menu-on-accent);
+    background-color: var(--zi-surface-raised);
+    color: var(--zi-ink);
   }
 </style>

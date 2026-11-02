@@ -90,5 +90,31 @@ export ZCP_S3_SECRET_KEY="<SECRET_ACCESS_KEY>"
 
 The CLI checks that `ZCP_S3_ACCESS_KEY` is active for the selected store before it connects.
 
+### Manage Keys with Terraform
+
+Provider v0.3.0 adds `zcp_object_storage_key`. Use it to create and revoke a key with the object
+storage instance managed by the same configuration:
+
+```hcl
+resource "zcp_object_storage_key" "app" {
+  object_storage = zcp_object_storage.app.id
+}
+```
+
+`api_key` and `api_secret` are sensitive outputs. The API only discloses a new plaintext secret for
+a limited time, but the provider preserves `api_secret` in Terraform state after that window closes.
+Limit access to state, and protect remote state storage and backups.
+
+When the same Terraform run manages bucket versioning, policies, tags, lifecycle rules, or CORS,
+export the active key for the provider process:
+
+```bash
+export ZCP_S3_ACCESS_KEY="<ACCESS_KEY_ID>"
+export ZCP_S3_SECRET_KEY="<SECRET_ACCESS_KEY>"
+```
+
+Rotate a key by creating a second key, updating consumers, and then removing the old key in a later
+apply. A store must retain one active key.
+
 See also: [Create Bucket](/public-cloud/storage/object-storage/create-bucket),
 [S3 Usage](/public-cloud/storage/object-storage/s3-usage/)

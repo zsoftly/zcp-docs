@@ -27,16 +27,15 @@ configuration and deployment state change at different times.
 
 The smallest configured general-purpose plans provide a starting point for a basic Debian VM:
 
-| Region  | Plan     | CPU    | Memory | Root storage | Storage tier |
-| ------- | -------- | ------ | ------ | ------------ | ------------ |
-| `yow-1` | `ci1.xs` | 1 vCPU | 1 GiB  | 40 GiB       | NVMe         |
-| `yul-1` | `ca2.xs` | 1 vCPU | 1 GiB  | 40 GiB       | Pro-NVMe     |
+| Region  | Plan      | CPU    | Memory | Storage tier |
+| ------- | --------- | ------ | ------ | ------------ |
+| `yow-1` | `ci1c.xs` | 1 vCPU | 1 GiB  | `b1.g1`      |
+| `yul-1` | `ca2c.xs` | 1 vCPU | 1 GiB  | `b2.g1`      |
 
-The 40 GiB value comes from the current `ci1.xs` and `ca2.xs` plan definitions. It is the root-disk
-baseline attached to those entry plans, not a Debian OS requirement. It leaves room for the base
-image, package metadata, cloud-init work, logs, and normal system updates. Add capacity for
-application packages, databases, monitoring agents, backups, and concurrency. Check the
-[instance types](/public-cloud/compute/instance-types) and
+The root disk is chosen when you create the instance. The minimum is the template size. A 40 GiB
+root disk leaves room for the base image, package metadata, cloud-init work, logs, and normal system
+updates. Add capacity for application packages, databases, monitoring agents, backups, and
+concurrency. Check the [instance types](/public-cloud/compute/instance-types) and
 [ZCP pricing page](https://zcp.zsoftly.ca/pricing) for current plan availability and pricing.
 
 ## Best Practices
