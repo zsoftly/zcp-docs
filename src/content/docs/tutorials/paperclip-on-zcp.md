@@ -38,7 +38,13 @@ IP address. Do not expose port 3100 to the internet.
 
 1. In the ZCP Console, create a VM from the approved Paperclip image.
 2. Choose your approved plan, network, and SSH key.
-3. Configure SSH access for your network:
+3. For internet SSH access, enable a public IPv4 address during creation or select an existing
+   public address after creation. Open the selected network or VPC's **Public IP Addresses** tab and
+   select an address for SSH forwarding. If no address is available, use **Acquire New IP**, choose
+   a billing cycle, then select **Buy IP**. See
+   [Public Network IP addresses](/public-cloud/networking/public-network/public-ips) or
+   [VPC IP addresses](/public-cloud/networking/vpc/public-ips).
+4. Configure SSH access for your network:
    - On a **Public Network**, add a firewall rule that allows TCP on your chosen public SSH port
      only from your current public IP address as `/32`. Then add a port-forwarding rule that maps
      that public port to VM TCP port 22. Apply the source CIDR to the firewall rule, not the
@@ -46,10 +52,12 @@ IP address. Do not expose port 3100 to the internet.
    - On a **VPC Network**, add a port-forwarding rule from your chosen public SSH port to VM TCP
      port 22. Add an inbound Network ACL rule that allows TCP port 22 only from your current public
      IP address as `/32`.
-4. Wait until the VM shows as running.
+5. Wait until the VM shows as running.
 
-Use the VM's public IP address and the public SSH port from the forwarding rule in the commands
-below.
+Your current public IP address is the `/32` source for the firewall or Network ACL rule. The
+`<vm-public-ip>` placeholder below is the public IP selected for the forwarding rule. A source-NAT
+address might not appear in the instance's Public IP field, so use the address attached to the
+forwarding rule.
 
 ## Verify First Boot
 
