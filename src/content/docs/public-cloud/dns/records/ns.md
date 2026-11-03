@@ -57,8 +57,6 @@ provider, add `NS` records for `dev` pointing at `ns1.zsoftly.ca` and `ns2.zsoft
 
 ## Notes
 
-- **A ZCP zone delegates to one name server.** Standard practice is two or more. ZCP cannot hold
-  more than one `NS` value at a name.
 - **The child provider must host the zone.** Delegation only forwards queries. The records live at
   the provider you delegate to.
 - **Do not delete the apex `NS` set.** ZCP manages your domain's own `ns1`/`ns2.zsoftly.ca` records.

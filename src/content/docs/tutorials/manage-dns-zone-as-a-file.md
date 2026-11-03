@@ -60,7 +60,7 @@ can see the shape of the zone without parsing it:
 # Columns are whitespace separated and CONTENT is the final field, so it may
 # contain spaces. "@" is the zone apex and "-" means the type takes no priority.
 #
-# TXT values keep their double quotes, because the API rejects an unquoted value.
+# TXT values may include double quotes. The platform accepts unquoted input and returns it quoted.
 
 # NAME     TYPE   TTL  PRIO  CONTENT
 
@@ -92,8 +92,15 @@ can see it and changes arrive through review.
 ## Step 3: Use Shared Regional Ingress Names
 
 Use one A record as a regional ingress target only when its services share the same ingress and move
-together. Point each service at that target with one direct CNAME. Updating the A record then
-changes the destination for every alias in that regional group. Do not use CNAME chains or loops.
+together. Point each service at that target with one direct CNAME. Adding a new A value leaves the
+old destination in the record set. After you verify the new destination, remove the old A value with
+the console or API. The authoritative record set no longer contains the old address.
+
+Resolvers may still return the cached old address until its TTL expires. Keep the old destination
+serving traffic until those cached answers expire, even after removing its A value.
+
+The CLI targets every value in its initial snapshot, so it is not suitable for removing one selected
+value when the set has several values. Do not use CNAME chains or loops.
 
 The `example.ca` file groups the `yow-edge` and `yul-edge` targets with the services they own.
 
@@ -238,9 +245,9 @@ finished propagating between them.
   store and reach the script through the environment.
 - **Short TTLs while you iterate.** 300 seconds keeps mistakes cheap. Raise them once the zone is
   settled.
-- **The file is the source of truth.** When someone changes a record in the console, the file and
-  the zone have diverged. Re-apply from the file, or update the file to match, and say which you
-  did.
+- **The file records your intended values.** Re-running this script adds the values in the file. It
+  does not reconcile console changes or remove values that are absent from the file. Update the file
+  and remove stale values yourself when the zone changes outside the script.
 - **`record-create` adds to a matching record set.** Existing values with the same name and type
   remain in place. You can include several values for one `TXT`, `MX`, or `A` record set in the
   file. An exact duplicate does not create a duplicate DNS answer.
