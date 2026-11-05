@@ -608,11 +608,30 @@ Manage ZCP infrastructure as code with the official provider, published as `zsof
 [OpenTofu registry](https://search.opentofu.org/provider/zsoftly/zcp) and the
 [Terraform Registry](https://registry.terraform.io/providers/zsoftly/zcp). Source code lives at
 [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+Provider v1.3.0 is available from the Terraform Registry. The OpenTofu Registry currently lists
+v1.2.0.
+
+### v1.3.0: November 5, 2026 {/* changelog-id: terraform-v1.3.0 */}
+
+**CLI profile authentication for Terraform.** See the
+[v1.3.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.3.0) on GitHub.
+
+- **Select a CLI profile.** Set `profile` in the provider configuration or `ZCP_PROFILE` in the
+  environment. Without either selector, the provider uses the active CLI profile.
+- **Connection settings follow explicit precedence.** `api_url` uses provider configuration,
+  `ZCP_API_URL`, the profile, then the public default. `default_project` uses provider
+  configuration, `ZCP_PROJECT`, then the profile.
+- **Credential precedence is explicit.** The provider uses `bearer_token`, then `ZCP_BEARER_TOKEN`,
+  then the selected profile's token. An explicitly selected profile must exist, even when a
+  higher-precedence token is set. A rejected credential does not fall back to another token.
+- **Unknown values fail safely.** Unknown provider configuration values return diagnostics rather
+  than falling back to environment or profile values.
+- **The provider builds against `zcp` CLI v1.3.0.**
 
 ### v1.2.0: October 29, 2026 {/* changelog-id: terraform-v1.2.0 */}
 
-**Current provider release.** Use `zcp_object_storage_bucket_encryption` to manage the default
-encryption of an object storage bucket as code. See the
+**Object storage bucket encryption.** Use `zcp_object_storage_bucket_encryption` to manage the
+default encryption of an object storage bucket as code. See the
 [v1.2.0 release](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.2.0) on GitHub.
 
 - **Set a bucket default encryption in configuration.** The resource supports SSE-S3 or a
