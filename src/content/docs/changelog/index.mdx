@@ -168,6 +168,17 @@ One-click application images for compute instances.
 The official command-line tool for the platform. The entries below mirror the CLI's
 [`CHANGELOG.md`](https://github.com/zsoftly/zcp-cli/blob/main/CHANGELOG.md) on GitHub.
 
+### v1.3.0: November 5, 2026 {/* changelog-id: cli-v1.3.0 */}
+
+**Clearer authentication and reliable subscription listings.** See the
+[CLI reference](/public-cloud/cli/reference).
+
+- **Explicit profile selection now fails safely.** When `--profile` or `ZCP_PROFILE` names a profile
+  that does not exist, the CLI returns an error even if `ZCP_BEARER_TOKEN` is set. Commands continue
+  to support environment-only authentication when no profile is selected.
+- **Inactive subscription listings accept numeric prices.** `zcp billing subscriptions inactive`
+  handles prices returned as either JSON numbers or strings. Invalid price types return an error.
+
 ### v1.2.0: October 29, 2026 {/* changelog-id: cli-v1.2.0 */}
 
 **Optional server-side encryption for object storage.** See the
