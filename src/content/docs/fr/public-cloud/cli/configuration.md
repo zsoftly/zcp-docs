@@ -68,7 +68,9 @@ zcp profile delete staging
 
 ### Variables d'environnement
 
-Les variables d'environnement remplacent le fichier de configuration. Elles sont utiles pour les
+Les variables d'environnement remplacent les valeurs correspondantes du profil. Pour les jetons
+Bearer, le CLI utilise d'abord `ZCP_BEARER_TOKEN`, puis un profil sélectionné avec `--profile` ou
+`ZCP_PROFILE`, puis le profil actif lorsqu'aucun sélecteur n'est défini. Elles sont utiles pour les
 pipelines CI/CD :
 
 | Variable             | Description                                |
@@ -81,6 +83,10 @@ pipelines CI/CD :
 | `ZCP_CLOUD_PROVIDER` | Fournisseur cloud par défaut               |
 | `ZCP_OUTPUT`         | Format de sortie (table, json, yaml)       |
 | `ZCP_DEBUG`          | Activer la sortie de débogage (true/false) |
+
+Lorsqu'un profil est nommé par `--profile` ou `ZCP_PROFILE`, il doit exister même si
+`ZCP_BEARER_TOKEN` est défini. Le CLI charge toujours le fichier de configuration pour valider un
+profil explicitement sélectionné. Une configuration malformée peut donc bloquer l'authentification.
 
 ### Options globales
 

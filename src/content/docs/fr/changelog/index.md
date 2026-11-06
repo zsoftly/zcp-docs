@@ -33,6 +33,12 @@ ci-dessous est son propre journal : **plateforme et services**, la **place de ma
 
 ## Versions récentes
 
+- [CLI v1.3.0 : sécurité de la sélection des profils et prix d’abonnement](/fr/changelog/#cli-v1.3.0)
+  (5 novembre 2026)
+- [Fournisseur Terraform v1.3.0 : authentification par un profil CLI](/fr/changelog/#terraform-v1.3.0)
+  (5 novembre 2026)
+- [CLI v1.2.0 : chiffrement du stockage objet](/fr/changelog/#cli-v1.2.0) (29 octobre 2026)
+- [Fournisseur Terraform / OpenTofu v1.2.0](/fr/changelog/#terraform-v1.2.0) (29 octobre 2026)
 - [CLI v1.1.0 : planifications d'instantanés de stockage bloc](/fr/changelog/#cli-v1.1.0) (23
   octobre 2026)
 - [Fournisseur Terraform / OpenTofu v1.1.0](/fr/changelog/#terraform-v1.1.0) (23 octobre 2026)
@@ -694,11 +700,31 @@ Gérez l'infrastructure ZCP comme du code avec le fournisseur officiel, publié 
 le [registre OpenTofu](https://search.opentofu.org/provider/zsoftly/zcp) et le
 [registre Terraform](https://registry.terraform.io/providers/zsoftly/zcp). Le code source se trouve
 sur [github.com/zsoftly/terraform-provider-zcp](https://github.com/zsoftly/terraform-provider-zcp).
+La version v1.3.0 est disponible dans le registre Terraform. Le registre OpenTofu liste actuellement
+la v1.2.0.
+
+### v1.3.0 : 5 novembre 2026 <!-- changelog-id: terraform-v1.3.0 -->
+
+**Authentification par un profil CLI pour Terraform.** Consultez la
+[version v1.3.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.3.0) sur GitHub.
+
+- **Sélectionnez un profil CLI.** Définissez `profile` dans la configuration du fournisseur ou
+  `ZCP_PROFILE` dans l'environnement. Sans sélecteur, le fournisseur utilise le profil CLI actif.
+- **Les paramètres de connexion suivent un ordre de priorité explicite.** `api_url` utilise la
+  configuration du fournisseur, `ZCP_API_URL`, le profil, puis la valeur par défaut publique.
+  `default_project` utilise la configuration du fournisseur, `ZCP_PROJECT`, puis le profil.
+- **La priorité des jetons d'authentification est explicite.** Le fournisseur utilise
+  `bearer_token`, puis `ZCP_BEARER_TOKEN`, puis le jeton du profil sélectionné. Un profil
+  sélectionné explicitement doit exister, même lorsqu'un jeton de priorité supérieure est défini. Un
+  jeton refusé ne déclenche pas de repli vers un autre jeton.
+- **Les valeurs inconnues échouent de façon sûre.** Les valeurs inconnues de la configuration du
+  fournisseur produisent des diagnostics plutôt qu'un repli vers l'environnement ou un profil.
+- **Le fournisseur est compilé avec le CLI `zcp` v1.3.0.**
 
 ### v1.2.0 : 29 octobre 2026 <!-- changelog-id: terraform-v1.2.0 -->
 
-**Version actuelle du fournisseur.** Utilisez `zcp_object_storage_bucket_encryption` pour gérer
-comme du code le chiffrement par défaut d'un compartiment de stockage objet. Consultez la
+**Chiffrement des compartiments de stockage objet.** Utilisez `zcp_object_storage_bucket_encryption`
+pour gérer comme du code le chiffrement par défaut d'un compartiment de stockage objet. Consultez la
 [version v1.2.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.2.0) sur GitHub.
 
 - **Définissez le chiffrement par défaut d'un compartiment dans la configuration.** La ressource

@@ -67,7 +67,9 @@ zcp profile delete staging
 
 ### Environment variables
 
-Environment variables override the config file. Useful for CI/CD pipelines:
+Environment variables override the matching profile values. For bearer tokens, the CLI uses
+`ZCP_BEARER_TOKEN` first, then a profile selected with `--profile` or `ZCP_PROFILE`, then the active
+profile when neither selector is set. Useful for CI/CD pipelines:
 
 | Variable             | Description                       |
 | -------------------- | --------------------------------- |
@@ -79,6 +81,10 @@ Environment variables override the config file. Useful for CI/CD pipelines:
 | `ZCP_CLOUD_PROVIDER` | Default cloud provider            |
 | `ZCP_OUTPUT`         | Output format (table, json, yaml) |
 | `ZCP_DEBUG`          | Enable debug output (true/false)  |
+
+When `--profile` or `ZCP_PROFILE` names a profile, it must exist even if `ZCP_BEARER_TOKEN` is set.
+The CLI still loads the configuration file to validate an explicitly selected profile, so malformed
+configuration can block authentication.
 
 ### Global flags
 

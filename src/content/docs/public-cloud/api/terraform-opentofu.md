@@ -1,17 +1,17 @@
 ---
 title: Terraform and OpenTofu Provider
-description: Install and migrate to version 1.0.0 of the ZCP provider for Terraform and OpenTofu.
+description: Use version 1.3.0 of the ZCP provider for Terraform and CLI profile authentication.
 ---
 
 The ZCP provider lets Terraform and OpenTofu manage instances, networks, Kubernetes, DNS, storage,
 and related platform resources. The
-[v1.0.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.0.0) provider uses the
-CLI v1.0.1 resource model.
+[v1.3.0](https://github.com/zsoftly/terraform-provider-zcp/releases/tag/v1.3.0) provider adds CLI
+profile authentication and builds against CLI v1.3.0.
 
 ## Install the Provider
 
-Use the registry address that matches your IaC tool. Replace the version constraint when you choose
-a later release.
+Provider v1.3.0 is available from the Terraform Registry. The OpenTofu Registry currently lists
+v1.2.0, so profile authentication requires the Terraform release until OpenTofu lists v1.3.0.
 
 ```hcl
 # OpenTofu
@@ -19,7 +19,7 @@ terraform {
   required_providers {
     zcp = {
       source  = "registry.opentofu.org/zsoftly/zcp"
-      version = "~> 1.0.0"
+      version = "~> 1.2.0"
     }
   }
 }
@@ -31,20 +31,42 @@ terraform {
   required_providers {
     zcp = {
       source  = "registry.terraform.io/zsoftly/zcp"
-      version = "~> 1.0.0"
+      version = "~> 1.3.0"
     }
   }
 }
 ```
 
-Set the token outside version control. The provider reads `ZCP_BEARER_TOKEN`, `ZCP_API_URL`, and
-`ZCP_PROJECT` from the environment. `ZCP_API_URL` is optional and defaults to
+## Authentication
+
+Set a bearer token outside version control. The provider reads `ZCP_BEARER_TOKEN`, `ZCP_API_URL`,
+and `ZCP_PROJECT` from the environment. `ZCP_API_URL` is optional and defaults to
 `https://api.zcp.zsoftly.ca/api`. Set it only when using a different API endpoint.
 
 ```bash
 export ZCP_BEARER_TOKEN="your-token"
 export ZCP_PROJECT="your-project-slug"
 ```
+
+Provider v1.3.0 also supports a CLI profile. Set `profile` in the provider configuration or
+`ZCP_PROFILE` in the environment. Without either selector, the provider uses the active CLI profile.
+
+```hcl
+provider "zcp" {
+  profile = "development"
+}
+```
+
+The provider uses `bearer_token` in provider configuration, then `ZCP_BEARER_TOKEN`, then the
+selected CLI profile's token. An explicitly selected profile must exist even when a
+higher-precedence token is set. A rejected token returns an error without trying another token.
+Unknown provider configuration values return diagnostics instead of falling back to environment or
+profile values.
+
+For connection settings, `api_url` uses provider configuration, `ZCP_API_URL`, the selected profile,
+then the public default. `default_project` uses provider configuration, `ZCP_PROJECT`, then the
+selected profile. A profile fills only values that a provider setting or environment variable has
+not set.
 
 ## Upgrade Existing Configuration
 

@@ -18,6 +18,22 @@ export const publicationDateAtUtcNoon = (date: string) => new Date(`${date}T12:0
 
 export const changelogFeedEntries: ChangelogFeedEntry[] = [
   {
+    title: 'CLI v1.3.0: profile-selection safety and subscription prices',
+    titleFr: "CLI v1.3.0 : sécurité de la sélection des profils et prix d'abonnement",
+    description:
+      'The zcp CLI rejects a missing explicitly selected profile even when an environment token is set, and accepts numeric inactive-subscription prices.',
+    pubDate: '2026-11-05',
+    slug: 'cli-v1.3.0',
+  },
+  {
+    title: 'Terraform provider v1.3.0: CLI profile authentication',
+    titleFr: 'Fournisseur Terraform v1.3.0 : authentification par un profil CLI',
+    description:
+      'Provider v1.3.0 adds CLI profile authentication with explicit token precedence and clear errors for missing profiles and unknown configuration values.',
+    pubDate: '2026-11-05',
+    slug: 'terraform-v1.3.0',
+  },
+  {
     title: 'CLI v1.2.0: object storage encryption',
     titleFr: 'CLI v1.2.0 : chiffrement du stockage objet',
     description:
