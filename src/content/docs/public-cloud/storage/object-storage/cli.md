@@ -36,6 +36,7 @@ automatically; you only choose a **region** and **project**.
 | **Object stat** (HEAD: size, type, ETag, user metadata)  |     —     |    ✅     |      ✅      |
 | **Content-type & user metadata on upload**               |     —     |    ✅     |      ✅      |
 | **Bucket & object tagging**                              |     —     |    ✅     |      ✅      |
+| **Customer-provided encryption (SSE-C)**                 |     —     |     —     |      ✅      |
 | **Default encryption (SSE-S3)**                          |     —     |    —²     |      —²      |
 | **Raw bucket policy** (get/set/delete)                   |     —     |    ✅     |      ✅      |
 | **Lifecycle / expiration rules**                         |     —     |    ✅     |      ✅      |
@@ -222,7 +223,9 @@ zcp object-storage bucket encryption status  <storage> <bucket>
 zcp object-storage bucket encryption disable <storage> <bucket>
 ```
 
-Server-side encryption remains unavailable. Encrypt on the client before upload.
+Customer-provided server-side encryption (SSE-C) is supported through the public HTTPS S3 endpoints.
+SSE-S3 default bucket encryption and SSE-KMS are not supported. For unsupported encryption modes,
+encrypt on the client before upload.
 [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
 walks through doing that with [restic](https://github.com/restic/restic), which encrypts and
 authenticates every object before it leaves the machine.
@@ -232,6 +235,9 @@ authenticates every object before it leaves the machine.
 - **Object Lock (WORM)**: enable it when creating a bucket in the portal, or directly against the S3
   endpoint with an SDK. CLI support is planned.
 - **Auto-scaling** the instance: use the portal.
+- **Customer-provided encryption (SSE-C)**: use an S3 SDK or the AWS CLI with the customer
+  encryption headers. The CLI does not manage or store the customer key.
 - **Default encryption (SSE-S3)**: blocked platform-wide, see above.
+- **SSE-KMS**: not supported.
 
 Everything else listed in the matrix above is fully supported in `zcp` today.

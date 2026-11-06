@@ -265,12 +265,22 @@ Always enable path-style addressing: `forcePathStyle` (JS/TS), `UsePathStyle` (G
 
 :::
 
+### Server-side encryption
+
+SSE-C (customer-provided server-side encryption) is supported through the public HTTPS S3 endpoints.
+Provide an AES-256 customer key with each upload and provide the same key when reading the object.
+ZSoftly does not store customer-managed SSE-C keys, so you must retain your keys. An object cannot
+be read without its original key.
+
+SSE-S3 default bucket encryption and SSE-KMS are not supported. Do not configure default bucket
+encryption.
+
 :::danger
 
-Do not set default bucket encryption (SSE-S3). The storage gateway has no encryption key backend
-yet, and a bucket with default encryption configured rejects **every** subsequent upload with
-`InvalidArgument` until the setting is removed. This applies to `PutBucketEncryption` from any SDK
-or `aws s3api put-bucket-encryption`.
+Do not set default bucket encryption (SSE-S3). The storage gateway has no supported SSE-S3 key
+backend yet, and a bucket with default encryption configured rejects **every** subsequent upload
+with `InvalidArgument` until the setting is removed. This applies to `PutBucketEncryption` from any
+SDK or `aws s3api put-bucket-encryption`.
 
 Clear the setting on a bucket that already has it:
 
@@ -279,7 +289,7 @@ zcp object-storage bucket encryption status <storage-slug> <bucket-name>
 zcp object-storage bucket encryption disable <storage-slug> <bucket-name>
 ```
 
-To encrypt what you store today, encrypt on the client before upload. See
+For encryption modes not supported by the platform, encrypt on the client before upload. See
 [Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
 for a worked example.
 

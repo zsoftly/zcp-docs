@@ -38,6 +38,7 @@ objet est sélectionné automatiquement ; vous choisissez seulement une **régio
 | **Stat d'objet** (HEAD : taille, type, ETag, métadonnées)       |    —    |    ✅     |      ✅      |
 | **Type de contenu et métadonnées au téléversement**             |    —    |    ✅     |      ✅      |
 | **Étiquettes de compartiment et d'objet**                       |    —    |    ✅     |      ✅      |
+| **Chiffrement fourni par le client (SSE-C)**                    |    —    |     —     |      ✅      |
 | **Chiffrement par défaut (SSE-S3)**                             |    —    |    —²     |      —²      |
 | **Politique de compartiment brute** (get/set/delete)            |    —    |    ✅     |      ✅      |
 | **Règles de cycle de vie / d'expiration**                       |    —    |    ✅     |      ✅      |
@@ -232,7 +233,9 @@ zcp object-storage bucket encryption status  <storage> <bucket>
 zcp object-storage bucket encryption disable <storage> <bucket>
 ```
 
-Le chiffrement côté serveur reste indisponible. Chiffrez côté client avant le téléversement.
+Le chiffrement côté serveur fourni par le client (SSE-C) est pris en charge par les points de
+terminaison S3 publics en HTTPS. Le chiffrement par défaut SSE-S3 et le SSE-KMS ne sont pas pris en
+charge. Pour les modes non pris en charge, chiffrez côté client avant le téléversement.
 [Sauvegarder Vaultwarden vers le stockage objet avec restic](/fr/tutorials/backup-vaultwarden-restic-object-storage/)
 détaille cette approche avec [restic](https://github.com/restic/restic), qui chiffre et authentifie
 chaque objet avant qu'il ne quitte la machine.
@@ -243,7 +246,10 @@ chaque objet avant qu'il ne quitte la machine.
   directement contre le point de terminaison S3 avec un SDK. La prise en charge dans le CLI est
   prévue.
 - **Mise à l'échelle automatique** de l'instance — utilisez le portail.
+- **Chiffrement fourni par le client (SSE-C)** — utilisez un SDK S3 ou AWS CLI avec les en-têtes de
+  chiffrement du client. Le CLI ne gère ni ne stocke la clé client.
 - **Chiffrement par défaut (SSE-S3)** — bloqué sur toute la plateforme, voir ci-dessus.
+- **SSE-KMS** — non pris en charge.
 
 Tout le reste indiqué dans le tableau ci-dessus est entièrement pris en charge par `zcp`
 aujourd'hui.
