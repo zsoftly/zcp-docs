@@ -38,11 +38,13 @@ Prefer defaults: explicit per-object `AES256` can fail on first use in YOW.
 
 ## 5. Use a Service-Managed SSE-KMS Default
 
-Obtain the approved regional service-managed key ID from ZSoftly support. It is not your S3 access
-key or secret. This walkthrough does not create or import encryption keys.
+This step uses the approved key ID you entered in
+[Prepare Credentials](/tutorials/encrypt-object-storage/#1-prepare-credentials). If `kms_key_id` is
+empty or you no longer trust the value, stop before the KMS upload and go to
+[Remove Only Tutorial Resources](/tutorials/encrypt-object-storage-verify-cleanup/#7-remove-only-tutorial-resources).
+Skip the commands for `sse-kms.txt`, which you did not create.
 
 ```bash
-read -r -p 'Approved service-managed KMS key ID: ' kms_key_id
 zcp object-storage bucket encryption enable "$storage" "$bucket_slug" \
   --sse aws:kms --sse-kms-key-id "$kms_key_id"
 zcp object-storage bucket encryption status "$storage" "$bucket_slug"

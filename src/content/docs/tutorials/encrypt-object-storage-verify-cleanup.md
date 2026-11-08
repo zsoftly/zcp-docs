@@ -17,7 +17,7 @@ for object_key in sse-s3.txt sse-kms.txt; do
   zcp object-storage object download "$storage" "$bucket_name" "$object_key" \
     --dest "$work_dir/$object_key" &&
   cmp "$work_dir/payload.txt" "$work_dir/$object_key" &&
-  printf 'Verified %s\n' "$object_key" || break
+  printf 'Downloaded bytes match for %s\n' "$object_key" || break
 done
 ```
 
@@ -49,9 +49,29 @@ Confirm both lists contain no objects, versions, or delete markers, then delete 
 
 ```bash
 zcp object-storage bucket delete "$storage" "$bucket_slug"
+zcp object-storage bucket list "$storage"
+```
+
+Continue only if the delete succeeded and the bucket no longer appears in the list. If the delete
+failed, keep the additional key and its credentials in this session so you can fix the problem and
+retry.
+
+Before revoking the additional key, check its ID:
+
+```bash
+zcp object-storage keys list "$storage"
+printf 'Key ID to revoke: %s\n' "$temporary_key_id"
+```
+
+The ID must match the key ID in the creation output from
+[step 2](/tutorials/encrypt-object-storage/#2-create-one-additional-s3-key), and it must not appear
+in the key list you ran in step 1. Stop if you cannot verify both. Do not delete a key you cannot
+verify.
+
+```bash
 zcp object-storage keys delete "$storage" "$temporary_key_id" -y
 zcp object-storage keys list "$storage"
-rm -- "$work_dir/payload.txt" "$work_dir/sse-s3.txt" "$work_dir/sse-kms.txt"
+rm -f -- "$work_dir/payload.txt" "$work_dir/sse-s3.txt" "$work_dir/sse-kms.txt"
 rmdir -- "$work_dir"
 unset ZCP_S3_ACCESS_KEY ZCP_S3_SECRET_KEY AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
 ```

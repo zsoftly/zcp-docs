@@ -32,6 +32,15 @@ zcp object-storage keys list "$storage"
 The account bearer token authorizes control-plane requests. A separate S3 access-key/secret-key pair
 authorizes object requests. An SSE-KMS key ID selects a service-managed encryption key.
 
+Before creating anything, obtain the approved regional service-managed KMS key ID from ZSoftly
+support. It is not your S3 access key or secret, and this tutorial does not create or import
+encryption keys. If you cannot obtain the key ID, stop here: do not create the additional S3 key or
+the test bucket.
+
+```bash
+read -r -p 'Approved service-managed KMS key ID: ' kms_key_id
+```
+
 ## 2. Create One Additional S3 Key
 
 Each store allows at most two active keys. Continue only if one slot is free. Never revoke an
