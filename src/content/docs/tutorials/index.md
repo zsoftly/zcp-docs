@@ -15,6 +15,11 @@ Looking for a single feature instead of a full walkthrough? The
 
 ## Tutorials
 
+### [Encrypt Object Storage with the CLI](/tutorials/encrypt-object-storage/)
+
+Create a private bucket in an existing store, apply SSE-S3 and service-managed SSE-KMS defaults,
+verify object metadata and downloaded bytes, then remove only your tutorial resources.
+
 ### [Deploy Paperclip on ZCP](/tutorials/paperclip-on-zcp/)
 
 Deploy an approved Paperclip image, open its private dashboard through an SSH tunnel, connect an AI
@@ -138,8 +143,8 @@ You learn how to:
 
 Deploy a Vaultwarden password manager with Terraform or OpenTofu, then back its database up to ZCP
 object storage every night with [restic](https://github.com/restic/restic). restic encrypts on the
-VM, so the bucket only ever holds ciphertext. That stays true whether or not server-side encryption
-ships. About 45 minutes.
+VM, so the bucket only ever holds ciphertext, including when server-side encryption is enabled.
+About 45 minutes.
 
 You learn how to:
 

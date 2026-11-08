@@ -5,7 +5,10 @@ sidebar_position: 3
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-ZSoftly object storage is S3-compatible. Any tool or SDK that supports S3 works with it.
+ZSoftly object storage is S3-compatible. Connect with the regional S3 endpoint, your access key and
+secret key, and the bucket's literal name. Direct S3 access does not require a bucket record in the
+ZCP control plane. Manage encryption through the S3 API or compatible command-line tools. The portal
+UI has no encryption controls.
 
 **Endpoints:**
 
@@ -36,10 +39,9 @@ Examples below use the YUL endpoint. Substitute YOW if your bucket is in Ottawa.
 
 ### Find your bucket name
 
-Before you write an endpoint URL, confirm the bucket's real name. The platform appends a numeric
-suffix to the name you asked for when the bucket is created. A bucket you requested as `my-bucket`
-exists as something like `my-bucket-001024`. That suffixed value is the name the S3 API answers to.
-Using the name you typed gives `NoSuchBucket` even though the bucket exists.
+Use the bucket's literal S3 name. Buckets created through the ZCP control plane receive a numeric
+suffix: a requested `my-bucket` becomes something like `my-bucket-001024`. For those buckets, find
+the full name with the ZCP CLI:
 
 ```bash
 zcp object-storage bucket list <storage-slug> --region os-yul --project <project-slug>
@@ -50,7 +52,8 @@ SLUG                NAME                OBJECTS  SIZE (GB)  STATUS
 my-bucket-001024    my-bucket-001024    0                   Inactive
 ```
 
-Use that value everywhere below in place of `my-bucket`. A bucket showing `Inactive` with zero
+Use the returned name in place of `my-bucket` below. For a bucket created directly through S3, use
+its S3 name without looking it up in ZCP. A control-plane bucket showing `Inactive` with zero
 objects is normal until something is written to it.
 
 :::note
@@ -58,8 +61,9 @@ objects is normal until something is written to it.
 The CLI's own bucket subcommands are split. Commands that go through the S3 gateway (`object …`,
 `bucket versioning`, `bucket policy`, `bucket lifecycle`, `bucket cors`, `bucket tag`,
 `bucket empty`) take the bucket **name**, even though their help text labels the argument
-`<bucket-slug>`. Only `bucket delete`, which goes through the control plane, takes the slug. In
-practice the name and the slug are usually the same suffixed string.
+`<bucket-slug>`. `bucket encryption` and `bucket delete` resolve the control-plane bucket slug.
+Released ZCP CLI commands still require control-plane instance metadata and key lookup. Use the AWS
+CLI or an S3 SDK for direct endpoint access without those records.
 
 :::
 
@@ -265,29 +269,62 @@ Always enable path-style addressing: `forcePathStyle` (JS/TS), `UsePathStyle` (G
 
 :::
 
-:::danger
+### Optional Server-Side Encryption
 
-Do not set default bucket encryption (SSE-S3). The storage gateway has no encryption key backend
-yet, and a bucket with default encryption configured rejects **every** subsequent upload with
-`InvalidArgument` until the setting is removed. This applies to `PutBucketEncryption` from any SDK
-or `aws s3api put-bucket-encryption`.
+SSE-S3 (`AES256`) and service-managed SSE-KMS (`aws:kms`) are available in YUL and YOW for new and
+existing buckets. Encryption is opt-in. Setting or removing a bucket default changes subsequent
+writes only. Existing objects and versions remain unchanged.
 
-Clear the setting on a bucket that already has it:
+Prefer a bucket default so uploads inherit the requested encryption. With your AWS CLI credentials
+configured above, set SSE-S3 and read the setting back:
 
 ```bash
-zcp object-storage bucket encryption status <storage-slug> <bucket-name>
-zcp object-storage bucket encryption disable <storage-slug> <bucket-name>
+aws s3api put-bucket-encryption \
+  --endpoint-url https://objects.yul.zcp.zsoftly.ca \
+  --bucket my-bucket \
+  --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
+
+aws s3api get-bucket-encryption \
+  --endpoint-url https://objects.yul.zcp.zsoftly.ca --bucket my-bucket
 ```
 
-To encrypt what you store today, encrypt on the client before upload. See
-[Back Up Vaultwarden to Object Storage with restic](/tutorials/backup-vaultwarden-restic-object-storage/)
-for a worked example.
+For SSE-KMS, use a service-managed key ID provided by ZSoftly:
+
+```bash
+aws s3api put-bucket-encryption \
+  --endpoint-url https://objects.yul.zcp.zsoftly.ca \
+  --bucket my-bucket \
+  --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"aws:kms","KMSMasterKeyID":"<service-managed-key-id>"}}]}'
+```
+
+The access key and secret key authenticate S3 requests. The KMS key ID selects a service-managed
+encryption key. Standard S3 permissions apply to both modes.
+
+For a control-plane store, the [CLI tutorial](/tutorials/encrypt-object-storage/) covers active S3
+credentials, both bucket defaults, metadata checks, matching downloads, and cleanup with ZCP CLI
+v1.3.0. The account bearer token authorizes control-plane requests. The S3 key pair authorizes
+object requests.
+
+Enable an SSE-S3 bucket default before the first encrypted upload. Explicit per-object `AES256` can
+fail on first use.
+
+For an individual upload, `aws s3api put-object` accepts `--server-side-encryption AES256`, or
+`--server-side-encryption aws:kms --ssekms-key-id <service-managed-key-id>`. See the AWS CLI
+[encryption configuration reference](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-bucket-encryption.html)
+and [upload reference](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-object.html).
+
+:::caution
+
+A single-request copy without encryption settings does not inherit the destination bucket default.
+The service refuses single-request copies with encryption headers or an encrypted source. Use
+multipart copy or download and re-upload for encrypted copies. Set encryption when initiating a
+multipart upload or copy.
 
 :::
 
 ### Common operations
 
-Once your client (or the AWS CLI) is configured, all standard S3 operations work. Using the AWS CLI:
+With your client or the AWS CLI configured, use these common operations:
 
 ```bash
 # Create a bucket
