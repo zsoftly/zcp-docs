@@ -1,4 +1,4 @@
-import { CLOUD_LOGIN_URL, CLOUD_REGISTER_URL, cloudUrl, websiteUrl } from './site';
+import { CLOUD_LOGIN_URL, CLOUD_REGISTER_URL, cloudUrl, FDE_PAGE_URL, websiteUrl } from './site';
 
 export const DOCS_REPO_URL = 'https://github.com/zsoftly/zcp-docs';
 export const DOCS_FEEDBACK_URL = `${DOCS_REPO_URL}/issues/new?labels=feedback&title=Feedback+on+docs`;
@@ -76,6 +76,7 @@ export const footerColumns: FooterColumn[] = [
     links: [
       { labelKey: 'zs.footer.website', href: websiteUrl, kind: 'external' },
       { labelKey: 'zs.footer.services', href: `${websiteUrl}/services`, kind: 'external' },
+      { labelKey: 'zs.nav.fde', href: FDE_PAGE_URL, kind: 'external' },
       {
         labelKey: 'zs.footer.privateCloud',
         href: `${websiteUrl}/services/private-cloud`,

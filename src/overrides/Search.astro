@@ -1,0 +1,1449 @@
+---
+// Site search: a header trigger and a command menu in a modal dialog. It replaces Starlight's
+// search UI but reads the same Pagefind index that Starlight builds at /pagefind/, with the same
+// options: the user `pagefind` config, the base path, an excerpt length of 12 words and
+// Pagefind's language detection from <html lang>, so each locale searches its own pages.
+//
+// With an empty query the menu lists quick links. Typing filters them and adds the top Pagefind
+// results above them. The input keeps focus and drives the list through the ARIA combobox
+// pattern. Pagefind loads on the first open only. In dev there is no index, so the menu says so
+// and the quick links still filter.
+import config from 'virtual:starlight/user-config';
+import project from 'virtual:starlight/project-context';
+import { FDE_PAGE_URL, localePathPrefix, websiteUrl } from '../data/site';
+
+const t = Astro.locals.t;
+const prefix = localePathPrefix(Astro.locals.starlightRoute.locale);
+
+interface QuickLink {
+  label: string;
+  href: string;
+  icon: string;
+  /** Extra words that match this link, in both languages. Not shown. */
+  keywords: string;
+  external?: boolean;
+}
+
+const suggestions: QuickLink[] = [
+  {
+    label: t('zs.search.link.quickstart'),
+    href: `${prefix}/public-cloud/getting-started/quickstart/`,
+    icon: 'rocket',
+    keywords: 'quickstart get started start begin first steps démarrer premiers pas',
+  },
+  {
+    label: t('zs.search.link.introduction'),
+    href: `${prefix}/public-cloud/getting-started/introduction/`,
+    icon: 'grid',
+    keywords: 'introduction products services overview produits présentation',
+  },
+  {
+    label: t('zs.search.link.tutorials'),
+    href: `${prefix}/tutorials/`,
+    icon: 'book',
+    keywords: 'tutorials guides how to tutoriels',
+  },
+  {
+    label: t('zs.search.link.cliQuickstart'),
+    href: `${prefix}/public-cloud/cli/quickstart/`,
+    icon: 'terminal',
+    keywords: 'cli command line terminal zcp quickstart ligne de commande',
+  },
+  {
+    label: t('zs.search.link.releaseNotes'),
+    href: `${prefix}/changelog/`,
+    icon: 'list',
+    keywords: 'release notes changelog what is new versions nouveautés journal',
+  },
+];
+
+const company: QuickLink[] = [
+  {
+    label: t('zs.nav.fde'),
+    href: FDE_PAGE_URL,
+    icon: 'briefcase',
+    keywords: 'forward deployed engineering fde services consulting engineers ingénierie conseil',
+    external: true,
+  },
+  {
+    label: t('zs.footer.pricing'),
+    href: `${websiteUrl}/pricing`,
+    icon: 'tag',
+    keywords: 'pricing prices cost plans tarifs prix coût',
+    external: true,
+  },
+  {
+    label: t('zs.footer.contact'),
+    href: `${websiteUrl}/contact`,
+    icon: 'mail',
+    keywords: 'contact sales support email help joindre ventes aide',
+    external: true,
+  },
+];
+
+const searchConfig = {
+  pagefind: config.pagefind || {},
+  stripTrailingSlash: project.trailingSlash === 'never',
+  groups: [
+    { id: 'suggestions', label: t('zs.search.group.suggestions'), links: suggestions },
+    { id: 'zsoftly', label: t('zs.search.group.zsoftly'), links: company },
+  ],
+  strings: {
+    pages: t('zs.search.group.pages'),
+    searching: t('zs.search.status.searching'),
+    noResults: t('zs.search.status.noResults'),
+    more: t('zs.search.status.more'),
+    unavailable: t('zs.search.status.unavailable'),
+    newTab: t('zs.search.newTab'),
+  },
+};
+
+const triggerLabel = t('zs.search.trigger');
+---
+
+<div class="zs-search" data-zs-search data-config={JSON.stringify(searchConfig)}>
+  <button
+    type="button"
+    class="zs-search-trigger"
+    data-zs-search-open
+    aria-label={triggerLabel}
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls="zs-search-dialog"
+    aria-keyshortcuts="Control+K"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="m20 20-3.5-3.5"></path>
+    </svg>
+    <span class="zs-search-trigger__label" aria-hidden="true">{triggerLabel}</span>
+    <span class="zs-search-trigger__keys" data-zs-search-keys aria-hidden="true" hidden>
+      <kbd class="zs-search-kbd" data-zs-search-mod>Ctrl</kbd>
+      <kbd class="zs-search-kbd">K</kbd>
+    </span>
+  </button>
+
+  <dialog
+    id="zs-search-dialog"
+    class="zs-search-dialog"
+    aria-label={t('zs.search.dialogLabel')}
+    aria-modal="true"
+  >
+    <div class="zs-search-panel">
+      <div class="zs-search-field">
+        <svg
+          class="zs-search-field__icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+        <input
+          class="zs-search-input"
+          data-zs-search-input
+          type="text"
+          role="combobox"
+          aria-label={t('zs.search.dialogLabel')}
+          aria-expanded="true"
+          aria-controls="zs-search-listbox"
+          aria-autocomplete="list"
+          placeholder={t('zs.search.placeholder')}
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          enterkeyhint="go"
+        />
+        <button type="button" class="zs-search-esc" data-zs-search-close>
+          <kbd class="zs-search-kbd" aria-hidden="true">Esc</kbd>
+          <span class="zs-search-esc__text">{t('zs.search.cancel')}</span>
+        </button>
+      </div>
+
+      <div class="zs-search-body" data-zs-search-body>
+        <div class="zs-search-scroller" data-zs-search-scroller>
+          <div class="zs-search-highlight" data-zs-search-highlight aria-hidden="true" hidden></div>
+          <div
+            id="zs-search-listbox"
+            class="zs-search-list"
+            data-zs-search-listbox
+            role="listbox"
+            aria-label={t('zs.search.results')}
+          >
+          </div>
+        </div>
+      </div>
+
+      <div class="zs-search-footer" data-zs-search-footer>
+        <div class="zs-search-tips" aria-hidden="true">
+          <span class="zs-search-tip">
+            <kbd class="zs-search-kbd">↑</kbd><kbd class="zs-search-kbd">↓</kbd>
+            {t('zs.search.hint.move')}
+          </span>
+          <span class="zs-search-tip">
+            <kbd class="zs-search-kbd">Tab</kbd>
+            {t('zs.search.hint.jump')}
+          </span>
+          <span class="zs-search-tip zs-search-tip--end">
+            <kbd class="zs-search-kbd">↵</kbd>
+            {t('zs.search.hint.open')}
+          </span>
+        </div>
+        <p class="zs-search-status" data-zs-search-status role="status"></p>
+      </div>
+    </div>
+  </dialog>
+
+  {/* Row icons, cloned by the script. 24px grid, stroke only, drawn for this site. */}
+  <template data-zs-search-icon="page">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 3h8l4 4v14H6z"></path>
+      <path d="M14 3v4h4M9 12h6M9 16h6"></path>
+    </svg>
+  </template>
+  <template data-zs-search-icon="section">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 4 7 20M17 4l-2 16M4 9h16M3 15h16"></path>
+    </svg>
+  </template>
+  <template data-zs-search-icon="rocket">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3c3 2 5 5.5 5 9.5L15 17H9l-2-4.5C7 8.5 9 5 12 3z"></path>
+      <path d="M9 17l-2.5 3M15 17l2.5 3"></path>
+      <circle cx="12" cy="10" r="1.5"></circle>
+    </svg>
+  </template>
+  <template data-zs-search-icon="grid">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"></path>
+    </svg>
+  </template>
+  <template data-zs-search-icon="book">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z"></path>
+      <path d="M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"></path>
+    </svg>
+  </template>
+  <template data-zs-search-icon="terminal">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 5h18v14H3z"></path>
+      <path d="m7 10 3 2-3 2M12 15h5"></path>
+    </svg>
+  </template>
+  <template data-zs-search-icon="list">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 6h11M9 12h11M9 18h11M4 6h1M4 12h1M4 18h1"></path>
+    </svg>
+  </template>
+  <template data-zs-search-icon="briefcase">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 8h18v11H3zM9 8V5h6v3M3 13h18"></path>
+    </svg>
+  </template>
+  <template data-zs-search-icon="tag">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 12V4h8l9 9-8 8z"></path>
+      <circle cx="7.5" cy="8.5" r="1.5"></circle>
+    </svg>
+  </template>
+  <template data-zs-search-icon="mail">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 6h18v12H3z"></path>
+      <path d="m3 7 9 6 9-6"></path>
+    </svg>
+  </template>
+  <template data-zs-search-icon="external">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 16 17 7M9 7h8v8"></path>
+    </svg>
+  </template>
+</div>
+
+{
+  /* Inline so the shortcut chip never shows the wrong modifier. navigator.platform is used on
+  purpose, as Starlight does: devtools can spoof the user agent. */
+}
+<script is:inline>
+  (() => {
+    const keys = document.querySelector('[data-zs-search-keys]');
+    if (!keys) return;
+    if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+      const mod = keys.querySelector('[data-zs-search-mod]');
+      if (mod) mod.textContent = '⌘';
+      keys.closest('button')?.setAttribute('aria-keyshortcuts', 'Meta+K');
+    }
+    keys.hidden = false;
+  })();
+</script>
+
+<script>
+  interface QuickLink {
+    label: string;
+    href: string;
+    icon: string;
+    keywords: string;
+    external?: boolean;
+  }
+
+  interface SearchConfig {
+    pagefind: { mergeIndex?: Array<{ bundlePath: string } & Record<string, unknown>> } & Record<
+      string,
+      unknown
+    >;
+    stripTrailingSlash: boolean;
+    groups: Array<{ id: string; label: string; links: QuickLink[] }>;
+    strings: Record<
+      'pages' | 'searching' | 'noResults' | 'more' | 'unavailable' | 'newTab',
+      string
+    >;
+  }
+
+  interface PagefindSubResult {
+    title: string;
+    url: string;
+    excerpt: string;
+    locations?: number[];
+  }
+
+  interface PagefindData {
+    url: string;
+    excerpt: string;
+    meta: { title?: string };
+    sub_results?: PagefindSubResult[];
+  }
+
+  interface PagefindModule {
+    options(options: Record<string, unknown>): Promise<void>;
+    mergeIndex(url: string, options?: Record<string, unknown>): Promise<void>;
+    init?: () => Promise<void>;
+    search(term: string): Promise<{ results: Array<{ data(): Promise<PagefindData> }> } | null>;
+  }
+
+  type Range = [number, number];
+
+  interface Row {
+    title: string;
+    hint?: string;
+    excerpt?: { text: string; marks: Range[] };
+    path: string;
+    href: string;
+    icon: string;
+    external: boolean;
+    /** 1 to 5: the Cmd/Ctrl number shortcut, shown with an empty query only. */
+    shortcut?: number;
+  }
+
+  interface Group {
+    label: string;
+    rows: Row[];
+  }
+
+  const MAX_PAGES = 8;
+  const DEBOUNCE_MS = 150;
+  /** Delay before "Searching…" shows, so fast searches do not flash it. */
+  const SLOW_MS = 300;
+  /** Starlight's Pagefind UI uses 12 words when it shows sub-results. */
+  const EXCERPT_LENGTH = 12;
+
+  const root = document.querySelector<HTMLElement>('[data-zs-search]');
+  if (root) setup(root);
+
+  function setup(root: HTMLElement) {
+    const config = JSON.parse(root.dataset.config ?? '{}') as SearchConfig;
+    const { strings } = config;
+    const find = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
+    const trigger = find<HTMLButtonElement>('[data-zs-search-open]');
+    const dialog = find<HTMLDialogElement>('dialog');
+    const input = find<HTMLInputElement>('[data-zs-search-input]');
+    const closeButton = find<HTMLButtonElement>('[data-zs-search-close]');
+    const body = find<HTMLElement>('[data-zs-search-body]');
+    const scroller = find<HTMLElement>('[data-zs-search-scroller]');
+    const listbox = find<HTMLElement>('[data-zs-search-listbox]');
+    const highlight = find<HTMLElement>('[data-zs-search-highlight]');
+    const footer = find<HTMLElement>('[data-zs-search-footer]');
+    const status = find<HTMLElement>('[data-zs-search-status]');
+    const icons = new Map(
+      Array.from(root.querySelectorAll<HTMLTemplateElement>('template[data-zs-search-icon]')).map(
+        (template) => [template.dataset.zsSearchIcon, template]
+      )
+    );
+
+    const isMac = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+    const shortcutLabel = (n: number) => (isMac ? `⌘${n}` : `Ctrl ${n}`);
+
+    // The home page hero shows the same shortcut.
+    document.querySelectorAll('[data-zs-search-kbd]').forEach((kbd) => {
+      kbd.textContent = isMac ? '⌘K' : 'Ctrl K';
+    });
+
+    // ── Text helpers ──────────────────────────────────────────────────
+
+    /**
+     * Lowercases and strips accents, keeping a map from each folded character back to its
+     * index in the original text, so matches found in the folded text can be marked in the
+     * original.
+     */
+    const fold = (text: string) => {
+      let folded = '';
+      const map: number[] = [];
+      let index = 0;
+      for (const char of text) {
+        const plain = char.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+        for (let k = 0; k < plain.length; k++) map.push(index);
+        folded += plain;
+        index += char.length;
+      }
+      map.push(text.length);
+      return { folded, map };
+    };
+
+    const termsOf = (query: string) => fold(query).folded.split(/\s+/).filter(Boolean);
+
+    const matchRanges = (text: string, terms: string[]): Range[] => {
+      if (!terms.length) return [];
+      const { folded, map } = fold(text);
+      const ranges: Range[] = [];
+      for (const term of terms) {
+        let from = folded.indexOf(term);
+        while (from !== -1) {
+          const to = from + term.length;
+          let end = to;
+          while (end < folded.length && map[end] === map[to - 1]) end++;
+          ranges.push([map[from], map[end]]);
+          from = folded.indexOf(term, to);
+        }
+      }
+      return ranges;
+    };
+
+    /** Appends `text` to `target` as text nodes, with each range wrapped in <mark>. */
+    const appendMarked = (target: HTMLElement, text: string, ranges: Range[]) => {
+      const sorted = ranges.filter(([s, e]) => e > s).sort((a, b) => a[0] - b[0]);
+      const merged: Range[] = [];
+      for (const range of sorted) {
+        const last = merged[merged.length - 1];
+        if (last && range[0] <= last[1]) last[1] = Math.max(last[1], range[1]);
+        else merged.push([range[0], range[1]]);
+      }
+      let cursor = 0;
+      for (const [start, end] of merged) {
+        if (start > cursor) target.append(text.slice(cursor, start));
+        const mark = document.createElement('mark');
+        mark.textContent = text.slice(start, end);
+        target.append(mark);
+        cursor = end;
+      }
+      if (cursor < text.length) target.append(text.slice(cursor));
+    };
+
+    /**
+     * Turns a Pagefind excerpt into plain text plus the ranges Pagefind marked. The HTML is
+     * parsed in an inert document and only its text is read, so nothing from the index ever
+     * reaches the page as markup.
+     */
+    const parser = new DOMParser();
+    const parseExcerpt = (html: string) => {
+      const doc = parser.parseFromString(html, 'text/html');
+      let text = '';
+      const marks: Range[] = [];
+      const walk = (node: Node) => {
+        for (const child of Array.from(node.childNodes)) {
+          if (child.nodeType === Node.TEXT_NODE) {
+            text += child.textContent ?? '';
+          } else if (child.nodeName === 'MARK') {
+            const start = text.length;
+            text += child.textContent ?? '';
+            marks.push([start, text.length]);
+          } else {
+            walk(child);
+          }
+        }
+      };
+      walk(doc.body);
+      return { text, marks };
+    };
+
+    const formatUrl = config.stripTrailingSlash
+      ? (url: string) => url.replace(/(.)\/(#.*)?$/, '$1$2')
+      : (url: string) => url;
+
+    const displayPath = (href: string, external: boolean) => {
+      try {
+        const url = new URL(href, location.href);
+        const path = decodeURI(url.pathname);
+        return external ? `${url.host}${path === '/' ? '' : path}` : path;
+      } catch {
+        return href;
+      }
+    };
+
+    // ── Pagefind ──────────────────────────────────────────────────────
+
+    let pagefind: Promise<PagefindModule | null> | null = null;
+    let pagefindUnavailable = false;
+
+    const loadPagefind = () => {
+      pagefind ??= (async () => {
+        if (import.meta.env.DEV) return null;
+        try {
+          const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+          const bundlePath = `${base}/pagefind/`;
+          const moduleUrl = `${bundlePath}pagefind.js`;
+          const module = (await import(/* @vite-ignore */ moduleUrl)) as PagefindModule;
+          const { mergeIndex = [], ...options } = config.pagefind;
+          await module.options({
+            ...options,
+            basePath: bundlePath,
+            baseUrl: import.meta.env.BASE_URL,
+            excerptLength: EXCERPT_LENGTH,
+          });
+          for (const { bundlePath: indexPath, ...indexOptions } of mergeIndex) {
+            await module.mergeIndex(indexPath, indexOptions);
+          }
+          await module.init?.();
+          return module;
+        } catch (error) {
+          console.error('[ERROR] Site search could not load the Pagefind index.', error);
+          return null;
+        }
+      })();
+      return pagefind;
+    };
+
+    /** One row per page: the page, or its best-matching section when that beats the intro. */
+    const pageRow = (data: PagefindData): Row => {
+      let best: PagefindSubResult | undefined;
+      for (const sub of data.sub_results ?? []) {
+        if (!best || (sub.locations?.length ?? 0) > (best.locations?.length ?? 0)) best = sub;
+      }
+      const section = best && best.url !== data.url && best.url.includes('#') ? best : undefined;
+      const title = data.meta.title || displayPath(data.url, false);
+      return {
+        title,
+        hint: section && section.title !== title ? section.title : undefined,
+        excerpt: parseExcerpt(section?.excerpt ?? data.excerpt),
+        path: displayPath(formatUrl(data.url), false),
+        href: formatUrl(section?.url ?? data.url),
+        icon: section ? 'section' : 'page',
+        external: false,
+      };
+    };
+
+    // ── State ─────────────────────────────────────────────────────────
+
+    let query = '';
+    let pageRows: Row[] = [];
+    let pageTotal = 0;
+    let pageQuery = '';
+    let pageState: 'idle' | 'pending' | 'slow' | 'done' = 'idle';
+    let searchId = 0;
+    let debounceTimer = 0;
+    let slowTimer = 0;
+
+    let rows: HTMLAnchorElement[] = [];
+    let rowGroup: number[] = [];
+    let shortcutRows: HTMLAnchorElement[] = [];
+    let groupCount = 0;
+    let active = -1;
+    let returnFocus: HTMLElement | null = null;
+
+    const cancelSearch = () => {
+      searchId++;
+      window.clearTimeout(debounceTimer);
+      window.clearTimeout(slowTimer);
+    };
+
+    const search = (term: string) => {
+      cancelSearch();
+      if (!term || pagefindUnavailable) {
+        pageRows = [];
+        pageState = 'idle';
+        return;
+      }
+      const id = searchId;
+      pageState = 'pending';
+      debounceTimer = window.setTimeout(async () => {
+        slowTimer = window.setTimeout(() => {
+          if (id !== searchId) return;
+          pageState = 'slow';
+          renderStatus();
+        }, SLOW_MS);
+        const module = await loadPagefind();
+        if (id !== searchId) return;
+        let results: PagefindData[] = [];
+        let total = 0;
+        if (module) {
+          try {
+            const response = await module.search(term);
+            if (id !== searchId || !response) return;
+            total = response.results.length;
+            results = await Promise.all(
+              response.results.slice(0, MAX_PAGES).map((result) => result.data())
+            );
+            if (id !== searchId) return;
+          } catch (error) {
+            console.error('[ERROR] Site search failed.', error);
+            pagefindUnavailable = true;
+          }
+        } else {
+          pagefindUnavailable = true;
+        }
+        window.clearTimeout(slowTimer);
+        pageRows = results.map(pageRow);
+        pageTotal = total;
+        pageQuery = term;
+        pageState = 'done';
+        render();
+      }, DEBOUNCE_MS);
+    };
+
+    // ── Rendering ─────────────────────────────────────────────────────
+
+    const icon = (name: string) => {
+      const span = document.createElement('span');
+      span.className = 'zs-search-row__icon';
+      const template = icons.get(name) ?? icons.get('page');
+      if (template) span.append(template.content.cloneNode(true));
+      return span;
+    };
+
+    const buildRow = (row: Row, index: number, terms: string[]) => {
+      const link = document.createElement('a');
+      link.className = 'zs-search-row';
+      link.id = `zs-search-option-${index}`;
+      link.href = row.href;
+      link.tabIndex = -1;
+      link.setAttribute('role', 'option');
+      link.setAttribute('aria-selected', 'false');
+      link.dataset.index = String(index);
+      if (row.external) {
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+      }
+
+      const text = document.createElement('span');
+      text.className = 'zs-search-row__text';
+
+      const titleLine = document.createElement('span');
+      titleLine.className = 'zs-search-row__title-line';
+      const title = document.createElement('span');
+      title.className = 'zs-search-row__title';
+      appendMarked(title, row.title, matchRanges(row.title, terms));
+      titleLine.append(title);
+      if (row.hint) {
+        const hint = document.createElement('span');
+        hint.className = 'zs-search-row__hint';
+        appendMarked(hint, row.hint, matchRanges(row.hint, terms));
+        titleLine.append(hint);
+      }
+
+      const meta = document.createElement('span');
+      meta.className = 'zs-search-row__meta';
+      if (row.excerpt?.text.trim()) {
+        const excerpt = document.createElement('span');
+        excerpt.className = 'zs-search-row__excerpt';
+        const { text: excerptText, marks } = row.excerpt;
+        appendMarked(excerpt, excerptText, [...marks, ...matchRanges(excerptText, terms)]);
+        meta.append(excerpt);
+      }
+      const path = document.createElement('span');
+      path.className = 'zs-search-row__path';
+      path.textContent = row.path;
+      meta.append(path);
+
+      text.append(titleLine, meta);
+      link.append(icon(row.icon), text);
+
+      if (row.external) {
+        const note = document.createElement('span');
+        note.className = 'sr-only';
+        note.textContent = ` (${strings.newTab})`;
+        link.append(note, Object.assign(icon('external'), { className: 'zs-search-row__trail' }));
+      }
+      if (row.shortcut) {
+        const chip = document.createElement('kbd');
+        chip.className = 'zs-search-kbd zs-search-row__chip';
+        chip.setAttribute('aria-hidden', 'true');
+        chip.textContent = shortcutLabel(row.shortcut);
+        link.setAttribute('aria-keyshortcuts', `${isMac ? 'Meta' : 'Control'}+${row.shortcut}`);
+        link.append(chip);
+      }
+      return link;
+    };
+
+    const quickRow = (link: QuickLink, shortcut?: number): Row => ({
+      title: link.label,
+      path: displayPath(link.href, Boolean(link.external)),
+      href: link.href,
+      icon: link.icon,
+      external: Boolean(link.external),
+      shortcut,
+    });
+
+    const quickMatches = (link: QuickLink, terms: string[]) => {
+      if (!terms.length) return true;
+      const haystack = fold(`${link.label} ${link.keywords}`).folded;
+      return terms.every((term) => haystack.includes(term));
+    };
+
+    const renderStatus = () => {
+      let message = '';
+      if (query) {
+        if (pagefindUnavailable) message = strings.unavailable;
+        else if (pageState === 'slow') message = strings.searching;
+        else if (pageState === 'done' && pageTotal === 0)
+          message = strings.noResults.replace('{q}', pageQuery);
+        else if (pageState === 'done' && pageTotal > MAX_PAGES)
+          message = strings.more
+            .replace('{shown}', String(MAX_PAGES))
+            .replace('{total}', String(pageTotal));
+      }
+      if (status.textContent !== message) status.textContent = message;
+      footer.toggleAttribute('data-status', message !== '');
+    };
+
+    const render = ({ instant = false } = {}) => {
+      const terms = termsOf(query);
+      const groups: Group[] = [];
+      if (query && pageRows.length) groups.push({ label: strings.pages, rows: pageRows });
+      for (const group of config.groups) {
+        const isSuggestions = group.id === 'suggestions';
+        const matched = group.links
+          .filter((link) => quickMatches(link, terms))
+          .map((link, i) => quickRow(link, isSuggestions && !query && i < 5 ? i + 1 : undefined));
+        if (matched.length) groups.push({ label: group.label, rows: matched });
+      }
+
+      rows = [];
+      rowGroup = [];
+      shortcutRows = [];
+      groupCount = groups.length;
+      const fragment = document.createDocumentFragment();
+      groups.forEach((group, groupIndex) => {
+        const element = document.createElement('div');
+        element.className = 'zs-search-group';
+        element.setAttribute('role', 'group');
+        element.setAttribute('aria-label', group.label);
+        const label = document.createElement('div');
+        label.className = 'zs-search-group__label';
+        label.setAttribute('aria-hidden', 'true');
+        label.textContent = group.label;
+        element.append(label);
+        for (const row of group.rows) {
+          const link = buildRow(row, rows.length, terms);
+          rows.push(link);
+          rowGroup.push(groupIndex);
+          if (row.shortcut) shortcutRows[row.shortcut - 1] = link;
+          element.append(link);
+        }
+        fragment.append(element);
+      });
+      listbox.replaceChildren(fragment);
+      input.setAttribute('aria-expanded', String(rows.length > 0));
+
+      // Animate the list to its new height. CSS caps it, and the scroller takes the rest.
+      body.classList.toggle('is-instant', instant);
+      body.style.height = `${listbox.offsetHeight}px`;
+      scroller.scrollTop = 0;
+      active = -1;
+      highlight.hidden = true;
+      input.removeAttribute('aria-activedescendant');
+      if (rows.length) setActive(0, { instant: true });
+      renderStatus();
+    };
+
+    // ── Active row ────────────────────────────────────────────────────
+
+    const moveHighlight = (row: HTMLElement, instant: boolean) => {
+      highlight.classList.toggle('is-instant', instant || highlight.hidden);
+      highlight.hidden = false;
+      highlight.style.transform = `translateY(${row.offsetTop}px)`;
+      highlight.style.height = `${row.offsetHeight}px`;
+      // Re-enable the slide for the next move once this position has applied.
+      void highlight.offsetHeight;
+      highlight.classList.remove('is-instant');
+    };
+
+    /** Scrolls only the list, so the active row and, for a group's first row, its label show. */
+    const scrollToRow = (index: number) => {
+      const row = rows[index];
+      const firstInGroup = rowGroup[index - 1] !== rowGroup[index];
+      const group = row.parentElement as HTMLElement;
+      const gap = 6;
+      const top = index === 0 ? 0 : (firstInGroup ? group.offsetTop : row.offsetTop) - gap;
+      const bottom = row.offsetTop + row.offsetHeight + gap;
+      if (top < scroller.scrollTop) scroller.scrollTop = top;
+      else if (bottom > scroller.scrollTop + scroller.clientHeight)
+        scroller.scrollTop = bottom - scroller.clientHeight;
+    };
+
+    function setActive(index: number, { scroll = false, instant = false } = {}) {
+      if (index === active) return;
+      rows[active]?.setAttribute('aria-selected', 'false');
+      active = index;
+      const row = rows[index];
+      if (!row) {
+        input.removeAttribute('aria-activedescendant');
+        highlight.hidden = true;
+        return;
+      }
+      row.setAttribute('aria-selected', 'true');
+      input.setAttribute('aria-activedescendant', row.id);
+      moveHighlight(row, instant);
+      if (scroll) scrollToRow(index);
+    }
+
+    const jumpGroup = (step: 1 | -1) => {
+      if (!groupCount) return;
+      const current = active >= 0 ? rowGroup[active] : step > 0 ? -1 : 0;
+      const target = (current + step + groupCount) % groupCount;
+      setActive(rowGroup.indexOf(target), { scroll: true });
+    };
+
+    // ── Open, close and navigate ──────────────────────────────────────
+
+    const open = () => {
+      if (dialog.open) return;
+      const focused = document.activeElement;
+      returnFocus = focused instanceof HTMLElement && focused !== document.body ? focused : trigger;
+      input.value = '';
+      query = '';
+      pageRows = [];
+      pageState = 'idle';
+      // Keep the scrollbar's space while scrolling is locked, so the page does not shift.
+      const hasScrollbar = window.innerWidth > document.documentElement.clientWidth;
+      document.documentElement.setAttribute('data-zs-search-open', hasScrollbar ? 'gutter' : '');
+      dialog.showModal();
+      trigger.setAttribute('aria-expanded', 'true');
+      render({ instant: true });
+      input.focus();
+      void loadPagefind().then((module) => {
+        if (module || pagefindUnavailable) return;
+        pagefindUnavailable = true;
+        if (dialog.open && query) render();
+      });
+    };
+
+    const close = () => {
+      if (dialog.open) dialog.close();
+    };
+
+    /** Opens a row like a plain click: internal links in this tab, external ones in a new tab. */
+    const openRow = (row: HTMLAnchorElement, newTab = false) => {
+      if (newTab && !row.target) {
+        window.open(row.href, '_blank', 'noopener');
+        return;
+      }
+      row.click();
+    };
+
+    dialog.addEventListener('close', () => {
+      cancelSearch();
+      document.documentElement.removeAttribute('data-zs-search-open');
+      trigger.setAttribute('aria-expanded', 'false');
+      const target = returnFocus?.isConnected ? returnFocus : trigger;
+      target.focus({ preventScroll: true });
+    });
+
+    // Escape with text in the field clears it first, wherever focus is in the dialog.
+    dialog.addEventListener('cancel', (event) => {
+      if (!input.value) return;
+      event.preventDefault();
+      input.value = '';
+      onInput();
+      input.focus();
+    });
+
+    // Close on a click that starts and ends on the backdrop, not a text selection dragged out.
+    let pressedBackdrop = false;
+    dialog.addEventListener('pointerdown', (event) => {
+      pressedBackdrop = event.target === dialog;
+    });
+    dialog.addEventListener('click', (event) => {
+      if (pressedBackdrop && event.target === dialog) close();
+      pressedBackdrop = false;
+    });
+
+    trigger.addEventListener('click', open);
+    closeButton.addEventListener('click', close);
+
+    const onInput = () => {
+      query = input.value.trim();
+      search(query);
+      render();
+    };
+    input.addEventListener('input', onInput);
+
+    input.addEventListener('keydown', (event) => {
+      if (event.isComposing) return;
+      switch (event.key) {
+        case 'ArrowDown':
+        case 'ArrowUp': {
+          if (!rows.length) return;
+          event.preventDefault();
+          const step = event.key === 'ArrowDown' ? 1 : -1;
+          setActive((active + step + rows.length) % rows.length, { scroll: true });
+          break;
+        }
+        case 'Tab':
+          if (!rows.length) return;
+          event.preventDefault();
+          jumpGroup(event.shiftKey ? -1 : 1);
+          break;
+        case 'Enter':
+          if (!rows[active]) return;
+          event.preventDefault();
+          openRow(rows[active], event.metaKey || event.ctrlKey);
+          break;
+        case 'Escape':
+          event.preventDefault();
+          if (input.value) {
+            input.value = '';
+            onInput();
+          } else {
+            close();
+          }
+          break;
+      }
+    });
+
+    // Hover moves the highlight without scrolling. pointermove, not pointerenter, so a list
+    // scrolled under a resting pointer by the keyboard does not steal the active row.
+    listbox.addEventListener('pointermove', (event) => {
+      const row = (event.target as Element).closest<HTMLAnchorElement>('.zs-search-row');
+      if (row) setActive(Number(row.dataset.index));
+    });
+
+    // A plain click follows the link, then the menu closes. The close waits a task so the
+    // link's own navigation runs first. Modified and middle clicks open a new tab and leave
+    // the menu open.
+    listbox.addEventListener('click', (event) => {
+      const row = (event.target as Element).closest('.zs-search-row');
+      if (!row) return;
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+        return;
+      window.setTimeout(close);
+    });
+
+    window.addEventListener('keydown', (event) => {
+      const mod = (event.metaKey || event.ctrlKey) && !event.altKey;
+      if (!mod) return;
+      if (event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        if (dialog.open) close();
+        else open();
+        return;
+      }
+      // Cmd/Ctrl 1 to 5 open the suggestions. event.code keeps this working on layouts such as
+      // AZERTY, where the digits need Shift.
+      if (!dialog.open || query) return;
+      const digit = /^(?:Digit|Numpad)([1-5])$/.exec(event.code);
+      const row = digit ? shortcutRows[Number(digit[1]) - 1] : undefined;
+      if (!row) return;
+      event.preventDefault();
+      openRow(row);
+    });
+
+    // A page restored from the back-forward cache should not come back with the menu open.
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) close();
+    });
+  }
+</script>
+
+<style is:global>
+  /* Classes here are prefixed zs-search- because the script builds the rows, so they carry no
+     scoped attribute. Unlayered, like the other overrides' rules that must beat Starlight. */
+  .zs-search {
+    display: contents;
+  }
+
+  /* ── Trigger: an icon below 80rem, a search field above ─────────── */
+  .zs-search-trigger {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: var(--zi-radius-md);
+    color: var(--zi-ink);
+    cursor: pointer;
+    display: inline-flex;
+    flex-shrink: 0;
+    font: inherit;
+    gap: var(--zi-space-2);
+    height: 2.5rem;
+    justify-content: center;
+    padding: 0;
+    transition:
+      border-color var(--zi-transition),
+      color var(--zi-transition);
+    width: 2.5rem;
+  }
+
+  .zs-search-trigger > svg {
+    flex-shrink: 0;
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+
+  .zs-search-trigger__label,
+  .zs-search-trigger__keys {
+    display: none;
+  }
+
+  @media (min-width: 50rem) {
+    .zs-search-trigger {
+      background: var(--zi-surface);
+      border: 1px solid var(--zi-line-control);
+    }
+
+    .zs-search-trigger:hover {
+      border-color: var(--zi-ink-muted);
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .zs-search-trigger {
+      color: var(--zi-ink-faint);
+      flex-shrink: 1;
+      font-size: var(--sl-text-sm);
+      justify-content: flex-start;
+      max-width: 22rem;
+      padding-inline: 0.75rem 0.5rem;
+      width: 100%;
+    }
+
+    .zs-search-trigger:hover {
+      color: var(--zi-ink);
+    }
+
+    .zs-search-trigger__label {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .zs-search-trigger__keys:not([hidden]) {
+      display: inline-flex;
+      gap: 0.25rem;
+      margin-inline-start: auto;
+    }
+  }
+
+  /* ── Keyboard chips ────────────────────────────────────────────── */
+  .zs-search-kbd {
+    align-items: center;
+    background: var(--zi-surface-raised);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-sm);
+    color: var(--zi-ink-muted);
+    display: inline-flex;
+    flex-shrink: 0;
+    font: 500 0.6875rem/1 var(--zi-font-mono);
+    height: 1.375rem;
+    justify-content: center;
+    min-width: 1.375rem;
+    padding: 0 0.375rem;
+    white-space: nowrap;
+  }
+
+  /* ── Dialog ────────────────────────────────────────────────────── */
+  :root[data-zs-search-open] {
+    overflow: hidden;
+  }
+
+  :root[data-zs-search-open='gutter'] {
+    scrollbar-gutter: stable;
+  }
+
+  /* Placed explicitly: a global reset zeroes the dialog's default auto margins. */
+  .zs-search-dialog {
+    --zs-search-top: min(10vh, 6rem);
+    background: var(--zi-surface);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-lg);
+    box-shadow: var(--zi-shadow-pop);
+    color: var(--zi-ink);
+    height: fit-content;
+    inset: 0;
+    margin: var(--zs-search-top) auto auto;
+    max-height: calc(100dvh - var(--zs-search-top) - var(--zi-space-4));
+    max-width: none;
+    overflow: hidden;
+    padding: 0;
+    position: fixed;
+    width: min(40rem, calc(100vw - 2 * var(--zi-space-4)));
+  }
+
+  .zs-search-dialog::backdrop {
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    background-color: var(--sl-color-backdrop-overlay);
+  }
+
+  .zs-search-dialog[open] {
+    animation: zs-search-in 140ms ease-out;
+  }
+
+  .zs-search-dialog[open]::backdrop {
+    animation: zs-search-fade 140ms ease-out;
+  }
+
+  @keyframes zs-search-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.99);
+    }
+  }
+
+  @keyframes zs-search-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .zs-search-panel {
+    container: zs-search / inline-size;
+    display: flex;
+    flex-direction: column;
+    max-height: inherit;
+  }
+
+  .zs-search-field {
+    align-items: center;
+    border-bottom: 1px solid var(--zi-line);
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--zi-space-3);
+    min-height: 3.25rem;
+    padding-inline: var(--zi-space-4) var(--zi-space-3);
+  }
+
+  .zs-search-field__icon {
+    color: var(--zi-ink-faint);
+    flex-shrink: 0;
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+
+  /* 16px text keeps iOS from zooming in on focus. The caret shows focus here; the field is
+     the only thing that ever holds it while the menu is open. */
+  .zs-search-input {
+    background: transparent;
+    border: 0;
+    color: var(--zi-ink);
+    flex: 1 1 auto;
+    font: 400 1rem/1.5 var(--zi-font-sans);
+    height: 3.25rem;
+    min-width: 0;
+    padding: 0;
+  }
+
+  .zs-search-input::placeholder {
+    color: var(--zi-ink-faint);
+    opacity: 1;
+  }
+
+  .zs-search-input:focus,
+  .zs-search-input:focus-visible {
+    outline: none;
+  }
+
+  .zs-search-esc {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: var(--zi-radius-sm);
+    color: var(--zi-accent);
+    cursor: pointer;
+    display: inline-flex;
+    flex-shrink: 0;
+    font: 600 var(--sl-text-sm) var(--zi-font-sans);
+    min-height: 2.75rem;
+    padding: 0;
+  }
+
+  .zs-search-esc__text {
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  /* ── List ──────────────────────────────────────────────────────── */
+  .zs-search-body {
+    flex-shrink: 1;
+    height: 0;
+    max-height: min(26rem, 55dvh);
+    overflow: hidden;
+    transition: height 160ms ease;
+  }
+
+  .zs-search-body.is-instant {
+    transition: none;
+  }
+
+  .zs-search-scroller {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    position: relative;
+  }
+
+  .zs-search-list {
+    padding: 0.375rem;
+  }
+
+  .zs-search-list:empty {
+    padding: 0;
+  }
+
+  .zs-search-highlight {
+    background: var(--zi-accent-soft);
+    border-radius: var(--zi-radius-md);
+    inset-inline: 0.375rem;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transition:
+      transform 90ms ease,
+      height 90ms ease;
+  }
+
+  .zs-search-highlight.is-instant {
+    transition: none;
+  }
+
+  .zs-search-highlight[hidden] {
+    display: none;
+  }
+
+  .zs-search-group + .zs-search-group {
+    margin-top: 0.25rem;
+  }
+
+  .zs-search-group__label {
+    color: var(--zi-ink-faint);
+    font: 500 0.6875rem/1rem var(--zi-font-mono);
+    letter-spacing: 0.08em;
+    padding: 0.625rem 0.625rem 0.25rem;
+    text-transform: uppercase;
+  }
+
+  .zs-search-row {
+    align-items: center;
+    border-radius: var(--zi-radius-md);
+    color: var(--zi-ink);
+    display: flex;
+    gap: var(--zi-space-3);
+    min-height: 2.75rem;
+    padding: 0.5rem 0.625rem;
+    position: relative;
+    text-decoration: none;
+  }
+
+  .zs-search-row:hover {
+    color: var(--zi-ink);
+  }
+
+  .zs-search-row__icon {
+    align-items: center;
+    background: var(--zi-surface-raised);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-sm);
+    color: var(--zi-ink-muted);
+    display: inline-flex;
+    flex-shrink: 0;
+    height: 1.75rem;
+    justify-content: center;
+    width: 1.75rem;
+  }
+
+  .zs-search-row__icon svg,
+  .zs-search-row__trail svg {
+    fill: none;
+    height: 1rem;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.75;
+    width: 1rem;
+  }
+
+  .zs-search-row[aria-selected='true'] .zs-search-row__icon {
+    border-color: var(--zi-accent);
+    color: var(--zi-accent);
+  }
+
+  .zs-search-row__trail {
+    color: var(--zi-ink-faint);
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .zs-search-row__text {
+    display: grid;
+    flex: 1 1 auto;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .zs-search-row__title-line,
+  .zs-search-row__meta {
+    align-items: baseline;
+    display: flex;
+    gap: var(--zi-space-2);
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .zs-search-row__title,
+  .zs-search-row__hint,
+  .zs-search-row__excerpt,
+  .zs-search-row__path {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .zs-search-row__title {
+    flex: 0 1 auto;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .zs-search-row__hint {
+    color: var(--zi-ink-faint);
+    flex: 0 4 auto;
+    font-size: 0.8125rem;
+  }
+
+  .zs-search-row__meta {
+    color: var(--zi-ink-muted);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .zs-search-row__excerpt {
+    flex: 0 1 auto;
+  }
+
+  .zs-search-row__path {
+    color: var(--zi-ink-faint);
+    flex: 0 0 auto;
+    font-family: var(--zi-font-mono);
+    font-size: 0.75rem;
+    max-width: 45%;
+  }
+
+  .zs-search-row__excerpt + .zs-search-row__path::before {
+    content: '·';
+    margin-inline-end: var(--zi-space-2);
+  }
+
+  /* Accent and ink are close in luminance, so matches also get an underline. */
+  .zs-search-row mark {
+    background: transparent;
+    color: var(--zi-accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .zs-search-row__chip {
+    margin-inline-start: auto;
+  }
+
+  /* ── Footer ────────────────────────────────────────────────────── */
+  .zs-search-footer {
+    align-items: center;
+    background: var(--zi-surface-raised);
+    border-top: 1px solid var(--zi-line);
+    color: var(--zi-ink-muted);
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    gap: var(--zi-space-4);
+    min-height: 2.5rem;
+    padding: 0.5rem var(--zi-space-4);
+  }
+
+  .zs-search-tips {
+    align-items: center;
+    display: flex;
+    flex: 1 1 auto;
+    gap: var(--zi-space-4);
+  }
+
+  .zs-search-tip {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .zs-search-tip--end {
+    margin-inline-start: auto;
+  }
+
+  .zs-search-footer[data-status] .zs-search-tips {
+    display: none;
+  }
+
+  .zs-search-status {
+    margin: 0;
+  }
+
+  /* ── Narrow panel: phones and touch ────────────────────────────── */
+  @container zs-search (max-width: 480px) {
+    .zs-search-row__chip,
+    .zs-search-tips,
+    .zs-search-esc .zs-search-kbd {
+      display: none;
+    }
+
+    .zs-search-esc {
+      padding-inline: var(--zi-space-2);
+    }
+
+    .zs-search-esc__text {
+      clip: auto;
+      height: auto;
+      overflow: visible;
+      position: static;
+      width: auto;
+    }
+
+    .zs-search-footer:not([data-status]) {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .zs-search-dialog[open],
+    .zs-search-dialog[open]::backdrop {
+      animation: none;
+    }
+
+    .zs-search-body,
+    .zs-search-highlight,
+    .zs-search-trigger {
+      transition: none;
+    }
+  }
+</style>
