@@ -256,6 +256,7 @@ export default defineConfig({
           collapsed: false,
           items: [
             { label: 'Overview', slug: 'tutorials' },
+            { label: 'Encrypt Object Storage (CLI)', slug: 'tutorials/encrypt-object-storage' },
             { label: 'Deploy a VPS with Dokploy (CLI)', slug: 'tutorials/deploy-vps-dokploy-cli' },
             {
               label: 'Deploy OpenClaw (Marketplace, CLI)',

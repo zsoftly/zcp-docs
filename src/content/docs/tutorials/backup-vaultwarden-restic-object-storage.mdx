@@ -31,14 +31,13 @@ Plan for about 45 minutes.
 
 :::caution
 
-Server-side encryption is not available on ZCP object storage yet.
-`zcp object-storage bucket encryption enable` refuses to run, because the storage gateway has no
-encryption key backend and setting default SSE-S3 makes every later upload to that bucket fail with
-`InvalidArgument`.
+Optional SSE-S3 and service-managed SSE-KMS are available in YUL and YOW. See
+[S3 API usage](/public-cloud/storage/object-storage/s3-usage/#optional-server-side-encryption) for
+bucket defaults and copy limitations.
 
-restic does not wait for it. It encrypts on the client, so the bucket only ever receives ciphertext.
-Server-side encryption, once it arrives, protects data written by clients that do not encrypt. It
-adds nothing to a restic repository.
+restic encrypts on the client before upload. Its repository password remains necessary to read a
+backup, including after an authorized S3 download. Server-side encryption does not replace this
+client-side protection.
 
 :::
 
@@ -680,8 +679,8 @@ not.
 
 ## Step 10: Confirm the bucket holds ciphertext
 
-This step answers the question the missing server-side encryption leaves open. Every restic
-repository has a small object named `config` at its root. On the VM, restic decrypts it for you:
+This step verifies restic's client-side encryption. Every restic repository has a small object named
+`config` at its root. On the VM, restic decrypts it for you:
 
 ```bash
 restic cat config
@@ -905,9 +904,10 @@ with `zcp object-storage bucket list <object_storage_slug> --region os-yul`.
 `RESTIC_PASSWORD_FILE` points at the file you generated, and that nothing has edited that file
 since.
 
-**Uploads fail with `InvalidArgument`.** Default bucket encryption is set on the bucket. Clear it
-with `zcp object-storage bucket encryption disable <object_storage_slug> <your-bucket-name>` and
-check the current setting with `encryption status`.
+**Uploads fail with `InvalidArgument`.** Inspect the S3 error body and the bucket's encryption
+configuration. For SSE-KMS, confirm the service-managed key ID with ZSoftly. See
+[S3 API usage](/public-cloud/storage/object-storage/s3-usage/#optional-server-side-encryption)
+before changing encryption settings.
 
 ## Next steps
 
