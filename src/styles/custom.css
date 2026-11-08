@@ -1196,3 +1196,19 @@ body {
 :root[data-theme='dark'] .postpaid-signup-screenshot__dark {
   display: block;
 }
+
+/* ── Previous / Next page links ─────────────────────────────── */
+/* Starlight sets the page title to 2xl, which makes each box very tall. */
+.pagination-links a {
+  padding: 0.625rem 0.875rem;
+  font-size: var(--sl-text-xs);
+}
+
+.pagination-links .link-title {
+  font-size: var(--sl-text-base);
+  font-weight: 500;
+}
+
+.pagination-links svg {
+  --sl-icon-size: 1rem !important;
+}
