@@ -1,14 +1,23 @@
 ---
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
-import { CLOUD_LOGIN_URL, docsNavCurrent, docsNavLinks, localePathPrefix } from '../data/site';
+import {
+  CLOUD_LOGIN_URL,
+  docsNavCurrent,
+  docsNavHref,
+  docsNavLinks,
+  isExternalNavLink,
+  localePathPrefix,
+} from '../data/site';
 
 // Below Starlight's 50rem breakpoint the header shows only the title and
 // search, so the documentation nav, language, theme and console live here.
 const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
 const docsLinks = docsNavLinks.map((link) => ({
-  label: Astro.locals.t(link.labelKey),
-  href: `${localePrefix}${link.path}`,
+  // The menu has room for the full name where the header bar uses a short one.
+  label: Astro.locals.t(link.menuLabelKey ?? link.labelKey),
+  href: docsNavHref(link, localePrefix),
+  external: isExternalNavLink(link),
   current: docsNavCurrent(link, Astro.url.pathname, localePrefix),
 }));
 ---
@@ -16,11 +25,17 @@ const docsLinks = docsNavLinks.map((link) => ({
 <div class="mobile-menu-footer">
   <nav class="mobile-docs-nav" aria-label={Astro.locals.t('zs.header.docsNav')}>
     {
-      docsLinks.map((link) => (
-        <a class="mobile-docs-link" href={link.href} aria-current={link.current}>
-          {link.label}
-        </a>
-      ))
+      docsLinks.map((link) =>
+        link.external ? (
+          <a class="mobile-docs-link" href={link.href} target="_blank" rel="noopener noreferrer">
+            {link.label}
+          </a>
+        ) : (
+          <a class="mobile-docs-link" href={link.href} aria-current={link.current}>
+            {link.label}
+          </a>
+        )
+      )
     }
   </nav>
 

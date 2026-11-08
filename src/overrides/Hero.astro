@@ -1,7 +1,7 @@
 ---
 // Docs home hero: an eyebrow, the title, a one-line tagline, then the search field and the Ask Docs
 // button.
-// The search field opens the site search in the header (Starlight's site-search), and
+// The search field opens the site search in the header (src/overrides/Search.astro), and
 // Ask Docs opens the Ask Docs dialog from src/overrides/AskDocs.astro. Neither has
 // its own logic here. The rest of the home page is src/components/DocsHome.astro.
 const t = Astro.locals.t;
@@ -27,7 +27,7 @@ const t = Astro.locals.t;
         <path d="m20 20-3.5-3.5"></path>
       </svg>
       <span class="zs-hero__search-text">{t('zs.hero.search')}</span>
-      <kbd class="zs-hero__kbd">⌘K</kbd>
+      <kbd class="zs-hero__kbd" data-zs-search-kbd>⌘K</kbd>
     </button>
     <button type="button" class="zs-hero__ask" data-zs-hero-ask>
       <svg
@@ -50,12 +50,8 @@ const t = Astro.locals.t;
 </section>
 
 <script>
-  // Defer the click. Starlight's search closes its dialog on any click outside it. This click is
-  // still bubbling to the window when the dialog opens.
   document.querySelector('[data-zs-hero-search]')?.addEventListener('click', () => {
-    setTimeout(() => {
-      document.querySelector<HTMLButtonElement>('site-search button[data-open-modal]')?.click();
-    });
+    document.querySelector<HTMLButtonElement>('[data-zs-search-open]')?.click();
   });
   document.querySelector('[data-zs-hero-ask]')?.addEventListener('click', () => {
     document.querySelector<HTMLButtonElement>('[data-ask-docs-open]')?.click();

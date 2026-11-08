@@ -237,6 +237,7 @@ export default defineConfig({
         MobileMenuFooter: './src/overrides/MobileMenuFooter.astro',
         TableOfContents: './src/overrides/TableOfContents.astro',
         PageFrame: './src/overrides/PageFrame.astro',
+        Search: './src/overrides/Search.astro',
       },
       sidebar: translateSidebar([
         // ── Changelog ──────────────────────────────────────────

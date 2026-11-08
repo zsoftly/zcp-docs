@@ -124,17 +124,6 @@
     background-color: var(--zi-surface-raised);
   }
 
-  site-search button[data-open-modal] {
-    align-items: center;
-    border-radius: var(--zi-radius-md);
-    color: var(--zi-ink);
-    display: flex;
-    height: 2.5rem;
-    justify-content: center;
-    padding: 0;
-    width: 2.5rem;
-  }
-
   .sidebar-pane {
     --zs-mobile-menu-surface: var(--zi-surface-raised);
     background-color: var(--zs-mobile-menu-surface);
@@ -168,21 +157,6 @@ body {
     animation: none !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* ── Search dialog ──────────────────────────────────────────── */
-/* It floats in the browser top layer, so it is one of the few places with a
-   shadow. The panel is surface-raised with a hairline, not Starlight's grey. */
-site-search dialog {
-  background-color: var(--zi-surface-raised);
-  border-color: var(--zi-line);
-  box-shadow: var(--zi-shadow-pop);
-}
-
-@media (min-width: 50rem) {
-  site-search dialog {
-    border-radius: var(--zi-radius-lg);
   }
 }
 

@@ -5,6 +5,9 @@ export const websiteUrl = (import.meta.env.PUBLIC_WEBSITE_URL ?? 'https://zcp.zs
 
 export const COMMUNITY_PAGE_URL = `${websiteUrl}/community`;
 
+/** The website page for the Forward Deployed Engineering service. */
+export const FDE_PAGE_URL = `${websiteUrl}/professional-services/forward-deployed-engineering/`;
+
 export const cloudUrl = (
   import.meta.env.PUBLIC_CLOUD_URL ?? 'https://cloud.zcp.zsoftly.ca'
 ).replace(/\/+$/, '');
@@ -18,13 +21,21 @@ export const COMMUNITY_SLACK_URL =
 /**
  * Primary documentation links in the site header and the mobile menu.
  *
- * Add, remove or reorder entries here rather than in the components. `path` is
- * site-relative without a locale prefix, so each caller adds `/fr` when
- * rendering the French site. `labelKey` must exist in both
+ * Add, remove or reorder entries here rather than in the components. A docs
+ * link has a `path` that is site-relative without a locale prefix, so each
+ * caller adds `/fr` when rendering the French site. An external link has an
+ * absolute `href`, is never marked current and opens in a new tab, like the
+ * footer's external links. Every label key must exist in both
  * `src/content/i18n/en.json` and `src/content/i18n/fr.json`.
  */
-export interface DocsNavLink {
+interface DocsNavLinkBase {
+  /** Label in the header bar, where the nav shares one row with the controls. */
   labelKey: string;
+  /** Longer label for the mobile menu, which has room for it. Defaults to `labelKey`. */
+  menuLabelKey?: string;
+}
+
+export interface DocsNavPathLink extends DocsNavLinkBase {
   path: string;
   /**
    * Extra unprefixed paths whose pages count as part of this link's section,
@@ -32,6 +43,12 @@ export interface DocsNavLink {
    */
   sections?: string[];
 }
+
+export interface DocsNavExternalLink extends DocsNavLinkBase {
+  href: string;
+}
+
+export type DocsNavLink = DocsNavPathLink | DocsNavExternalLink;
 
 export const docsNavLinks: DocsNavLink[] = [
   { labelKey: 'zs.header.getStarted', path: '/public-cloud/getting-started/quickstart/' },
@@ -43,17 +60,29 @@ export const docsNavLinks: DocsNavLink[] = [
     sections: ['/public-cloud/cli/', '/public-cloud/api/'],
   },
   { labelKey: 'zs.header.releaseNotes', path: '/changelog/', sections: ['/changelog/'] },
+  { labelKey: 'zs.header.fde', menuLabelKey: 'zs.nav.fde', href: FDE_PAGE_URL },
 ];
+
+export function isExternalNavLink(link: DocsNavLink): link is DocsNavExternalLink {
+  return 'href' in link;
+}
+
+/** The href for a header link, with the locale prefix on docs links only. */
+export function docsNavHref(link: DocsNavLink, localePrefix: string): string {
+  return isExternalNavLink(link) ? link.href : `${localePrefix}${link.path}`;
+}
 
 /**
  * The `aria-current` value for a header link on the page at `pathname`:
  * `page` on the link's own page, `true` anywhere else in its section.
+ * External links are never current.
  */
 export function docsNavCurrent(
   link: DocsNavLink,
   pathname: string,
   localePrefix: string
 ): 'page' | 'true' | undefined {
+  if (isExternalNavLink(link)) return undefined;
   const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);
   const current = withSlash(pathname);
   if (current === withSlash(`${localePrefix}${link.path}`)) return 'page';

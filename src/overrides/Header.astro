@@ -13,7 +13,14 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import { Icon } from '@astrojs/starlight/components';
 import type { Props } from '@astrojs/starlight/props';
 import MobileMenuFooter from './MobileMenuFooter.astro';
-import { CLOUD_LOGIN_URL, docsNavCurrent, docsNavLinks, localePathPrefix } from '../data/site';
+import {
+  CLOUD_LOGIN_URL,
+  docsNavCurrent,
+  docsNavHref,
+  docsNavLinks,
+  isExternalNavLink,
+  localePathPrefix,
+} from '../data/site';
 
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
@@ -21,7 +28,8 @@ const { hasSidebar, siteTitleHref } = Astro.locals.starlightRoute;
 const localePrefix = localePathPrefix(Astro.locals.starlightRoute.locale);
 const docsLinks = docsNavLinks.map((link) => ({
   label: Astro.locals.t(link.labelKey),
-  href: `${localePrefix}${link.path}`,
+  href: docsNavHref(link, localePrefix),
+  external: isExternalNavLink(link),
   current: docsNavCurrent(link, Astro.url.pathname, localePrefix),
 }));
 ---
@@ -38,11 +46,17 @@ const docsLinks = docsNavLinks.map((link) => ({
     aria-label={Astro.locals.t('zs.header.docsNav')}
   >
     {
-      docsLinks.map((link) => (
-        <a href={link.href} aria-current={link.current}>
-          {link.label}
-        </a>
-      ))
+      docsLinks.map((link) =>
+        link.external ? (
+          <a href={link.href} target="_blank" rel="noopener noreferrer">
+            {link.label}
+          </a>
+        ) : (
+          <a href={link.href} aria-current={link.current}>
+            {link.label}
+          </a>
+        )
+      )
     }
   </nav>
   <div class="header-search sl-flex print:hidden">
@@ -457,9 +471,26 @@ const docsLinks = docsNavLinks.map((link) => ({
       }
     }
 
+    /* Six links rarely fit next to the controls, so wherever the nav shows
+       it fades its trailing edge to show that more links sit past it. When
+       the links fit, the nav grows into the free space and the fade lands
+       on empty space. */
+    @media (min-width: 50rem) {
+      .header-docs-nav {
+        -webkit-mask-image: linear-gradient(
+          to right,
+          var(--zi-ink) calc(100% - 1.5rem),
+          transparent
+        );
+        mask-image: linear-gradient(to right, var(--zi-ink) calc(100% - 1.5rem), transparent);
+        mask-repeat: no-repeat;
+        mask-size: 100% 100%;
+      }
+    }
+
     /* Between Starlight's 50rem breakpoint and a wide window the nav and the
-       controls share the bar, so the title drops its wordmark and the search
-       button shows only its icon. */
+       controls share the bar, so the title drops its wordmark. The search
+       trigger switches to its icon-only form at the same width (Search.astro). */
     @media (min-width: 50rem) and (max-width: 79.999rem) {
       .site-title {
         gap: 0;
@@ -471,29 +502,6 @@ const docsLinks = docsNavLinks.map((link) => ({
 
       .header-search {
         flex: 0 0 auto;
-      }
-
-      /* The nav may scroll here, so fade its trailing edge to show more links
-         sit past it. */
-      .header-docs-nav {
-        -webkit-mask-image: linear-gradient(
-          to right,
-          var(--zi-ink) calc(100% - 1.5rem),
-          transparent
-        );
-        mask-image: linear-gradient(to right, var(--zi-ink) calc(100% - 1.5rem), transparent);
-        mask-repeat: no-repeat;
-        mask-size: 100% 100%;
-      }
-
-      .header-search :global(button[data-open-modal]) {
-        justify-content: center;
-        padding-inline: 0;
-        width: 2.5rem;
-      }
-
-      .header-search :global(button[data-open-modal] > :not(svg)) {
-        display: none !important;
       }
     }
   }
