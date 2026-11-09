@@ -330,7 +330,7 @@ key with each request. ZSoftly does not store your key.
 Generate a key and upload an object:
 
 ```bash
-openssl rand -out sse-c.key 32
+(umask 077 && openssl rand -out sse-c.key 32)
 
 aws s3api put-object \
   --endpoint-url https://objects.yul.zcp.zsoftly.ca \
@@ -344,8 +344,11 @@ Send the same key to download the object:
 aws s3api get-object \
   --endpoint-url https://objects.yul.zcp.zsoftly.ca \
   --bucket my-bucket --key file.txt \
-  --sse-customer-algorithm AES256 --sse-customer-key fileb://sse-c.key file.txt
+  --sse-customer-algorithm AES256 --sse-customer-key fileb://sse-c.key file-copy.txt
 ```
+
+The `zcp` CLI, the portal, and browser apps cannot send the key, so they cannot read SSE-C objects.
+Use the AWS CLI or an S3 SDK.
 
 :::danger
 

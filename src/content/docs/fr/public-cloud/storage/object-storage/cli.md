@@ -233,7 +233,7 @@ zcp object-storage bucket encryption status  <storage> <bucket>
 zcp object-storage bucket encryption disable <storage> <bucket>
 ```
 
-Le SSE-C est disponible par l'API S3, voir
+Le SSE-C est disponible avec l'API S3. Voir
 [Chiffrement avec clé fournie par le client](/fr/public-cloud/storage/object-storage/s3-usage/#chiffrement-avec-clé-fournie-par-le-client-sse-c).
 Vous pouvez aussi chiffrer côté client avant le téléversement.
 [Sauvegarder Vaultwarden vers le stockage objet avec restic](/fr/tutorials/backup-vaultwarden-restic-object-storage/)
@@ -247,7 +247,8 @@ chaque objet avant qu'il ne quitte la machine.
   prévue.
 - **Mise à l'échelle automatique** de l'instance — utilisez le portail.
 - **Chiffrement par défaut (SSE-S3)** — bloqué sur toute la plateforme, voir ci-dessus.
-- **Chiffrement avec clé fournie par le client (SSE-C)** — utilisez AWS CLI ou un SDK S3.
+- **Chiffrement avec clé fournie par le client (SSE-C)** — utilisez AWS CLI ou un SDK S3. Voir
+  [Chiffrement avec clé fournie par le client](/fr/public-cloud/storage/object-storage/s3-usage/#chiffrement-avec-clé-fournie-par-le-client-sse-c).
 
 Tout le reste indiqué dans le tableau ci-dessus est entièrement pris en charge par `zcp`
 aujourd'hui.

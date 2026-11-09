@@ -284,7 +284,8 @@ zcp object-storage bucket encryption status <storage-slug> <bucket-name>
 zcp object-storage bucket encryption disable <storage-slug> <bucket-name>
 ```
 
-Pour chiffrer ce que vous stockez aujourd'hui, chiffrez côté client avant le téléversement. Voir
+Pour chiffrer vos données, utilisez le [SSE-C](#chiffrement-avec-clé-fournie-par-le-client-sse-c) ou
+chiffrez côté client avant le téléversement. Voir
 [Sauvegarder Vaultwarden vers le stockage objet avec restic](/fr/tutorials/backup-vaultwarden-restic-object-storage/)
 pour un exemple complet.
 
@@ -292,13 +293,13 @@ pour un exemple complet.
 
 ### Chiffrement avec clé fournie par le client (SSE-C)
 
-Le SSE-C est offert par l'API S3 sur les points de terminaison HTTPS de YUL et de YOW. Vous
+Le SSE-C est disponible avec l'API S3 sur les points de terminaison HTTPS de YUL et de YOW. Vous
 fournissez une clé AES-256 à chaque requête. ZSoftly ne conserve pas votre clé.
 
 Générez une clé et téléversez un objet :
 
 ```bash
-openssl rand -out sse-c.key 32
+(umask 077 && openssl rand -out sse-c.key 32)
 
 aws s3api put-object \
   --endpoint-url https://objects.yul.zcp.zsoftly.ca \
@@ -312,8 +313,11 @@ Fournissez la même clé pour télécharger l'objet :
 aws s3api get-object \
   --endpoint-url https://objects.yul.zcp.zsoftly.ca \
   --bucket my-bucket --key file.txt \
-  --sse-customer-algorithm AES256 --sse-customer-key fileb://sse-c.key file.txt
+  --sse-customer-algorithm AES256 --sse-customer-key fileb://sse-c.key file-copy.txt
 ```
+
+Le CLI `zcp`, le portail et les applications web ne peuvent pas envoyer la clé, donc ils ne peuvent
+pas lire les objets SSE-C. Utilisez AWS CLI ou un SDK S3.
 
 :::danger
 
