@@ -39,6 +39,7 @@ automatically; you only choose a **region** and **project**.
 | **Content-type & user metadata on upload**               |     —     |    ✅     |      ✅      |
 | **Bucket & object tagging**                              |     —     |    ✅     |      ✅      |
 | **Default encryption (SSE-S3 / SSE-KMS)**                |     —     |    ✅²    |      ✅      |
+| **Customer-provided encryption (SSE-C)**                 |     —     |     —     |      ✅      |
 | **Raw bucket policy** (get/set/delete)                   |     —     |    ✅     |      ✅      |
 | **Lifecycle / expiration rules**                         |     —     |    ✅     |      ✅      |
 | **CORS rules**                                           |     —     |    ✅     |      ✅      |
@@ -226,5 +227,7 @@ for AWS CLI examples and multipart/copy limitations. No portal UI step is requir
 - **Auto-scaling** the instance: use the portal.
 - **Direct endpoint access** without a control-plane instance or bucket record: use the AWS CLI or
   an S3 SDK.
+- **Customer-provided encryption (SSE-C)**: use the AWS CLI or an S3 SDK. See
+  [Customer-Provided Encryption](/public-cloud/storage/object-storage/s3-usage/#customer-provided-encryption-sse-c).
 
 Everything else listed in the matrix above is fully supported in `zcp` today.

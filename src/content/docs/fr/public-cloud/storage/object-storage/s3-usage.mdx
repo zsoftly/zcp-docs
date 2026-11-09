@@ -290,6 +290,38 @@ pour un exemple complet.
 
 :::
 
+### Chiffrement avec clé fournie par le client (SSE-C)
+
+Le SSE-C est offert par l'API S3 sur les points de terminaison HTTPS de YUL et de YOW. Vous
+fournissez une clé AES-256 à chaque requête. ZSoftly ne conserve pas votre clé.
+
+Générez une clé et téléversez un objet :
+
+```bash
+openssl rand -out sse-c.key 32
+
+aws s3api put-object \
+  --endpoint-url https://objects.yul.zcp.zsoftly.ca \
+  --bucket my-bucket --key file.txt --body file.txt \
+  --sse-customer-algorithm AES256 --sse-customer-key fileb://sse-c.key
+```
+
+Fournissez la même clé pour télécharger l'objet :
+
+```bash
+aws s3api get-object \
+  --endpoint-url https://objects.yul.zcp.zsoftly.ca \
+  --bucket my-bucket --key file.txt \
+  --sse-customer-algorithm AES256 --sse-customer-key fileb://sse-c.key file.txt
+```
+
+:::danger
+
+Conservez votre clé en lieu sûr. Un objet ne peut pas être lu sans sa clé d'origine, et ZSoftly ne
+peut pas la récupérer.
+
+:::
+
 ### Opérations courantes
 
 Une fois votre client (ou AWS CLI) configuré, toutes les opérations S3 standard fonctionnent. Avec
