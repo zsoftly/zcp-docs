@@ -68,8 +68,8 @@ less employee-desktop-tools/zcp/deploy-employee-desktop.sh \
   employee-desktop-tools/zcp/lib/deploy-employee-desktop/04-finish.sh
 ```
 
-Then run it. It needs a region and a project, same as any other command. Export them now if this
-is a new shell session, or pass `--region`/`--project` directly:
+Then run it. It needs a region and a project, same as any other command. Export them now if this is
+a new shell session, or pass `--region`/`--project` directly:
 
 ```bash
 export ZCP_REGION=yul-1       # your region
@@ -422,8 +422,8 @@ less destroy-employee-desktop.sh
 ```
 
 Then run it. It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script
-does. It hard-errors without one or the other. Export them again if this is a new shell session,
-or pass `--region`/`--project` explicitly:
+does. It hard-errors without one or the other. Export them again if this is a new shell session, or
+pass `--region`/`--project` explicitly:
 
 ```bash
 export ZCP_REGION=yul-1       # your region

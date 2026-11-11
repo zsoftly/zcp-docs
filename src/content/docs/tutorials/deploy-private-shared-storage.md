@@ -44,8 +44,8 @@ Deploying the storage VM, its data disk, and the NFS export is one script:
 `zcp/deploy-private-storage.sh` from the [zsoftly/tools](https://github.com/zsoftly/tools)
 repository. It runs through the same phases explained in the next section, in order.
 
-The script needs a region and a project, same as any other command. Export them now if this is a
-new shell session, or pass `--region`/`--project` directly on the command below:
+The script needs a region and a project, same as any other command. Export them now if this is a new
+shell session, or pass `--region`/`--project` directly on the command below:
 
 ```bash
 export ZCP_REGION=yul-1       # your region
@@ -243,8 +243,8 @@ data volume for a given `--name` prefix. It does not touch the private tier or V
 tutorial.
 
 It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. The
-script hard-errors without one or the other, so export them again if this is a new shell session,
-or pass `--region`/`--project` explicitly:
+script hard-errors without one or the other, so export them again if this is a new shell session, or
+pass `--region`/`--project` explicitly:
 
 ```bash
 export ZCP_REGION=yul-1       # your region
