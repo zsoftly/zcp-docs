@@ -150,7 +150,13 @@ Linux. On Windows, run it from WSL or Git Bash.
 
 :::
 
+The script needs a region and a project, same as any other command (Step 2). Export them now if you
+haven't already, or pass `--region`/`--project` directly on the command below:
+
 ```bash
+export ZCP_REGION=yul-1       # your region from Step 2
+export ZCP_PROJECT=default-9  # your project from Step 2
+
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/build-private-network.sh) \
   --ssh-key my-key --name my-workspace
 ```
@@ -159,9 +165,6 @@ This tutorial uses `my-workspace` as the `--name` prefix throughout its command 
 screenshots below are from an earlier test run with a different prefix, so the resource names you
 see in them won't match the command examples exactly. Your own resource names will differ from both,
 based on whatever `--name` you choose.
-
-The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them in Step 2.
-Pass `--region`/`--project` instead if you didn't.
 
 | Flag         | Purpose                                   | Default / requirement      |
 | ------------ | ----------------------------------------- | -------------------------- |
@@ -523,13 +526,16 @@ portal, the same way described in the Clean up caution below.
 Hourly billing runs while resources exist. The teardown script removes the subnet router, the
 Headplane VM, the private tier, and the VPC, for a given `--name` prefix.
 
+It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the build script does. Export
+them again if this is a new shell session, or pass `--region`/`--project` directly:
+
 ```bash
+export ZCP_REGION=yul-1       # your region from Step 2
+export ZCP_PROJECT=default-9  # your project from Step 2
+
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-private-network.sh) \
   --name my-workspace
 ```
-
-It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the build script does. Pass
-`--region`/`--project` instead if you didn't export them.
 
 :::caution
 

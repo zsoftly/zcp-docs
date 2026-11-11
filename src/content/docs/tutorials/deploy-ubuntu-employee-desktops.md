@@ -68,9 +68,13 @@ less employee-desktop-tools/zcp/deploy-employee-desktop.sh \
   employee-desktop-tools/zcp/lib/deploy-employee-desktop/04-finish.sh
 ```
 
-Then run it:
+Then run it. It needs a region and a project, same as any other command. Export them now if this
+is a new shell session, or pass `--region`/`--project` directly:
 
 ```bash
+export ZCP_REGION=yul-1       # your region
+export ZCP_PROJECT=default-9  # your project
+
 bash employee-desktop-tools/zcp/deploy-employee-desktop.sh \
   --name jane-doe-desktop --tier-name my-workspace-tier --username janedoe --ssh-key my-key
 ```
@@ -82,9 +86,6 @@ will differ.
 Leave `--password` out and the script generates a strong random password locally and prints it
 before creating the VM, and again in the final summary. Save it then. It isn't shown again on a
 rerun. Pass `--password` explicitly only if you need a specific value.
-
-The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them. Pass
-`--region`/`--project` instead if you didn't.
 
 | Flag                 | Purpose                                              | Default / requirement                                                |
 | -------------------- | ---------------------------------------------------- | -------------------------------------------------------------------- |
@@ -420,15 +421,18 @@ Review the downloaded script before you run it:
 less destroy-employee-desktop.sh
 ```
 
-Then run it:
+Then run it. It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script
+does. It hard-errors without one or the other. Export them again if this is a new shell session,
+or pass `--region`/`--project` explicitly:
 
 ```bash
+export ZCP_REGION=yul-1       # your region
+export ZCP_PROJECT=default-9  # your project
+
 bash destroy-employee-desktop.sh --name jane-doe-desktop
 ```
 
-It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. Pass
-`--region`/`--project` explicitly if you didn't export them. The script hard-errors without one or
-the other, and has no confirmation prompt of its own, matching the teardown scripts in the earlier
+This script has no confirmation prompt of its own, matching the teardown scripts in the earlier
 tutorials.
 
 :::caution
