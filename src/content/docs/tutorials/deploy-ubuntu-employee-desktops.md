@@ -408,28 +408,18 @@ routes nothing, so the firewall above is the actual gate. There's nothing to cha
 Hourly billing runs while this VM exists. Unlike the storage tutorial, there's no companion volume
 to clean up here: this desktop VM has none.
 
-Download the teardown script at the reviewed commit:
-
-```bash
-curl --fail --show-error --location --output destroy-employee-desktop.sh \
-  https://raw.githubusercontent.com/zsoftly/tools/a0939bc0389380266cd4d071c6cc152bb596f68e/zcp/destroy-employee-desktop.sh
-```
-
-Review the downloaded script before you run it:
-
-```bash
-less destroy-employee-desktop.sh
-```
-
-Then run it. It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script
-does. It hard-errors without one or the other. Export them again if this is a new shell session, or
-pass `--region`/`--project` explicitly:
+Unlike the deploy script, this one doesn't handle a password or create a login user, so it skips the
+pinned-commit review step. It runs straight from `main`, same as every other teardown script in this
+series. It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does.
+It hard-errors without one or the other. Export them again if this is a new shell session, or pass
+`--region`/`--project` explicitly:
 
 ```bash
 export ZCP_REGION=yul-1       # your region
 export ZCP_PROJECT=default-9  # your project
 
-bash destroy-employee-desktop.sh --name jane-doe-desktop
+bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-employee-desktop.sh) \
+  --name jane-doe-desktop
 ```
 
 This script has no confirmation prompt of its own, matching the teardown scripts in the earlier
