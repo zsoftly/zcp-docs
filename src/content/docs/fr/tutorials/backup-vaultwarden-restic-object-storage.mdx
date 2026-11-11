@@ -32,14 +32,13 @@ Prévoyez environ 45 minutes.
 
 :::caution
 
-Le chiffrement côté serveur n’est pas encore disponible dans le stockage objet ZCP.
-`zcp object-storage bucket encryption enable` refuse de s’exécuter, car la passerelle de stockage ne
-dispose pas de serveur principal de chiffrement et l’activation de SSE-S3 par défaut fait échouer
-chaque envoi ultérieur dans ce compartiment avec `InvalidArgument`.
+Le chiffrement par défaut des compartiments (SSE-S3) n’est pas encore disponible dans le stockage
+objet ZCP. `zcp object-storage bucket encryption enable` refuse de s’exécuter, car la passerelle de
+stockage ne dispose pas de serveur principal de chiffrement et l’activation de SSE-S3 par défaut
+fait échouer chaque envoi ultérieur dans ce compartiment avec `InvalidArgument`.
 
 restic ne l’attend pas. Il chiffre côté client, donc le compartiment ne reçoit que du texte chiffré.
-Le chiffrement côté serveur, lorsqu’il sera disponible, protège les données écrites par des clients
-qui ne chiffrent pas. Il n’apporte rien à un dépôt restic.
+Le chiffrement côté serveur ne remplace pas cette protection côté client.
 
 :::
 
@@ -698,8 +697,8 @@ pas.
 
 ## Étape 10 : Confirmer que le compartiment contient du texte chiffré
 
-Cette étape répond à la question laissée ouverte par l'absence de chiffrement côté serveur. Chaque
-dépôt restic contient à sa racine un petit objet nommé `config`. Sur la VM, restic le déchiffre :
+Cette étape vérifie que le compartiment ne contient que du texte chiffré. Chaque dépôt restic
+contient à sa racine un petit objet nommé `config`. Sur la VM, restic le déchiffre :
 
 ```bash
 restic cat config

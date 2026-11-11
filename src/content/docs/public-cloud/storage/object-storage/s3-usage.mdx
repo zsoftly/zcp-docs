@@ -322,6 +322,41 @@ multipart upload or copy.
 
 :::
 
+### Customer-Provided Encryption (SSE-C)
+
+SSE-C is available through the S3 API on the HTTPS endpoints in YUL and YOW. You supply an AES-256
+key with each request. ZSoftly does not store your key.
+
+Generate a key and upload an object:
+
+```bash
+(umask 077 && openssl rand -out sse-c.key 32)
+
+aws s3api put-object \
+  --endpoint-url https://objects.yul.zcp.zsoftly.ca \
+  --bucket my-bucket --key file.txt --body file.txt \
+  --sse-customer-algorithm AES256 --sse-customer-key fileb://sse-c.key
+```
+
+Send the same key to download the object:
+
+```bash
+aws s3api get-object \
+  --endpoint-url https://objects.yul.zcp.zsoftly.ca \
+  --bucket my-bucket --key file.txt \
+  --sse-customer-algorithm AES256 --sse-customer-key fileb://sse-c.key file-copy.txt
+```
+
+The `zcp` CLI, the portal, and browser apps cannot send the key, so they cannot read SSE-C objects.
+Use the AWS CLI or an S3 SDK.
+
+:::danger
+
+Keep your key safe. An object cannot be read without its original key, and ZSoftly cannot recover
+it.
+
+:::
+
 ### Common operations
 
 With your client or the AWS CLI configured, use these common operations:
