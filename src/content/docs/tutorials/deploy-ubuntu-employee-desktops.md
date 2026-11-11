@@ -55,7 +55,7 @@ Download the deployment tree at the reviewed commit:
 
 ```bash
 git clone --filter=blob:none --no-checkout https://github.com/zsoftly/tools.git employee-desktop-tools
-git -C employee-desktop-tools checkout --detach a0939bc0389380266cd4d071c6cc152bb596f68e
+git -C employee-desktop-tools checkout --detach f884c14f11145c1f885ffaebfc3578c6425dc432
 ```
 
 Review the downloaded script and its helper files before you run it:
