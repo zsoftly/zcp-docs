@@ -55,7 +55,7 @@ Download the deployment tree at the reviewed commit:
 
 ```bash
 git clone --filter=blob:none --no-checkout https://github.com/zsoftly/tools.git employee-desktop-tools
-git -C employee-desktop-tools checkout --detach a0939bc0389380266cd4d071c6cc152bb596f68e
+git -C employee-desktop-tools checkout --detach f884c14f11145c1f885ffaebfc3578c6425dc432
 ```
 
 Review the downloaded script and its helper files before you run it:
@@ -68,9 +68,13 @@ less employee-desktop-tools/zcp/deploy-employee-desktop.sh \
   employee-desktop-tools/zcp/lib/deploy-employee-desktop/04-finish.sh
 ```
 
-Then run it:
+Then run it. It needs a region and a project, same as any other command. Export them now if this is
+a new shell session, or pass `--region`/`--project` directly:
 
 ```bash
+export ZCP_REGION=yul-1       # your region
+export ZCP_PROJECT=default-9  # your project
+
 bash employee-desktop-tools/zcp/deploy-employee-desktop.sh \
   --name jane-doe-desktop --tier-name my-workspace-tier --username janedoe --ssh-key my-key
 ```
@@ -82,9 +86,6 @@ will differ.
 Leave `--password` out and the script generates a strong random password locally and prints it
 before creating the VM, and again in the final summary. Save it then. It isn't shown again on a
 rerun. Pass `--password` explicitly only if you need a specific value.
-
-The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them. Pass
-`--region`/`--project` instead if you didn't.
 
 | Flag                 | Purpose                                              | Default / requirement                                                |
 | -------------------- | ---------------------------------------------------- | -------------------------------------------------------------------- |
@@ -407,28 +408,21 @@ routes nothing, so the firewall above is the actual gate. There's nothing to cha
 Hourly billing runs while this VM exists. Unlike the storage tutorial, there's no companion volume
 to clean up here: this desktop VM has none.
 
-Download the teardown script at the reviewed commit:
+Unlike the deploy script, this one doesn't handle a password or create a login user, so it skips the
+pinned-commit review step. It runs straight from `main`, same as every other teardown script in this
+series. It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does.
+It hard-errors without one or the other. Export them again if this is a new shell session, or pass
+`--region`/`--project` explicitly:
 
 ```bash
-curl --fail --show-error --location --output destroy-employee-desktop.sh \
-  https://raw.githubusercontent.com/zsoftly/tools/a0939bc0389380266cd4d071c6cc152bb596f68e/zcp/destroy-employee-desktop.sh
+export ZCP_REGION=yul-1       # your region
+export ZCP_PROJECT=default-9  # your project
+
+bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-employee-desktop.sh) \
+  --name jane-doe-desktop
 ```
 
-Review the downloaded script before you run it:
-
-```bash
-less destroy-employee-desktop.sh
-```
-
-Then run it:
-
-```bash
-bash destroy-employee-desktop.sh --name jane-doe-desktop
-```
-
-It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. Pass
-`--region`/`--project` explicitly if you didn't export them. The script hard-errors without one or
-the other, and has no confirmation prompt of its own, matching the teardown scripts in the earlier
+This script has no confirmation prompt of its own, matching the teardown scripts in the earlier
 tutorials.
 
 :::caution

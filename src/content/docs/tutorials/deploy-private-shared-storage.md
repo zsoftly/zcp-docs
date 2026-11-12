@@ -44,7 +44,13 @@ Deploying the storage VM, its data disk, and the NFS export is one script:
 `zcp/deploy-private-storage.sh` from the [zsoftly/tools](https://github.com/zsoftly/tools)
 repository. It runs through the same phases explained in the next section, in order.
 
+The script needs a region and a project, same as any other command. Export them now if this is a new
+shell session, or pass `--region`/`--project` directly on the command below:
+
 ```bash
+export ZCP_REGION=yul-1       # your region
+export ZCP_PROJECT=default-9  # your project
+
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/deploy-private-storage.sh) \
   --ssh-key my-key --tier-name my-workspace-tier --name my-storage
 ```
@@ -52,9 +58,6 @@ bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/deplo
 This tutorial uses `my-storage` as the `--name` prefix and `my-workspace-tier` as the tier from the
 previous tutorial's `my-workspace` example. Your own values will differ based on the `--name` you
 used there and the one you choose here.
-
-The script picks up `ZCP_REGION` and `ZCP_PROJECT` from your shell if you exported them. Pass
-`--region`/`--project` instead if you didn't.
 
 | Flag            | Purpose                                | Default / requirement      |
 | --------------- | -------------------------------------- | -------------------------- |
@@ -239,14 +242,17 @@ Hourly billing runs while these resources exist. The teardown script removes the
 data volume for a given `--name` prefix. It does not touch the private tier or VPC from the previous
 tutorial.
 
+It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. The
+script hard-errors without one or the other, so export them again if this is a new shell session, or
+pass `--region`/`--project` explicitly:
+
 ```bash
+export ZCP_REGION=yul-1       # your region
+export ZCP_PROJECT=default-9  # your project
+
 bash <(curl -fsSL https://raw.githubusercontent.com/zsoftly/tools/main/zcp/destroy-private-storage.sh) \
   --name my-storage --allow-unverified-volume-delete
 ```
-
-It picks up `ZCP_REGION`/`ZCP_PROJECT` from your shell the same way the deploy script does. Pass
-`--region`/`--project` explicitly if you didn't export them. The script hard-errors without one or
-the other.
 
 :::note
 
