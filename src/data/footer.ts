@@ -3,6 +3,7 @@ import { CLOUD_LOGIN_URL, CLOUD_REGISTER_URL, cloudUrl, FDE_PAGE_URL, websiteUrl
 export const DOCS_REPO_URL = 'https://github.com/zsoftly/zcp-docs';
 export const DOCS_FEEDBACK_URL = `${DOCS_REPO_URL}/issues/new?labels=feedback&title=Feedback+on+docs`;
 export const STATUS_PAGE_URL = 'https://status.zsoftly.ca/';
+export const HELPDESK_URL = 'https://help.zsoftly.ca/';
 
 /**
  * How the footer renders a link.
@@ -57,6 +58,7 @@ export const footerColumns: FooterColumn[] = [
       { labelKey: 'zs.footer.community', href: '/community/', kind: 'docs' },
       { labelKey: 'zs.footer.status', href: STATUS_PAGE_URL, kind: 'external' },
       { labelKey: 'zs.footer.contact', href: `${websiteUrl}/contact`, kind: 'external' },
+      { labelKey: 'zs.footer.helpdesk', href: HELPDESK_URL, kind: 'external' },
       { labelKey: 'zs.toc.feedback', href: DOCS_FEEDBACK_URL, kind: 'external' },
     ],
   },
