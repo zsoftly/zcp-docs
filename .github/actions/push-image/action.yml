@@ -1,0 +1,72 @@
+name: 'Push Site Image'
+description: 'Build the static-site image from a release tarball and push it to the registry'
+
+inputs:
+  image:
+    description: 'Image repository, for example ghcr.io/zsoftly/zcp-website'
+    required: true
+  tag:
+    description: 'Image tag'
+    required: true
+  artifact-path:
+    description: 'Path to the tarball of the built site'
+    required: true
+  token:
+    description: 'Token allowed to push packages'
+    required: true
+
+outputs:
+  digest:
+    description: 'Digest of the pushed image'
+    value: ${{ steps.push.outputs.digest }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build and push
+      id: push
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.image }}
+        TAG: ${{ inputs.tag }}
+        ARTIFACT: ${{ inputs.artifact-path }}
+        TOKEN: ${{ inputs.token }}
+      run: |
+        set -euo pipefail
+        work="$RUNNER_TEMP/site-image-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+        mkdir -p "$work/context/dist" "$work/docker"
+        tar -xzf "$ARTIFACT" -C "$work/context/dist"
+        cp deploy/image/Dockerfile "$work/context/Dockerfile"
+        export DOCKER_CONFIG="$work/docker"
+        registry="${IMAGE%%/*}"
+        printf '%s' "$TOKEN" | docker login "$registry" -u "$GITHUB_ACTOR" --password-stdin
+        ref="$IMAGE:$TAG"
+        docker build \
+          --label "org.opencontainers.image.source=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
+          --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+          -t "$ref" "$work/context"
+        docker push "$ref"
+        digest="$(docker inspect --format '{{range .RepoDigests}}{{println .}}{{end}}' "$ref" \
+          | awk -F@ -v image="$IMAGE" '$1 == image { print $2; exit }')"
+        if [[ ! "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+          echo "[ERROR] no pushed digest found for $IMAGE"
+          exit 1
+        fi
+        echo "digest=$digest" >> "$GITHUB_OUTPUT"
+        {
+          echo "### Site image"
+          echo "- Image: \`$ref\`"
+          echo "- Digest: \`$digest\`"
+        } >> "$GITHUB_STEP_SUMMARY"
+        echo "[OK] pushed $ref@$digest"
+
+    - name: Remove the local image, login and work directory
+      if: always()
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.image }}
+        TAG: ${{ inputs.tag }}
+      run: |
+        work="$RUNNER_TEMP/site-image-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+        docker rmi -f "$IMAGE:$TAG" >/dev/null 2>&1 || true
+        rm -rf "$work"
