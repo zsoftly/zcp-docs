@@ -128,7 +128,10 @@ jobs:
       # that GitOps promotes from dev to stg and prd.
       - name: '09a: Package the release build'
         if: github.event_name == 'push'
-        run: tar -czf "$RUNNER_TEMP/zcp-docs-release.tar.gz" -C dist .
+        run: |
+          git rev-parse HEAD > dist/source-sha.txt
+          git rev-parse --short HEAD > dist/build-id.txt
+          tar -czf "$RUNNER_TEMP/zcp-docs-release.tar.gz" -C dist .
 
       - name: '09b: Keep the release build for the image job'
         if: github.event_name == 'push'
