@@ -4,7 +4,8 @@ name: '10: Deploy Dev'
 # Deploy runs on zsoftly-yow (self-hosted, VPN-reachable) — builds the site
 # and ships it to the dev/stg Caddy box via deploy/scripts/deploy-web.sh
 # (release-symlink swap).
-# A separate job then pushes the same build as a container image.
+# A separate job pushes the checked CI build (prd site URL) as the container
+# image that GitOps promotes from dev to stg and prd.
 
 on:
   push:
@@ -61,15 +62,6 @@ jobs:
       - name: '06: Package release artifact'
         run: tar -czf "$RUNNER_TEMP/zcp-docs-dev.tar.gz" -C dist .
 
-      - name: '06b: Keep the artifact for the image job'
-        continue-on-error: true
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: zcp-docs-dev
-          path: ${{ runner.temp }}/zcp-docs-dev.tar.gz
-          if-no-files-found: error
-          retention-days: 3
-
       - name: '07: Deploy release'
         uses: ./.github/actions/deploy-release
         with:
@@ -82,11 +74,12 @@ jobs:
       - name: '08: Smoke test live site'
         run: .github/scripts/smoke-test.sh dev-docs.zcp.zsoftly.ca
 
-  # The image feeds the K3s cluster on the dev sites VM (zcp-website #202).
-  # It is its own job so a registry problem never fails the Compose deploy.
+  # The image is the checked CI build with the prd site URL. GitOps promotes the
+  # same digest from dev to stg and prd (zcp-website #202). It does not wait for
+  # the Compose deploy, and a registry problem never fails that deploy.
   image:
-    name: Push dev image
-    needs: [deploy]
+    name: Push image
+    needs: [ci]
     runs-on: zsoftly-yow
     permissions:
       contents: read
@@ -97,16 +90,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: '01: Fetch the built site'
+      - name: '01: Fetch the checked release build'
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: zcp-docs-dev
+          name: zcp-docs-release
           path: ${{ runner.temp }}/site-artifact
 
       - name: '02: Build and push the image'
         uses: ./.github/actions/push-image
         with:
           image: ghcr.io/zsoftly/zcp-docs
-          tag: dev-${{ github.sha }}
-          artifact-path: ${{ runner.temp }}/site-artifact/zcp-docs-dev.tar.gz
+          tag: sha-${{ github.sha }}
+          artifact-path: ${{ runner.temp }}/site-artifact/zcp-docs-release.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
