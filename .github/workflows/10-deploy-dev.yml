@@ -1,11 +1,8 @@
 name: '10: Deploy Dev'
 
-# Auto-deploys to dev on every push to main after CI passes.
-# Deploy runs on zsoftly-yow (self-hosted, VPN-reachable) — builds the site
-# and ships it to the dev/stg Caddy box via deploy/scripts/deploy-web.sh
-# (release-symlink swap).
-# A separate job pushes the checked CI build (prd site URL) as the container
-# image that GitOps promotes from dev to stg and prd.
+# Runs after every push to main: full CI, then the container image that
+# zsoftly/gitops-apps pins for dev, stg and prd. Dev is served by K3s since
+# 2026-11-14 (zsoftly/zcp-website#202).
 
 on:
   push:
@@ -30,49 +27,6 @@ jobs:
     name: CI
     uses: ./.github/workflows/00-ci.yml
     secrets: inherit
-
-  deploy:
-    name: Deploy to Dev
-    needs: [ci]
-    runs-on: zsoftly-yow
-    environment: dev
-    steps:
-      - name: '00: Checkout'
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: '01: Setup Node.js'
-        uses: ./.github/actions/setup-node
-
-      - name: '02: Install Chromium for Playwright (build-time Mermaid SVG)'
-        run: pnpm exec playwright install chromium
-
-      - name: '03: Build'
-        env:
-          PUBLIC_SITE_URL: https://dev-docs.zcp.zsoftly.ca
-        run: pnpm build
-
-      - name: '04: Verify sitemap host'
-        run: .github/scripts/verify-sitemap.sh https://dev-docs.zcp.zsoftly.ca
-
-      - name: '05: Verify robots host'
-        run: bash .github/scripts/verify-robots.sh https://dev-docs.zcp.zsoftly.ca
-
-      - name: '06: Package release artifact'
-        run: tar -czf "$RUNNER_TEMP/zcp-docs-dev.tar.gz" -C dist .
-
-      - name: '07: Deploy release'
-        uses: ./.github/actions/deploy-release
-        with:
-          ssh-key: ${{ secrets.DEPLOY_SSH_KEY }}
-          deploy-host: ${{ secrets.DEV_DEPLOY_HOST }}
-          site-root: /var/www/zcp-docs-dev
-          releases-dir: /var/releases/zcp-docs-dev
-          artifact-path: ${{ runner.temp }}/zcp-docs-dev.tar.gz
-
-      - name: '08: Smoke test live site'
-        run: .github/scripts/smoke-test.sh dev-docs.zcp.zsoftly.ca
 
   # The image is the checked CI build with the prd site URL. GitOps promotes the
   # same digest from dev to stg and prd (zcp-website #202). It does not wait for
