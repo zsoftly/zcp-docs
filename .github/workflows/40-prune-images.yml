@@ -41,21 +41,21 @@ jobs:
           client-id: Iv23liurfYWGw6qod4l1
           private-key: ${{ secrets.ZSOFTLY_CI_READ_APP_PRIVATE_KEY }}
           owner: zsoftly
-          repositories: gitops-apps
+          repositories: zs-gitops-apps
           permission-contents: read
 
-      - name: '02: Checkout gitops-apps'
+      - name: '02: Checkout zs-gitops-apps'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: zsoftly/gitops-apps
+          repository: zsoftly/zs-gitops-apps
           token: ${{ steps.app-token.outputs.token }}
-          path: gitops-apps
+          path: zs-gitops-apps
           persist-credentials: false
 
       - name: '03: Collect the pinned digests'
         run: |
-          grep -rhoE --exclude-dir=.git 'sha256:[0-9a-f]{64}' gitops-apps | sort -u > "$RUNNER_TEMP/pinned-digests.txt"
-          echo "[INFO] $(wc -l < "$RUNNER_TEMP/pinned-digests.txt" | tr -d ' ') digests are pinned in gitops-apps"
+          grep -rhoE --exclude-dir=.git 'sha256:[0-9a-f]{64}' zs-gitops-apps | sort -u > "$RUNNER_TEMP/pinned-digests.txt"
+          echo "[INFO] $(wc -l < "$RUNNER_TEMP/pinned-digests.txt" | tr -d ' ') digests are pinned in zs-gitops-apps"
 
       - name: '04: Prune'
         env:
