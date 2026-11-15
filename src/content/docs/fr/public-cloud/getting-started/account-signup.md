@@ -91,7 +91,7 @@ postpayée.
 Après avoir dépensé **200 $ CA sur des plans de calcul admissibles**, vous pouvez demander **200 $
 CA de crédit promotionnel de lancement supplémentaire**. Faites la demande depuis l'adresse courriel
 de votre compte au moyen de notre
-[page de contact](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), en indiquant votre
+[page de contact](https://zsoftly.ca/contact?source=docs&topic=billing), en indiquant votre
 **numéro de compte** et la mention **"$200 Credit Request"**. Nous appliquerons directement ce
 crédit promotionnel de lancement supplémentaire à votre compte. Il est valide pendant **60 jours**,
 pour un total de crédit promotionnel de lancement pouvant atteindre **300 $ CA**.
@@ -106,7 +106,7 @@ ZSoftly Public Cloud accepte :
 - **Carte** : Visa, Mastercard et American Express, traitées de façon sécurisée par **Stripe**.
 - **PayPal** : paiement depuis votre solde PayPal ou un compte lié.
 - **Bank Transfer / Wire** : pour les paiements manuels, communiquez avec notre
-  [équipe des ventes](https://zcp.zsoftly.ca/contact?source=docs&topic=billing). Elle organisera le
+  [équipe des ventes](https://zsoftly.ca/contact?source=docs&topic=billing). Elle organisera le
   transfert et appliquera les fonds à votre compte sous forme de crédit à votre compte.
 
 Les paiements par carte et PayPal sont en libre-service dans le portail. Les virements bancaires
@@ -126,7 +126,7 @@ sont organisés avec l'équipe des ventes.
   utilisable.
 - Payez avec **Stripe** ou **PayPal**, puis cliquez sur **Proceed** pour terminer un ajout de
   crédit. Pour payer par virement bancaire, communiquez avec
-  [l'équipe des ventes](https://zcp.zsoftly.ca/contact?source=docs&topic=billing).
+  [l'équipe des ventes](https://zsoftly.ca/contact?source=docs&topic=billing).
 - Choisissez le mode prépayé pour un cycle de facturation trimestriel ou plus long.
 
 #### Postpayé

@@ -456,7 +456,7 @@ Le DNS ne remplace pas les contrôles hors DNS :
   et le coût.
 
 Pour les décisions de politique et de responsabilité qui sous-tendent ce travail technique, lisez
-[La sécurité des e-mails a besoin d'un responsable](https://zcp.zsoftly.ca/blog/email-security-needs-an-owner).
+[La sécurité des e-mails a besoin d'un responsable](https://zsoftly.ca/blog/email-security-needs-an-owner).
 
 ## Prochaines étapes
 

@@ -83,7 +83,7 @@ credit, and Postpaid billing threshold.
 
 After you spend **CA$200 on eligible compute plans**, you can claim an additional **CA$200 in launch
 promotional credit**: request it from your account email address through our
-[contact page](https://zcp.zsoftly.ca/contact?source=docs&topic=billing), including your **account
+[contact page](https://zsoftly.ca/contact?source=docs&topic=billing), including your **account
 number** and referencing **"$200 Credit Request"**. We'll apply the additional launch promotional
 credit to your account. It is valid for **60 days**, bringing your total launch promotional credit
 to up to **CA$300**.
@@ -98,7 +98,7 @@ ZSoftly Public Cloud accepts:
 - **Card**: Visa, Mastercard, and American Express, processed securely through **Stripe**.
 - **PayPal**: pay from your PayPal balance or a linked account.
 - **Bank Transfer / Wire**: for manual payments, contact our
-  [Sales team](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) and they will arrange the
+  [Sales team](https://zsoftly.ca/contact?source=docs&topic=billing) and they will arrange the
   transfer and apply the funds to your account as account credit.
 
 Card and PayPal are self-serve in the portal. Bank transfer and wire are arranged with Sales.
@@ -114,7 +114,7 @@ Card and PayPal are self-serve in the portal. Bank transfer and wire are arrange
 - Active usage or a renewal can still leave your account credit negative. Your next top-up clears a
   negative balance before adding usable credit.
 - Pay with **Stripe** or **PayPal** and click **Proceed** to complete a top-up, or contact
-  [Sales](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) to pay by bank transfer or wire.
+  [Sales](https://zsoftly.ca/contact?source=docs&topic=billing) to pay by bank transfer or wire.
 - Choose Prepaid for a quarterly or longer billing cycle.
 
 #### Postpaid

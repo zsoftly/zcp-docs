@@ -47,5 +47,5 @@ nodes or devices. Contact ZSoftly to plan an expansion.
 
 ## Get started
 
-→ [Contact ZSoftly](https://zcp.zsoftly.ca/contact?source=docs&topic=cloud-storage) to provision or
+→ [Contact ZSoftly](https://zsoftly.ca/contact?source=docs&topic=cloud-storage) to provision or
 expand a cluster.

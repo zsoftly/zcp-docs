@@ -10,7 +10,7 @@ Les plans de calcul ZCP sont offerts en trois familles, dans deux régions et av
 stockage. Pour comprendre comment un ID de plan encode ces informations, consultez
 [Noms des plans](/fr/public-cloud/compute/plan-names). Pour les **caractéristiques à jour par taille
 (vCPU, RAM, disque racine) et les prix de chaque plan**, consultez la
-[page de tarification](https://zcp.zsoftly.ca/pricing), qui est la source de référence.
+[page de tarification](https://zsoftly.ca/pricing), qui est la source de référence.
 
 ## Familles
 
@@ -37,7 +37,7 @@ Le niveau de stockage est fixe par série et varie selon la région. Consultez
 
 Les tailles vont de `xs`, `s`, `m`, `l`, `xl`, `2xl`, `4xl` à `6xl`, de la plus petite à la plus
 grande. Certaines séries n'offrent pas toutes les tailles. La
-[page de tarification](https://zcp.zsoftly.ca/pricing) indique les vCPU, la RAM et le disque racine
+[page de tarification](https://zsoftly.ca/pricing) indique les vCPU, la RAM et le disque racine
 exactement offerts pour chaque taille; le portail affiche aussi les options courantes lors de la
 création d'une instance.
 

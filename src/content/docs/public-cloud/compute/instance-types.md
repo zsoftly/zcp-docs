@@ -9,7 +9,7 @@ description:
 ZCP compute plans come in three families across two regions and four storage tiers. For how a plan
 ID encodes all of that, see [Plan Names](/public-cloud/compute/plan-names). For the **live per-size
 specs (vCPU, RAM) and pricing of every plan**, see the
-[pricing page](https://zcp.zsoftly.ca/pricing), which is the source of truth.
+[pricing page](https://zsoftly.ca/pricing), which is the source of truth.
 
 ## Compute and storage are sold separately
 
@@ -17,7 +17,7 @@ Since October 11, 2026, every plan covers CPU and memory only. The root disk is 
 storage volume that you size and pay for per GB. The review step shows compute, network, public IP,
 and block storage root as separate lines.
 
-Prices on this page were checked on 2026-10-11. The [pricing page](https://zcp.zsoftly.ca/pricing)
+Prices on this page were checked on 2026-10-11. The [pricing page](https://zsoftly.ca/pricing)
 is the source of truth, and `zcp plan vm` and `zcp plan storage` show current prices.
 
 Plan names carry a `c` before the size. `ca2c.m` gives you 2 vCPU and 4 GB of memory in YUL, with a
@@ -97,7 +97,7 @@ orderable for your region.
 ## Sizes
 
 Sizes run `xs`, `s`, `m`, `l`, `xl`, `2xl`, `4xl`, `6xl`, smallest to largest. Not every series
-offers every size. The [pricing page](https://zcp.zsoftly.ca/pricing) lists the exact vCPU and RAM
+offers every size. The [pricing page](https://zsoftly.ca/pricing) lists the exact vCPU and RAM
 for each size, and the portal shows the current options when you create an instance.
 
 ## See also

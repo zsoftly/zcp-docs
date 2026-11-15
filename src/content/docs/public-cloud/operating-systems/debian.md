@@ -36,7 +36,7 @@ The root disk is chosen when you create the instance. The minimum is the templat
 root disk leaves room for the base image, package metadata, cloud-init work, logs, and normal system
 updates. Add capacity for application packages, databases, monitoring agents, backups, and
 concurrency. Check the [instance types](/public-cloud/compute/instance-types) and
-[ZCP pricing page](https://zcp.zsoftly.ca/pricing) for current plan availability and pricing.
+[ZCP pricing page](https://zsoftly.ca/pricing) for current plan availability and pricing.
 
 ## Best Practices
 

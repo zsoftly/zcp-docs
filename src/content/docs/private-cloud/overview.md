@@ -40,7 +40,7 @@ support.
 
 ## Get started
 
-→ [Contact ZSoftly](https://zcp.zsoftly.ca/contact?source=docs&topic=private-cloud) to discuss your
+→ [Contact ZSoftly](https://zsoftly.ca/contact?source=docs&topic=private-cloud) to discuss your
 private cloud deployment.
 
 Once your deployment is complete, continue to

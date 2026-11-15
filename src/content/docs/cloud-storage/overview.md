@@ -69,7 +69,7 @@ Choose ZCS when you need a dedicated cluster you control.
 
 ## Get started
 
-→ [Contact ZSoftly](https://zcp.zsoftly.ca/contact?source=docs&topic=cloud-storage) to size and
+→ [Contact ZSoftly](https://zsoftly.ca/contact?source=docs&topic=cloud-storage) to size and
 provision a cluster.
 
 Once your cluster is provisioned, continue to

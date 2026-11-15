@@ -421,7 +421,7 @@ DNS does not replace controls outside DNS:
   recipients, key recovery, data access, and cost.
 
 For the policy and ownership decisions behind this technical work, read
-[Email Security Needs an Owner](https://zcp.zsoftly.ca/blog/email-security-needs-an-owner).
+[Email Security Needs an Owner](https://zsoftly.ca/blog/email-security-needs-an-owner).
 
 ## Next Steps
 

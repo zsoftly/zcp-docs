@@ -41,7 +41,7 @@ fournisseurs OIDC ou SAML), ainsi que le soutien continu de ZSoftly.
 
 ## Commencer
 
-→ [Communiquer avec ZSoftly](https://zcp.zsoftly.ca/contact?source=docs&topic=private-cloud) pour
+→ [Communiquer avec ZSoftly](https://zsoftly.ca/contact?source=docs&topic=private-cloud) pour
 discuter de votre déploiement de nuage privé.
 
 Une fois votre déploiement terminé, poursuivez avec

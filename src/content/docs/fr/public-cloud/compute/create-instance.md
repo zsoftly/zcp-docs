@@ -35,8 +35,8 @@ besoin.
 | Windows Server 2022 | Disponible |
 | Windows 11 Pro      | Disponible |
 
-Consultez les catalogues complets : [images de SE](https://zcp.zsoftly.ca/marketplace/os-images) et
-[applications en un clic](https://zcp.zsoftly.ca/marketplace/apps).
+Consultez les catalogues complets : [images de SE](https://zsoftly.ca/marketplace/os-images) et
+[applications en un clic](https://zsoftly.ca/marketplace/apps).
 
 ![Choix d'une image de système d'exploitation](../../../../../assets/compute/create-instance-choose-an-image.webp)
 
@@ -65,7 +65,7 @@ Consultez les catalogues complets : [images de SE](https://zcp.zsoftly.ca/market
   temps réel.
 
 Consultez [Types d'instances](/fr/public-cloud/compute/instance-types) pour les familles et niveaux
-de stockage, ainsi que la [page de tarification](https://zcp.zsoftly.ca/pricing) pour les
+de stockage, ainsi que la [page de tarification](https://zsoftly.ca/pricing) pour les
 caractéristiques et prix par taille.
 
 ![Choix d'un plan](../../../../../assets/compute/create-instance-choose-a-plan.webp)

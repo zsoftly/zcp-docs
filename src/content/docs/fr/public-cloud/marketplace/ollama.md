@@ -44,7 +44,7 @@ quantification Q4, le réglage par défaut d'Ollama.
 Les noms de forfaits et les niveaux de stockage varient selon la région. Les forfaits généraux
 ci-dessous fournissent assez de RAM pour chaque modèle, et leur disque racine contient les fichiers
 de modèles. Consultez [Types d'instances](/fr/public-cloud/compute/instance-types/) et la
-[page de tarification](https://zcp.zsoftly.ca/pricing) pour les spécifications et prix actuels.
+[page de tarification](https://zsoftly.ca/pricing) pour les spécifications et prix actuels.
 
 | Taille du modèle | YOW-1 (Ottawa)                     | YUL-1 (Montréal)                   |
 | ---------------- | ---------------------------------- | ---------------------------------- |

@@ -18,7 +18,7 @@ tier based on performance, recovery requirements, and workload criticality.
 
 ## Pricing and ordering
 
-The [ZCP pricing page](https://zcp.zsoftly.ca/pricing/#block-storage) is the source for current
+The [ZCP pricing page](https://zsoftly.ca/pricing/#block-storage) is the source for current
 storage rates and local-tier ordering status. The docs explain storage behavior and selection, but
 do not duplicate the pricing tables.
 
@@ -53,7 +53,7 @@ created before that date keep their bundled root disk and their price.
 Use a data volume to keep application data apart from the operating system, change the VM without
 touching the data, or back up the data on its own plan.
 
-Prices were checked on 2026-10-11. The [pricing page](https://zcp.zsoftly.ca/pricing) is the source
+Prices were checked on 2026-10-11. The [pricing page](https://zsoftly.ca/pricing) is the source
 of truth.
 
 | Tier    | Region | Media                  | Price per GB per month |
