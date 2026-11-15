@@ -79,7 +79,7 @@ dans le nuage public. Choisissez ZCS lorsque vous avez besoin d'un cluster dédi
 
 ## Commencer
 
-→ [Communiquer avec ZSoftly](https://zcp.zsoftly.ca/contact?source=docs&topic=cloud-storage) pour
+→ [Communiquer avec ZSoftly](https://zsoftly.ca/contact?source=docs&topic=cloud-storage) pour
 dimensionner et provisionner un cluster.
 
 Une fois votre cluster provisionné, poursuivez avec

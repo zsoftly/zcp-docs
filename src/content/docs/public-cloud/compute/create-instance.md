@@ -52,8 +52,8 @@ Select an OS or application template. Import a custom ISO if needed.
 | Windows Server 2022 | Available |
 | Windows 11 Pro      | Available |
 
-Browse the full catalogs: [OS Images](https://zcp.zsoftly.ca/marketplace/os-images) and
-[One-Click Apps](https://zcp.zsoftly.ca/marketplace/apps).
+Browse the full catalogs: [OS Images](https://zsoftly.ca/marketplace/os-images) and
+[One-Click Apps](https://zsoftly.ca/marketplace/apps).
 
 ![Choosing an operating system image](../../../../assets/compute/create-instance-choose-an-image.webp)
 
@@ -77,7 +77,7 @@ minimum is the template size. Grow the disk later. You cannot shrink it. See
 Plans cover CPU and memory only. You choose and pay for the root disk separately on the **OS Disk
 Offering** step. Custom plans are retired, so choose a fixed size. See
 [Instance Types](/public-cloud/compute/instance-types) for families and storage tiers, and the
-[pricing page](https://zcp.zsoftly.ca/pricing) for per-size specs and pricing.
+[pricing page](https://zsoftly.ca/pricing) for per-size specs and pricing.
 
 ![Choosing a plan](../../../../assets/compute/create-instance-choose-a-plan.webp)
 

@@ -53,7 +53,7 @@ We accept:
 - **Card**: Visa, Mastercard, and American Express, processed securely through **Stripe**.
 - **PayPal**: pay from your PayPal balance or a linked account.
 - **Bank Transfer / Wire**: for manual payments, contact our
-  [Sales team](https://zcp.zsoftly.ca/contact?source=docs&topic=billing) and they will set up the
+  [Sales team](https://zsoftly.ca/contact?source=docs&topic=billing) and they will set up the
   transfer and apply the funds to your account as account credit.
 
 Card and PayPal payments are self-serve in the portal. Bank transfer and wire are arranged with

@@ -85,6 +85,6 @@ The family determines how vCPU and RAM scale together:
 :::tip
 
 The full plan catalog, with vCPU, RAM, disk, and pricing for every size, is on the
-[pricing page](https://zcp.zsoftly.ca/pricing).
+[pricing page](https://zsoftly.ca/pricing).
 
 :::

@@ -82,6 +82,6 @@ La famille détermine l'évolution conjointe des vCPU et de la RAM :
 :::tip
 
 Le catalogue complet des plans, avec vCPU, RAM, disque et tarification pour chaque taille, se trouve
-sur la [page de tarification](https://zcp.zsoftly.ca/pricing).
+sur la [page de tarification](https://zsoftly.ca/pricing).
 
 :::

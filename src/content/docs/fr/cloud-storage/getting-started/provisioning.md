@@ -50,5 +50,5 @@ expansion.
 
 ## Commencer
 
-→ [Communiquer avec ZSoftly](https://zcp.zsoftly.ca/contact?source=docs&topic=cloud-storage) pour
+→ [Communiquer avec ZSoftly](https://zsoftly.ca/contact?source=docs&topic=cloud-storage) pour
 provisionner ou étendre un cluster.

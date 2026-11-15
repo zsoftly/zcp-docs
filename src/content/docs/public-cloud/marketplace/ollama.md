@@ -44,7 +44,7 @@ Plan names and storage tiers differ by region. The general-purpose plans below g
 enough RAM. Plans cover CPU and memory only, so choose a root disk to hold the model files on the
 **OS Disk Offering** step. The disk sizes in the table above are starting sizes. See
 [Instance Types](/public-cloud/compute/instance-types/) and the
-[pricing page](https://zcp.zsoftly.ca/pricing) for current specs and prices.
+[pricing page](https://zsoftly.ca/pricing) for current specs and prices.
 
 | Model size | YOW-1 (Ottawa)              | YUL-1 (Montréal)            |
 | ---------- | --------------------------- | --------------------------- |

@@ -20,9 +20,9 @@ criticité de la charge de travail.
 
 ## Tarification et commande
 
-La [page de tarification de ZCP](https://zcp.zsoftly.ca/pricing/#block-storage) est la source des
-tarifs actuels et de l'état de commande des niveaux locaux. La documentation explique le
-comportement et le choix du stockage, sans recopier les tableaux de prix.
+La [page de tarification de ZCP](https://zsoftly.ca/pricing/#block-storage) est la source des tarifs
+actuels et de l'état de commande des niveaux locaux. La documentation explique le comportement et le
+choix du stockage, sans recopier les tableaux de prix.
 
 ## Niveaux de stockage
 

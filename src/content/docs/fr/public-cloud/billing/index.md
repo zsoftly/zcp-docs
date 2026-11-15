@@ -60,7 +60,7 @@ Les modes de paiement acceptés sont :
 - **Carte** : Visa, Mastercard et American Express, traitées de façon sécurisée par **Stripe**.
 - **PayPal** : paiement depuis votre solde PayPal ou un compte lié.
 - **Bank Transfer / Wire** : pour les paiements manuels, communiquez avec notre
-  [équipe des ventes](https://zcp.zsoftly.ca/contact?source=docs&topic=billing). Elle organisera le
+  [équipe des ventes](https://zsoftly.ca/contact?source=docs&topic=billing). Elle organisera le
   transfert et appliquera les fonds à votre compte sous forme de crédit à votre compte.
 
 Les paiements par carte et PayPal sont en libre-service dans le portail. Les virements bancaires
