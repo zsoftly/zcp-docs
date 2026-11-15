@@ -40,8 +40,8 @@ de la place pour l'image de base, les métadonnées des paquets, cloud-init, les
 à jour normales du système. Ajoutez des ressources pour les paquets applicatifs, les bases de
 données, les agents de surveillance, les sauvegardes et la concurrence. Consultez les
 [types d'instances](/fr/public-cloud/compute/instance-types) et la
-[page de tarification ZCP](https://zsoftly.ca/pricing) pour connaître la disponibilité et les
-prix actuels.
+[page de tarification ZCP](https://zsoftly.ca/pricing) pour connaître la disponibilité et les prix
+actuels.
 
 ## Bonnes pratiques
 
