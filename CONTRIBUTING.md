@@ -47,7 +47,7 @@ pnpm install
 All docs live in `src/content/docs/` (English). Each page is Markdown with a `title` frontmatter
 field. Follow [docs/content-standards.md](./docs/content-standards.md) for style, asides, code
 blocks, and structure. Styling changes follow the
-[ZCP Instrument design system](https://github.com/zsoftly/platform/blob/main/docs/architecture/zcp-instrument-design-system.md)
+[ZCP Instrument design system](https://github.com/zsoftly/zs-platform/blob/main/docs/architecture/zcp-instrument-design-system.md)
 (local `$HOME/zsoftly/platform/docs/architecture/zcp-instrument-design-system.md`). Don't edit
 `src/content/docs/fr/**`. Our translation/review workflow handles the French copy.
 

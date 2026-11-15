@@ -11,9 +11,9 @@ AI assistant instructions for this repository (the ZSoftly documentation site).
 - **[docs/](./docs/)** — contributor guides: [content-standards](./docs/content-standards.md),
   [release-process](./docs/release-process.md), [launch-checklist](./docs/launch-checklist.md)
 - **Internal platform docs** — for product, API, or operations details not documented here, search
-  the platform repo ([github.com/zsoftly/platform](https://github.com/zsoftly/platform) → `docs/`,
-  typically a sibling checkout at `../platform`) as the source of truth. Do not copy internal-only
-  details into these public pages.
+  the platform repo ([github.com/zsoftly/zs-platform](https://github.com/zsoftly/zs-platform) →
+  `docs/`, typically a sibling checkout at `../platform`) as the source of truth. Do not copy
+  internal-only details into these public pages.
 
 ---
 
@@ -129,7 +129,7 @@ Always use the short forms:
 - Content: Markdown + MDX via Starlight content collections (`src/content/docs/`)
 - Layout overrides: `src/overrides/*.astro`; global styles: `src/styles/custom.css`
 - Visual design: follow the ZCP Instrument design system
-  ([GitHub](https://github.com/zsoftly/platform/blob/main/docs/architecture/zcp-instrument-design-system.md),
+  ([GitHub](https://github.com/zsoftly/zs-platform/blob/main/docs/architecture/zcp-instrument-design-system.md),
   local `$HOME/zsoftly/platform/docs/architecture/zcp-instrument-design-system.md`). Tokens live in
   `src/styles/tokens.css`.
 - Package manager: **pnpm 10**

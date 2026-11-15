@@ -8,7 +8,7 @@
  *
  * Spotlight cards name a tutorial by slug. Their title and description come from the tutorial's own
  * page. Their date comes from `tutorialPublishedOn` in `tutorials.ts`. Nothing is copied here. The
- * artwork comes from the capability cards in the zcp-media repository.
+ * artwork comes from the capability cards in the zs-media repository.
  *
  * Icons are copied from Lucide 1.16 (https://lucide.dev, ISC licence), the icon set the website
  * uses through lucide-react, and render through ShapeIcon.
