@@ -1,8 +1,8 @@
 name: '10: Deploy Dev'
 
 # Runs after every push to main: full CI, then the container image that
-# zsoftly/gitops-apps pins for dev, stg and prd. Dev is served by K3s since
-# 2026-11-14 (zsoftly/zcp-website#202).
+# zsoftly/zs-gitops-apps pins for dev, stg and prd. Dev is served by K3s since
+# 2026-11-14 (zsoftly/zs-website#202).
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
     secrets: inherit
 
   # The image is the checked CI build with the prd site URL. GitOps promotes the
-  # same digest from dev to stg and prd (zcp-website #202). It does not wait for
+  # same digest from dev to stg and prd (zs-website #202). It does not wait for
   # the Compose deploy, and a registry problem never fails that deploy.
   image:
     name: Push image

@@ -12,5 +12,5 @@ AI-assistant rules, see [CLAUDE.md](../CLAUDE.md).
 | [release-process.md](./release-process.md)     | Branch naming, commit format, local validation, the PR |
 | [launch-checklist.md](./launch-checklist.md)   | Content and quality checks to run before publishing    |
 
-Deployment (dev/stg/prd) is documented centrally in the private `zsoftly/platform` repo under
+Deployment (dev/stg/prd) is documented centrally in the private `zsoftly/zs-platform` repo under
 `docs/deployments/`, not here.
