@@ -5,10 +5,16 @@ description:
   and repositories, and recover workspace data after a reboot.
 ---
 
-OpenHands Agent Canvas is a self-hosted coding-agent interface. This image runs OpenHands Agent
-Canvas 1.38.0 on Ubuntu 26.04.1 LTS. Nginx serves the web interface over HTTPS on port 443. Agent
-Canvas is published only on loopback. The container runs as an unprivileged user. The image contains
-no model-provider, repository, or customer account credentials.
+OpenHands Agent Canvas is a self-hosted coding-agent interface. Nginx serves the web interface over
+HTTPS on port 443. Agent Canvas is published only on loopback. The container runs as an unprivileged
+user. The image contains no model-provider, repository, or customer account credentials.
+
+## Software Included
+
+| Component              | Version     |
+| ---------------------- | ----------- |
+| OpenHands Agent Canvas | 1.38.0      |
+| Ubuntu                 | 26.04.1 LTS |
 
 ## Requirements
 

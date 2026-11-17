@@ -93,9 +93,10 @@ Reconnect and attach the same named session:
 herdr session attach project-a
 ```
 
-A VM reboot stops the server and every process running in its panes. On restart, Herdr restores the
-saved workspace, tabs, panes, current directories, layout, and focus. Claude Code and Codex resume
-prior conversations through each agent's own authenticated session restore.
+A VM reboot stops the server and every process running in its panes. The restore is not automatic on
+boot. Reconnect over SSH and run `herdr session attach <name>` to rebuild the saved workspace, tabs,
+panes, current directories, layout, and focus. Claude Code and Codex resume prior conversations
+through each agent's own authenticated session restore.
 
 :::note
 

@@ -6,11 +6,17 @@ description:
   un redémarrage.
 ---
 
-OpenHands Agent Canvas est une interface auto-hébergée d'agent de codage. Cette image exécute
-OpenHands Agent Canvas 1.38.0 sur Ubuntu 26.04.1 LTS. Nginx sert l'interface web en HTTPS sur le
-port 443. Agent Canvas n'est publié que sur l'interface de bouclage. Le conteneur s'exécute sous un
-utilisateur non privilégié. L'image ne contient aucun identifiant de fournisseur de modèles, de
-dépôt ou de compte client.
+OpenHands Agent Canvas est une interface auto-hébergée d'agent de codage. Nginx sert l'interface web
+en HTTPS sur le port 443. Agent Canvas n'est publié que sur l'interface de bouclage. Le conteneur
+s'exécute sous un utilisateur non privilégié. L'image ne contient aucun identifiant de fournisseur
+de modèles, de dépôt ou de compte client.
+
+## Logiciels inclus
+
+| Composant              | Version     |
+| ---------------------- | ----------- |
+| OpenHands Agent Canvas | 1.38.0      |
+| Ubuntu                 | 26.04.1 LTS |
 
 ## Prérequis
 

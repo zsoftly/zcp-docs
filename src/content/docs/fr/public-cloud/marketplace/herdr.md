@@ -95,10 +95,11 @@ cours d'exécution. Reconnectez-vous et attachez la même session nommée :
 herdr session attach project-a
 ```
 
-Un redémarrage de la VM arrête le serveur et chaque processus exécuté dans ses panneaux. Au
-redémarrage, Herdr restaure l'espace de travail sauvegardé, les onglets, les panneaux, les
-répertoires courants, la disposition et le focus. Claude Code et Codex reprennent les conversations
-précédentes grâce à la restauration de session authentifiée propre à chaque agent.
+Un redémarrage de la VM arrête le serveur et chaque processus exécuté dans ses panneaux. La
+restauration n'est pas automatique au démarrage. Reconnectez-vous en SSH et exécutez
+`herdr session attach <name>` pour reconstruire l'espace de travail sauvegardé, les onglets, les
+panneaux, les répertoires courants, la disposition et le focus. Claude Code et Codex reprennent les
+conversations précédentes grâce à la restauration de session authentifiée propre à chaque agent.
 
 :::note
 

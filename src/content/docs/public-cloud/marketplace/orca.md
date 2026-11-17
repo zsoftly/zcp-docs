@@ -83,8 +83,8 @@ into chat, tickets, logs, or shared documents. Complete pairing while the comman
 pairing finishes, press `Ctrl-C` to restore the normal Orca service, then wait for readiness before
 reconnecting through the browser URL.
 
-If the SSH tunnel disconnects, open it again and reload the browser. A disconnected tunnel does not
-bypass the firewall on port `6768`.
+If the SSH tunnel disconnects, open it again and reload the browser. Port `6768` stays firewalled,
+so reopen the SSH tunnel rather than opening the port.
 
 ## Customer-Owned Claude and Codex Accounts
 

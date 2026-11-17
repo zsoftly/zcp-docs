@@ -88,8 +88,8 @@ l'appairage pendant que la commande est en cours d'exécution. Lorsque l'appaira
 appuyez sur `Ctrl-C` pour restaurer le service Orca normal, puis attendez la disponibilité avant de
 vous reconnecter via l'URL du navigateur.
 
-Si le tunnel SSH se déconnecte, rouvrez-le et rechargez le navigateur. Un tunnel déconnecté ne
-contourne pas le pare-feu sur le port `6768`.
+Si le tunnel SSH se déconnecte, rouvrez-le et rechargez le navigateur. Le port `6768` reste protégé
+par le pare-feu, rouvrez donc le tunnel SSH plutôt que d'ouvrir le port.
 
 ## Comptes Claude et Codex gérés par le client
 
