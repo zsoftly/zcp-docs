@@ -8,6 +8,11 @@ AI and agent applications build, run, and serve language models and automated ag
 ## Available applications
 
 - [Dify](/public-cloud/marketplace/dify)
+- [Herdr](/public-cloud/marketplace/herdr)
 - [HermesAgent](/public-cloud/marketplace/hermesagent)
-- [Ollama](/public-cloud/marketplace/ollama) Review each application page for included software,
-  configuration, and access instructions before deployment.
+- [Ollama](/public-cloud/marketplace/ollama)
+- [OpenHands Agent Canvas](/public-cloud/marketplace/openhands)
+- [Orca](/public-cloud/marketplace/orca)
+
+Review each application page for included software, configuration, and access instructions before
+deployment.

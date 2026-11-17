@@ -673,8 +673,14 @@ export default defineConfig({
                   items: [
                     { label: 'Overview', slug: 'public-cloud/marketplace/ai-agents' },
                     { label: 'Dify', slug: 'public-cloud/marketplace/dify' },
+                    { label: 'Herdr', slug: 'public-cloud/marketplace/herdr' },
                     { label: 'HermesAgent', slug: 'public-cloud/marketplace/hermesagent' },
                     { label: 'Ollama', slug: 'public-cloud/marketplace/ollama' },
+                    {
+                      label: 'OpenHands Agent Canvas',
+                      slug: 'public-cloud/marketplace/openhands',
+                    },
+                    { label: 'Orca', slug: 'public-cloud/marketplace/orca' },
                   ],
                 },
                 {
