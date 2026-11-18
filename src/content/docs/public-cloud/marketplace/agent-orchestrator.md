@@ -2,11 +2,11 @@
 title: Agent Orchestrator
 ---
 
-Agent Orchestrator ships ZSoftly's own [ai-craft](https://github.com/zsoftly/ai-craft) engineering
-workflow with Claude Code and Codex pre-installed. Instead of one AI writing code unchecked, one
-orchestrator plans and delegates, an implementation agent writes the code, and two review agents
-check it in parallel from different angles before you accept the result. There is no desktop
-environment or web UI — everything runs over SSH.
+Agent Orchestrator ships ZSoftly's own [ai-craft](https://github.com/zsoftly/zs-ai-craft)
+engineering workflow with Claude Code and Codex pre-installed. Instead of one AI writing code
+unchecked, one orchestrator plans and delegates, an implementation agent writes the code, and two
+review agents check it in parallel from different angles before you accept the result. There is no
+desktop environment or web UI — everything runs over SSH.
 
 ## Software included
 
@@ -26,7 +26,9 @@ environment or web UI — everything runs over SSH.
 | Storage  | 20 GB   | 40 GB+ for larger repos and worktrees |
 
 Agent Orchestrator has no built-in task scheduler or sandbox. Each additional parallel agent task
-needs roughly its own vCPU/RAM budget on top of these numbers.
+needs roughly its own vCPU/RAM budget on top of these numbers. `AGENT_ORCHESTRATOR_MAX_TASKS`
+defaults to `4`, more than the Minimum tier above is sized for — lower it to `1` or `2` on a
+minimum-size VM, or size up to Recommended before running more than two parallel tasks.
 
 ## Environment variables
 
@@ -94,12 +96,14 @@ agent-task claude
 
 ### 6. Run the orchestrator workflow
 
-```bash
+Inside the Claude Code session:
+
+```text
 /zs-orchestrate add rate limiting to the login endpoint
 ```
 
 Codex uses the same agents, with slightly different mechanics — see
-[ai-craft's workflow doc](https://github.com/zsoftly/ai-craft/blob/main/docs/workflow.md#running-it-in-codex)
+[ai-craft's workflow doc](https://github.com/zsoftly/zs-ai-craft/blob/main/docs/workflow.md#running-it-in-codex)
 for how to spawn them there.
 
 ## Task limits
@@ -146,7 +150,7 @@ Anthropic, and OpenAI API access.
 
 ## Next steps
 
-- [ai-craft repository](https://github.com/zsoftly/ai-craft)
-- [ai-craft workflow doc](https://github.com/zsoftly/ai-craft/blob/main/docs/workflow.md)
-- [Claude Code documentation](https://docs.claude.com/en/docs/claude-code)
-- [Codex documentation](https://developers.openai.com/codex)
+- [ai-craft repository](https://github.com/zsoftly/zs-ai-craft)
+- [ai-craft workflow doc](https://github.com/zsoftly/zs-ai-craft/blob/main/docs/workflow.md)
+- [Claude Code documentation](https://code.claude.com/docs/en/overview)
+- [Codex documentation](https://learn.chatgpt.com/docs)

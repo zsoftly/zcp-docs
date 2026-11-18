@@ -2,8 +2,8 @@
 title: Agent Orchestrator
 ---
 
-Agent Orchestrator intègre le flux d'ingénierie [ai-craft](https://github.com/zsoftly/ai-craft) de
-ZSoftly, avec Claude Code et Codex préinstallés. Plutôt qu'une seule IA qui écrit du code sans
+Agent Orchestrator intègre le flux d'ingénierie [ai-craft](https://github.com/zsoftly/zs-ai-craft)
+de ZSoftly, avec Claude Code et Codex préinstallés. Plutôt qu'une seule IA qui écrit du code sans
 contrôle, un orchestrateur planifie et délègue, un agent d'implémentation écrit le code, et deux
 agents de révision le vérifient en parallèle sous des angles différents avant que vous n'acceptiez
 le résultat. Il n'y a aucun environnement de bureau ni interface web — tout se passe via SSH.
@@ -27,6 +27,9 @@ le résultat. Il n'y a aucun environnement de bureau ni interface web — tout s
 
 Agent Orchestrator n'a ni planificateur de tâches intégré ni bac à sable. Chaque tâche d'agent
 supplémentaire en parallèle nécessite à peu près son propre budget vCPU/RAM en plus de ces chiffres.
+`AGENT_ORCHESTRATOR_MAX_TASKS` vaut `4` par défaut, plus que ce pour quoi le palier Minimum
+ci-dessus est dimensionné — abaissez-le à `1` ou `2` sur une VM de taille minimale, ou passez au
+palier Recommandé avant d'exécuter plus de deux tâches en parallèle.
 
 ## Variables d'environnement
 
@@ -95,12 +98,14 @@ tâches ci-dessous). Consultez `~/workspace/README.md` sur la VM pour le modèle
 
 ### 6. Exécuter le flux de l'orchestrateur
 
-```bash
+Dans la session Claude Code:
+
+```text
 /zs-orchestrate add rate limiting to the login endpoint
 ```
 
 Codex utilise les mêmes agents, avec une mécanique légèrement différente — voir le
-[guide de workflow d'ai-craft](https://github.com/zsoftly/ai-craft/blob/main/docs/workflow.md#running-it-in-codex)
+[guide de workflow d'ai-craft](https://github.com/zsoftly/zs-ai-craft/blob/main/docs/workflow.md#running-it-in-codex)
 pour savoir comment les lancer de ce côté.
 
 ## Limites de tâches
@@ -150,7 +155,7 @@ nécessaire pour l'accès aux API GitHub, Anthropic et OpenAI.
 
 ## Prochaines étapes
 
-- [Dépôt ai-craft](https://github.com/zsoftly/ai-craft)
-- [Guide de workflow d'ai-craft](https://github.com/zsoftly/ai-craft/blob/main/docs/workflow.md)
-- [Documentation Claude Code](https://docs.claude.com/en/docs/claude-code)
-- [Documentation Codex](https://developers.openai.com/codex)
+- [Dépôt ai-craft](https://github.com/zsoftly/zs-ai-craft)
+- [Guide de workflow d'ai-craft](https://github.com/zsoftly/zs-ai-craft/blob/main/docs/workflow.md)
+- [Documentation Claude Code](https://code.claude.com/docs/en/overview)
+- [Documentation Codex](https://learn.chatgpt.com/docs)
