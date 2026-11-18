@@ -975,5 +975,15 @@ Store credentials in a password manager and change any initial passwords after s
     </div>
   </a>
 
+  <a href="/public-cloud/marketplace/agent-orchestrator" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/agent-orchestrator.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Agent Orchestrator</p>
+      <p class="service-desc">ai-craft engineering workflow with Claude Code and Codex pre-installed for parallel agent tasks.</p>
+    </div>
+  </a>
+
 </div>
 </div>
