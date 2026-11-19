@@ -985,5 +985,35 @@ Store credentials in a password manager and change any initial passwords after s
     </div>
   </a>
 
+  <a href="/public-cloud/marketplace/herdr" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/herdr.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Herdr</p>
+      <p class="service-desc">SSH terminal workspace manager for named Claude Code and Codex sessions.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/openhands" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/openhands.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">OpenHands Agent Canvas</p>
+      <p class="service-desc">Self-hosted OpenHands Agent Canvas with HTTPS auth and isolated agent runtime.</p>
+    </div>
+  </a>
+
+  <a href="/public-cloud/marketplace/orca" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/orca.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Orca</p>
+      <p class="service-desc">Browser coding workspace running Claude Code and Codex over a private SSH tunnel.</p>
+    </div>
+  </a>
+
 </div>
 </div>
