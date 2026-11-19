@@ -987,7 +987,8 @@ Store credentials in a password manager and change any initial passwords after s
 
   <a href="/public-cloud/marketplace/herdr" class="service-card">
     <div class="mp-brand-icon">
-      <img src="/icons/marketplace/herdr.svg" alt="" width="26" height="26" aria-hidden="true">
+      <img class="icon-for-light" src="/icons/marketplace/herdr.svg" alt="" width="26" height="26" aria-hidden="true">
+      <img class="icon-for-dark" src="/icons/marketplace/herdr-light.svg" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
       <p class="service-name">Herdr</p>
