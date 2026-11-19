@@ -27,9 +27,9 @@ le résultat. Il n'y a aucun environnement de bureau ni interface web — tout s
 
 Agent Orchestrator n'a ni planificateur de tâches intégré ni bac à sable. Chaque tâche d'agent
 supplémentaire en parallèle nécessite à peu près son propre budget vCPU/RAM en plus de ces chiffres.
-`AGENT_ORCHESTRATOR_MAX_TASKS` vaut `4` par défaut, plus que ce pour quoi le palier Minimum
-ci-dessus est dimensionné — abaissez-le à `1` ou `2` sur une VM de taille minimale, ou passez au
-palier Recommandé avant d'exécuter plus de deux tâches en parallèle.
+`AGENT_ORCHESTRATOR_MAX_TASKS` vaut `4` par défaut, plus que ce que couvre chaque palier ci-dessus.
+Abaissez-le à `1` sur une VM de taille Minimum ou à `2` sur une VM de taille Recommandé, ou
+augmentez la taille de la VM pour exécuter plus de deux tâches à la fois.
 
 ## Variables d'environnement
 

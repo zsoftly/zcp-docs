@@ -27,8 +27,8 @@ desktop environment or web UI — everything runs over SSH.
 
 Agent Orchestrator has no built-in task scheduler or sandbox. Each additional parallel agent task
 needs roughly its own vCPU/RAM budget on top of these numbers. `AGENT_ORCHESTRATOR_MAX_TASKS`
-defaults to `4`, more than the Minimum tier above is sized for — lower it to `1` or `2` on a
-minimum-size VM, or size up to Recommended before running more than two parallel tasks.
+defaults to `4`, more than either sizing tier above accounts for. Lower it to `1` on a Minimum-sized
+VM or `2` on a Recommended-sized VM, or size the VM up further to run more than two tasks at once.
 
 ## Environment variables
 
