@@ -959,11 +959,11 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
 
   <a href="/public-cloud/marketplace/agent-orchestrator" class="service-card">
     <div class="mp-brand-icon">
-      <img src="/icons/marketplace/agent-orchestrator.svg" alt="" width="26" height="26" aria-hidden="true">
+      <img src="/icons/marketplace/agent-orchestrator.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
       <p class="service-name">Agent Orchestrator</p>
-      <p class="service-desc">Flux d'ingénierie ai-craft avec Claude Code et Codex préinstallés pour des tâches d'agent en parallèle.</p>
+      <p class="service-desc">Application de bureau qui planifie et délègue des tâches de codage à des agents Claude Code et Codex dans des worktrees isolés.</p>
     </div>
   </a>
 
