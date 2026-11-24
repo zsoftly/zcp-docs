@@ -40,9 +40,11 @@ utilisez-les à cet endroit. Sinon, fournissez les mêmes valeurs via un user da
 | `AGENT_ORCHESTRATOR_USERNAME` | Nom d'utilisateur du bureau. Par défaut `ubuntu`. |
 | `AGENT_ORCHESTRATOR_PASSWORD` | Mot de passe du bureau. Généré si vide.           |
 
-Les identifiants GitHub, Claude Code et Codex ne sont jamais intégrés dans cette image ni écrits
-dans une configuration de déploiement — ils résident uniquement dans le stockage local de
-l'application une fois que vous vous connectez.
+La connexion à GitHub, Claude Code et Codex est une étape manuelle que vous effectuez dans la
+session de bureau; rien n'est préauthentifié ni intégré dans cette image. Chaque outil conserve son
+propre état de connexion dans son propre fichier de configuration du répertoire personnel (`gh` sous
+`~/.config/gh`, Claude Code et Codex dans leurs propres répertoires de configuration CLI), pas dans
+le stockage propre d'Agent Orchestrator.
 
 ## Démarrage
 
@@ -84,10 +86,15 @@ Utilisez le nom d'utilisateur et le mot de passe du bureau configurés.
 
 ### 5. Ouvrir Agent Orchestrator
 
-Double-cliquez sur l'icône **Agent Orchestrator** sur le bureau (la recherche dans le menu des
-applications n'est pas fiable sur cette session de bureau à distance). Au premier lancement,
-connectez-vous avec votre propre compte GitHub et associez vos propres identifiants Claude Code et
-Codex via les paramètres de l'application — rien n'est préauthentifié.
+Double-cliquez sur l'icône **Orchestrator** sur le bureau — c'est le nom que l'application se donne
+elle-même, distinct du nom "Agent Orchestrator" utilisé dans la fiche de la marketplace (la
+recherche dans le menu des applications n'est pas fiable sur cette session de bureau à distance). Au
+premier lancement, connectez-vous avec votre propre compte GitHub et associez vos propres
+identifiants Claude Code et Codex via les paramètres de l'application — rien n'est préauthentifié.
+
+Agent Orchestrator transmet par défaut des données de télémétrie anonymes (un identifiant
+d'installation et votre nom d'utilisateur GitHub) à ses mainteneurs. Désactivez-la depuis
+l'application, sous Settings > General > Privacy.
 
 ### 6. Exécuter une tâche
 

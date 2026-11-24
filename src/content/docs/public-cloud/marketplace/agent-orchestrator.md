@@ -39,8 +39,10 @@ boot instead. Both are optional.
 | `AGENT_ORCHESTRATOR_USERNAME` | Desktop username. Defaults to `ubuntu`. |
 | `AGENT_ORCHESTRATOR_PASSWORD` | Desktop password. Generated if blank.   |
 
-GitHub, Claude Code, and Codex credentials are never baked into this image or written to any
-deploy-time configuration — they live only in the app's own local storage once you sign in.
+Signing in to GitHub, Claude Code, and Codex is a manual step you do inside the desktop session;
+none of it is pre-authenticated or baked into this image. Each tool keeps its own sign-in state in
+its own home-directory config file (`gh` under `~/.config/gh`, Claude Code and Codex in their own
+CLI config directories), not inside Agent Orchestrator's own storage.
 
 ## Getting started
 
@@ -81,10 +83,14 @@ Use the configured desktop username and password.
 
 ### 5. Open Agent Orchestrator
 
-Double-click the **Agent Orchestrator** icon on the desktop (the app-menu search is not reliable
+Double-click the **Orchestrator** icon on the desktop — that is the app's own name for itself,
+distinct from the "Agent Orchestrator" marketplace listing name (the app-menu search is not reliable
 over this remote desktop session). On first launch, sign in with your own GitHub account and connect
 your own Claude Code and Codex credentials through the app's settings — nothing is
 pre-authenticated.
+
+Agent Orchestrator reports anonymous usage telemetry (an installation ID and your GitHub username)
+to its maintainers by default. Turn it off from inside the app under Settings > General > Privacy.
 
 ### 6. Run a task
 
