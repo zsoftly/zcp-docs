@@ -92,9 +92,11 @@ recherche dans le menu des applications n'est pas fiable sur cette session de bu
 premier lancement, connectez-vous avec votre propre compte GitHub et associez vos propres
 identifiants Claude Code et Codex via les paramètres de l'application — rien n'est préauthentifié.
 
-Agent Orchestrator transmet par défaut des données de télémétrie anonymes (un identifiant
-d'installation et votre nom d'utilisateur GitHub) à ses mainteneurs. Désactivez-la depuis
-l'application, sous Settings > General > Privacy.
+Agent Orchestrator transmet par défaut des données d'utilisation et de fiabilité à Orchestrator.inc.
+Ces données ne sont pas entièrement anonymes : elles incluent un identifiant d'installation et votre
+nom d'utilisateur GitHub, ainsi que votre identifiant et votre adresse courriel AO Cloud si vous
+vous connectez à AO Cloud. Elles n'incluent jamais de code, d'invites ni d'identifiants. Pour la
+désactiver : Settings > General > Privacy > Share usage analytics.
 
 ### 6. Exécuter une tâche
 

@@ -89,8 +89,10 @@ over this remote desktop session). On first launch, sign in with your own GitHub
 your own Claude Code and Codex credentials through the app's settings — nothing is
 pre-authenticated.
 
-Agent Orchestrator reports anonymous usage telemetry (an installation ID and your GitHub username)
-to its maintainers by default. Turn it off from inside the app under Settings > General > Privacy.
+Agent Orchestrator sends usage and reliability telemetry to Orchestrator.inc by default. It includes
+an installation ID and your GitHub username, plus your AO Cloud user ID and email if you sign in to
+AO Cloud. It never includes code, prompts, or credentials. Turn it off under Settings > General >
+Privacy > Share usage analytics.
 
 ### 6. Run a task
 
