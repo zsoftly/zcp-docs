@@ -2,47 +2,47 @@
 title: Agent Orchestrator
 ---
 
-Agent Orchestrator intègre le flux d'ingénierie [ai-craft](https://github.com/zsoftly/zs-ai-craft)
-de ZSoftly, avec Claude Code et Codex préinstallés. Plutôt qu'une seule IA qui écrit du code sans
-contrôle, un orchestrateur planifie et délègue, un agent d'implémentation écrit le code, et deux
-agents de révision le vérifient en parallèle sous des angles différents avant que vous n'acceptiez
-le résultat. Il n'y a aucun environnement de bureau ni interface web — tout se passe via SSH.
+Agent Orchestrator intègre la véritable application de bureau
+[Agent Orchestrator](https://github.com/OrchestratorInc/agent-orchestrator), avec Claude Code et
+Codex préinstallés. Elle planifie des tâches, les délègue à des agents dans des worktrees Git
+isolés, et suit les approbations via sa propre interface graphique. Agent Orchestrator est une
+application de bureau, pas un outil en ligne de commande; cette image fournit donc un bureau KDE
+accessible par RDP.
 
 ## Logiciels inclus
 
-| Composant   | Version                           |
-| ----------- | --------------------------------- |
-| ai-craft    | 2.2.0 (commit épinglé `d17d6946`) |
-| Claude Code | 2.1.309                           |
-| Codex       | 0.166.0                           |
-| Ubuntu      | 26.04.1 LTS                       |
+| Composant          | Version     |
+| ------------------ | ----------- |
+| Agent Orchestrator | 0.15.3      |
+| Claude Code        | 2.1.309     |
+| Codex              | 0.166.0     |
+| Ubuntu             | 26.04.1 LTS |
+
+Cette image utilise XRDP, vous pouvez donc vous connecter avec un client Remote Desktop Protocol
+standard depuis Windows, macOS ou Linux. L'accès SSH est également disponible.
 
 ## Prérequis
 
-| Ressource | Minimum | Recommandé (2 tâches d'agent en parallèle)          |
-| --------- | ------- | --------------------------------------------------- |
-| vCPU      | 2       | 4                                                   |
-| RAM       | 4 Go    | 8 Go                                                |
-| Stockage  | 20 Go   | 40 Go+ pour les dépôts et worktrees plus volumineux |
-
-Agent Orchestrator n'a ni planificateur de tâches intégré ni bac à sable. Chaque tâche d'agent
-supplémentaire en parallèle nécessite à peu près son propre budget vCPU/RAM en plus de ces chiffres.
-`AGENT_ORCHESTRATOR_MAX_TASKS` vaut `4` par défaut, plus que ce que couvre chaque palier ci-dessus.
-Abaissez-le à `1` sur une VM de taille Minimum ou à `2` sur une VM de taille Recommandé, ou
-augmentez la taille de la VM pour exécuter plus de deux tâches à la fois.
+| Ressource | Minimum | Recommandé |
+| --------- | ------- | ---------- |
+| vCPU      | 2       | 4          |
+| RAM       | 4 Go    | 8 Go       |
+| Stockage  | 40 Go   | 50 Go+     |
 
 ## Variables d'environnement
 
 Si des champs de variables de déploiement sont disponibles dans votre parcours de lancement,
 utilisez-les à cet endroit. Sinon, fournissez les mêmes valeurs via un user data qui écrit
-`/etc/zmi/deploy.env`, ou configurez-les après le premier démarrage. Toutes sont facultatives.
+`/etc/zmi/deploy.env`, ou configurez-les après le premier démarrage. Les deux sont facultatives.
 
-| Variable                       | Description                                                        |
-| ------------------------------ | ------------------------------------------------------------------ |
-| `GITHUB_TOKEN`                 | Configure `git`/`gh` pour l'utilisateur `ubuntu` sans interaction. |
-| `ANTHROPIC_API_KEY`            | Permet à Claude Code de s'authentifier sans connexion interactive. |
-| `OPENAI_API_KEY`               | Permet à Codex de s'authentifier sans connexion interactive.       |
-| `AGENT_ORCHESTRATOR_MAX_TASKS` | Nombre de créneaux `agent-task` simultanés. Par défaut `4`.        |
+| Variable                      | Description                                       |
+| ----------------------------- | ------------------------------------------------- |
+| `AGENT_ORCHESTRATOR_USERNAME` | Nom d'utilisateur du bureau. Par défaut `ubuntu`. |
+| `AGENT_ORCHESTRATOR_PASSWORD` | Mot de passe du bureau. Généré si vide.           |
+
+Les identifiants GitHub, Claude Code et Codex ne sont jamais intégrés dans cette image ni écrits
+dans une configuration de déploiement — ils résident uniquement dans le stockage local de
+l'application une fois que vous vous connectez.
 
 ## Démarrage
 
@@ -52,110 +52,100 @@ utilisez-les à cet endroit. Sinon, fournissez les mêmes valeurs via un user da
 ssh ubuntu@<your-vm-ip>
 ```
 
-### 2. Démarrer une session persistante
+### 2. Attendre la configuration du premier démarrage
 
-Les sessions des CLI d'agent ne survivent pas d'elles-mêmes à une déconnexion SSH. Exécutez-les dans
-`tmux` pour pouvoir vous reconnecter sans perdre votre place:
+Au premier démarrage, le service de configuration applique les métadonnées de la plateforme,
+régénère les clés d'hôte SSH, crée ou met à jour l'utilisateur du bureau, configure KDE Plasma comme
+session XRDP, et démarre XRDP.
 
-```bash
-tmux new -s work
-```
-
-### 3. Authentifier Claude Code et Codex
-
-Chaque CLI utilise votre propre compte. Rien n'est préauthentifié dans l'image.
+Suivre la progression:
 
 ```bash
-claude   # connexion interactive
-codex    # connexion interactive
+sudo journalctl -u agent-orchestrator-first-boot.service -f
 ```
 
-Pour éviter la connexion interactive, fournissez `ANTHROPIC_API_KEY` et/ou `OPENAI_API_KEY` au
-déploiement — le premier démarrage les rend disponibles à chaque nouveau shell pour l'utilisateur
-`ubuntu`.
-
-### 4. Connecter l'accès GitHub
+### 3. Récupérer les identifiants du bureau
 
 ```bash
-gh auth login
+sudo cat /etc/agent-orchestrator/credentials.env
 ```
 
-Ou fournissez `GITHUB_TOKEN` au déploiement pour que cela soit configuré automatiquement.
+Le fichier n'est lisible que par root.
 
-### 5. Exécuter des tâches en parallèle dans des worktrees séparés
+### 4. Se connecter par RDP
 
-```bash
-cd ~/workspace
-git clone <your-repo-url>
-cd <your-repo>
-git worktree add ../<your-repo>-task-a -b task-a
-cd ../<your-repo>-task-a
-agent-task claude
-```
-
-`agent-task` limite le nombre de CLI d'agent pouvant s'exécuter en même temps (voir Limites de
-tâches ci-dessous). Consultez `~/workspace/README.md` sur la VM pour le modèle complet de worktree.
-
-### 6. Exécuter le flux de l'orchestrateur
-
-Dans la session Claude Code:
+Ouvrez votre client RDP et connectez-vous à:
 
 ```text
-/zs-orchestrate add rate limiting to the login endpoint
+<your-vm-ip>:3389
 ```
 
-Codex utilise les mêmes agents, avec une mécanique légèrement différente — voir le
-[guide de workflow d'ai-craft](https://github.com/zsoftly/zs-ai-craft/blob/main/docs/workflow.md#running-it-in-codex)
-pour savoir comment les lancer de ce côté.
+Utilisez le nom d'utilisateur et le mot de passe du bureau configurés.
 
-## Limites de tâches
+### 5. Ouvrir Agent Orchestrator
 
-`agent-task` est une limite de concurrence, pas un bac à sable:
+Double-cliquez sur l'icône **Agent Orchestrator** sur le bureau (la recherche dans le menu des
+applications n'est pas fiable sur cette session de bureau à distance). Au premier lancement,
+connectez-vous avec votre propre compte GitHub et associez vos propres identifiants Claude Code et
+Codex via les paramètres de l'application — rien n'est préauthentifié.
 
-```bash
-agent-task claude ...
-agent-task codex ...
-```
+### 6. Exécuter une tâche
 
-Il refuse de démarrer une nouvelle tâche une fois que `AGENT_ORCHESTRATOR_MAX_TASKS` (par défaut
-`4`) sont déjà en cours d'exécution, jusqu'à ce que l'une d'elles se termine. Exécuter
-`claude`/`codex` directement au lieu de passer par `agent-task` fonctionne toujours — ce n'est
-simplement pas limité. Il s'agit d'une VM autogérée que vous possédez, pas d'un bac à sable
-multi-locataire, donc cette limite est un contrôle d'usage, pas une frontière de sécurité.
+Pointez l'application vers un dépôt Git (clonez-le d'abord dans un terminal, ou laissez
+l'application le faire) et créez une tâche. Agent Orchestrator crée un worktree et une branche
+isolés par tâche, assigne un agent, et renvoie les échecs de CI et les retours de révision à cet
+agent jusqu'à ce que le travail soit prêt à être fusionné.
 
-Pour modifier la limite après le déploiement, modifiez directement
-`/etc/agent-orchestrator/limits.conf`; aucun redémarrage n'est nécessaire.
+### 7. Exécuter des tâches en parallèle
+
+Créez d'autres tâches de la même façon — chacune obtient son propre worktree, sa propre branche et
+son propre agent, afin qu'elles n'interfèrent pas entre elles. Révisez et approuvez chacune depuis
+l'interface de l'application à mesure qu'elle se termine.
 
 ## Persistance de session et récupération après redémarrage
 
-`tmux` maintient une session active à travers les déconnexions SSH, mais un redémarrage de la VM met
-quand même fin à tous les processus en cours, y compris `tmux`. Après un redémarrage:
+Agent Orchestrator conserve l'état des tâches, les worktrees et l'historique des conversations sur
+disque, et non en mémoire; un redémarrage de la VM ne fait donc pas perdre le travail en cours:
 
-- Reconnectez-vous en SSH et démarrez une nouvelle session `tmux`.
-- Claude Code et Codex conservent chacun leur propre historique de conversation sur disque, vous
-  pouvez donc reprendre une conversation précédente via la fonction de reprise propre à chaque CLI
-  plutôt que de recommencer.
-- Vos dépôts et worktrees Git sous `~/workspace` ne sont pas affectés — ils résident sur le disque
-  normal de la VM, pas en mémoire.
-
-## Identifiants
-
-Aucun identifiant n'est jamais intégré dans cette image. `GITHUB_TOKEN`, `ANTHROPIC_API_KEY` et
-`OPENAI_API_KEY` sont entièrement fournis par le client, soit au déploiement, soit de façon
-interactive par la suite.
-
-> L'ensemble d'agents d'ai-craft inclut `zs-cmp-deploy-agent`, un assistant de déploiement interne à
-> ZSoftly. Il est installé avec le reste des agents; il est inerte sans le contexte de déploiement
-> propre à ZSoftly, mais vous le verrez listé aux côtés des agents destinés aux clients.
+- Reconnectez-vous par RDP et rouvrez l'application; les tâches en cours et terminées sont toujours
+  listées.
+- Vos dépôts et worktrees Git ne sont pas affectés — ils résident sur le disque normal de la VM.
 
 ## Sécurité
 
-UFW n'autorise que SSH (`22/tcp`) en entrée. Tout le trafic sortant est autorisé, ce qui est
-nécessaire pour l'accès aux API GitHub, Anthropic et OpenAI.
+N'exposez pas largement le RDP à l'internet public. Restreignez le port 3389 aux IP de confiance,
+utilisez un VPN, ou un tunnel SSH lorsque c'est possible. UFW n'autorise que SSH (`22/tcp`) et RDP
+(`3389/tcp`) en entrée; rien d'autre n'est jamais ouvert. Tout le trafic sortant est autorisé, ce
+qui est nécessaire pour l'accès aux API GitHub, Anthropic et OpenAI.
+
+## Dépannage
+
+Si le client RDP ne peut pas se connecter, vérifiez que la VM dispose d'une IP publique accessible
+et que `3389/tcp` est autorisé par le pare-feu ou la politique de sécurité ZCP.
+
+Si la connexion réussit mais que le bureau n'apparaît pas, consultez les journaux de session XRDP:
+
+```bash
+sudo journalctl -u xrdp
+sudo journalctl -u xrdp-sesman
+cat ~/.xsession-errors
+```
+
+Si le mot de passe est inconnu, récupérez-le en tant que root:
+
+```bash
+sudo cat /etc/agent-orchestrator/credentials.env
+```
+
+Si le service de premier démarrage a échoué, relancez-le après avoir corrigé le problème signalé:
+
+```bash
+sudo systemctl reset-failed agent-orchestrator-first-boot
+sudo systemctl start agent-orchestrator-first-boot
+```
 
 ## Prochaines étapes
 
-- [Dépôt ai-craft](https://github.com/zsoftly/zs-ai-craft)
-- [Guide de workflow d'ai-craft](https://github.com/zsoftly/zs-ai-craft/blob/main/docs/workflow.md)
+- [Dépôt Agent Orchestrator](https://github.com/OrchestratorInc/agent-orchestrator)
 - [Documentation Claude Code](https://code.claude.com/docs/en/overview)
 - [Documentation Codex](https://learn.chatgpt.com/docs)

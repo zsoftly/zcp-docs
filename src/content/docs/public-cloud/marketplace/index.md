@@ -977,11 +977,11 @@ Store credentials in a password manager and change any initial passwords after s
 
   <a href="/public-cloud/marketplace/agent-orchestrator" class="service-card">
     <div class="mp-brand-icon">
-      <img src="/icons/marketplace/agent-orchestrator.svg" alt="" width="26" height="26" aria-hidden="true">
+      <img src="/icons/marketplace/agent-orchestrator.png" alt="" width="26" height="26" aria-hidden="true">
     </div>
     <div>
       <p class="service-name">Agent Orchestrator</p>
-      <p class="service-desc">ai-craft engineering workflow with Claude Code and Codex pre-installed for parallel agent tasks.</p>
+      <p class="service-desc">Desktop app that plans and delegates coding tasks to Claude Code and Codex agents in isolated worktrees.</p>
     </div>
   </a>
 
