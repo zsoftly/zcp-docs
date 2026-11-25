@@ -967,5 +967,36 @@ automatiquement. OPNsense est l'exception basée sur FreeBSD et se configure dep
     </div>
   </a>
 
+  <a href="/fr/public-cloud/marketplace/herdr" class="service-card">
+    <div class="mp-brand-icon">
+      <img class="icon-for-light" src="/icons/marketplace/herdr.svg" alt="" width="26" height="26" aria-hidden="true">
+      <img class="icon-for-dark" src="/icons/marketplace/herdr-light.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Herdr</p>
+      <p class="service-desc">Gestionnaire d'espaces de travail en terminal SSH pour les sessions nommées Claude Code et Codex.</p>
+    </div>
+  </a>
+
+  <a href="/fr/public-cloud/marketplace/openhands" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/openhands.svg" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">OpenHands Agent Canvas</p>
+      <p class="service-desc">OpenHands Agent Canvas auto-hébergé avec authentification HTTPS et exécution d'agent isolée.</p>
+    </div>
+  </a>
+
+  <a href="/fr/public-cloud/marketplace/orca" class="service-card">
+    <div class="mp-brand-icon">
+      <img src="/icons/marketplace/orca.png" alt="" width="26" height="26" aria-hidden="true">
+    </div>
+    <div>
+      <p class="service-name">Orca</p>
+      <p class="service-desc">Espace de travail de développement en navigateur avec Claude Code et Codex par tunnel SSH privé.</p>
+    </div>
+  </a>
+
 </div>
 </div>
