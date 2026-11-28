@@ -1,0 +1,90 @@
+---
+// The navigation tree shared by the left sidebar and the right "On this page" panel (see
+// src/lib/nav-tree.ts). Branches are native <details>, so they fold without JavaScript. A branch
+// with its own href (a TOC heading) is a plain link row with a separate chevron button beside it
+// ("Show or hide <heading>"), so the link and the disclosure are two controls, never nested. `persist` adds Starlight's restore points so the sidebar keeps
+// what the reader opened across pages. Styles: "Navigation tree" in src/styles/custom.css.
+import SidebarRestorePoint from '@astrojs/starlight/components/SidebarRestorePoint.astro';
+import NavIcon from './NavIcon.astro';
+import { holdsCurrent, type TreeItem } from '../lib/nav-tree';
+
+interface Props {
+  items: TreeItem[];
+  depth?: number;
+  persist?: boolean;
+  class?: string;
+}
+
+const { items, depth = 0, persist = false, class: className } = Astro.props;
+
+// Astro escapes the attribute itself, so the translation must not escape the label as well.
+const toggleLabel = (label: string) =>
+  Astro.locals.t('zs.tree.toggle', { label, interpolation: { escapeValue: false } });
+
+// Starlight's per-link attrs may carry a class; it joins the row's own class.
+const linkAttrs = (item: TreeItem) => {
+  const { class: extra, ...rest } = item.attrs ?? {};
+  return { rest, extra: typeof extra === 'string' ? extra : undefined };
+};
+---
+
+<ul class:list={['zs-tree-list', className]} data-depth={depth}>
+  {
+    items.map((item) =>
+      item.children?.length && item.href ? (
+        <li class="zs-tree-linked">
+          <a class="zs-tree-row" href={item.href} aria-current={item.current}>
+            {item.icon && <NavIcon name={item.icon} />}
+            <span class="zs-tree-label">{item.label}</span>
+          </a>
+          <details class="zs-tree-branch" open={item.open ?? holdsCurrent(item)}>
+            <summary class="zs-tree-toggle" aria-label={toggleLabel(item.label)}>
+              <NavIcon name="chevron" size={14} class="zs-tree-chevron" />
+            </summary>
+            {persist && <SidebarRestorePoint />}
+            <Astro.self items={item.children} depth={depth + 1} persist={persist} />
+          </details>
+        </li>
+      ) : item.children?.length ? (
+        <li>
+          <details class="zs-tree-branch" open={item.open ?? holdsCurrent(item)}>
+            <summary class="zs-tree-row" title={depth === 0 ? item.label : undefined}>
+              {item.icon && <NavIcon name={item.icon} />}
+              <span class="zs-tree-label">{item.label}</span>
+              {item.badge && (
+                <span class:list={['sl-badge', item.badge.variant, item.badge.class]}>
+                  {item.badge.text}
+                </span>
+              )}
+              <NavIcon name="chevron" size={14} class="zs-tree-chevron" />
+            </summary>
+            {persist && <SidebarRestorePoint />}
+            <Astro.self items={item.children} depth={depth + 1} persist={persist} />
+          </details>
+        </li>
+      ) : (
+        <li>
+          <a
+            {...linkAttrs(item).rest}
+            class:list={['zs-tree-row', linkAttrs(item).extra]}
+            href={item.href}
+            aria-current={item.current}
+            title={depth === 0 ? item.label : undefined}
+            target={item.external ? '_blank' : undefined}
+            rel={item.external ? 'noopener noreferrer' : undefined}
+          >
+            {item.icon && <NavIcon name={item.icon} />}
+            <span class="zs-tree-label">{item.label}</span>
+            {item.badge && (
+              <span class:list={['sl-badge', item.badge.variant, item.badge.class]}>
+                {item.badge.text}
+              </span>
+            )}
+            {item.external && <NavIcon name="external" size={13} class="zs-tree-external" />}
+            {item.external && <span class="sr-only">({Astro.locals.t('zs.search.newTab')})</span>}
+          </a>
+        </li>
+      )
+    )
+  }
+</ul>

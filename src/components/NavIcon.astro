@@ -1,0 +1,23 @@
+---
+// One quiet sidebar icon from the console's Hugeicons set (src/data/nav-icons.ts).
+import { navIcons, type NavIconName } from '../data/nav-icons';
+
+interface Props {
+  name: NavIconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 17, class: className } = Astro.props;
+---
+
+<svg
+  class:list={['zs-nav-icon', className]}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+  set:html={navIcons[name]}
+/>

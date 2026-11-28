@@ -76,6 +76,9 @@ const languages = [
       >
         <img data-status-badge alt={Astro.locals.t('zs.footer.statusBadgeAlt')} height="20" />
       </a>
+      <button type="button" class="site-footer__privacy" data-zs-consent-open>
+        {Astro.locals.t('zs.footer.privacyChoices')}
+      </button>
       <nav class="site-footer__langs" aria-label={Astro.locals.t('zs.header.languageNav')}>
         {
           languages.map((language) => (
@@ -235,6 +238,23 @@ const languages = [
 
   .site-footer__status[hidden] {
     display: none;
+  }
+
+  /* Reopens the consent banner. It lives here, not as a floating button, so it never covers
+     the sidebar or the page. */
+  .site-footer__privacy {
+    background: none;
+    border: 0;
+    color: var(--zi-ink-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.8125rem;
+    padding: 0;
+  }
+
+  .site-footer__privacy:hover {
+    color: var(--zi-ink);
+    text-decoration: underline;
   }
 
   .site-footer__langs {
