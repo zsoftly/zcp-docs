@@ -59,6 +59,11 @@ export function initCollapsiblePanel({
     toggle.setAttribute('aria-expanded', String(!isRail()));
   };
 
+  // A pointer press marks the toggle so its focus ring shows for keyboard use only.
+  toggle?.addEventListener('pointerdown', () => toggle.setAttribute('data-pointer', ''));
+  toggle?.addEventListener('keydown', () => toggle.removeAttribute('data-pointer'));
+  toggle?.addEventListener('blur', () => toggle.removeAttribute('data-pointer'));
+
   toggle?.addEventListener('click', () => {
     const rail = !isRail();
     closePeek();
