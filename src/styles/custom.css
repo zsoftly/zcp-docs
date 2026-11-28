@@ -209,11 +209,6 @@ body {
   margin-top: var(--zi-space-6);
 }
 
-/* Running text reads at a 68 to 72 character measure. Tables and code keep
-   the full column. */
-.sl-markdown-content :is(p, ul, ol, dl):not(:where(.not-content *)) {
-  max-inline-size: 72ch;
-}
 
 /* Links are accent. Prose links keep a thin underline so they do not rely on
    colour alone: accent and ink are too close in luminance to tell apart. */
@@ -686,6 +681,16 @@ body {
   width: auto;
 }
 
+/* The ring sits inside the button, so a narrow rail never clips it, and only keyboard focus
+   draws it (collapsible-panel.ts marks a pointer press with data-pointer). */
+.zs-panel-toggle:focus-visible {
+  outline-offset: -2px;
+}
+
+.zs-panel-toggle[data-pointer]:focus-visible {
+  outline: none;
+}
+
 @media (min-width: 50rem) {
   :root {
     --sl-sidebar-width: 16.5rem;
@@ -818,6 +823,8 @@ body {
 
 @media (min-width: 72rem) {
   :root {
+    /* About 840px: a long but readable line at the 16px body size. */
+    --zs-content-max: 52.5rem;
     --toc-width: 17rem;
     /* The TOC column's drawn width: the resizable width, or the rail while folded. */
     --zs-toc-col: var(--toc-width);
@@ -831,10 +838,12 @@ body {
     --sl-content-margin-inline: 0 !important;
   }
 
-  /* Drop the 45rem cap so the article fills the main pane. */
+  /* One content width for every block of the article: title, text, lists, screenshots,
+     callouts, code, the pager and the footer. The column is centred in whatever space the two
+     side panels leave, so folding either panel never leaves a lopsided empty band. */
   [data-has-sidebar] .sl-container {
-    max-width: none !important;
-    margin-inline: 0 !important;
+    max-width: var(--zs-content-max) !important;
+    margin-inline: auto !important;
   }
 
   [data-has-sidebar] .content-panel {
