@@ -7,6 +7,7 @@ import rehypeMermaid from 'rehype-mermaid';
 import aiReadableContent from './src/integrations/ai-readable-content.mjs';
 import remarkExplicitHeadingIds from './src/plugins/remark-explicit-heading-ids.mjs';
 import remarkMermaid from './src/plugins/remark-mermaid.mjs';
+import { tutorialCatalog, tutorialCategories } from './src/data/tutorials.ts';
 
 /** @type {Record<string, string>} */
 const frSidebarLabels = {
@@ -19,6 +20,11 @@ const frSidebarLabels = {
   'Deploy Employee Desktops (CLI)': 'Déployer des postes de travail (CLI)',
   'Configure Email Authentication DNS': 'Configurer le DNS d’authentification des e-mails',
   'Vaultwarden Backups with restic': 'Sauvegardes Vaultwarden avec restic',
+  'Encrypt Object Storage (CLI)': 'Chiffrer le stockage objet (CLI)',
+  'Deploy OpenClaw (Marketplace, CLI)': 'Déployer OpenClaw (Marketplace, CLI)',
+  'Manage ZCP with Terraform / OpenTofu': 'Gérer ZCP avec Terraform / OpenTofu',
+  'Connect Desktops to Storage (CLI)': 'Connecter les postes au stockage (CLI)',
+  'Deploy Paperclip': 'Déployer Paperclip',
   'Manage a Zone as a File': 'Gérer une zone sous forme de fichier',
   'Deploy a VPS with Dokploy (CLI)': 'Déployer un VPS avec Dokploy (CLI)',
   'Host DNS on ZCP (CLI)': 'Héberger le DNS sur ZCP (CLI)',
@@ -251,58 +257,23 @@ export default defineConfig({
         },
 
         // ── Tutorials ──────────────────────────────────────────
+        // Grouped by category from src/data/tutorials.ts, the same list the overview page uses.
         {
           label: 'Tutorials',
           collapsed: false,
           items: [
             { label: 'Overview', slug: 'tutorials' },
-            { label: 'Encrypt Object Storage (CLI)', slug: 'tutorials/encrypt-object-storage' },
-            { label: 'Deploy a VPS with Dokploy (CLI)', slug: 'tutorials/deploy-vps-dokploy-cli' },
-            {
-              label: 'Deploy OpenClaw (Marketplace, CLI)',
-              slug: 'tutorials/deploy-openclaw-marketplace-cli',
-            },
-            {
-              label: 'Ollama Chat and Inference',
-              slug: 'tutorials/ollama-chat-and-inference',
-            },
-            {
-              label: 'Open WebUI With Ollama',
-              slug: 'tutorials/open-webui-with-ollama',
-            },
-            {
-              label: 'Manage ZCP with Terraform / OpenTofu',
-              slug: 'tutorials/manage-infrastructure-terraform',
-            },
-            { label: 'Host DNS on ZCP (CLI)', slug: 'tutorials/host-dns-on-zcp-cli' },
-            {
-              label: 'Build a Private Network (CLI)',
-              slug: 'tutorials/build-private-network-headscale',
-            },
-            {
-              label: 'Deploy Private Storage (CLI)',
-              slug: 'tutorials/deploy-private-shared-storage',
-            },
-            {
-              label: 'Deploy Employee Desktops (CLI)',
-              slug: 'tutorials/deploy-ubuntu-employee-desktops',
-            },
-            {
-              label: 'Connect Desktops to Storage (CLI)',
-              slug: 'tutorials/connect-desktops-to-storage',
-            },
-            {
-              label: 'Configure Email Authentication DNS',
-              slug: 'tutorials/configure-email-authentication-dns',
-            },
-            {
-              label: 'Vaultwarden Backups with restic',
-              slug: 'tutorials/backup-vaultwarden-restic-object-storage',
-            },
-            {
-              label: 'Manage a Zone as a File',
-              slug: 'tutorials/manage-dns-zone-as-a-file',
-            },
+            ...tutorialCategories.map((category) => ({
+              label: category.label.en,
+              translations: { fr: category.label.fr },
+              collapsed: true,
+              items: tutorialCatalog
+                .filter((tutorial) => tutorial.category === category.id)
+                .map((tutorial) => ({
+                  label: tutorial.sidebarLabel,
+                  slug: `tutorials/${tutorial.slug}`,
+                })),
+            })),
           ],
         },
 

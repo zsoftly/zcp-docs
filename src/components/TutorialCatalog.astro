@@ -1,0 +1,480 @@
+---
+/**
+ * The Tutorials overview: every tutorial in src/data/tutorials.ts, grouped by category, with
+ * category filters and a grid or list view. Titles and descriptions come from each tutorial's
+ * frontmatter in the page's language, falling back to English where a page is not translated.
+ * Without JavaScript every category shows in the grid and the toolbar stays hidden. The component stores the chosen view in localStorage and keeps the chosen category in the URL (?category=ai).
+ */
+import { getEntry } from 'astro:content';
+import {
+  defaultTutorialIcon,
+  tutorialCatalog,
+  tutorialCategories,
+  tutorialIcons,
+  type TutorialTool,
+} from '../data/tutorials';
+import ShapeIcon from './ShapeIcon.astro';
+
+interface Props {
+  lang: 'en' | 'fr';
+}
+
+const { lang } = Astro.props;
+const prefix = lang === 'fr' ? '/fr' : '';
+
+const t = {
+  filters: { en: 'Filter by category', fr: 'Filtrer par catégorie' },
+  all: { en: 'All', fr: 'Tous' },
+  view: { en: 'View', fr: 'Affichage' },
+  grid: { en: 'Grid', fr: 'Grille' },
+  list: { en: 'List', fr: 'Liste' },
+  minutes: { en: 'min', fr: 'min' },
+  count: { en: 'tutorials', fr: 'tutoriels' },
+};
+
+const toolLabels: Record<TutorialTool, { en: string; fr: string }> = {
+  cli: { en: 'CLI', fr: 'CLI' },
+  terraform: { en: 'Terraform', fr: 'Terraform' },
+  marketplace: { en: 'Marketplace', fr: 'Marketplace' },
+};
+
+const entries = await Promise.all(
+  tutorialCatalog.map(async (tutorial) => {
+    const entry =
+      (lang === 'fr' ? await getEntry('docs', `fr/tutorials/${tutorial.slug}`) : undefined) ??
+      (await getEntry('docs', `tutorials/${tutorial.slug}`));
+    if (!entry) throw new Error(`[ERROR] TutorialCatalog: tutorial ${tutorial.slug} not found`);
+    return {
+      ...tutorial,
+      title: entry.data.title,
+      description: entry.data.description ?? '',
+      href: `${prefix}/tutorials/${tutorial.slug}/`,
+      icon: tutorialIcons[tutorial.slug] ?? defaultTutorialIcon,
+    };
+  })
+);
+
+const groups = tutorialCategories
+  .map((category) => ({
+    ...category,
+    items: entries.filter((entry) => entry.category === category.id),
+  }))
+  .filter((group) => group.items.length > 0);
+---
+
+<div class="zs-tutorials not-content" data-zs-tutorials data-view="grid">
+  <div class="zs-tutorials__bar" hidden data-zs-tutorials-bar>
+    <div class="zs-tutorials__filters" role="group" aria-label={t.filters[lang]}>
+      <button type="button" class="zs-tutorials__chip" data-filter="all" aria-pressed="true">
+        {t.all[lang]}
+        <span class="zs-tutorials__count">{entries.length}</span>
+      </button>
+      {
+        groups.map((group) => (
+          <button
+            type="button"
+            class="zs-tutorials__chip"
+            data-filter={group.id}
+            aria-pressed="false"
+          >
+            {group.label[lang]}
+            <span class="zs-tutorials__count">{group.items.length}</span>
+          </button>
+        ))
+      }
+    </div>
+    <div class="zs-tutorials__views" role="group" aria-label={t.view[lang]}>
+      <button type="button" data-view-choice="grid" aria-pressed="true" title={t.grid[lang]}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"
+          ></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"
+          ></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"
+          ></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"
+          ></rect>
+        </svg>
+        <span>{t.grid[lang]}</span>
+      </button>
+      <button type="button" data-view-choice="list" aria-pressed="false" title={t.list[lang]}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"></path>
+        </svg>
+        <span>{t.list[lang]}</span>
+      </button>
+    </div>
+  </div>
+
+  {
+    groups.map((group) => (
+      <section
+        class="zs-tutorials__group"
+        data-category={group.id}
+        aria-labelledby={`zs-tutorials-${group.id}`}
+      >
+        <header class="zs-tutorials__head">
+          <h2 id={`zs-tutorials-${group.id}`}>{group.label[lang]}</h2>
+          <p>{group.desc[lang]}</p>
+        </header>
+        <ul class="zs-tutorials__items">
+          {group.items.map((item) => (
+            <li>
+              <a class="zs-tutorials__item" href={item.href}>
+                <span class="zs-tutorials__icon">
+                  <ShapeIcon shapes={item.icon} />
+                </span>
+                <span class="zs-tutorials__body">
+                  <span class="zs-tutorials__title">{item.title}</span>
+                  <span class="zs-tutorials__desc">{item.description}</span>
+                </span>
+                <span class="zs-tutorials__meta">
+                  {item.minutes && (
+                    <span class="zs-tutorials__time">
+                      {item.minutes} {t.minutes[lang]}
+                    </span>
+                  )}
+                  {item.tools.map((tool) => (
+                    <span class="zs-tutorials__tool">{toolLabels[tool][lang]}</span>
+                  ))}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-zs-tutorials]');
+  const bar = root?.querySelector<HTMLElement>('[data-zs-tutorials-bar]');
+  if (root && bar) {
+    bar.hidden = false;
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const views = [...root.querySelectorAll<HTMLButtonElement>('[data-view-choice]')];
+    const groups = [...root.querySelectorAll<HTMLElement>('[data-category]')];
+
+    const setView = (view: string) => {
+      root.dataset.view = view;
+      views.forEach((button) =>
+        button.setAttribute('aria-pressed', String(button.dataset.viewChoice === view))
+      );
+    };
+
+    const setFilter = (filter: string) => {
+      const known = chips.some((chip) => chip.dataset.filter === filter);
+      const active = known ? filter : 'all';
+      chips.forEach((chip) =>
+        chip.setAttribute('aria-pressed', String(chip.dataset.filter === active))
+      );
+      groups.forEach((group) => {
+        group.hidden = active !== 'all' && group.dataset.category !== active;
+      });
+      return active;
+    };
+
+    let savedView: string | null = null;
+    try {
+      savedView = localStorage.getItem('zs-tutorials-view');
+    } catch {
+      /* storage unavailable: start in the grid */
+    }
+    setView(savedView === 'list' ? 'list' : 'grid');
+    setFilter(new URLSearchParams(location.search).get('category') ?? 'all');
+
+    views.forEach((button) =>
+      button.addEventListener('click', () => {
+        const view = button.dataset.viewChoice ?? 'grid';
+        setView(view);
+        try {
+          localStorage.setItem('zs-tutorials-view', view);
+        } catch {
+          /* storage unavailable: the choice lasts for this page only */
+        }
+      })
+    );
+
+    chips.forEach((chip) =>
+      chip.addEventListener('click', () => {
+        const active = setFilter(chip.dataset.filter ?? 'all');
+        const url = new URL(location.href);
+        if (active === 'all') url.searchParams.delete('category');
+        else url.searchParams.set('category', active);
+        history.replaceState(history.state, '', url);
+      })
+    );
+  }
+</script>
+
+<style>
+  .zs-tutorials {
+    display: grid;
+    gap: var(--zi-space-8);
+    margin-top: var(--zi-space-6);
+  }
+
+  /* Toolbar: category chips on the left, the grid or list switch on the right. */
+  .zs-tutorials__bar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zi-space-3);
+    justify-content: space-between;
+  }
+
+  .zs-tutorials__bar[hidden] {
+    display: none;
+  }
+
+  .zs-tutorials__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zi-space-2);
+  }
+
+  .zs-tutorials__chip {
+    align-items: center;
+    background: var(--zi-surface);
+    border: 1px solid var(--zi-line-control);
+    border-radius: 999px;
+    color: var(--zi-ink-muted);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    gap: 0.4rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.75rem;
+    transition:
+      background-color var(--zi-transition),
+      color var(--zi-transition),
+      border-color var(--zi-transition);
+  }
+
+  .zs-tutorials__chip:hover {
+    color: var(--zi-ink);
+  }
+
+  .zs-tutorials__chip[aria-pressed='true'] {
+    background: var(--zi-accent-soft);
+    border-color: var(--zi-accent);
+    color: var(--zi-accent);
+  }
+
+  .zs-tutorials__count {
+    color: inherit;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+  }
+
+  /* The view switch: one segmented control, the chosen side raised. */
+  .zs-tutorials__views {
+    background: var(--zi-surface-raised);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-md);
+    display: inline-flex;
+    padding: 0.15rem;
+  }
+
+  .zs-tutorials__views button {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: calc(var(--zi-radius-md) - 2px);
+    color: var(--zi-ink-muted);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    gap: 0.35rem;
+    min-height: 1.875rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .zs-tutorials__views button[aria-pressed='true'] {
+    background: var(--zi-surface);
+    box-shadow: 0 0 0 1px var(--zi-line-strong);
+    color: var(--zi-ink);
+  }
+
+  .zs-tutorials__group {
+    display: grid;
+    gap: var(--zi-space-4);
+  }
+
+  .zs-tutorials__group[hidden] {
+    display: none;
+  }
+
+  .zs-tutorials__head h2 {
+    color: var(--zi-ink);
+    font-size: var(--sl-text-h3);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .zs-tutorials__head p {
+    color: var(--zi-ink-muted);
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .zs-tutorials__items {
+    display: grid;
+    gap: var(--zi-space-3);
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .zs-tutorials__items li {
+    margin: 0;
+    min-width: 0;
+  }
+
+  /* Grid: a card per tutorial with the icon, title, description and its time and tools. */
+  .zs-tutorials__item {
+    background: var(--zi-surface);
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-lg);
+    color: inherit;
+    display: grid;
+    gap: var(--zi-space-3);
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
+    padding: var(--zi-space-4);
+    text-decoration: none;
+    transition:
+      border-color var(--zi-transition),
+      background-color var(--zi-transition);
+  }
+
+  .zs-tutorials__item:hover {
+    background: var(--zi-surface-raised);
+    border-color: var(--zi-line-strong);
+  }
+
+  .zs-tutorials__icon {
+    align-items: center;
+    background: var(--zi-accent-soft);
+    border-radius: var(--zi-radius-md);
+    color: var(--zi-accent);
+    display: inline-flex;
+    height: 2.25rem;
+    justify-content: center;
+    width: 2.25rem;
+  }
+
+  /* Rows sit at the top, so a stretched card never shows part of a clamped line. */
+  .zs-tutorials__body {
+    align-content: start;
+    display: grid;
+    gap: var(--zi-space-1);
+    min-width: 0;
+  }
+
+  .zs-tutorials__title {
+    color: var(--zi-ink);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .zs-tutorials__desc {
+    color: var(--zi-ink-muted);
+    display: -webkit-box;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .zs-tutorials__meta {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--zi-space-2);
+  }
+
+  .zs-tutorials__time,
+  .zs-tutorials__tool {
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-sm);
+    color: var(--zi-ink-faint);
+    font-family: var(--zi-font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    padding: 0.25rem 0.4rem;
+    text-transform: uppercase;
+  }
+
+  .zs-tutorials__time {
+    color: var(--zi-ink-muted);
+  }
+
+  /* List: one row per tutorial, the description on one line, the time and tools at the end. */
+  [data-view='list'] .zs-tutorials__items {
+    border: 1px solid var(--zi-line);
+    border-radius: var(--zi-radius-lg);
+    gap: 0;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  [data-view='list'] .zs-tutorials__items li + li {
+    border-top: 1px solid var(--zi-line);
+  }
+
+  [data-view='list'] .zs-tutorials__item {
+    align-items: center;
+    border: 0;
+    border-radius: 0;
+    gap: var(--zi-space-4);
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: none;
+    padding: var(--zi-space-3) var(--zi-space-4);
+  }
+
+  [data-view='list'] .zs-tutorials__icon {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  [data-view='list'] .zs-tutorials__desc {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+
+  [data-view='list'] .zs-tutorials__meta {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 40rem) {
+    [data-view='list'] .zs-tutorials__item {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    [data-view='list'] .zs-tutorials__meta {
+      grid-column: 2;
+      justify-content: flex-start;
+    }
+
+    .zs-tutorials__views span {
+      display: none;
+    }
+  }
+</style>
