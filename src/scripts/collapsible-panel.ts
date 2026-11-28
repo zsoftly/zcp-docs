@@ -64,8 +64,9 @@ export function initCollapsiblePanel({
     closePeek();
     if (rail) {
       root.setAttribute(modeAttr, 'rail');
-      // The pointer is still over the panel: wait until it leaves before previewing again.
-      root.setAttribute(holdAttr, '');
+      // A pointer still over the panel would reopen it at once: wait until it leaves. A keyboard
+      // fold sets no hold, so focus moving back into the rail opens the preview as usual.
+      if (pane?.matches(':hover')) root.setAttribute(holdAttr, '');
     } else {
       root.removeAttribute(modeAttr);
     }
@@ -114,6 +115,11 @@ export function initCollapsiblePanel({
     );
     pane.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && isPeek()) {
+        // Nested rows disappear in the rail, so focus moves to the top-level row holding it first.
+        const top = (document.activeElement as Element | null)
+          ?.closest('[data-depth="0"] > li')
+          ?.querySelector<HTMLElement>('.zs-tree-row');
+        top?.focus();
         closePeek();
         root.setAttribute(holdAttr, '');
       }

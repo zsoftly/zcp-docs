@@ -30,7 +30,11 @@ export function holdsCurrent(item: TreeItem): boolean {
   return Boolean(item.current) || (item.children ?? []).some(holdsCurrent);
 }
 
-/** Starlight's sidebar entries, with an optional icon per top-level row. */
+/**
+ * Starlight's sidebar entries, with an optional icon per top-level row. `collapsed` from the
+ * sidebar config is not carried over on purpose: as in the console, a branch starts open only when
+ * it holds the current page, and Starlight's persister then restores what the reader opened.
+ */
 export function sidebarToTree(entry: SidebarEntry, icon?: NavIconName): TreeItem {
   if (entry.type === 'link') {
     return {
@@ -53,7 +57,7 @@ export function sidebarToTree(entry: SidebarEntry, icon?: NavIconName): TreeItem
 /** Starlight's table of contents headings. The current one is set while the page scrolls. */
 export function tocToTree(items: TocItem[]): TreeItem[] {
   return items.map((item) => ({
-    label: item.text,
+    label: item.text.trim(),
     href: `#${item.slug}`,
     children: item.children.length ? tocToTree(item.children) : undefined,
     open: false,

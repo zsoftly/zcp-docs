@@ -116,7 +116,10 @@ const copy = isFrench
     // The footer's Privacy choices link reopens the banner (Footer.astro, data-zs-consent-open).
     document.addEventListener('click', function (event) {
       var target = event.target;
-      if (target instanceof Element && target.closest('[data-zs-consent-open]')) showBanner();
+      if (!(target instanceof Element) || !target.closest('[data-zs-consent-open]')) return;
+      showBanner();
+      // Opened from the footer: move focus into the banner so keyboard users land on it.
+      if (analytics) analytics.focus();
     });
 
     var storedConsent = null;

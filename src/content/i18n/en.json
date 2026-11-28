@@ -111,7 +111,6 @@
   "zs.sidebar.label": "Documentation",
   "zs.sidebar.search": "Quick search",
   "zs.sidebar.home": "Docs home",
-  "zs.sidebar.more": "Help and console",
   "zs.sidebar.collapse": "Collapse sidebar",
   "zs.sidebar.expand": "Expand sidebar",
   "zs.sidebar.group.learn": "Learn",
@@ -122,5 +121,6 @@
   "zs.sidebar.group.help": "Help",
   "zs.footer.privacyChoices": "Privacy choices",
   "zs.toc.collapse": "Collapse “On this page”",
-  "zs.toc.expand": "Expand “On this page”"
+  "zs.toc.expand": "Expand “On this page”",
+  "zs.tree.toggle": "Show or hide {{label}}"
 }

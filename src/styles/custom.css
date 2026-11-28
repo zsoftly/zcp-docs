@@ -474,6 +474,45 @@ body {
   transform: rotate(90deg);
 }
 
+/* A linked branch: the link fills the row and the chevron button sits over its end. */
+.zs-tree-linked {
+  position: relative;
+}
+
+.zs-tree-linked > .zs-tree-row {
+  padding-inline-end: 2rem;
+}
+
+.zs-tree-toggle {
+  align-items: center;
+  border-radius: var(--zi-radius-sm);
+  color: var(--zi-ink-faint);
+  cursor: pointer;
+  display: flex;
+  height: 1.625rem;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  justify-content: center;
+  list-style: none;
+  position: absolute;
+  width: 1.75rem;
+}
+
+.zs-tree-toggle::-webkit-details-marker,
+.zs-tree-toggle::marker {
+  content: '';
+  display: none;
+}
+
+.zs-tree-toggle:hover {
+  background-color: var(--zi-surface-raised);
+  color: var(--zi-ink);
+}
+
+.zs-tree-toggle > .zs-tree-chevron {
+  margin: 0;
+}
+
 [dir='rtl'] .zs-tree-chevron {
   transform: rotate(180deg);
 }
@@ -497,7 +536,8 @@ body {
 /* Children: plain text beside a thin guide under the parent's icon. */
 .zs-tree-list .zs-tree-list {
   border-inline-start: 1px solid var(--zi-line);
-  margin: 0.0625rem 0 0.25rem 1rem;
+  margin-block: 0.0625rem 0.25rem;
+  margin-inline: 1rem 0;
   padding-inline-start: 0.375rem;
 }
 
@@ -521,8 +561,8 @@ body {
 /* The current page or heading is the only filled row. A branch whose own link is current, or a
    closed branch hiding the current row, carries the fill instead. */
 .zs-tree-row[aria-current],
-.zs-tree-row:has(> a[aria-current]),
-.zs-tree-branch:not([open]):has([aria-current]) > .zs-tree-row {
+.zs-tree-branch:not([open]):has([aria-current]) > .zs-tree-row,
+.zs-tree-linked:has(> .zs-tree-branch:not([open]) [aria-current]) > .zs-tree-row {
   background-color: var(--zi-accent-soft);
   color: var(--zi-accent) !important;
   font-weight: 500;
