@@ -107,5 +107,20 @@
   "zs.search.status.noResults": "Aucune page ne correspond à « {q} ». Essayez d’autres termes.",
   "zs.search.status.more": "Affichage des {shown} pages les plus pertinentes sur {total}. Précisez votre recherche pour en voir plus.",
   "zs.search.status.unavailable": "Les résultats de pages sont indisponibles. Les liens rapides fonctionnent toujours.",
-  "zs.search.newTab": "s’ouvre dans un nouvel onglet"
+  "zs.search.newTab": "s’ouvre dans un nouvel onglet",
+  "zs.sidebar.label": "Documentation",
+  "zs.sidebar.search": "Recherche rapide",
+  "zs.sidebar.home": "Accueil de la documentation",
+  "zs.sidebar.more": "Aide et console",
+  "zs.sidebar.collapse": "Réduire la barre latérale",
+  "zs.sidebar.expand": "Agrandir la barre latérale",
+  "zs.sidebar.group.learn": "Apprendre",
+  "zs.sidebar.group.developer": "Outils de développement",
+  "zs.sidebar.group.zcp": "Nuage public",
+  "zs.sidebar.group.zpcp": "Nuage privé",
+  "zs.sidebar.group.zcs": "Stockage infonuagique",
+  "zs.sidebar.group.help": "Aide",
+  "zs.footer.privacyChoices": "Préférences de confidentialité",
+  "zs.toc.collapse": "Réduire « Sur cette page »",
+  "zs.toc.expand": "Agrandir « Sur cette page »"
 }

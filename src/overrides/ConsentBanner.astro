@@ -13,7 +13,6 @@ const copy = isFrench
       decline: 'Tout refuser',
       save: 'Enregistrer les choix',
       acceptAll: 'Tout autoriser',
-      settings: 'Préférences de confidentialité',
     }
   : {
       title: 'Privacy choices',
@@ -25,7 +24,6 @@ const copy = isFrench
       decline: 'Decline all',
       save: 'Save choices',
       acceptAll: 'Accept all',
-      settings: 'Privacy choices',
     };
 ---
 
@@ -66,12 +64,9 @@ const copy = isFrench
   </div>
 </div>
 
-<button id="zsoftly-consent-settings" hidden type="button">{copy.settings}</button>
-
 <script is:inline>
   (function () {
     var banner = document.getElementById('zsoftly-consent-banner');
-    var settings = document.getElementById('zsoftly-consent-settings');
     var analytics = document.getElementById('zsoftly-consent-analytics');
     var advertising = document.getElementById('zsoftly-consent-advertising');
     var save = document.getElementById('zsoftly-consent-save');
@@ -82,13 +77,11 @@ const copy = isFrench
     function showBanner() {
       if (!banner) return;
       banner.hidden = false;
-      if (settings) settings.hidden = true;
     }
 
     function hideBanner() {
       if (!banner) return;
       banner.hidden = true;
-      if (settings) settings.hidden = false;
     }
 
     function setConsent(consent) {
@@ -120,7 +113,11 @@ const copy = isFrench
       decline.addEventListener('click', function () {
         setConsent({ analytics: false, advertising: false });
       });
-    if (settings) settings.addEventListener('click', showBanner);
+    // The footer's Privacy choices link reopens the banner (Footer.astro, data-zs-consent-open).
+    document.addEventListener('click', function (event) {
+      var target = event.target;
+      if (target instanceof Element && target.closest('[data-zs-consent-open]')) showBanner();
+    });
 
     var storedConsent = null;
     try {
@@ -267,8 +264,7 @@ const copy = isFrench
     gap: 0.5rem;
   }
 
-  .zsoftly-consent__actions button,
-  #zsoftly-consent-settings {
+  .zsoftly-consent__actions button {
     padding: 0.4rem var(--zi-space-3);
     border: 1px solid var(--zi-line-control);
     border-radius: var(--zi-radius-md);
@@ -281,8 +277,7 @@ const copy = isFrench
     transition: background-color var(--zi-transition);
   }
 
-  .zsoftly-consent__actions button:hover,
-  #zsoftly-consent-settings:hover {
+  .zsoftly-consent__actions button:hover {
     background: var(--zi-surface-raised);
   }
 
@@ -296,14 +291,5 @@ const copy = isFrench
   #zsoftly-consent-save:hover {
     border-color: var(--zi-accent-hover);
     background: var(--zi-accent-hover);
-  }
-
-  #zsoftly-consent-settings {
-    position: fixed;
-    bottom: 1rem;
-    left: 1rem;
-    z-index: var(--zi-layer-float);
-    background: var(--zi-surface);
-    box-shadow: var(--zi-shadow-pop);
   }
 </style>

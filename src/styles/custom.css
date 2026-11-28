@@ -385,196 +385,380 @@ body {
   outline-offset: 2px;
 }
 
-/* ── Sidebar (SidebarNav) ───────────────────────────────────── */
-/* Top-level groups (ZCP, ZPCP) read as labels. */
-.sidebar ul.top-level > li > details > summary,
-.sidebar ul.top-level > li > a {
-  font-family: var(--zi-font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--zi-ink-muted) !important;
-  padding: 0.4rem var(--zi-space-3);
-  border-radius: var(--zi-radius-md);
-  cursor: pointer;
+/* ── Navigation tree (NavTree) ──────────────────────────────── */
+/* One style for every tree: the left sidebar and "On this page". Same shape as the ZCP console
+   sidebar (zcp-cmp-core, console-shell.module.css): quiet 32px top rows with small muted icons,
+   children as plain text beside a thin guide, a chevron on each branch and one filled row for the
+   current page or heading. Markup: src/components/NavTree.astro. */
+.zs-tree-list {
+  display: grid;
+  gap: 0.0625rem;
   list-style: none;
-  user-select: none;
-  transition: background-color var(--zi-transition);
-}
-
-.sidebar ul.top-level > li > details > summary:hover {
-  background-color: var(--zi-surface);
-}
-
-/* Sub-section group labels */
-.sidebar details > summary {
-  padding: 0.3rem var(--zi-space-3);
-  border-radius: var(--zi-radius-md);
-  cursor: pointer;
-  user-select: none;
-  list-style: none;
-  transition: background-color var(--zi-transition);
-}
-
-.sidebar details > summary::-webkit-details-marker {
-  display: none;
-}
-
-.sidebar details > summary:hover {
-  background-color: var(--zi-surface);
-}
-
-/* Linked sidebar groups have distinct targets: the overview link remains visible
-   outside the native details element, while its summary controls expansion.
-   The summary is positioned over the end of the link row, so closed details do
-   not hide the overview link and expanded child links still flow below it. */
-.sidebar li.has-linked-label {
-  position: relative;
-}
-
-.sidebar li.has-linked-label > .group-link {
-  padding-inline-end: 3rem;
-}
-
-.sidebar li.has-linked-label > details.linked-group > .group-toggle {
-  display: flex;
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-end: 0;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: calc(1.4em + 0.6rem);
+  margin: 0;
   padding: 0;
 }
 
-/* The toggle sits flush with the sidebar edge, so its ring is drawn inside. */
-.sidebar li.has-linked-label > details.linked-group > .group-toggle:focus-visible {
-  outline: 2px solid var(--zi-focus);
-  outline-offset: -2px;
-  border-radius: var(--zi-radius-sm);
+.zs-tree-list li {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-/* Top-level group names carry the label style through Starlight's inner
-   span as well. */
-.sidebar ul.top-level > li > details > summary .group-label .large,
-.sidebar ul.top-level > li > a .group-label .large {
-  font-family: var(--zi-font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--zi-ink-muted);
-}
-
-.sidebar ul ul .group-label .large {
-  font-family: var(--zi-font-sans);
-}
-
-.sidebar .group-label .large {
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--zi-ink);
-}
-
-.sidebar .caret {
-  color: var(--zi-ink-faint);
-  transition: transform var(--zi-transition);
-  flex-shrink: 0;
-}
-
-.sidebar details[open] > summary .caret {
-  transform: rotate(90deg);
-}
-
-/* Links: ink-muted at 14px, surface on hover with ink text. */
-.sidebar a {
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: var(--zi-ink-muted);
-  padding: 0.3rem var(--zi-space-3);
+.zs-tree-row {
+  align-items: center;
+  background: transparent;
+  border: 0;
   border-radius: var(--zi-radius-md);
-  border-inline-start: 2px solid transparent;
-  display: block;
+  color: var(--zi-ink);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  gap: 0.625rem;
+  line-height: 1.3;
+  list-style: none;
+  min-height: 2rem;
+  padding: 0.3125rem 0.5rem;
+  text-align: start;
   text-decoration: none;
   transition:
     background-color var(--zi-transition),
     color var(--zi-transition);
+  user-select: none;
+  width: 100%;
 }
 
-.sidebar a:hover {
+.zs-tree-row::-webkit-details-marker,
+.zs-tree-row::marker {
+  content: '';
+  display: none;
+}
+
+.zs-tree-row:hover {
   background-color: var(--zi-surface);
   color: var(--zi-ink);
   text-decoration: none;
 }
 
-/* Current page: accent-soft fill, accent text at 600, 2px accent leading bar. */
-.sidebar a[aria-current='page'],
-.sidebar a[aria-current='page']:hover,
-.sidebar a[aria-current='page']:focus {
+.zs-tree-label {
+  color: inherit;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.zs-tree-label:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.zs-tree-list[data-depth='0'] > li > .zs-tree-row > .zs-tree-label,
+.zs-tree-list[data-depth='0'] > li > details > .zs-tree-row > .zs-tree-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zs-tree-row .zs-nav-icon {
+  color: var(--zi-ink-faint);
+  flex: none;
+}
+
+.zs-tree-chevron {
+  margin-inline-start: auto;
+  transition: transform var(--zi-transition);
+}
+
+.zs-tree-branch[open] > summary > .zs-tree-chevron {
+  transform: rotate(90deg);
+}
+
+[dir='rtl'] .zs-tree-chevron {
+  transform: rotate(180deg);
+}
+
+[dir='rtl'] .zs-tree-branch[open] > summary > .zs-tree-chevron {
+  transform: rotate(90deg);
+}
+
+.zs-tree-external {
+  color: var(--zi-ink-faint);
+  margin-inline-start: auto;
+  opacity: 0;
+  transition: opacity var(--zi-transition);
+}
+
+.zs-tree-row:hover .zs-tree-external,
+.zs-tree-row:focus-visible .zs-tree-external {
+  opacity: 1;
+}
+
+/* Children: plain text beside a thin guide under the parent's icon. */
+.zs-tree-list .zs-tree-list {
+  border-inline-start: 1px solid var(--zi-line);
+  margin: 0.0625rem 0 0.25rem 1rem;
+  padding-inline-start: 0.375rem;
+}
+
+.zs-tree-list .zs-tree-list .zs-tree-list {
+  margin-inline-start: 0.5rem;
+}
+
+.zs-tree-list .zs-tree-list .zs-tree-row {
+  color: var(--zi-ink-muted);
+  font-weight: 400;
+  gap: 0.375rem;
+  line-height: 1.35;
+  min-height: 1.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.zs-tree-list .zs-tree-list .zs-tree-row:hover {
+  color: var(--zi-ink);
+}
+
+/* The current page or heading is the only filled row. A branch whose own link is current, or a
+   closed branch hiding the current row, carries the fill instead. */
+.zs-tree-row[aria-current],
+.zs-tree-row:has(> a[aria-current]),
+.zs-tree-branch:not([open]):has([aria-current]) > .zs-tree-row {
   background-color: var(--zi-accent-soft);
-  border-inline-start-color: var(--zi-accent);
-  border-radius: 0 var(--zi-radius-md) var(--zi-radius-md) 0;
   color: var(--zi-accent) !important;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-/* Sub-item indents. Links and group labels at the same depth share the same
-   indent so headers line up with their sibling links, and every nesting level
-   steps by a consistent amount. */
-.sidebar ul ul a,
-.sidebar ul ul details > summary {
-  padding-left: 1.25rem;
+.zs-tree-row[aria-current] .zs-nav-icon,
+.zs-tree-branch:not([open]):has([aria-current]) > .zs-tree-row .zs-nav-icon {
+  color: inherit;
 }
 
-.sidebar ul ul ul a,
-.sidebar ul ul ul details > summary {
-  padding-left: 1.875rem;
+/* Rows scroll and clip sideways, so focus rings sit just inside them. */
+.zs-tree-list :focus-visible {
+  outline-offset: -2px;
 }
 
-.sidebar li {
-  margin-block: 1px;
+/* "On this page": the same tree, quieter. Headings wrap instead of truncating. */
+.zs-tree--toc .zs-tree-row,
+.zs-tree--toc .zs-tree-list .zs-tree-row {
+  color: var(--zi-ink-muted);
+  font-weight: 400;
+  min-height: 1.625rem;
+  padding-block: 0.1875rem;
 }
 
-/* Top-level group divider */
-.sidebar ul.top-level > li + li {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
+.zs-tree--toc.zs-tree-list > li > .zs-tree-row > .zs-tree-label,
+.zs-tree--toc.zs-tree-list > li > details > .zs-tree-row > .zs-tree-label {
+  overflow: visible;
+  white-space: normal;
+}
+
+.zs-tree--toc .zs-tree-chevron {
+  color: var(--zi-ink-faint);
+}
+
+/* ── Sidebar shell ──────────────────────────────────────────── */
+/* Search and Docs home stay on top, the collapse control at the bottom; only the groups scroll
+   between them. Markup: src/overrides/Sidebar.astro. */
+.zs-nav {
+  color: var(--zi-ink);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.zs-nav-top {
+  background-color: var(--sl-color-bg-sidebar);
+  display: grid;
+  gap: 0.125rem;
+  padding: 0.75rem 0.625rem 0.25rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.zs-nav-tree {
+  flex: 1;
+  padding: 0.25rem 0.625rem 0.75rem;
+}
+
+.zs-nav-search {
+  color: var(--zi-ink-muted);
+  font-weight: 400;
+}
+
+.zs-nav-search > .zs-tree-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zs-nav-kbd {
+  border: 1px solid var(--zi-line);
+  border-radius: var(--zi-radius-sm);
+  color: var(--zi-ink-faint);
+  flex: none;
+  font-family: var(--zi-font-sans);
+  font-size: 0.6875rem;
+  line-height: 1;
+  padding: 0.2rem 0.3rem;
+}
+
+.zs-nav-group + .zs-nav-group {
+  margin-top: 0.5rem;
+}
+
+.zs-nav-group-label {
+  color: var(--zi-ink-faint);
+  display: block;
+  font-family: var(--zi-font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  margin: 0;
+  overflow: hidden;
+  padding: 0.375rem 0.5rem 0.25rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zs-nav-utilities {
   border-top: 1px solid var(--zi-line);
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.zs-nav-foot {
+  background-color: var(--sl-color-bg-sidebar);
+  border-top: 1px solid var(--zi-line);
+  bottom: 0;
+  display: flex;
+  padding: 0.375rem 0.625rem 0.625rem;
+  position: sticky;
+}
+
+.zs-panel-toggle {
+  color: var(--zi-ink-faint);
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.25rem;
+  width: auto;
+}
+
+@media (min-width: 50rem) {
+  :root {
+    --sl-sidebar-width: 16.5rem;
+  }
+
+  .sidebar-pane .sidebar-content {
+    gap: 0;
+    padding: 0;
+  }
+
+  .sidebar-pane .sidebar-content::after {
+    display: none;
+  }
+
+  /* Compact rail: section icons only, grouped by thin separators. The content column moves
+     in to the rail's width. */
+  :root[data-zs-sidebar='rail'][data-has-sidebar] {
+    --sl-content-inline-start: 4rem;
+  }
+
+  :root[data-zs-sidebar='rail'] .sidebar-pane {
+    overflow-x: hidden;
+    scrollbar-gutter: auto;
+    scrollbar-width: none;
+    transition:
+      width 0.14s ease-out,
+      box-shadow 0.14s ease-out;
+    width: 4rem;
+  }
+
+  :root[data-zs-sidebar='rail'] .sidebar-resizer {
+    display: none;
+  }
+
+  :root[data-zs-sidebar='rail']:not([data-zs-sidebar-peek]) .zs-nav
+    :is(
+      .zs-tree-label,
+      .zs-tree-chevron,
+      .zs-tree-external,
+      .zs-nav-kbd,
+      .zs-nav-group-label,
+      .zs-tree-list .zs-tree-list,
+      .sl-badge
+    ) {
+    display: none;
+  }
+
+  :root[data-zs-sidebar='rail']:not([data-zs-sidebar-peek]) :is(.zs-nav-top, .zs-nav-tree) {
+    padding-inline: 0.5rem;
+  }
+
+  :root[data-zs-sidebar='rail']:not([data-zs-sidebar-peek]) .zs-nav :is(.zs-tree-row, .zs-nav-foot) {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  :root[data-zs-sidebar='rail']:not([data-zs-sidebar-peek]) .zs-nav-group + .zs-nav-group {
+    border-top: 1px solid var(--zi-line);
+    margin-top: 0.375rem;
+    padding-top: 0.375rem;
+  }
+
+  /* In the rail, a section holding the current page shows the fill on its icon, open or not. */
+  :root[data-zs-sidebar='rail']:not([data-zs-sidebar-peek])
+    .zs-nav
+    .zs-tree-branch:has([aria-current])
+    > .zs-tree-row {
+    background-color: var(--zi-accent-soft);
+    color: var(--zi-accent);
+  }
+
+  :root[data-zs-sidebar='rail']:not([data-zs-sidebar-peek])
+    .zs-nav
+    .zs-tree-branch:has([aria-current])
+    > .zs-tree-row
+    .zs-nav-icon {
+    color: inherit;
+  }
+
+  /* The floating preview: the full sidebar over the page while the content stays put. */
+  :root[data-zs-sidebar='rail'][data-zs-sidebar-peek] .sidebar-pane {
+    box-shadow: var(--zi-shadow-pop);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    width: var(--sl-sidebar-width);
+  }
+
+  :root[data-zs-sidebar='rail'] .zs-nav .zs-panel-toggle .zs-nav-icon {
+    transform: scaleX(-1);
+  }
 }
 
 @media (max-width: 49.999rem) {
-  .sidebar ul.top-level > li > details > summary,
-  .sidebar ul.top-level > li > a {
-    align-items: center;
-    display: flex;
-    min-height: 3rem;
+  .zs-nav-foot {
+    display: none;
   }
 
-  .sidebar ul ul details > summary {
-    align-items: center;
-    display: flex;
+  .zs-nav-top {
+    position: static;
+  }
+
+  .zs-nav .zs-tree-row {
     min-height: 2.75rem;
   }
 
-  .sidebar a {
-    align-items: center;
-    display: flex;
+  .zs-nav .zs-tree-list .zs-tree-list .zs-tree-row {
     min-height: 2.5rem;
   }
+}
 
-  .sidebar li.has-linked-label > .group-link,
-  .sidebar li.has-linked-label > details.linked-group > .group-toggle {
-    min-height: 2.75rem;
-    height: 2.75rem;
-  }
-
-  .sidebar ul.top-level > li + li {
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
+@media (prefers-reduced-motion: reduce) {
+  :root[data-zs-sidebar='rail'] .sidebar-pane {
+    transition: none;
   }
 }
 
@@ -595,6 +779,8 @@ body {
 @media (min-width: 72rem) {
   :root {
     --toc-width: 17rem;
+    /* The TOC column's drawn width: the resizable width, or the rail while folded. */
+    --zs-toc-col: var(--toc-width);
   }
 
   /* Content fills the row instead of the fixed --sl-content-width formula. */
@@ -618,12 +804,96 @@ body {
 
   /* The TOC becomes an independent, fixed-width (resizable) column. */
   [data-has-toc] .right-sidebar-container {
-    width: var(--toc-width) !important;
-    flex: 0 0 var(--toc-width) !important;
+    width: var(--zs-toc-col) !important;
+    flex: 0 0 var(--zs-toc-col) !important;
   }
 
   [data-has-toc] .right-sidebar {
-    width: var(--toc-width) !important;
+    width: var(--zs-toc-col) !important;
+  }
+}
+
+/* ── "On this page" panel fold ──────────────────────────────── */
+/* Like the console's right info rail (zcp-cmp-core page-layout.module.css): a ghost chevron at
+   the top right folds the column to a 2.75rem strip with an info icon, and the article takes
+   the width. No hover preview. Wide three-column layout only (src/scripts/collapsible-panel.ts). */
+.zs-toc-head {
+  display: grid;
+  justify-items: end;
+  margin-bottom: 0.25rem;
+}
+
+.zs-toc-head .zs-panel-toggle {
+  color: var(--zi-ink-muted);
+  min-height: 2.25rem;
+  min-width: 2.25rem;
+  padding: 0.5rem;
+}
+
+.zs-toc-strip {
+  color: var(--zi-ink-muted);
+  display: none;
+  padding: 0.4rem 0;
+}
+
+@media (max-width: 71.999rem) {
+  .zs-toc-head {
+    display: none;
+  }
+}
+
+@media (min-width: 72rem) {
+  [data-has-toc] .right-sidebar-container,
+  [data-has-toc] .right-sidebar {
+    transition:
+      width 0.2s ease,
+      flex-basis 0.2s ease;
+  }
+
+  :root[data-zs-toc='rail'] {
+    --zs-toc-col: 2.75rem;
+  }
+
+  :root[data-zs-toc='rail'] .right-sidebar {
+    overflow: hidden;
+  }
+
+  :root[data-zs-toc='rail'] .toc-resizer {
+    display: none;
+  }
+
+  :root[data-zs-toc='rail'] .right-sidebar-panel {
+    padding-inline: 0.25rem;
+  }
+
+  /* Starlight sizes the inner container from the sidebar width; the strip needs it to fit. */
+  :root[data-zs-toc='rail'] .right-sidebar-panel .sl-container {
+    max-width: none;
+    width: auto;
+  }
+
+  :root[data-zs-toc='rail'] .zs-toc-panel > :not(.zs-toc-head) {
+    display: none;
+  }
+
+  :root[data-zs-toc='rail'] .zs-toc-head {
+    justify-items: center;
+  }
+
+  :root[data-zs-toc='rail'] .zs-toc-head .zs-panel-toggle .zs-nav-icon {
+    transform: rotate(180deg);
+  }
+
+  :root[data-zs-toc='rail'] .zs-toc-strip {
+    display: grid;
+    justify-items: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-has-toc] .right-sidebar-container,
+  [data-has-toc] .right-sidebar {
+    transition: none;
   }
 }
 
@@ -644,7 +914,7 @@ body {
 }
 
 .toc-resizer {
-  right: var(--toc-width, 17rem);
+  right: var(--zs-toc-col, 17rem);
 }
 
 .sidebar-resizer::after,

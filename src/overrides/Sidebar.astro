@@ -1,15 +1,117 @@
 ---
+// Docs sidebar in the ZCP console's shape (zcp-cmp-core, console-shell/sidebar-nav.tsx):
+// quick search and Docs home on top, small muted group labels, one row per section with an
+// icon and a chevron, the section's pages beside a thin guide, the support links at the foot
+// and a control that folds the sidebar into a compact icon rail. While folded, hovering or
+// focusing the rail floats the full sidebar over the page without moving the content, the same
+// preview the console draws. Every list here is the shared NavTree, as is "On this page".
 import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter';
 import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
-import SidebarSublist from './SidebarSublist.astro';
+import NavIcon from '../components/NavIcon.astro';
+import NavTree from '../components/NavTree.astro';
+import { buildNavGroups, NAV_GROUP_LABEL_KEYS } from '../data/sidebar-nav';
+import type { TreeItem } from '../lib/nav-tree';
+import { cloudUrl, localePathPrefix, websiteUrl } from '../data/site';
+import { STATUS_PAGE_URL } from '../data/footer';
 
-const { sidebar } = Astro.locals.starlightRoute;
+const t = Astro.locals.t;
+const { sidebar, siteTitleHref, locale } = Astro.locals.starlightRoute;
+const groups = buildNavGroups(sidebar, localePathPrefix(locale));
+
+const home: TreeItem[] = [
+  {
+    label: t('zs.sidebar.home'),
+    href: siteTitleHref,
+    icon: 'home',
+    current: Astro.url.pathname === siteTitleHref ? 'page' : undefined,
+  },
+];
+
+const utilities: TreeItem[] = [
+  { label: t('zs.footer.support'), href: `${websiteUrl}/contact`, icon: 'support', external: true },
+  { label: t('zs.footer.status'), href: STATUS_PAGE_URL, icon: 'status', external: true },
+  { label: t('zs.header.openConsole'), href: cloudUrl, icon: 'cloud', external: true },
+];
 ---
 
-<SidebarPersister>
-  <SidebarSublist sublist={sidebar} />
-</SidebarPersister>
+<script is:inline>
+  (() => {
+    try {
+      if (localStorage.getItem('zs-sidebar-mode') === 'rail') {
+        document.documentElement.setAttribute('data-zs-sidebar', 'rail');
+      }
+    } catch {
+      /* storage unavailable: keep the full sidebar */
+    }
+  })();
+</script>
+
+<div class="zs-nav">
+  <div class="zs-nav-top">
+    <button
+      type="button"
+      class="zs-tree-row zs-nav-search"
+      data-zs-nav-search
+      title={t('zs.sidebar.search')}
+    >
+      <NavIcon name="search" />
+      <span class="zs-tree-label">{t('zs.sidebar.search')}</span>
+      <kbd class="zs-nav-kbd" data-zs-nav-kbd>Ctrl K</kbd>
+    </button>
+    <NavTree items={home} />
+  </div>
+
+  <SidebarPersister>
+    <nav class="zs-nav-tree" aria-label={t('zs.sidebar.label')}>
+      {
+        groups.map((group) => {
+          const labelKey = NAV_GROUP_LABEL_KEYS[group.id];
+          return (
+            <section class="zs-nav-group" data-nav-group={group.id}>
+              {labelKey && <h2 class="zs-nav-group-label">{t(labelKey)}</h2>}
+              <NavTree items={group.items} persist />
+            </section>
+          );
+        })
+      }
+      <NavTree items={utilities} class="zs-nav-utilities" />
+    </nav>
+  </SidebarPersister>
+
+  <div class="zs-nav-foot">
+    <button
+      type="button"
+      class="zs-tree-row zs-panel-toggle"
+      data-zs-nav-collapse
+      data-label-collapse={t('zs.sidebar.collapse')}
+      data-label-expand={t('zs.sidebar.expand')}
+      aria-label={t('zs.sidebar.collapse')}
+      title={t('zs.sidebar.collapse')}
+    >
+      <NavIcon name="collapse" size={16} />
+    </button>
+  </div>
+</div>
 
 <div class="md:sl-hidden">
   <MobileMenuFooter />
 </div>
+
+<script>
+  import { initCollapsiblePanel } from '../scripts/collapsible-panel';
+
+  // Quick search opens the header's search dialog, the same one Ctrl K or Cmd K opens.
+  const kbd = document.querySelector('[data-zs-nav-kbd]');
+  if (kbd && /Mac|iPhone|iPad/.test(navigator.platform)) kbd.textContent = '\u2318K';
+  document.querySelector('[data-zs-nav-search]')?.addEventListener('click', () => {
+    document.querySelector<HTMLButtonElement>('[data-zs-search-open]')?.click();
+  });
+
+  initCollapsiblePanel({
+    pane: document.getElementById('starlight__sidebar'),
+    toggle: document.querySelector<HTMLButtonElement>('[data-zs-nav-collapse]'),
+    modeAttr: 'data-zs-sidebar',
+    storageKey: 'zs-sidebar-mode',
+    media: '(min-width: 50rem)',
+  });
+</script>

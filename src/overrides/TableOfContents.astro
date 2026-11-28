@@ -1,6 +1,8 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
-import Default from '@astrojs/starlight/components/TableOfContents.astro';
+import NavIcon from '../components/NavIcon.astro';
+import NavTree from '../components/NavTree.astro';
+import { tocToTree } from '../lib/nav-tree';
 import { assistantUrl, pagePrompt } from '../lib/ai-assistants';
 
 const { toc, entry, lastUpdated } = Astro.locals.starlightRoute;
@@ -39,7 +41,40 @@ const claudeUrl = assistantUrl('claude', aiPrompt);
 const cursorUrl = assistantUrl('cursor', aiPrompt);
 ---
 
-<div class="zs-toc-panel">
+<script is:inline>
+  (() => {
+    try {
+      if (localStorage.getItem('zs-toc-mode') === 'rail') {
+        document.documentElement.setAttribute('data-zs-toc', 'rail');
+      }
+    } catch {
+      /* storage unavailable: keep the full panel */
+    }
+  })();
+</script>
+
+<div class="zs-toc-panel" id="zs-toc-panel">
+  {
+    /* Like the console's right info rail (zcp-cmp-core page-info-rail.tsx): a chevron at the top
+       folds the panel to a strip with an info icon; the same chevron opens it again. */
+  }
+  <div class="zs-toc-head">
+    <button
+      type="button"
+      class="zs-tree-row zs-panel-toggle"
+      data-zs-toc-collapse
+      aria-controls="zs-toc-panel"
+      data-label-collapse={Astro.locals.t('zs.toc.collapse')}
+      data-label-expand={Astro.locals.t('zs.toc.expand')}
+      aria-label={Astro.locals.t('zs.toc.collapse')}
+      title={Astro.locals.t('zs.toc.collapse')}
+    >
+      <NavIcon name="chevron" size={18} />
+    </button>
+    <span class="zs-toc-strip" aria-hidden="true">
+      <NavIcon name="overview" size={18} />
+    </span>
+  </div>
   {
     lastUpdatedStr && (
       <p class="zs-last-updated">
@@ -64,7 +99,16 @@ const cursorUrl = assistantUrl('cursor', aiPrompt);
     )
   }
 
-  {hasToc && <Default {...Astro.props} />}
+  {
+    /* The same NavTree as the left sidebar: each heading folds its sub-headings, and the one being
+       read is marked and kept open as the page scrolls (src/scripts/nav-tree.ts). */
+    hasToc && (
+      <nav class="zs-toc" aria-labelledby="starlight__on-this-page" data-zs-toc>
+        <h2 id="starlight__on-this-page">{Astro.locals.t('tableOfContents.onThisPage')}</h2>
+        <NavTree items={tocToTree(toc.items)} class="zs-tree--toc" />
+      </nav>
+    )
+  }
 
   <div class="zs-toc-actions">
     <button
@@ -461,6 +505,24 @@ const cursorUrl = assistantUrl('cursor', aiPrompt);
       .replace(/\n{3,}/g, '\n\n')
       .trim();
   }
+</script>
+
+<script>
+  import { initCollapsiblePanel } from '../scripts/collapsible-panel';
+  import { trackHeadings } from '../scripts/nav-tree';
+
+  const toc = document.querySelector<HTMLElement>('[data-zs-toc]');
+  if (toc) trackHeadings(toc);
+
+  // The shared fold, without the hover preview, for the wide three-column layout only.
+  initCollapsiblePanel({
+    pane: document.querySelector<HTMLElement>('.right-sidebar'),
+    toggle: document.querySelector<HTMLButtonElement>('[data-zs-toc-collapse]'),
+    modeAttr: 'data-zs-toc',
+    storageKey: 'zs-toc-mode',
+    media: '(min-width: 72rem)',
+    peek: false,
+  });
 </script>
 
 <style>
