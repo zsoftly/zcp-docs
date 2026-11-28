@@ -134,8 +134,8 @@ export interface TutorialCategory {
 export interface TutorialEntry {
   slug: string;
   category: TutorialCategoryId;
-  /** Sidebar label in English. French labels come from frSidebarLabels in astro.config.mjs. */
-  sidebarLabel: string;
+  /** Short label for the sidebar, in both languages. */
+  sidebarLabel: { en: string; fr: string };
   tools: TutorialTool[];
   minutes?: number;
 }
@@ -187,100 +187,121 @@ export const tutorialCatalog: TutorialEntry[] = [
   {
     slug: 'deploy-vps-dokploy-cli',
     category: 'servers',
-    sidebarLabel: 'Deploy a VPS with Dokploy (CLI)',
+    sidebarLabel: {
+      en: 'Deploy a VPS with Dokploy (CLI)',
+      fr: 'Déployer un VPS avec Dokploy (CLI)',
+    },
     tools: ['cli'],
     minutes: 15,
   },
   {
     slug: 'manage-infrastructure-terraform',
     category: 'servers',
-    sidebarLabel: 'Manage ZCP with Terraform / OpenTofu',
+    sidebarLabel: {
+      en: 'Manage ZCP with Terraform / OpenTofu',
+      fr: 'Gérer ZCP avec Terraform / OpenTofu',
+    },
     tools: ['terraform'],
     minutes: 15,
   },
   {
     slug: 'ollama-chat-and-inference',
     category: 'ai',
-    sidebarLabel: 'Ollama Chat and Inference',
+    sidebarLabel: { en: 'Ollama Chat and Inference', fr: 'Ollama : chat et inférence' },
     tools: ['cli', 'marketplace'],
   },
   {
     slug: 'open-webui-with-ollama',
     category: 'ai',
-    sidebarLabel: 'Open WebUI With Ollama',
+    sidebarLabel: { en: 'Open WebUI With Ollama', fr: 'Open WebUI avec Ollama' },
     tools: ['cli'],
   },
   {
     slug: 'deploy-openclaw-marketplace-cli',
     category: 'ai',
-    sidebarLabel: 'Deploy OpenClaw (Marketplace, CLI)',
+    sidebarLabel: {
+      en: 'Deploy OpenClaw (Marketplace, CLI)',
+      fr: 'Déployer OpenClaw (Marketplace, CLI)',
+    },
     tools: ['cli', 'marketplace'],
     minutes: 10,
   },
   {
     slug: 'paperclip-on-zcp',
     category: 'ai',
-    sidebarLabel: 'Deploy Paperclip',
+    sidebarLabel: { en: 'Deploy Paperclip', fr: 'Déployer Paperclip' },
     tools: ['cli'],
   },
   {
     slug: 'build-private-network-headscale',
     category: 'network',
-    sidebarLabel: 'Build a Private Network (CLI)',
+    sidebarLabel: { en: 'Build a Private Network (CLI)', fr: 'Créer un réseau privé (CLI)' },
     tools: ['cli', 'marketplace'],
     minutes: 30,
   },
   {
     slug: 'host-dns-on-zcp-cli',
     category: 'network',
-    sidebarLabel: 'Host DNS on ZCP (CLI)',
+    sidebarLabel: { en: 'Host DNS on ZCP (CLI)', fr: 'Héberger le DNS sur ZCP (CLI)' },
     tools: ['cli'],
     minutes: 20,
   },
   {
     slug: 'manage-dns-zone-as-a-file',
     category: 'network',
-    sidebarLabel: 'Manage a Zone as a File',
+    sidebarLabel: { en: 'Manage a Zone as a File', fr: 'Gérer une zone sous forme de fichier' },
     tools: ['cli'],
     minutes: 20,
   },
   {
     slug: 'configure-email-authentication-dns',
     category: 'network',
-    sidebarLabel: 'Configure Email Authentication DNS',
+    sidebarLabel: {
+      en: 'Configure Email Authentication DNS',
+      fr: 'Configurer le DNS d’authentification des e-mails',
+    },
     tools: ['cli', 'terraform'],
   },
   {
     slug: 'encrypt-object-storage',
     category: 'storage',
-    sidebarLabel: 'Encrypt Object Storage (CLI)',
+    sidebarLabel: { en: 'Encrypt Object Storage (CLI)', fr: 'Chiffrer le stockage objet (CLI)' },
     tools: ['cli'],
   },
   {
     slug: 'deploy-private-shared-storage',
     category: 'storage',
-    sidebarLabel: 'Deploy Private Storage (CLI)',
+    sidebarLabel: { en: 'Deploy Private Storage (CLI)', fr: 'Déployer un stockage privé (CLI)' },
     tools: ['cli'],
     minutes: 20,
   },
   {
     slug: 'backup-vaultwarden-restic-object-storage',
     category: 'storage',
-    sidebarLabel: 'Vaultwarden Backups with restic',
+    sidebarLabel: {
+      en: 'Vaultwarden Backups with restic',
+      fr: 'Sauvegardes Vaultwarden avec restic',
+    },
     tools: ['cli', 'terraform'],
     minutes: 45,
   },
   {
     slug: 'deploy-ubuntu-employee-desktops',
     category: 'workplace',
-    sidebarLabel: 'Deploy Employee Desktops (CLI)',
+    sidebarLabel: {
+      en: 'Deploy Employee Desktops (CLI)',
+      fr: 'Déployer des postes de travail (CLI)',
+    },
     tools: ['cli', 'marketplace'],
     minutes: 30,
   },
   {
     slug: 'connect-desktops-to-storage',
     category: 'workplace',
-    sidebarLabel: 'Connect Desktops to Storage (CLI)',
+    sidebarLabel: {
+      en: 'Connect Desktops to Storage (CLI)',
+      fr: 'Connecter les postes au stockage (CLI)',
+    },
     tools: ['cli'],
     minutes: 10,
   },

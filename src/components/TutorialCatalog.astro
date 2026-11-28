@@ -67,7 +67,10 @@ const groups = tutorialCategories
     <div class="zs-tutorials__filters" role="group" aria-label={t.filters[lang]}>
       <button type="button" class="zs-tutorials__chip" data-filter="all" aria-pressed="true">
         {t.all[lang]}
-        <span class="zs-tutorials__count">{entries.length}</span>
+        <span class="zs-tutorials__count">
+          {entries.length}
+          <span class="sr-only">{t.count[lang]}</span>
+        </span>
       </button>
       {
         groups.map((group) => (
@@ -78,7 +81,10 @@ const groups = tutorialCategories
             aria-pressed="false"
           >
             {group.label[lang]}
-            <span class="zs-tutorials__count">{group.items.length}</span>
+            <span class="zs-tutorials__count">
+              {group.items.length}
+              <span class="sr-only">{t.count[lang]}</span>
+            </span>
           </button>
         ))
       }
